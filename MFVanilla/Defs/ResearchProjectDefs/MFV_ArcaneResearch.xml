@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ResearchTabDef>
+    <defName>MFV_Arcane</defName>
+    <label>Arcane</label>
+    <generalTitle>Arcane research projects</generalTitle>
+    <generalDescription>Study magical theory, practical arcana, spell schools, and forbidden arts.</generalDescription>
+  </ResearchTabDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_ArcaneTheory</defName>
+    <label>arcane theory</label>
+    <description>Study the first principles of mana, spell structure, and occult practice.</description>
+    <baseCost>500</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <researchViewX>0</researchViewX>
+    <researchViewY>2.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_LeylineSensitivity</defName>
+    <label>leyline sensitivity</label>
+    <description>Learn to perceive the subtle currents of mana that move through land, stone, and living things.</description>
+    <baseCost>700</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>0.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_RunicInscription</defName>
+    <label>runic inscription</label>
+    <description>Develop stable runes for storing intent, binding effects, and shaping magical triggers.</description>
+    <baseCost>800</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>1.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Alchemy</defName>
+    <label>alchemy</label>
+    <description>Refine plants, minerals, and reagents into magical compounds and restorative draughts.</description>
+    <baseCost>800</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>2.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Enchantment</defName>
+    <label>enchantment</label>
+    <description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+      <li>MFV_RunicInscription</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>3.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_ApprenticeSchools</defName>
+    <label>apprentice schools</label>
+    <description>Organize practical spellcasting into teachable schools of elemental, vital, shadow, and death magic.</description>
+    <baseCost>900</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>4.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Pyromancy</defName>
+    <label>pyromancy</label>
+    <description>Study heat, combustion, and the deliberate shaping of magical flame.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>0</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Cryomancy</defName>
+    <label>cryomancy</label>
+    <description>Shape cold, frost, and thermal stasis into protective and hostile magic.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>0.75</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Aeromancy</defName>
+    <label>aeromancy</label>
+    <description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>1.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Geomancy</defName>
+    <label>geomancy</label>
+    <description>Study stone, soil, metal, and the patient strength of the earth.</description>
+    <baseCost>1000</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>2.25</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Vitalism</defName>
+    <label>vitalism</label>
+    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</description>
+    <baseCost>1100</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+      <li>MFV_Alchemy</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>3</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Umbramancy</defName>
+    <label>umbramancy</label>
+    <description>Study shadow, silence, concealment, fear, and the unseen spaces between thoughts.</description>
+    <baseCost>1200</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+      <li>MFV_LeylineSensitivity</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>3.75</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Necromancy</defName>
+    <label>necromancy</label>
+    <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</description>
+    <baseCost>1400</baseCost>
+    <techLevel>Medieval</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ApprenticeSchools</li>
+      <li>MFV_Vitalism</li>
+    </prerequisites>
+    <researchViewX>4</researchViewX>
+    <researchViewY>4.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_AdvancedSchools</defName>
+    <label>advanced schools</label>
+    <description>Unify several apprentice disciplines into deeper schools of colony-scale magic.</description>
+    <baseCost>1800</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_Pyromancy</li>
+      <li>MFV_Cryomancy</li>
+      <li>MFV_Vitalism</li>
+    </prerequisites>
+    <researchViewX>6</researchViewX>
+    <researchViewY>2.25</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Infrastructure</defName>
+    <label>infrastructure</label>
+    <description>Apply arcane theory to practical colony systems such as wards, anchors, and mana wells.</description>
+    <baseCost>1800</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_AdvancedSchools</li>
+      <li>MFV_LeylineSensitivity</li>
+      <li>MFV_RunicInscription</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>8</researchViewX>
+    <researchViewY>0.75</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_ArtifactForging</defName>
+    <label>artifact forging</label>
+    <description>Create durable vessels for powerful enchantments, bound tools, and rare magical components.</description>
+    <baseCost>2200</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_AdvancedSchools</li>
+      <li>MFV_Enchantment</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>8</researchViewX>
+    <researchViewY>1.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Soulcraft</defName>
+    <label>soulcraft</label>
+    <description>Bind, preserve, wound, and strengthen souls through precise and dangerous rites.</description>
+    <baseCost>2400</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_AdvancedSchools</li>
+      <li>MFV_Necromancy</li>
+      <li>MFV_Vitalism</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>8</researchViewX>
+    <researchViewY>2.25</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_PlanarMagic</defName>
+    <label>planar magic</label>
+    <description>Reach beyond local space into other planes, hostile dimensions, and distant thresholds.</description>
+    <baseCost>2600</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_AdvancedSchools</li>
+      <li>MFV_LeylineSensitivity</li>
+      <li>MFV_Geomancy</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>8</researchViewX>
+    <researchViewY>3</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_GrandSorcery</defName>
+    <label>grand sorcery</label>
+    <description>Perform large rituals and endgame spells whose effects can reshape a whole colony.</description>
+    <baseCost>3200</baseCost>
+    <techLevel>Spacer</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_Infrastructure</li>
+      <li>MFV_ArtifactForging</li>
+      <li>MFV_PlanarMagic</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>10</researchViewX>
+    <researchViewY>2.25</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_ForbiddenBranches</defName>
+    <label>forbidden branches</label>
+    <description>Record the first principles of magic that most traditions refuse to teach openly.</description>
+    <baseCost>2000</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+      <li>MFV_Umbramancy</li>
+    </prerequisites>
+    <hiddenPrerequisites>
+      <li>MFV_Necromancy</li>
+    </hiddenPrerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>6</researchViewX>
+    <researchViewY>4.95</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Fleshcraft</defName>
+    <label>fleshcraft</label>
+    <description>Alter living tissue through invasive magic, trading stability for power and survival.</description>
+    <baseCost>2600</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ForbiddenBranches</li>
+      <li>MFV_Vitalism</li>
+      <li>MFV_Necromancy</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>8</researchViewX>
+    <researchViewY>4.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_InfernalPact</defName>
+    <label>infernal pact</label>
+    <description>Study binding bargains, sacrificial power, and the summoning of infernal allies.</description>
+    <baseCost>2800</baseCost>
+    <techLevel>Industrial</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ForbiddenBranches</li>
+      <li>MFV_Pyromancy</li>
+      <li>MFV_Soulcraft</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>10</researchViewX>
+    <researchViewY>3.75</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_VoidStudies</defName>
+    <label>void studies</label>
+    <description>Investigate null spaces, anti-magic effects, and the destructive pressure of the void.</description>
+    <baseCost>3000</baseCost>
+    <techLevel>Spacer</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ForbiddenBranches</li>
+      <li>MFV_Umbramancy</li>
+      <li>MFV_PlanarMagic</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>10</researchViewX>
+    <researchViewY>4.95</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>MFV_Chronomancy</defName>
+    <label>chronomancy</label>
+    <description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.</description>
+    <baseCost>3600</baseCost>
+    <techLevel>Spacer</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ForbiddenBranches</li>
+      <li>MFV_GrandSorcery</li>
+    </prerequisites>
+    <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <researchViewX>12</researchViewX>
+    <researchViewY>4.35</researchViewY>
+  </ResearchProjectDef>
+
+</Defs>

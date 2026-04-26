@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Might</defName>
+    <label>might</label>
+    <description>Maintains a strengthening enchantment on an allied pawn, improving melee damage and carrying capacity while the caster keeps focus.</description>
+    <range>12</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Might</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>12</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Might</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Might cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Might</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Might cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Might sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Might effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
+            <debugLabel>Might sustained buff</debugLabel>
+            <targetSource>CurrentTarget</targetSource>
+            <maxDurationTicks>1800</maxDurationTicks>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+            <statusCue>
+              <hediffDef>MF_Mighty</hediffDef>
+              <severity>0.01</severity>
+              <removeOnExpire>true</removeOnExpire>
+            </statusCue>
+            <maxRange>12</maxRange>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenTargetDowned>false</breakWhenTargetDowned>
+            <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+            <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+            <modifiers>
+              <li>
+                <statDef>MeleeDamageFactor</statDef>
+                <factor>1.35</factor>
+              </li>
+              <li>
+                <statDef>CarryingCapacity</statDef>
+                <offset>25</offset>
+              </li>
+            </modifiers>
+            <onBreakActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Might break effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+                <debugLabel>Might backlash weakness</debugLabel>
+                <targetSource>CurrentTarget</targetSource>
+                <durationTicks>300</durationTicks>
+                <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+                <statusCue>
+                  <hediffDef>MF_Weakened</hediffDef>
+                  <severity>0.01</severity>
+                  <removeOnExpire>true</removeOnExpire>
+                </statusCue>
+                <modifiers>
+                  <li>
+                    <statDef>MeleeDamageFactor</statDef>
+                    <factor>0.75</factor>
+                  </li>
+                  <li>
+                    <statDef>CarryingCapacity</statDef>
+                    <offset>-15</offset>
+                  </li>
+                </modifiers>
+              </li>
+            </onBreakActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>MagicFramework</AssemblyName>
+    <RootNamespace>MagicFramework</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <ModAssembliesDir Condition="'$(ModAssembliesDir)' == ''">..\Assemblies\</ModAssembliesDir>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">D:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldDir>
+    <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(RimWorldDir)\Mods\MagicFramework</ModDeployDir>
+    <DeployToRimWorldMod Condition="'$(DeployToRimWorldMod)' == ''">true</DeployToRimWorldMod>
+  </PropertyGroup>
+
+  <Target Name="CheckRimWorldInstall" BeforeTargets="ResolveReferences">
+    <Error
+      Condition="!Exists('$(RimWorldDir)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll')"
+      Text="RimWorld assemblies were not found. Set the RimWorldDir MSBuild property to your game install path." />
+  </Target>
+
+  <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Harmony\v1.1\Assemblies\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AboutContent Include="..\About\**\*.*" />
+    <DefContent Include="..\Defs\**\*.*" />
+    <TextureContent Include="..\Textures\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="DeployToModAssemblies" AfterTargets="Build" Condition="'$(DeployToModAssemblies)' == 'true'">
+    <MakeDir Directories="$(ModAssembliesDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModAssembliesDir)" SkipUnchangedFiles="true" />
+  </Target>
+
+  <Target Name="DeployToRimWorldModFolder" AfterTargets="Build" Condition="'$(DeployToRimWorldMod)' == 'true'">
+    <PropertyGroup>
+      <ModDeployAssembliesDir>$(ModDeployDir)\Assemblies</ModDeployAssembliesDir>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(ModDeployDir)" />
+    <MakeDir Directories="$(ModDeployAssembliesDir)" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDeployAssembliesDir)" SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(AboutContent)"
+      DestinationFiles="@(AboutContent->'$(ModDeployDir)\About\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(DefContent)"
+      DestinationFiles="@(DefContent->'$(ModDeployDir)\Defs\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(TextureContent)"
+      DestinationFiles="@(TextureContent->'$(ModDeployDir)\Textures\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
+</Project>

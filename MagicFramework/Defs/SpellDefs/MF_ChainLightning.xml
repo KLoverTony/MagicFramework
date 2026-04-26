@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_ChainLightning</defName>
+    <label>chain lightning</label>
+    <description>Strikes a foe with arcing lightning that jumps forward through nearby enemies, sometimes stunning those it hits.</description>
+    <range>22</range>
+    <castTimeTicks>45</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_ChainLightning</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>22</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Chain Lightning</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Chain Lightning cooldown ready</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Chain Lightning</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Chain Lightning cooldown</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.ChainLightningActionDef">
+        <debugLabel>Chain Lightning arcs</debugLabel>
+        <jumpDelayTicks>10</jumpDelayTicks>
+        <jumpRadius>7</jumpRadius>
+        <maxHops>9</maxHops>
+        <minBranches>1</minBranches>
+        <maxBranches>2</maxBranches>
+        <minForwardScore>-0.10</minForwardScore>
+        <allowRepeatTargets>true</allowRepeatTargets>
+        <includeCaster>false</includeCaster>
+        <pawnAffinity>Foe</pawnAffinity>
+        <impactFleckDef>SparkFlash</impactFleckDef>
+        <lineFleckDef>ElectricalSpark</lineFleckDef>
+        <stunFleckDef>Mote_Stun</stunFleckDef>
+        <onHitActions>
+          <li Class="MagicFramework.Definitions.DamageActionDef">
+            <debugLabel>Chain Lightning shock damage</debugLabel>
+            <amount>12</amount>
+            <damageDef>Burn</damageDef>
+            <armorPenetration>0.15</armorPenetration>
+          </li>
+          <li Class="MagicFramework.Definitions.StunActionDef">
+            <debugLabel>Chain Lightning stun chance</debugLabel>
+            <chance>0.30</chance>
+            <stunTicks>90</stunTicks>
+            <fleckDef>Mote_Stun</fleckDef>
+          </li>
+        </onHitActions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BenchBase">
+    <defName>MFV_ArcaneResearchBench</defName>
+    <label>arcane research bench</label>
+    <description>A simple workbench for recording arcane observations, comparing runic patterns, and conducting early magical research.</description>
+    <thingClass>Building_ResearchBench</thingClass>
+    <size>(3,2)</size>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Woody</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>75</costStuffCount>
+    <costList>
+      <Steel>20</Steel>
+    </costList>
+    <graphicData>
+      <texPath>Things/Building/Production/ArcaneBench</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(3,2)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.20</staticSunShadowHeight>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <statBases>
+      <MaxHitPoints>250</MaxHitPoints>
+      <WorkToBuild>2800</WorkToBuild>
+      <Flammability>1.0</Flammability>
+      <ResearchSpeedFactor>0.75</ResearchSpeedFactor>
+    </statBases>
+    <placeWorkers>
+      <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+      <li>PlaceWorker_DrawLinesToBookcasesInRoom</li>
+    </placeWorkers>
+    <fillPercent>0.5</fillPercent>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <hasInteractionCell>true</hasInteractionCell>
+    <designationCategory>Production</designationCategory>
+    <uiOrder>2602</uiOrder>
+    <surfaceType>Item</surfaceType>
+    <building>
+      <paintable>true</paintable>
+      <workTableRoomRole>Laboratory</workTableRoomRole>
+      <workTableNotInRoomRoleFactor>0.8</workTableNotInRoomRoleFactor>
+    </building>
+    <comps Inherit="False">
+      <li Class="CompProperties_ReportWorkSpeed">
+        <workSpeedStat>ResearchSpeedFactor</workSpeedStat>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="BenchBase">
+    <defName>MFV_AdvancedArcaneResearchBench</defName>
+    <label>advanced arcane research bench</label>
+    <description>An elaborate arcane laboratory bench with stabilized instruments for higher-order ritual, planar, and enchantment research.</description>
+    <thingClass>Building_ResearchBench</thingClass>
+    <size>(5,2)</size>
+    <minifiedDef />
+    <thingCategories Inherit="false" />
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>150</costStuffCount>
+    <costList>
+      <Steel>80</Steel>
+      <ComponentIndustrial>4</ComponentIndustrial>
+    </costList>
+    <graphicData>
+      <texPath>Things/Building/Production/AdvancedArcaneBench</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(5,2)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.20</staticSunShadowHeight>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>5000</WorkToBuild>
+      <Flammability>0.7</Flammability>
+      <ResearchSpeedFactor>1.0</ResearchSpeedFactor>
+    </statBases>
+    <placeWorkers>
+      <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+      <li>PlaceWorker_DrawLinesToBookcasesInRoom</li>
+    </placeWorkers>
+    <fillPercent>0.5</fillPercent>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <hasInteractionCell>true</hasInteractionCell>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <designationCategory>Production</designationCategory>
+    <uiOrder>2612</uiOrder>
+    <surfaceType>Item</surfaceType>
+    <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
+    <researchPrerequisites>
+      <li>MFV_AdvancedSchools</li>
+    </researchPrerequisites>
+    <building>
+      <paintable>true</paintable>
+      <workTableRoomRole>Laboratory</workTableRoomRole>
+      <workTableNotInRoomRoleFactor>0.8</workTableNotInRoomRoleFactor>
+    </building>
+    <comps Inherit="False">
+      <li Class="CompProperties_ReportWorkSpeed">
+        <workSpeedStat>ResearchSpeedFactor</workSpeedStat>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

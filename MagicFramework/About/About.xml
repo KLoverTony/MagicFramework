@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Magic Framework</name>
+  <author>Oracle</author>
+  <packageId>oracle.magicframework</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>A modular, data-driven spell framework for RimWorld 1.6.</description>
+  <loadAfter>
+    <li>lude.ludeCore</li>
+  </loadAfter>
+  <optionalDependencies>
+    <li>
+      <packageId>oracle.mfvanilla</packageId>
+      <displayName>MF Vanilla</displayName>
+    </li>
+  </optionalDependencies>
+</ModMetaData>

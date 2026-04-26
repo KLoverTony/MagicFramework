@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Example authored spell defs for design discussion and future data-driven tests.
+
+  Notes:
+  - These examples are intentionally grounded in the current C# def model.
+  - The exact polymorphic XML syntax for abstract action/query/cost/requirement nodes may change
+    once we wire the framework fully into RimWorld's def loading pipeline.
+  - Fields like projectile def names, damage def names, and hediff def names are illustrative.
+-->
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Firebolt</defName>
+    <label>firebolt</label>
+    <description>A basic offensive spell that launches a bolt of fire at one target.</description>
+    <range>24</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Firebolt</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>PawnOrThing</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>true</includeBuildings>
+      <includeItems>true</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>24</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Firebolt</debugLabel>
+        <amount>8</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Firebolt cooldown ready</debugLabel>
+        <cooldownTicks>90</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Firebolt</debugLabel>
+        <amount>8</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Firebolt cooldown</debugLabel>
+        <cooldownTicks>90</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Firebolt sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Play firebolt cast effect</debugLabel>
+            <effectDef>MF_FireboltCastEffect</effectDef>
+            <soundDef>MF_FireboltCastSound</soundDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.LaunchProjectileActionDef">
+            <debugLabel>Launch firebolt projectile</debugLabel>
+            <projectileDef>MF_FireboltProjectile</projectileDef>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Play firebolt impact effect</debugLabel>
+            <effectDef>MF_FireboltImpactEffect</effectDef>
+            <soundDef>MF_FireboltImpactSound</soundDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.DamageActionDef">
+            <debugLabel>Apply firebolt damage</debugLabel>
+            <amount>18</amount>
+            <damageDef>Flame</damageDef>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Fireball</defName>
+    <label>fireball</label>
+    <description>A more advanced fire spell that detonates at the target and burns everything nearby.</description>
+    <range>28</range>
+    <castTimeTicks>60</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Fireball</gizmoIconPath>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>PawnOrCell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>28</range>
+      <radius>3.9</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Fireball</debugLabel>
+        <amount>20</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Fireball cooldown ready</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Fireball</debugLabel>
+        <amount>20</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Fireball cooldown</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Fireball sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Play fireball cast effect</debugLabel>
+            <effectDef>MF_FireballCastEffect</effectDef>
+            <soundDef>MF_FireballCastSound</soundDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.LaunchProjectileActionDef">
+            <debugLabel>Launch fireball projectile</debugLabel>
+            <projectileDef>MF_FireballProjectile</projectileDef>
+            <onImpactActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Play fireball impact effect</debugLabel>
+                <effectDef>MF_FireballImpactEffect</effectDef>
+                <soundDef>MF_FireballImpactSound</soundDef>
+                <locationSource>CurrentCell</locationSource>
+                <attachToTarget>false</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.ExplosionActionDef">
+                <debugLabel>Fireball explosion</debugLabel>
+                <radius>3.9</radius>
+                <damageAmount>14</damageAmount>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+                <debugLabel>Apply burning effects in blast radius</debugLabel>
+                <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+                  <debugLabel>Targets around fireball impact</debugLabel>
+                  <radius>3.9</radius>
+                  <centerSource>CurrentCell</centerSource>
+                  <includePawns>true</includePawns>
+                  <includeBuildings>true</includeBuildings>
+                  <includeItems>true</includeItems>
+                  <includeCaster>false</includeCaster>
+                </targetQuery>
+                <actions>
+                  <li Class="MagicFramework.Definitions.DamageActionDef">
+                    <debugLabel>Secondary fire damage</debugLabel>
+                    <amount>10</amount>
+                    <damageDef>Flame</damageDef>
+                  </li>
+                  <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+                    <debugLabel>Ignite or apply burning status</debugLabel>
+                    <hediffDef>MF_Burning</hediffDef>
+                    <severity>0.20</severity>
+                  </li>
+                </actions>
+              </li>
+            </onImpactActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Haste</defName>
+    <label>haste</label>
+    <description>Accelerates an allied pawn for a short time, increasing movement speed.</description>
+    <range>18</range>
+    <castTimeTicks>20</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Haste</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+    </targeting>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+        <debugLabel>Haste buff</debugLabel>
+        <targetSource>CurrentTarget</targetSource>
+        <durationTicks>900</durationTicks>
+        <statusCue>
+          <hediffDef>MF_Hasted</hediffDef>
+          <severity>0.01</severity>
+          <removeOnExpire>true</removeOnExpire>
+        </statusCue>
+        <modifiers>
+          <li>
+            <statDef>MoveSpeed</statDef>
+            <factor>1.35</factor>
+          </li>
+        </modifiers>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Might</defName>
+    <label>might</label>
+    <description>Maintains a strengthening enchantment while range and line of sight hold.</description>
+    <range>12</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Might</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>12</range>
+    </targeting>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
+        <debugLabel>Might sustained buff</debugLabel>
+        <targetSource>CurrentTarget</targetSource>
+        <maxDurationTicks>1800</maxDurationTicks>
+        <statusCue>
+          <hediffDef>MF_Mighty</hediffDef>
+          <severity>0.01</severity>
+          <removeOnExpire>true</removeOnExpire>
+        </statusCue>
+        <maxRange>12</maxRange>
+        <breakWhenCasterDowned>true</breakWhenCasterDowned>
+        <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+        <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+        <modifiers>
+          <li>
+            <statDef>MeleeDamageFactor</statDef>
+            <factor>1.35</factor>
+          </li>
+          <li>
+            <statDef>CarryingCapacity</statDef>
+            <offset>25</offset>
+          </li>
+        </modifiers>
+        <onBreakActions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Might break effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+            <debugLabel>Might backlash weakness</debugLabel>
+            <targetSource>CurrentTarget</targetSource>
+            <durationTicks>300</durationTicks>
+            <statusCue>
+              <hediffDef>MF_Weakened</hediffDef>
+              <severity>0.01</severity>
+              <removeOnExpire>true</removeOnExpire>
+            </statusCue>
+            <modifiers>
+              <li>
+                <statDef>MeleeDamageFactor</statDef>
+                <factor>0.75</factor>
+              </li>
+              <li>
+                <statDef>CarryingCapacity</statDef>
+                <offset>-15</offset>
+              </li>
+            </modifiers>
+          </li>
+        </onBreakActions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_CleanseExample</defName>
+    <label>cleanse example</label>
+    <description>Example utility spell that clears framework stat modifiers and status cues from one pawn.</description>
+    <range>12</range>
+    <castTimeTicks>30</castTimeTicks>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>12</range>
+    </targeting>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.ClearStatModifiersActionDef">
+        <debugLabel>Clear all framework stat status effects</debugLabel>
+        <targetSource>CurrentTarget</targetSource>
+        <scope>AllFromFramework</scope>
+        <runBreakActions>false</runBreakActions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

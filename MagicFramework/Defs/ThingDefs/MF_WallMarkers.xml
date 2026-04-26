@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>MF_WallOfFireMarker</defName>
+    <label>wall of fire marker</label>
+    <description>A persistent magical flame marker used to show a wall of fire.</description>
+    <thingClass>MagicFramework.Core.SpellPersistentMarkerThing</thingClass>
+    <selectable>false</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <drawerType>MapMeshOnly</drawerType>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Never</tickerType>
+    <passability>PassThroughOnly</passability>
+    <pathCost>0</pathCost>
+    <useHitPoints>false</useHitPoints>
+    <fillPercent>0.01</fillPercent>
+    <statBases>
+      <MaxHitPoints>1</MaxHitPoints>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Projectile/Spark</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.2,1.2)</drawSize>
+      <color>(255,140,60,255)</color>
+    </graphicData>
+    <building>
+      <isInert>true</isInert>
+    </building>
+  </ThingDef>
+</Defs>

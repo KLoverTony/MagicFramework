@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_SummonDog</defName>
+    <label>summon dog</label>
+    <description>Summons a loyal dog for a short time to aid the caster.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_SummonDog</gizmoIconPath>
+    <range>14</range>
+    <castTimeTicks>30</castTimeTicks>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireWalkableCell>true</requireWalkableCell>
+      <requireStandableCell>true</requireStandableCell>
+      <range>14</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Summon Dog</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Summon Dog cooldown ready</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Summon Dog</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Summon Dog cooldown</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Summon Dog sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Summon Dog cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.SummonPawnActionDef">
+            <debugLabel>Summon Dog summon</debugLabel>
+            <pawnKindDef>LabradorRetriever</pawnKindDef>
+            <durationTicks>1800</durationTicks>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <setFactionToPlayer>true</setFactionToPlayer>
+            <joinLord>true</joinLord>
+            <followMasterWhileDrafted>true</followMasterWhileDrafted>
+            <followMasterWhileFieldwork>true</followMasterWhileFieldwork>
+            <trainableDefs>
+              <li>Obedience</li>
+              <li>Release</li>
+              <li>Rescue</li>
+              <li>Haul</li>
+            </trainableDefs>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Summon Dog arrival effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

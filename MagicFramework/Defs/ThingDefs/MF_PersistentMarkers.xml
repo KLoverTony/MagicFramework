@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <ThingDef ParentName="BuildingBase">
+    <defName>MF_RuneTrapMarker</defName>
+    <label>rune trap marker</label>
+    <description>A persistent magical marker used to show an armed rune trap.</description>
+    <thingClass>MagicFramework.Core.SpellPersistentMarkerThing</thingClass>
+    <selectable>false</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <drawerType>MapMeshOnly</drawerType>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <tickerType>Never</tickerType>
+    <passability>PassThroughOnly</passability>
+    <pathCost>0</pathCost>
+    <useHitPoints>false</useHitPoints>
+    <fillPercent>0.01</fillPercent>
+    <statBases>
+      <MaxHitPoints>1</MaxHitPoints>
+    </statBases>
+    <graphicData>
+      <texPath>Things/Projectile/Spark</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>MoteGlow</shaderType>
+      <drawSize>(1.1,1.1)</drawSize>
+      <color>(255,110,40,255)</color>
+    </graphicData>
+    <building>
+      <isInert>true</isInert>
+    </building>
+  </ThingDef>
+</Defs>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Heal</defName>
+    <label>heal</label>
+    <description>Restores an allied pawn by dividing healing evenly across their current wounds.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Heal</gizmoIconPath>
+    <range>16</range>
+    <castTimeTicks>25</castTimeTicks>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>16</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Heal</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Heal cooldown ready</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Heal</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Heal cooldown</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Heal sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Heal effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.HealActionDef">
+            <debugLabel>Heal injuries evenly</debugLabel>
+            <amount>18</amount>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>
