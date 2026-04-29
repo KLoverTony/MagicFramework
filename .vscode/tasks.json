@@ -1,0 +1,45 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build & Deploy All Mods",
+      "description": "Build available mods and deploy all to RimWorld",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Build MFVanilla",
+        "Deploy All Mods"
+      ]
+    },
+    {
+      "label": "Build MFVanilla",
+      "type": "shell",
+      "command": "dotnet",
+      "args": ["build", "MFVanilla/Source/MFVanilla.csproj", "-c", "Debug"],
+      "problemMatcher": ["$msCompile"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "group": "build"
+      }
+    },
+    {
+      "label": "Deploy All Mods",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile",
+        "-ExecutionPolicy", "Bypass",
+        "-Command",
+        "$steamMods = 'D:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods'; @('MagicFramework', 'MFVanilla', 'AeternusFaith') | ForEach-Object { $mod = $_; $src = \"$PSScriptRoot\\$mod\"; $dst = \"$steamMods\\$mod\"; Write-Host \"Deploying $mod...\"; if (Test-Path \"$src\\Assemblies\\*.dll\") { Copy-Item \"$src\\Assemblies\\*.dll\" \"$dst\\Assemblies\\\" -Force -Verbose }; if (Test-Path \"$src\\Defs\") { Copy-Item \"$src\\Defs\\*\" \"$dst\\Defs\\\" -Recurse -Force -Verbose }; if (Test-Path \"$src\\Textures\") { Copy-Item \"$src\\Textures\\*\" \"$dst\\Textures\\\" -Recurse -Force -Verbose }; Write-Host \"✓ Deployed $mod\"; }"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "panel": "shared",
+        "group": "build"
+      }
+    }
+  ]
+}

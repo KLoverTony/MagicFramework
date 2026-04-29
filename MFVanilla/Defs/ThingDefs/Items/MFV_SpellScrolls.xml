@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_SpellScrollBase" Abstract="True">
+    <thingClass>ThingWithComps</thingClass>
+    <category>Item</category>
+    <label>spell scroll</label>
+    <description>A prepared arcane scroll that teaches a pawn the spell bound into its script. A pawn can use the scroll only after the scroll's prerequisites have been satisfied.</description>
+    <graphicData>
+      <texPath>Things/Item/Book/Schematic/Schematic</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <selectable>true</selectable>
+    <stackLimit>1</stackLimit>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <tradeability>Sellable</tradeability>
+    <techLevel>Neolithic</techLevel>
+    <statBases>
+      <MaxHitPoints>60</MaxHitPoints>
+      <MarketValue>300</MarketValue>
+      <Mass>0.05</Mass>
+      <Flammability>1.0</Flammability>
+      <DeteriorationRate>2</DeteriorationRate>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_Firebolt</defName>
+    <label>spell scroll (firebolt)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast Firebolt.</description>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Firebolt</spell>
+        <requiredResearch>
+          <li>MFV_Pyromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_Heal</defName>
+    <label>spell scroll (heal)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast Heal.</description>
+    <statBases>
+      <MarketValue>320</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Heal</spell>
+        <requiredResearch>
+          <li>MFV_Vitalism</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+
+</Defs>

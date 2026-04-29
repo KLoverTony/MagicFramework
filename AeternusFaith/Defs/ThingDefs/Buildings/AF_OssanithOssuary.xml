@@ -8,7 +8,7 @@
     <thingClass>Building</thingClass>
     <category>Building</category>
     <graphicData>
-      <texPath>Textures/Things/RitualCircles/AF_OssanithCircle</texPath>
+      <texPath>Things/RitualCircles/AF_OssanithCircle</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(3,3)</drawSize>
     </graphicData>
@@ -52,7 +52,7 @@
         <offset>(0,0,0)</offset>
         <commandLabel>Build ossuary bone box</commandLabel>
         <commandDescription>Place a normal construction blueprint for an ossuary bone box in the center of this circle.</commandDescription>
-        <commandIconPath>Textures/Things/Graves/OssuaryBox_south</commandIconPath>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
       </li>
     </comps>
   </ThingDef>
@@ -64,7 +64,7 @@
     <thingClass>Building</thingClass>
     <category>Building</category>
     <graphicData>
-      <texPath>Textures/Things/Graves/OssuaryBox</texPath>
+      <texPath>Things/Graves/OssuaryBox</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <drawSize>(1,1)</drawSize>
     </graphicData>
@@ -104,17 +104,13 @@
   <ThingDef ParentName="BuildingBase">
     <defName>AF_OssanithLectern</defName>
     <label>ossanith lectern</label>
-    <description>
-      A ceremonial lectern used by the Ossanith Bonewrights for sacred rites,
-      funerary observances, and solemn sermons honoring memory, death, and the
-      stewardship of the departed.
-    </description>
+    <description>A ceremonial lectern used by the Ossanith Bonewrights for sacred rites, funerary observances, and solemn sermons honoring memory, death, and the stewardship of the departed.</description>
 
     <thingClass>Building</thingClass>
     <category>Building</category>
 
     <graphicData>
-      <texPath>Textures/Things/RitualLectern/Ossanith_Lectern</texPath>
+      <texPath>Things/RitualLectern/Ossanith_Lectern</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <drawSize>(1,1)</drawSize>
     </graphicData>
@@ -134,6 +130,8 @@
 
     <rotatable>true</rotatable>
     <defaultPlacingRot>South</defaultPlacingRot>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
 
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
 
@@ -141,7 +139,7 @@
     <uiOrder>2061</uiOrder>
 
     <thingCategories>
-      <li>Furniture</li>
+      <li>BuildingsFurniture</li>
     </thingCategories>
 
     <statBases>
@@ -159,10 +157,6 @@
     <building>
       <isInert>true</isInert>
       <ai_chillDestination>false</ai_chillDestination>
-
-      <!-- ritual officiant stands here -->
-      <hasInteractionCell>true</hasInteractionCell>
-      <interactionCellOffset>(0,0,-1)</interactionCellOffset>
     </building>
 
     <surfaceType>Item</surfaceType>
@@ -175,7 +169,7 @@
         <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
         <commandLabel>Begin ossuary rite</commandLabel>
         <commandDescription>Begin a placeholder Ossanith ossuary rite. Requires an orthogonally adjacent Ossanith circle with a completed ossuary in its center.</commandDescription>
-        <commandIconPath>Textures/Things/Graves/OssuaryBox_south</commandIconPath>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
       </li>
     </comps>
 

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Visuals.MagicFXDef>
+    <defName>MF_GenericMagicFX</defName>
+    <primaryColorHex>9A7CFF</primaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <castSoundDef>PsycastPsychicEffect</castSoundDef>
+    <impactSoundDef>PsycastPsychicEffect</impactSoundDef>
+    <scale>1</scale>
+  </MagicFramework.Visuals.MagicFXDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Arcane</defName>
+    <label>arcane</label>
+    <primaryColorHex>9A7CFF</primaryColorHex>
+    <secondaryColorHex>DAA8FF</secondaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <castSoundDef>PsycastPsychicEffect</castSoundDef>
+    <impactSoundDef>PsycastPsychicEffect</impactSoundDef>
+    <scale>1</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Fire</defName>
+    <label>fire</label>
+    <primaryColorHex>FF5A1F</primaryColorHex>
+    <secondaryColorHex>FFC247</secondaryColorHex>
+    <castFleckDef>YellowSparkFlash</castFleckDef>
+    <impactFleckDef>SparkFlash</impactFleckDef>
+    <explosionEffectDef>GiantExplosion</explosionEffectDef>
+    <explosionSoundDef>Explosion_Flame</explosionSoundDef>
+    <areaFleckDef>SparkFlash</areaFleckDef>
+    <scale>1.1</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Frost</defName>
+    <label>frost</label>
+    <primaryColorHex>8EEBFF</primaryColorHex>
+    <secondaryColorHex>D8FAFF</secondaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <scale>0.95</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Lightning</defName>
+    <label>lightning</label>
+    <primaryColorHex>DDF7FF</primaryColorHex>
+    <secondaryColorHex>7EE6FF</secondaryColorHex>
+    <castFleckDef>ElectricalSpark</castFleckDef>
+    <impactFleckDef>ElectricalSpark</impactFleckDef>
+    <areaFleckDef>ElectricalSpark</areaFleckDef>
+    <sustainFleckDef>ElectricalSpark</sustainFleckDef>
+    <scale>1</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Force</defName>
+    <label>force</label>
+    <primaryColorHex>80B7FF</primaryColorHex>
+    <secondaryColorHex>C7E2FF</secondaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <scale>1.05</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Vital</defName>
+    <label>vital</label>
+    <primaryColorHex>61F08A</primaryColorHex>
+    <secondaryColorHex>C7FFD5</secondaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <scale>0.9</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+
+  <MagicFramework.Visuals.MagicElementDef>
+    <defName>Shadow</defName>
+    <label>shadow</label>
+    <primaryColorHex>5A4A80</primaryColorHex>
+    <secondaryColorHex>9B83C7</secondaryColorHex>
+    <castFleckDef>PsycastAreaEffect</castFleckDef>
+    <impactFleckDef>PsycastPsychicEffect</impactFleckDef>
+    <areaFleckDef>PsycastAreaEffect</areaFleckDef>
+    <sustainFleckDef>PsycastPsychicEffect</sustainFleckDef>
+    <scale>0.95</scale>
+  </MagicFramework.Visuals.MagicElementDef>
+</Defs>

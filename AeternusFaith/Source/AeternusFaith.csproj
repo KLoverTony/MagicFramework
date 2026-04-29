@@ -9,28 +9,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Verse">
-      <HintPath>../../Common/Assemblies/Verse.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Core\Assemblies\Verse.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="RimWorld">
-      <HintPath>../../Common/Assemblies/RimWorld.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Core\Assemblies\RimWorld.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>../../Common/Assemblies/UnityEngine.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>../../Common/Assemblies/UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../../MagicFramework/Source/MagicFramework.csproj">
+    <Reference Include="MagicFramework">
+      <HintPath>../../MagicFramework/Assemblies/MagicFramework.dll</HintPath>
       <Private>False</Private>
-    </ProjectReference>
+    </Reference>
   </ItemGroup>
 
 </Project>
