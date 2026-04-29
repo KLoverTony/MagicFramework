@@ -33,6 +33,43 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         return GetOrCreateState(caster).currentMana;
     }
 
+    public bool HasArcaneGift(Pawn pawn)
+    {
+        return pawn != null && GetOrCreateState(pawn).hasArcaneGift;
+    }
+
+    public void SetArcaneGift(Pawn pawn, bool value)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        GetOrCreateState(pawn).hasArcaneGift = value;
+    }
+
+    public int GetCasterLevel(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            return 0;
+        }
+
+        return GetOrCreateState(pawn).casterLevel;
+    }
+
+    public void SetCasterLevel(Pawn pawn, int level)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        state.casterLevel = Mathf.Max(0, level);
+        state.debugCasterLevel = state.casterLevel;
+    }
+
     public int GetDebugCasterLevel(Thing caster)
     {
         if (caster == null)
@@ -40,7 +77,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return 0;
         }
 
-        return GetOrCreateState(caster).debugCasterLevel;
+        return GetOrCreateState(caster).casterLevel;
     }
 
     public int CycleDebugCasterLevel(Thing caster)
@@ -51,7 +88,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         CasterRuntimeState state = GetOrCreateState(caster);
-        state.debugCasterLevel = state.debugCasterLevel switch
+        state.casterLevel = state.casterLevel switch
         {
             0 => 1,
             1 => 3,
@@ -60,7 +97,8 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             10 => 20,
             _ => 0
         };
-        return state.debugCasterLevel;
+        state.debugCasterLevel = state.casterLevel;
+        return state.casterLevel;
     }
 
     public bool HasEnoughMana(Thing caster, float amount)
@@ -474,6 +512,54 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         return false;
+    }
+
+    public bool KnowsSpell(Pawn pawn, SpellDef spellDef)
+    {
+        if (pawn == null || spellDef == null)
+        {
+            return false;
+        }
+
+        return GetOrCreateState(pawn).KnowsSpell(spellDef.defName);
+    }
+
+    public bool LearnSpell(Pawn pawn, SpellDef spellDef)
+    {
+        if (pawn == null || spellDef == null)
+        {
+            return false;
+        }
+
+        return GetOrCreateState(pawn).LearnSpell(spellDef.defName);
+    }
+
+    public bool ForgetSpell(Pawn pawn, SpellDef spellDef)
+    {
+        if (pawn == null || spellDef == null)
+        {
+            return false;
+        }
+
+        return GetOrCreateState(pawn).ForgetSpell(spellDef.defName);
+    }
+
+    public IEnumerable<SpellDef> GetKnownSpells(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            yield break;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        foreach (string spellDefName in state.KnownSpellDefNames)
+        {
+            SpellDef spellDef = DefDatabase<SpellDef>.GetNamedSilentFail(spellDefName);
+            if (spellDef != null)
+            {
+                yield return spellDef;
+            }
+        }
     }
 
     public int CancelMaintainedSpell(Thing caster, SpellDef spellDef, bool runBreakActions)
@@ -1428,8 +1514,44 @@ public sealed class SpellRuntimeGameComponent : GameComponent
     {
         public Thing caster;
         public float currentMana;
+        public bool hasArcaneGift;
+        public int casterLevel;
         public int debugCasterLevel;
         private List<SpellCooldownEntry> cooldowns = new();
+        private List<string> knownSpellDefNames = new();
+
+        public IEnumerable<string> KnownSpellDefNames => knownSpellDefNames ?? new List<string>();
+
+        public bool KnowsSpell(string spellDefName)
+        {
+            return !string.IsNullOrWhiteSpace(spellDefName)
+                && knownSpellDefNames != null
+                && knownSpellDefNames.Contains(spellDefName);
+        }
+
+        public bool LearnSpell(string spellDefName)
+        {
+            if (string.IsNullOrWhiteSpace(spellDefName))
+            {
+                return false;
+            }
+
+            knownSpellDefNames ??= new List<string>();
+            if (knownSpellDefNames.Contains(spellDefName))
+            {
+                return false;
+            }
+
+            knownSpellDefNames.Add(spellDefName);
+            return true;
+        }
+
+        public bool ForgetSpell(string spellDefName)
+        {
+            return !string.IsNullOrWhiteSpace(spellDefName)
+                && knownSpellDefNames != null
+                && knownSpellDefNames.Remove(spellDefName);
+        }
 
         public int GetCooldownReadyTick(string spellDefName)
         {
@@ -1458,12 +1580,25 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         {
             Scribe_References.Look(ref caster, "caster");
             Scribe_Values.Look(ref currentMana, "currentMana", DefaultStartingMana);
+            Scribe_Values.Look(ref hasArcaneGift, "hasArcaneGift");
+            Scribe_Values.Look(ref casterLevel, "casterLevel");
             Scribe_Values.Look(ref debugCasterLevel, "debugCasterLevel");
             Scribe_Collections.Look(ref cooldowns, "cooldowns", LookMode.Deep);
+            Scribe_Collections.Look(ref knownSpellDefNames, "knownSpellDefNames", LookMode.Value);
 
             if (Scribe.mode == LoadSaveMode.PostLoadInit && cooldowns == null)
             {
                 cooldowns = new List<SpellCooldownEntry>();
+            }
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && knownSpellDefNames == null)
+            {
+                knownSpellDefNames = new List<string>();
+            }
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && casterLevel == 0 && debugCasterLevel > 0)
+            {
+                casterLevel = debugCasterLevel;
             }
         }
 

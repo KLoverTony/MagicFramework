@@ -83,7 +83,11 @@ public static class SpellPowerUtility
             return 0f;
         }
 
-        return (SpellRuntimeGameComponent.Instance?.GetDebugCasterLevel(caster) ?? 0) * powerDef.casterLevelFactor;
+        SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+        int casterLevel = caster is Pawn pawn
+            ? runtime?.GetCasterLevel(pawn) ?? 0
+            : runtime?.GetDebugCasterLevel(caster) ?? 0;
+        return casterLevel * powerDef.casterLevelFactor;
     }
 
     private static int ResolveTier(SpellPowerDef powerDef, float value)

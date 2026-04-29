@@ -114,7 +114,7 @@
     <surfaceType>Item</surfaceType>
     <constructionSkillPrerequisite>6</constructionSkillPrerequisite>
     <researchPrerequisites>
-      <li>MFV_AdvancedSchools</li>
+      <li>MFV_ArcaneSecrets</li>
     </researchPrerequisites>
     <building>
       <paintable>true</paintable>

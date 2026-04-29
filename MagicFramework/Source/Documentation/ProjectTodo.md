@@ -88,15 +88,40 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
 - Basic damage, hediff, and explosion primitives.
   Current state:
   - `DamageActionDef` applies authored damage amount, damage def, and armor penetration to the current target thing
+  - `DamageActionDef` now supports extra damage entries, hit part selection, guilt policy, and combat log behavior
   - `ApplyHediffActionDef` adjusts an authored hediff severity on the current pawn target
+  - `ApplyHediffActionDef` now supports body-part targeting, add/remove modes, duration policies, and checkIfAlreadyHas
   - `ExplosionActionDef` triggers a radial flame explosion at the current cell with authored radius and damage
+  - `ExplosionActionDef` now supports damage type, fire chance, falloff, explosion sound/effect, spawned filth/things, and RimWorld explosion gas type
+  - gas duration authoring is retained for compatibility, but RimWorld 1.6 explosion gas exposes type/amount/radius rather than lifetime control
+  - `RemoveHediffActionDef` and worker for scheduled hediff removal
+  Validation spells:
+  - `MF_Firebolt` (now uses extra damage, guilt policy, combat log)
+  - `MF_Fireball` (now uses full explosion options, hediff add modes)
+
+- Modular procedural magic FX system.
+  Current state:
+  - `SpellDef` supports semantic FX metadata (`element`, `delivery`, `effectShape`) plus spell-specific override knobs
+  - `MagicElementDef` and `MagicFXDef` provide Def-driven visual profiles that external mods can extend
+  - `MagicFXResolver` composes a playable FX package from spell metadata, power tier, overrides, and fallback profiles
+  - `MagicFXSpawner` plays resolved effecters, flecks, sounds, color overrides, and tier-scaled fleck intensity
+  - `SpellExecutor` plays a metadata-driven cast-start FX automatically when procedural FX is enabled
+  - `ProceduralFXActionDef` lets authored action trees request cast, impact, explosion, area pulse, and sustain FX without naming concrete RimWorld effect defs
   Remaining gaps:
-  - damage actions do not yet support extra damage entries, hit part selection, instigator guilt policy, or custom combat log behavior
-  - hediff actions do not yet support body-part targeting, add/remove modes, duration policies, or richer status-effect semantics
-  - explosion actions do not yet author damage type, fire chance, falloff, explosion sound/effect, spawned filth/things/gas, or other RimWorld explosion options
+  - delivery-specific projectile/trail generation is not yet automatic
+  - existing damage, explosion, projectile, chain, force-field, and persistent-effect workers do not yet consume procedural FX as missing-field fallbacks
+  - no custom beam renderer, decal placement, light pulse, or shader overlay layer yet
   Validation spells:
   - `MF_Firebolt`
   - `MF_Fireball`
+
+- Terrain and weather-buildup action primitives.
+  Current state:
+  - `TerrainPatchActionDef` mutates cells in a radius around an authored center source
+  - terrain patches can convert water-like terrain to authored replacement terrain such as `Ice`
+  - terrain patches can add snow depth to non-water cells, with optional roof skipping
+  Validation spells:
+  - `MF_Freeze`
 
 - Real projectile launch primitive.
   Current state:
@@ -309,11 +334,11 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
 
 - Add explicit Harmony dependency metadata in `About/About.xml` so load order is enforced by mod metadata.
 
-- Review debug fallback spells and continue replacing them with authored defs where practical.
+- Keep debug fallback spells lightweight. Authored validation spell XML has moved to MFVanilla content.
 
 - Add custom gizmo icons for validation spells.
   Current state:
-  - authored validation spells now have icon paths when matching PNGs exist under `Textures/UI/Gizmos/Spells`
+  - authored validation spells and matching PNGs now live in MFVanilla under `Defs/SpellDefs` and `Textures/UI/Gizmos/Spells`
   - currently wired: `MF_BlinkStep`, `MF_ChainLightning`, `MF_CreateFood`, `MF_DelayedBlastRune`, `MF_Disintegrate`, `MF_Fireball`, `MF_Firebolt`, `MF_FlameField`, `MF_ForceField`, `MF_ForcePull`, `MF_ForcePush`, `MF_Haste`, `MF_Heal`, `MF_ManaShield`, `MF_Might`, `MF_Regeneration`, `MF_RuneTrap`, `MF_SummonDog`, and `MF_WallOfFire`
   Remaining useful icons:
   - future validation spells as they are added

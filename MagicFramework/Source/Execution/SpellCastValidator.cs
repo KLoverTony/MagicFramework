@@ -21,6 +21,7 @@ public sealed class SpellCastValidator
         if (!TryValidateTargeting(context, out string targetingReason))
         {
             context.executionState.failed = true;
+            context.executionState.failureReason = targetingReason;
             Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {targetingReason}");
             return false;
         }
@@ -40,6 +41,7 @@ public sealed class SpellCastValidator
             if (!requirementDef.CreateWorker().CanCast(context, requirementDef, out string reason))
             {
                 context.executionState.failed = true;
+                context.executionState.failureReason = reason;
                 Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {reason}");
                 return false;
             }

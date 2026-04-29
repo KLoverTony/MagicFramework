@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MagicFramework.Context;
 using MagicFramework.Conditions;
@@ -5,6 +6,8 @@ using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using MagicFramework.Scheduling;
+using MagicFramework.Targeting;
+using MagicFramework.Visuals;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -142,6 +145,24 @@ public sealed class EffectActionWorker : SpellActionWorker
         };
 
         return new TargetInfo(cell, context?.map);
+    }
+}
+
+public sealed class ProceduralFXActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        ProceduralFXActionDef fxActionDef = actionDef as ProceduralFXActionDef;
+        if (fxActionDef == null)
+        {
+            return;
+        }
+
+        bool played = MagicFXSpawner.Play(context, fxActionDef.fxEvent, fxActionDef.locationSource);
+        if (!played)
+        {
+            Log.Warning($"[MagicFramework] ProceduralFXActionDef did not resolve any playable FX for {context?.spellDef?.defName ?? "<null spell>"}.");
+        }
     }
 }
 
@@ -297,6 +318,127 @@ public sealed class SpawnThingActionWorker : SpellActionWorker
         }
 
         spawnedThingService.CreateSpawnedThing(context, spawnThingActionDef);
+    }
+}
+
+public sealed class TerrainPatchActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        TerrainPatchActionDef terrainPatchActionDef = actionDef as TerrainPatchActionDef;
+        if (terrainPatchActionDef == null || context?.map == null)
+        {
+            return;
+        }
+
+        IntVec3 center = TargetQueryUtility.ResolvePoint(context, terrainPatchActionDef.centerSource);
+        if (!center.IsValid)
+        {
+            Log.Warning("[MagicFramework] TerrainPatchActionWorker skipped because its center point was invalid.");
+            return;
+        }
+
+        TerrainDef replacementTerrain = ResolveTerrain(terrainPatchActionDef.replacementTerrainDef);
+        TerrainDef waterReplacementTerrain = ResolveTerrain(terrainPatchActionDef.waterReplacementTerrainDef);
+        HashSet<TerrainDef> replaceTerrainDefs = ResolveTerrainSet(terrainPatchActionDef.replaceTerrainDefs);
+        int changedTerrain = 0;
+        int snowedCells = 0;
+
+        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, Mathf.Max(0.1f, terrainPatchActionDef.radius), true))
+        {
+            if (!cell.InBounds(context.map))
+            {
+                continue;
+            }
+
+            if (terrainPatchActionDef.skipRoofedCells && cell.Roofed(context.map))
+            {
+                continue;
+            }
+
+            TerrainDef currentTerrain = context.map.terrainGrid.TerrainAt(cell);
+            if (currentTerrain == null)
+            {
+                continue;
+            }
+
+            bool isWater = IsWaterTerrain(currentTerrain);
+            if (terrainPatchActionDef.onlyAffectNaturalTerrain && currentTerrain.IsFloor)
+            {
+                continue;
+            }
+
+            if (terrainPatchActionDef.replaceWater && isWater && waterReplacementTerrain != null)
+            {
+                context.map.terrainGrid.SetTerrain(cell, waterReplacementTerrain);
+                changedTerrain++;
+                currentTerrain = waterReplacementTerrain;
+                isWater = false;
+            }
+            else if (replacementTerrain != null && replaceTerrainDefs.Contains(currentTerrain))
+            {
+                context.map.terrainGrid.SetTerrain(cell, replacementTerrain);
+                changedTerrain++;
+                currentTerrain = replacementTerrain;
+                isWater = IsWaterTerrain(currentTerrain);
+            }
+
+            if (terrainPatchActionDef.addSnow && !isWater)
+            {
+                float targetDepth = Mathf.Clamp01(terrainPatchActionDef.snowDepth);
+                if (targetDepth > 0f && context.map.snowGrid.GetDepth(cell) < targetDepth)
+                {
+                    context.map.snowGrid.SetDepth(cell, targetDepth);
+                    snowedCells++;
+                }
+            }
+        }
+
+        Log.Message($"[MagicFramework] Terrain patch at {center}: changedTerrain={changedTerrain}, snowedCells={snowedCells}.");
+    }
+
+    private static TerrainDef ResolveTerrain(string terrainDefName)
+    {
+        return string.IsNullOrWhiteSpace(terrainDefName)
+            ? null
+            : DefDatabase<TerrainDef>.GetNamedSilentFail(terrainDefName);
+    }
+
+    private static HashSet<TerrainDef> ResolveTerrainSet(List<string> terrainDefNames)
+    {
+        HashSet<TerrainDef> terrainDefs = new();
+        if (terrainDefNames == null)
+        {
+            return terrainDefs;
+        }
+
+        foreach (string terrainDefName in terrainDefNames)
+        {
+            TerrainDef terrainDef = ResolveTerrain(terrainDefName);
+            if (terrainDef != null)
+            {
+                terrainDefs.Add(terrainDef);
+            }
+        }
+
+        return terrainDefs;
+    }
+
+    private static bool IsWaterTerrain(TerrainDef terrainDef)
+    {
+        if (terrainDef == null)
+        {
+            return false;
+        }
+
+        if (terrainDef.waterBodyType != WaterBodyType.None)
+        {
+            return true;
+        }
+
+        string defName = terrainDef.defName;
+        return defName != null
+            && (defName.StartsWith("Water") || defName == "Marsh" || defName == "Mud");
     }
 }
 
@@ -1138,12 +1280,38 @@ public sealed class DamageActionWorker : SpellActionWorker
 
         float damageAmount = SpellPowerUtility.ResolveScalableFloat(context, damageActionDef.amount, damageActionDef.scalableAmount);
         float armorPenetration = SpellPowerUtility.ResolveScalableFloat(context, damageActionDef.armorPenetration, damageActionDef.scalableArmorPenetration);
+
+        BodyPartRecord hitPart = null;
+        Pawn pawnTarget = targetThing as Pawn;
+        if (!string.IsNullOrWhiteSpace(damageActionDef.hitBodyPartDef) && pawnTarget != null)
+        {
+            hitPart = GetBodyPart(pawnTarget, damageActionDef.hitBodyPartDef);
+        }
+
         DamageInfo damageInfo = new(
             resolvedDamageDef,
             damageAmount,
             armorPenetration,
-            instigator: context?.caster);
+            instigator: context?.caster,
+            hitPart: hitPart,
+            intendedTarget: targetThing,
+            instigatorGuilty: damageActionDef.guiltPolicy == GuiltPolicy.Damage);
+
         targetThing.TakeDamage(damageInfo);
+
+        if (damageActionDef.extraDamages != null)
+        {
+            foreach (ExtraDamageEntry extraEntry in damageActionDef.extraDamages)
+            {
+                ApplyExtraDamage(context, targetThing, extraEntry, damageActionDef.guiltPolicy);
+            }
+        }
+
+        if (damageActionDef.useCombatLog && pawnTarget != null)
+        {
+            TryAddCombatLogEntry(context, damageActionDef, pawnTarget, damageAmount, resolvedDamageDef);
+        }
+
         Log.Message(
             $"[MagicFramework] Applied {damageAmount} {resolvedDamageDef.defName} damage to {targetThing.LabelCap} with {armorPenetration} armor penetration.");
     }
@@ -1162,6 +1330,91 @@ public sealed class DamageActionWorker : SpellActionWorker
         }
 
         return null;
+    }
+
+    private static BodyPartRecord GetBodyPart(Pawn pawn, string bodyPartDef)
+    {
+        if (pawn?.RaceProps?.body == null || string.IsNullOrWhiteSpace(bodyPartDef))
+        {
+            return null;
+        }
+
+        BodyPartDef authoredBodyPartDef = DefDatabase<BodyPartDef>.GetNamedSilentFail(bodyPartDef);
+        BodyPartTagDef authoredTagDef = DefDatabase<BodyPartTagDef>.GetNamedSilentFail(bodyPartDef);
+        foreach (BodyPartRecord part in pawn.RaceProps.body.AllParts)
+        {
+            if (part.def == authoredBodyPartDef || part.def.defName == bodyPartDef)
+            {
+                return part;
+            }
+
+            if (authoredTagDef != null && part.def.tags != null && part.def.tags.Contains(authoredTagDef))
+            {
+                return part;
+            }
+
+            if (part.LabelCap.ToString().Equals(bodyPartDef, StringComparison.OrdinalIgnoreCase))
+            {
+                return part;
+            }
+        }
+
+        return null;
+    }
+
+    private static void ApplyExtraDamage(SpellContext context, Thing targetThing, ExtraDamageEntry extraEntry, GuiltPolicy guiltPolicy)
+    {
+        if (targetThing == null || extraEntry == null || string.IsNullOrWhiteSpace(extraEntry.damageDef))
+        {
+            return;
+        }
+
+        DamageDef extraDamageDef = DefDatabase<DamageDef>.GetNamedSilentFail(extraEntry.damageDef);
+        if (extraDamageDef == null)
+        {
+            Log.Warning($"[MagicFramework] Extra damage def '{extraEntry.damageDef}' could not be resolved.");
+            return;
+        }
+
+        DamageInfo extraDamageInfo = new(
+            extraDamageDef,
+            extraEntry.amount,
+            extraEntry.armorPenetration,
+            instigator: context?.caster,
+            intendedTarget: targetThing,
+            instigatorGuilty: guiltPolicy == GuiltPolicy.Damage);
+
+        Pawn pawnTarget = targetThing as Pawn;
+        if (extraEntry.toHead && pawnTarget != null)
+        {
+            BodyPartRecord head = GetBodyPart(pawnTarget, "Head");
+            if (head != null)
+            {
+                extraDamageInfo.SetHitPart(head);
+            }
+        }
+
+        targetThing.TakeDamage(extraDamageInfo);
+        Log.Message(
+            $"[MagicFramework] Applied extra {extraEntry.amount} {extraDamageDef.defName} damage to {targetThing.LabelCap}.");
+    }
+
+    private static void TryAddCombatLogEntry(SpellContext context, DamageActionDef damageActionDef, Pawn targetPawn, float damageAmount, DamageDef damageDef)
+    {
+        Pawn casterPawn = context?.caster as Pawn;
+        RulePackDef rulePack = null;
+        if (!string.IsNullOrWhiteSpace(damageActionDef.combatLogSignature))
+        {
+            rulePack = DefDatabase<RulePackDef>.GetNamedSilentFail(damageActionDef.combatLogSignature);
+        }
+
+        rulePack ??= RulePackDefOf.Combat_RangedDamage;
+        if (Find.BattleLog != null)
+        {
+            Find.BattleLog.Add(new BattleLogEntry_DamageTaken(targetPawn, rulePack, casterPawn));
+        }
+
+        Log.Message($"[MagicFramework] CombatLog {rulePack.defName}: {casterPawn?.LabelCap ?? "Unknown caster"} damaged {targetPawn.LabelCap} for {damageAmount} {damageDef.defName}.");
     }
 }
 
@@ -1189,8 +1442,81 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
             return;
         }
 
-        HealthUtility.AdjustSeverity(targetPawn, resolvedHediffDef, hediffActionDef.severity);
-        Log.Message($"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {hediffActionDef.severity} to {targetPawn.LabelCap}.");
+        // Handle checkIfAlreadyHas option
+        if (hediffActionDef.checkIfAlreadyHas)
+        {
+            Hediff existingHediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
+            if (existingHediff != null)
+            {
+                Log.Message($"[MagicFramework] Skipped hediff {resolvedHediffDef.defName} on {targetPawn.LabelCap} because target already has it.");
+                return;
+            }
+        }
+
+        // Handle body part targeting
+        BodyPartRecord targetBodyPart = null;
+        if (!string.IsNullOrWhiteSpace(hediffActionDef.bodyPartDef))
+        {
+            targetBodyPart = GetBodyPart(targetPawn, hediffActionDef.bodyPartDef);
+        }
+
+        // Apply hediff based on add mode
+        Hediff hediff = null;
+        switch (hediffActionDef.addMode)
+        {
+            case HediffAddMode.Replace:
+                RemoveExistingHediffs(targetPawn, resolvedHediffDef, targetBodyPart);
+                hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
+                SetSeverity(hediff, hediffActionDef.severity);
+                break;
+            case HediffAddMode.TryAdd:
+                hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
+                if (hediff == null)
+                {
+                    hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
+                    SetSeverity(hediff, hediffActionDef.severity);
+                }
+                break;
+            case HediffAddMode.SoftReplace:
+                hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
+                if (hediff != null)
+                {
+                    hediff.Severity += hediffActionDef.severity;
+                }
+                else
+                {
+                    hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
+                    if (hediff != null)
+                    {
+                        hediff.Severity = hediffActionDef.severity;
+                    }
+                }
+                break;
+            case HediffAddMode.Default:
+            default:
+                hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
+                if (hediff != null)
+                {
+                    hediff.Severity += hediffActionDef.severity;
+                }
+                else
+                {
+                    hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
+                    SetSeverity(hediff, hediffActionDef.severity);
+                }
+                break;
+        }
+
+        if (hediffActionDef.removeAfterDuration && hediff != null && context?.map != null)
+        {
+            int duration = SpellPowerUtility.ResolveScalableInt(context, hediffActionDef.durationTicks, hediffActionDef.scalableDurationTicks);
+            if (duration > 0)
+            {
+                ScheduleHediffRemoval(context, targetPawn, resolvedHediffDef, targetBodyPart, duration);
+            }
+        }
+
+        Log.Message($"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {hediffActionDef.severity} to {targetPawn.LabelCap} (mode: {hediffActionDef.addMode}, bodyPart: {hediffActionDef.bodyPartDef ?? "none"}).");
     }
 
     private static HediffDef ResolveHediffDef(ApplyHediffActionDef hediffActionDef)
@@ -1201,6 +1527,161 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
         }
 
         return DefDatabase<HediffDef>.GetNamedSilentFail(hediffActionDef.hediffDef);
+    }
+
+    private static BodyPartRecord GetBodyPart(Pawn pawn, string bodyPartDef)
+    {
+        if (pawn?.RaceProps?.body == null || string.IsNullOrWhiteSpace(bodyPartDef))
+        {
+            return null;
+        }
+
+        BodyPartDef authoredBodyPartDef = DefDatabase<BodyPartDef>.GetNamedSilentFail(bodyPartDef);
+        BodyPartTagDef authoredTagDef = DefDatabase<BodyPartTagDef>.GetNamedSilentFail(bodyPartDef);
+        foreach (BodyPartRecord part in pawn.RaceProps.body.AllParts)
+        {
+            if (part.def == authoredBodyPartDef || part.def.defName == bodyPartDef)
+            {
+                return part;
+            }
+
+            if (authoredTagDef != null && part.def.tags != null && part.def.tags.Contains(authoredTagDef))
+            {
+                return part;
+            }
+
+            if (part.LabelCap.ToString().Equals(bodyPartDef, StringComparison.OrdinalIgnoreCase))
+            {
+                return part;
+            }
+        }
+
+        return null;
+    }
+
+    private static Hediff FindHediff(Pawn pawn, HediffDef hediffDef, string bodyPartDef)
+    {
+        if (pawn?.health?.hediffSet == null || hediffDef == null)
+        {
+            return null;
+        }
+
+        BodyPartRecord bodyPart = GetBodyPart(pawn, bodyPartDef);
+        foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+        {
+            if (hediff.def == hediffDef && (bodyPart == null || hediff.Part == bodyPart))
+            {
+                return hediff;
+            }
+        }
+
+        return null;
+    }
+
+    private static void SetSeverity(Hediff hediff, float severity)
+    {
+        if (hediff != null)
+        {
+            hediff.Severity = severity;
+        }
+    }
+
+    private static void RemoveExistingHediffs(Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPart)
+    {
+        if (pawn?.health?.hediffSet?.hediffs == null || hediffDef == null)
+        {
+            return;
+        }
+
+        List<Hediff> toRemove = new();
+        foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+        {
+            if (hediff.def == hediffDef && (bodyPart == null || hediff.Part == bodyPart))
+            {
+                toRemove.Add(hediff);
+            }
+        }
+
+        foreach (Hediff hediff in toRemove)
+        {
+            pawn.health.RemoveHediff(hediff);
+        }
+    }
+
+    private static void ScheduleHediffRemoval(SpellContext context, Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPart, int durationTicks)
+    {
+        if (context?.map == null || pawn == null || hediffDef == null)
+        {
+            return;
+        }
+
+        HediffRemovalMapComponent removalRuntime = context.map.GetComponent<HediffRemovalMapComponent>();
+        if (removalRuntime != null)
+        {
+            removalRuntime.Enqueue(new ScheduledHediffRemoval(
+                (Find.TickManager?.TicksGame ?? 0) + durationTicks,
+                pawn,
+                hediffDef,
+                bodyPart?.def?.defName));
+            Log.Message($"[MagicFramework] Scheduled hediff {hediffDef.defName} removal in {durationTicks} ticks for {pawn.LabelCap}.");
+        }
+    }
+}
+
+public sealed class RemoveHediffActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        RemoveHediffActionDef removeActionDef = actionDef as RemoveHediffActionDef;
+        if (removeActionDef == null)
+        {
+            return;
+        }
+
+        Pawn targetPawn = context?.currentTarget.Thing as Pawn;
+        if (targetPawn == null || targetPawn.Destroyed || targetPawn.health == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(removeActionDef.hediffDef))
+        {
+            return;
+        }
+
+        HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(removeActionDef.hediffDef);
+        if (hediffDef == null)
+        {
+            return;
+        }
+
+        BodyPartRecord bodyPart = null;
+        if (!string.IsNullOrWhiteSpace(removeActionDef.bodyPartDef) && targetPawn.RaceProps?.body != null)
+        {
+            foreach (BodyPartRecord part in targetPawn.RaceProps.body.AllParts)
+            {
+                if (part.def.defName == removeActionDef.bodyPartDef)
+                {
+                    bodyPart = part;
+                    break;
+                }
+            }
+        }
+
+        Hediff hediff = null;
+        foreach (Hediff candidate in targetPawn.health.hediffSet.hediffs)
+        {
+            if (candidate.def == hediffDef && (bodyPart == null || candidate.Part == bodyPart))
+            {
+                hediff = candidate;
+                break;
+            }
+        }
+        if (hediff != null)
+        {
+            targetPawn.health.RemoveHediff(hediff);
+            Log.Message($"[MagicFramework] Removed hediff {hediffDef.defName} from {targetPawn.LabelCap}.");
+        }
     }
 }
 
@@ -1245,22 +1726,151 @@ public sealed class ExplosionActionWorker : SpellActionWorker
         float radius = SpellPowerUtility.ResolveScalableFloat(context, explosionActionDef.radius, explosionActionDef.scalableRadius);
         float damageAmount = SpellPowerUtility.ResolveScalableFloat(context, explosionActionDef.damageAmount, explosionActionDef.scalableDamageAmount);
 
+        // Resolve damage def
+        DamageDef damageDef = ResolveDamageDef(explosionActionDef.damageDef);
+        if (damageDef == null)
+        {
+            damageDef = DamageDefOf.Flame;
+        }
+
+        // Resolve explosion sound
+        SoundDef explosionSound = null;
+        if (!string.IsNullOrWhiteSpace(explosionActionDef.explosionSoundDef))
+        {
+            explosionSound = DefDatabase<SoundDef>.GetNamedSilentFail(explosionActionDef.explosionSoundDef);
+        }
+
+        // Resolve explosion effect
+        EffecterDef explosionEffect = null;
+        if (!string.IsNullOrWhiteSpace(explosionActionDef.explosionEffectDef))
+        {
+            explosionEffect = DefDatabase<EffecterDef>.GetNamedSilentFail(explosionActionDef.explosionEffectDef);
+        }
+
+        GasType? gasType = ResolveGasType(explosionActionDef.gasDef);
+        if (explosionActionDef.gasDurationTicks > 0f && gasType.HasValue)
+        {
+            Log.Warning("[MagicFramework] ExplosionActionDef gasDurationTicks is authored, but this RimWorld version exposes explosion gas amount/radius rather than gas lifetime. The duration value was ignored.");
+        }
+
+        explosionEffect?.Spawn(context.currentCell, context.map);
+
         GenExplosion.DoExplosion(
             context.currentCell,
             context.map,
             radius,
-            DamageDefOf.Flame,
+            damageDef,
             context.caster,
             damAmount: Mathf.RoundToInt(damageAmount),
             armorPenetration: -1f,
-            explosionSound: DefDatabase<SoundDef>.GetNamedSilentFail("Explosion_Flame"),
+            explosionSound: explosionSound,
             projectile: context.currentTarget.Thing?.def,
             intendedTarget: context.currentTarget.Thing,
-            chanceToStartFire: 0.35f,
-            damageFalloff: true);
+            postExplosionGasType: gasType,
+            chanceToStartFire: explosionActionDef.fireChance,
+            damageFalloff: explosionActionDef.damageFalloff);
+
+        // Handle spawned things
+        if (explosionActionDef.spawnedThings != null)
+        {
+            foreach (SpawnedThingEntry spawnedThing in explosionActionDef.spawnedThings)
+            {
+                if (spawnedThing == null || !Rand.Chance(Mathf.Clamp01(spawnedThing.chance)))
+                {
+                    continue;
+                }
+
+                ThingDef thingDef = DefDatabase<ThingDef>.GetNamedSilentFail(spawnedThing.thingDef);
+                if (thingDef != null)
+                {
+                    Thing thing = ThingMaker.MakeThing(thingDef);
+                    if (thing != null)
+                    {
+                        IntVec3 spawnCell = RandomCellInRadius(context.currentCell, context.map, radius);
+                        thing.stackCount = Mathf.Max(1, spawnedThing.stackCount);
+                        GenSpawn.Spawn(thing, spawnCell, context.map);
+                        Log.Message($"[MagicFramework] Spawned {thing.stackCount}x {spawnedThing.thingDef} at {spawnCell}.");
+                    }
+                }
+                else
+                {
+                    Log.Warning($"[MagicFramework] ExplosionActionWorker could not resolve spawned thing def '{spawnedThing.thingDef ?? "<null>"}'.");
+                }
+            }
+        }
+
+        // Handle spawned filth
+        if (explosionActionDef.spawnedFilth != null)
+        {
+            foreach (SpawnedFilthEntry spawnedFilth in explosionActionDef.spawnedFilth)
+            {
+                if (spawnedFilth == null || !Rand.Chance(Mathf.Clamp01(spawnedFilth.chance)))
+                {
+                    continue;
+                }
+
+                ThingDef filthDef = DefDatabase<ThingDef>.GetNamedSilentFail(spawnedFilth.filthDef);
+                if (filthDef != null)
+                {
+                    IntVec3 filthCell = RandomCellInRadius(context.currentCell, context.map, radius);
+                    GenSpawn.Spawn(filthDef, filthCell, context.map);
+                    Log.Message($"[MagicFramework] Spawned filth {spawnedFilth.filthDef} at {filthCell}.");
+                }
+                else
+                {
+                    Log.Warning($"[MagicFramework] ExplosionActionWorker could not resolve filth def '{spawnedFilth.filthDef ?? "<null>"}'.");
+                }
+            }
+        }
 
         Log.Message(
-            $"[MagicFramework] Triggered flame explosion at {context.currentCell} with radius {radius} and damage {damageAmount}.");
+            $"[MagicFramework] Triggered explosion at {context.currentCell} with radius {radius}, damage {damageAmount}, damageDef {damageDef.defName}, fireChance {explosionActionDef.fireChance}, damageFalloff {explosionActionDef.damageFalloff}.");
+    }
+
+    private static DamageDef ResolveDamageDef(string damageDefName)
+    {
+        if (string.IsNullOrWhiteSpace(damageDefName))
+        {
+            return DamageDefOf.Flame;
+        }
+
+        DamageDef damageDef = DefDatabase<DamageDef>.GetNamedSilentFail(damageDefName);
+        return damageDef ?? DamageDefOf.Flame;
+    }
+
+    private static GasType? ResolveGasType(string gasDefName)
+    {
+        if (string.IsNullOrWhiteSpace(gasDefName))
+        {
+            return null;
+        }
+
+        if (Enum.TryParse(gasDefName, true, out GasType gasType))
+        {
+            return gasType;
+        }
+
+        Log.Warning($"[MagicFramework] ExplosionActionWorker could not resolve gas type '{gasDefName}'.");
+        return null;
+    }
+
+    private static IntVec3 RandomCellInRadius(IntVec3 center, Map map, float radius)
+    {
+        if (map == null || !center.IsValid)
+        {
+            return center;
+        }
+
+        List<IntVec3> validCells = new();
+        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
+        {
+            if (cell.InBounds(map))
+            {
+                validCells.Add(cell);
+            }
+        }
+
+        return validCells.Count > 0 ? validCells.RandomElement() : center;
     }
 }
 

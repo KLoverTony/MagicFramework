@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Aeternus Faith</name>
+  <author>Oracle</author>
+  <packageId>oracle.aeternusfaith</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>A faith, death, memory, spirit, and hidden divine intervention content mod inspired by Aeternus.</description>
+  <modDependencies>
+    <li>
+      <packageId>ludeon.rimworld.ideology</packageId>
+      <displayName>Ideology</displayName>
+    </li>
+    <li>
+      <packageId>oracle.magicframework</packageId>
+      <downloadUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=...</downloadUrl>
+      <displayName>Magic Framework</displayName>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>ludeon.rimworld.ideology</li>
+    <li>oracle.magicframework</li>
+  </loadAfter>
+</ModMetaData>

@@ -5,3 +5,4 @@ D:\RimWorld\Mods\MFVanilla\Source\obj\Debug\MFVanilla.GeneratedMSBuildEditorConf
 D:\RimWorld\Mods\MFVanilla\Source\obj\Debug\MFVanilla.csproj.CoreCompileInputs.cache
 D:\RimWorld\Mods\MFVanilla\Source\obj\Debug\MFVanilla.dll
 D:\RimWorld\Mods\MFVanilla\Source\obj\Debug\MFVanilla.pdb
+D:\RimWorld\Mods\MFVanilla\Source\obj\Debug\MFVanilla.sourcelink.json

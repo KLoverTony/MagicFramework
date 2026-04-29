@@ -1,6 +1,7 @@
 using MagicFramework.Context;
 using MagicFramework.Definitions;
 using MagicFramework.Scheduling;
+using MagicFramework.Visuals;
 using Verse;
 
 namespace MagicFramework.Execution;
@@ -54,6 +55,7 @@ public sealed class SpellExecutor
         }
 
         costProcessor.ApplyCosts(context);
+        MagicFXSpawner.Play(context, MagicFXEvent.CastStart, SpellEffectLocationSource.Caster);
         actionRunner.RunRootActions(context);
         scheduler.FlushDebugSchedule(context);
         return !context.executionState.failed && !context.executionState.cancelled;

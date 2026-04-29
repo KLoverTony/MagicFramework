@@ -72,6 +72,11 @@ public static class SpellDebugCasting
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetFlameField(), "Debug: Cast Flame Field", "Starts target selection and casts the current debug Flame Field spell through Magic Framework.", "UI/Commands/Attack");
     }
 
+    public static Gizmo CreateFreezeGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetFreeze(), "Debug: Cast Freeze", "Starts target selection and casts the current debug Freeze spell through Magic Framework.", "UI/Commands/Attack");
+    }
+
     public static Gizmo CreateForcePushGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetForcePush(), "Debug: Cast Force Push", "Starts target selection and casts the current debug Force Push spell through Magic Framework.", "UI/Commands/Attack");
@@ -129,16 +134,34 @@ public static class SpellDebugCasting
 
     public static Gizmo CreateCasterLevelGizmo(Pawn pawn)
     {
-        int currentLevel = SpellRuntimeGameComponent.Instance?.GetDebugCasterLevel(pawn) ?? 0;
+        int currentLevel = SpellRuntimeGameComponent.Instance?.GetCasterLevel(pawn) ?? 0;
         return new Command_Action
         {
             defaultLabel = $"Debug: Caster Level {currentLevel}",
-            defaultDesc = "Cycles the Magic Framework debug caster level used by spell power scaling tests.",
+            defaultDesc = "Cycles the Magic Framework caster level used by spell power scaling and level requirements.",
             icon = ContentFinder<Texture2D>.Get("UI/Commands/DesirePower", true),
             action = () =>
             {
                 int newLevel = SpellRuntimeGameComponent.Instance?.CycleDebugCasterLevel(pawn) ?? 0;
-                Messages.Message($"Magic Framework debug caster level set to {newLevel}.", pawn, MessageTypeDefOf.TaskCompletion, false);
+                Messages.Message($"Magic Framework caster level set to {newLevel}.", pawn, MessageTypeDefOf.TaskCompletion, false);
+            }
+        };
+    }
+
+    public static Gizmo CreateArcaneGiftGizmo(Pawn pawn)
+    {
+        bool hasGift = SpellRuntimeGameComponent.Instance?.HasArcaneGift(pawn) == true;
+        return new Command_Action
+        {
+            defaultLabel = hasGift ? "Debug: Arcane Gift On" : "Debug: Arcane Gift Off",
+            defaultDesc = "Toggles the Magic Framework Arcane gift metadata for this pawn.",
+            icon = ContentFinder<Texture2D>.Get("UI/Commands/DesirePower", true),
+            action = () =>
+            {
+                SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+                bool newValue = runtime?.HasArcaneGift(pawn) != true;
+                runtime?.SetArcaneGift(pawn, newValue);
+                Messages.Message($"Magic Framework Arcane gift {(newValue ? "enabled" : "disabled")} for {pawn.LabelShortCap}.", pawn, MessageTypeDefOf.TaskCompletion, false);
             }
         };
     }

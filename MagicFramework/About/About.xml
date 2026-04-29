@@ -10,10 +10,4 @@
   <loadAfter>
     <li>lude.ludeCore</li>
   </loadAfter>
-  <optionalDependencies>
-    <li>
-      <packageId>oracle.mfvanilla</packageId>
-      <displayName>MF Vanilla</displayName>
-    </li>
-  </optionalDependencies>
 </ModMetaData>

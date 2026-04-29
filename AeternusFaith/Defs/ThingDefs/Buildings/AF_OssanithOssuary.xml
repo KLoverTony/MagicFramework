@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>AF_OssanithCircle</defName>
+    <label>ossanith circle</label>
+    <description>A sealed Ossanith ritual circle laid across the floor, prepared to receive a bone box at its center.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Textures/Things/RitualCircles/AF_OssanithCircle</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3,3)</drawSize>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <size>(3,3)</size>
+    <altitudeLayer>FloorCoverings</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>0</pathCost>
+    <fillPercent>0</fillPercent>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <rotatable>false</rotatable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2060</uiOrder>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <blocksAltitudes>
+      <li>FloorCoverings</li>
+    </blocksAltitudes>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>800</WorkToBuild>
+      <Flammability>0.32</Flammability>
+      <Beauty>4</Beauty>
+      <Mass>20</Mass>
+    </statBases>
+    <costList>
+      <Cloth>60</Cloth>
+      <Steel>20</Steel>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <comps>
+      <li Class="AeternusFaith.CompProperties_PlaceLinkedBuildable">
+        <targetDef>AF_OssuaryBoneBox</targetDef>
+        <offset>(0,0,0)</offset>
+        <commandLabel>Build ossuary bone box</commandLabel>
+        <commandDescription>Place a normal construction blueprint for an ossuary bone box in the center of this circle.</commandDescription>
+        <commandIconPath>Textures/Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>AF_OssuaryBoneBox</defName>
+    <label>ossuary bone box</label>
+    <description>A small Ossanith bone box for a sealed ossuary rite. This first version is decorative and does not store remains.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Textures/Things/Graves/OssuaryBox</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.35</fillPercent>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <rotatable>true</rotatable>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2061</uiOrder>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>120</MaxHitPoints>
+      <WorkToBuild>600</WorkToBuild>
+      <Flammability>0.2</Flammability>
+      <Beauty>2</Beauty>
+      <Mass>18</Mass>
+    </statBases>
+    <costList>
+      <BlocksGranite>35</BlocksGranite>
+      <Steel>10</Steel>
+    </costList>
+    <building>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>AF_OssanithLectern</defName>
+    <label>ossanith lectern</label>
+    <description>
+      A ceremonial lectern used by the Ossanith Bonewrights for sacred rites,
+      funerary observances, and solemn sermons honoring memory, death, and the
+      stewardship of the departed.
+    </description>
+
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+
+    <graphicData>
+      <texPath>Textures/Things/RitualLectern/Ossanith_Lectern</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+
+    <drawerType>MapMeshOnly</drawerType>
+    <minifiedDef>MinifiedThing</minifiedDef>
+
+    <size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.35</fillPercent>
+
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+
+    <rotatable>true</rotatable>
+    <defaultPlacingRot>South</defaultPlacingRot>
+
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2061</uiOrder>
+
+    <thingCategories>
+      <li>Furniture</li>
+    </thingCategories>
+
+    <statBases>
+      <MaxHitPoints>140</MaxHitPoints>
+      <WorkToBuild>700</WorkToBuild>
+      <Flammability>0.20</Flammability>
+      <Beauty>5</Beauty>
+      <Mass>25</Mass>
+    </statBases>
+
+    <costList>
+      <WoodLog>45</WoodLog>
+    </costList>
+
+    <building>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+
+      <!-- ritual officiant stands here -->
+      <hasInteractionCell>true</hasInteractionCell>
+      <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    </building>
+
+    <surfaceType>Item</surfaceType>
+
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+
+      <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
+        <circleDef>AF_OssanithCircle</circleDef>
+        <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
+        <commandLabel>Begin ossuary rite</commandLabel>
+        <commandDescription>Begin a placeholder Ossanith ossuary rite. Requires an orthogonally adjacent Ossanith circle with a completed ossuary in its center.</commandDescription>
+        <commandIconPath>Textures/Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+    </comps>
+
+  </ThingDef>
+
+</Defs>

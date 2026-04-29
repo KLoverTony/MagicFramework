@@ -41,6 +41,17 @@ public sealed class EffectActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Plays a metadata-resolved visual/sound event without requiring concrete effect defs on the spell.
+/// </summary>
+public sealed class ProceduralFXActionDef : SpellActionDef
+{
+    public MagicFXEvent fxEvent = MagicFXEvent.Auto;
+    public SpellEffectLocationSource locationSource = SpellEffectLocationSource.CurrentTarget;
+
+    public override SpellActionWorker CreateWorker() => new ProceduralFXActionWorker();
+}
+
+/// <summary>
 /// Schedules child actions to occur after a delay.
 /// </summary>
 public sealed class DelayActionDef : SpellActionDef
@@ -186,6 +197,25 @@ public sealed class SpawnThingActionDef : SpellActionDef
     public bool replaceExistingForCasterSpell;
 
     public override SpellActionWorker CreateWorker() => new SpawnThingActionWorker();
+}
+
+/// <summary>
+/// Mutates terrain and weather buildup around a resolved point.
+/// </summary>
+public sealed class TerrainPatchActionDef : SpellActionDef
+{
+    public TargetQueryCenterSource centerSource = TargetQueryCenterSource.CurrentCell;
+    public float radius = 1f;
+    public List<string> replaceTerrainDefs = new();
+    public string replacementTerrainDef;
+    public bool replaceWater;
+    public string waterReplacementTerrainDef = "Ice";
+    public bool addSnow;
+    public float snowDepth = 0.35f;
+    public bool skipRoofedCells = true;
+    public bool onlyAffectNaturalTerrain;
+
+    public override SpellActionWorker CreateWorker() => new TerrainPatchActionWorker();
 }
 
 /// <summary>
@@ -388,8 +418,33 @@ public sealed class DamageActionDef : SpellActionDef
     public string damageDef;
     public float armorPenetration;
     public ScalableFloatDef scalableArmorPenetration;
+    public List<ExtraDamageEntry> extraDamages;
+    public string hitBodyPartDef;
+    public GuiltPolicy guiltPolicy = GuiltPolicy.None;
+    public bool useCombatLog;
+    public string combatLogSignature;
 
     public override SpellActionWorker CreateWorker() => new DamageActionWorker();
+}
+
+/// <summary>
+/// Controls how a damage action marks its instigator for RimWorld's guilt handling.
+/// </summary>
+public enum GuiltPolicy
+{
+    None,
+    Damage
+}
+
+/// <summary>
+/// Represents an additional damage entry for a damage action.
+/// </summary>
+public sealed class ExtraDamageEntry
+{
+    public string damageDef;
+    public float amount;
+    public float armorPenetration;
+    public bool toHead;
 }
 
 /// <summary>
@@ -409,8 +464,36 @@ public sealed class ApplyHediffActionDef : SpellActionDef
 {
     public string hediffDef;
     public float severity;
+    public string bodyPartDef;
+    public HediffAddMode addMode = HediffAddMode.Default;
+    public bool removeAfterDuration;
+    public int durationTicks;
+    public ScalableFloatDef scalableDurationTicks;
+    public bool checkIfAlreadyHas;
 
     public override SpellActionWorker CreateWorker() => new ApplyHediffActionWorker();
+}
+
+/// <summary>
+/// Hediff add mode options.
+/// </summary>
+public enum HediffAddMode
+{
+    Default,
+    Replace,
+    TryAdd,
+    SoftReplace
+}
+
+/// <summary>
+/// Removes a hediff from the current pawn target.
+/// </summary>
+public sealed class RemoveHediffActionDef : SpellActionDef
+{
+    public string hediffDef;
+    public string bodyPartDef;
+
+    public override SpellActionWorker CreateWorker() => new RemoveHediffActionWorker();
 }
 
 /// <summary>
@@ -422,8 +505,36 @@ public sealed class ExplosionActionDef : SpellActionDef
     public ScalableFloatDef scalableRadius;
     public float damageAmount;
     public ScalableFloatDef scalableDamageAmount;
+    public string damageDef = "Flame";
+    public float fireChance = 0.35f;
+    public bool damageFalloff;
+    public string explosionSoundDef;
+    public string explosionEffectDef;
+    public List<SpawnedThingEntry> spawnedThings;
+    public List<SpawnedFilthEntry> spawnedFilth;
+    public string gasDef;
+    public float gasDurationTicks = -1f;
 
     public override SpellActionWorker CreateWorker() => new ExplosionActionWorker();
+}
+
+/// <summary>
+/// Represents a thing to spawn after an explosion.
+/// </summary>
+public sealed class SpawnedThingEntry
+{
+    public string thingDef;
+    public int stackCount = 1;
+    public float chance = 1f;
+}
+
+/// <summary>
+/// Represents filth to spawn after an explosion.
+/// </summary>
+public sealed class SpawnedFilthEntry
+{
+    public string filthDef;
+    public float chance = 1f;
 }
 
 /// <summary>
@@ -500,6 +611,20 @@ public enum SpellEffectLocationSource
     CurrentTarget,
     InitialTarget,
     Caster
+}
+
+public enum MagicFXEvent
+{
+    Auto,
+    CastStart,
+    ProjectileLaunch,
+    ProjectileImpact,
+    Impact,
+    AreaPulse,
+    Explosion,
+    SustainStart,
+    SustainTick,
+    SustainEnd
 }
 
 public enum TeleportSubjectSource

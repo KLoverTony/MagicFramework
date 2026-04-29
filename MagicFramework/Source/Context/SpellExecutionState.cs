@@ -12,6 +12,7 @@ public sealed class SpellExecutionState
     public bool failed;
     public bool cancelled;
     public bool costsApplied;
+    public string failureReason;
     public SpellVariableStore variables = new();
     public List<ScheduledSpellAction> scheduledActions = new();
     public List<SpellDebugEntry> debugHistory = new();

@@ -21,3 +21,21 @@ public sealed class CooldownRequirementDef : SpellRequirementDef
 
     public override SpellRequirementWorker CreateWorker() => new CooldownRequirementWorker();
 }
+
+/// <summary>
+/// Requires the caster pawn to carry the framework's arcane gift metadata.
+/// </summary>
+public sealed class ArcaneGiftRequirementDef : SpellRequirementDef
+{
+    public override SpellRequirementWorker CreateWorker() => new ArcaneGiftRequirementWorker();
+}
+
+/// <summary>
+/// Requires the caster pawn to have reached an authored caster level.
+/// </summary>
+public sealed class CasterLevelRequirementDef : SpellRequirementDef
+{
+    public int minimumLevel = 1;
+
+    public override SpellRequirementWorker CreateWorker() => new CasterLevelRequirementWorker();
+}

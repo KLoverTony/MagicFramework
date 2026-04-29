@@ -58,6 +58,11 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_FlameField", CreateFallbackFlameField);
     }
 
+    public static SpellDef GetFreeze()
+    {
+        return GetSpellOrFallback("MF_Freeze", CreateFallbackFreeze);
+    }
+
     public static SpellDef GetForcePush()
     {
         return GetSpellOrFallback("MF_ForcePush", CreateFallbackForcePush);
@@ -724,6 +729,105 @@ public static class SpellDebugSpellLibrary
                                     debugLabel = "Debug Flame Field burn",
                                     hediffDef = "Burn",
                                     severity = 0.06f
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackFreeze()
+    {
+        return new SpellDef
+        {
+            defName = "MF_Freeze_DebugFallback",
+            label = "debug freeze",
+            description = "Built-in fallback freeze spell for testing frost area, terrain, and slow primitives.",
+            range = 24f,
+            castTimeTicks = 45,
+            element = "Frost",
+            delivery = "Burst",
+            effectShape = "Pulse",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Radius,
+                primaryTargetType = SpellPrimaryTargetType.PawnOrCell,
+                pawnAffinity = SpellPawnAffinity.Foe,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = false,
+                requireLineOfSight = true,
+                range = 24f,
+                radius = 3.6f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Freeze fallback sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new ProceduralFXActionDef
+                        {
+                            debugLabel = "Freeze fallback burst FX",
+                            fxEvent = MagicFXEvent.AreaPulse,
+                            locationSource = SpellEffectLocationSource.CurrentCell
+                        },
+                        new TerrainPatchActionDef
+                        {
+                            debugLabel = "Freeze fallback terrain patch",
+                            centerSource = TargetQueryCenterSource.CurrentCell,
+                            radius = 3.6f,
+                            replaceWater = true,
+                            waterReplacementTerrainDef = "Ice",
+                            addSnow = true,
+                            snowDepth = 0.45f
+                        },
+                        new PersistentAreaZoneActionDef
+                        {
+                            debugLabel = "Freeze fallback lingering field",
+                            markerThingDef = "MF_FreezeMarker",
+                            zoneRadius = 3.6f,
+                            pulseIntervalTicks = 60,
+                            visualPulseIntervalTicks = 90,
+                            emitVisualFromMarkers = false,
+                            maxVisualMarkersPerPulse = 1,
+                            durationTicks = 600,
+                            failsafeDurationTicks = 720,
+                            pawnAffinity = SpellPawnAffinity.Foe,
+                            includeCaster = false,
+                            replaceExistingForCaster = true,
+                            actions = new List<SpellActionDef>
+                            {
+                                new DamageActionDef
+                                {
+                                    debugLabel = "Freeze fallback frostbite damage",
+                                    amount = 4f,
+                                    damageDef = "Frostbite",
+                                    armorPenetration = 0.05f
+                                },
+                                new ApplyStatModifierActionDef
+                                {
+                                    debugLabel = "Freeze fallback movement slow",
+                                    durationTicks = 90,
+                                    replaceExistingFromCasterSpell = true,
+                                    statusCue = new SpellStatusCueDef
+                                    {
+                                        hediffDef = "MF_Frozen",
+                                        severity = 0.01f,
+                                        removeOnExpire = true
+                                    },
+                                    modifiers = new List<SpellStatModifierDef>
+                                    {
+                                        new()
+                                        {
+                                            statDef = "MoveSpeed",
+                                            factor = 0.55f
+                                        }
+                                    }
                                 }
                             }
                         }

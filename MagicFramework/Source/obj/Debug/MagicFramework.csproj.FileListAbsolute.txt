@@ -7,3 +7,11 @@ D:\RimWorld\Mods\MagicFramework\Source\obj\Debug\MagicFramework.pdb
 D:\RimWorld\Mods\MagicFramework\Assemblies\MagicFramework.pdb
 D:\RimWorld\Mods\MagicFramework\Source\bin\Debug\MagicFramework.dll
 D:\RimWorld\Mods\MagicFramework\Source\bin\Debug\MagicFramework.pdb
+D:\RimWorld\Mods\MagicFramework\Source\obj\Debug\MagicFramework.sourcelink.json
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\bin\Debug\MagicFramework.dll
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\bin\Debug\MagicFramework.pdb
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\obj\Debug\MagicFramework.csproj.AssemblyReference.cache
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\obj\Debug\MagicFramework.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\obj\Debug\MagicFramework.csproj.CoreCompileInputs.cache
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\obj\Debug\MagicFramework.dll
+C:\Users\CodexSandboxOffline\.codex\.sandbox\cwd\794b175e5a120623\obj\Debug\MagicFramework.pdb
