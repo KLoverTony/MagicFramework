@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Haste</defName>
+    <label>haste</label>
+    <description>Accelerates an allied pawn for a short time, increasing movement speed.</description>
+    <range>18</range>
+    <castTimeTicks>20</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Haste</gizmoIconPath>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <tiers>
+        <li>
+          <minPower>1</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>5</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>10</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Haste</debugLabel>
+        <amount>9</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Haste cooldown ready</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Haste</debugLabel>
+        <amount>9</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Haste cooldown</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Haste sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Haste effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+            <debugLabel>Haste buff</debugLabel>
+            <targetSource>CurrentTarget</targetSource>
+            <durationTicks>900</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>900</baseValue>
+              <perPower>30</perPower>
+              <max>1500</max>
+            </scalableDurationTicks>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+            <statusCue>
+              <hediffDef>MF_Hasted</hediffDef>
+              <severity>0.01</severity>
+              <removeOnExpire>true</removeOnExpire>
+            </statusCue>
+            <modifiers>
+              <li>
+                <statDef>MoveSpeed</statDef>
+                <factor>1.35</factor>
+              </li>
+            </modifiers>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

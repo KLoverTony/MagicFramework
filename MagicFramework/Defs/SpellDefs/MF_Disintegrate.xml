@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Disintegrate</defName>
+    <label>disintegrate</label>
+    <description>Unmakes light objects outright and tears larger targets apart with concentrated destructive force.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Disintegrate</gizmoIconPath>
+    <range>22</range>
+    <castTimeTicks>45</castTimeTicks>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>PawnOrThing</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>true</includeBuildings>
+      <includeItems>true</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>22</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Disintegrate</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Disintegrate cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Disintegrate</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Disintegrate cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Disintegrate sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Disintegrate cast effect</debugLabel>
+            <effectDef>Mote_SparkThrownFast</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Disintegrate target effect</debugLabel>
+            <effectDef>GiantExplosion</effectDef>
+            <soundDef>Explosion_Flame</soundDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ConditionalActionDef">
+            <debugLabel>Disintegrate conditional</debugLabel>
+            <conditionLabel>If the target is a pawn</conditionLabel>
+            <condition Class="MagicFramework.Definitions.TargetIsPawnConditionDef">
+              <targetSource>CurrentTarget</targetSource>
+            </condition>
+            <thenActions>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Disintegrate pawn damage</debugLabel>
+                <amount>28</amount>
+                <damageDef>Flame</damageDef>
+                <armorPenetration>0.4</armorPenetration>
+              </li>
+            </thenActions>
+            <elseActions>
+              <li Class="MagicFramework.Definitions.ConditionalActionDef">
+                <debugLabel>Disintegrate building conditional</debugLabel>
+                <conditionLabel>If the target is a building</conditionLabel>
+                <condition Class="MagicFramework.Definitions.ThingCategoryConditionDef">
+                  <targetSource>CurrentTarget</targetSource>
+                  <category>Building</category>
+                </condition>
+                <thenActions>
+                  <li Class="MagicFramework.Definitions.DamageActionDef">
+                    <debugLabel>Disintegrate building damage</debugLabel>
+                    <amount>40</amount>
+                    <damageDef>Flame</damageDef>
+                    <armorPenetration>1.2</armorPenetration>
+                  </li>
+                </thenActions>
+                <elseActions>
+                  <li Class="MagicFramework.Definitions.DestroyThingActionDef">
+                    <debugLabel>Disintegrate destroy thing</debugLabel>
+                    <allowPawns>false</allowPawns>
+                  </li>
+                </elseActions>
+              </li>
+            </elseActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

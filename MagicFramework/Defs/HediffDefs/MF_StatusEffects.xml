@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <HediffDef>
+    <defName>MF_GenericSpellStatusCue</defName>
+    <label>affected by magic</label>
+    <description>This pawn is affected by a spell.</description>
+    <hediffClass>MagicFramework.Core.SpellStatusCueHediff</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_Hasted</defName>
+    <label>hasted</label>
+    <description>This pawn is moving with magically enhanced speed.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_Mighty</defName>
+    <label>mighty</label>
+    <description>This pawn is strengthened by maintained magic.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_Weakened</defName>
+    <label>weakened</label>
+    <description>This pawn is suffering backlash from broken strengthening magic.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_ForceFielded</defName>
+    <label>force fielded</label>
+    <description>This pawn is protected by a maintained magical force field.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_ManaShielded</defName>
+    <label>mana shielded</label>
+    <description>This pawn is protected by a shield that consumes mana to absorb incoming damage.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+</Defs>

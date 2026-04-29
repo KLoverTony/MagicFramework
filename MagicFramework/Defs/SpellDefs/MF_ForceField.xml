@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_ForceField</defName>
+    <label>force field</label>
+    <description>Maintains a defensive field around an allied pawn, reducing incoming damage while the caster keeps focus.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_ForceField</gizmoIconPath>
+    <range>16</range>
+    <castTimeTicks>35</castTimeTicks>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>16</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Force Field</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Force Field cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Force Field</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Force Field cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.ApplyForceFieldActionDef">
+        <debugLabel>Force Field shield</debugLabel>
+        <targetSource>CurrentTarget</targetSource>
+        <maxDurationTicks>1200</maxDurationTicks>
+        <statusCue>
+          <hediffDef>MF_ForceFielded</hediffDef>
+          <severity>0.01</severity>
+          <removeOnExpire>true</removeOnExpire>
+        </statusCue>
+        <damageFactor>0.50</damageFactor>
+        <absorbFullyWithMana>false</absorbFullyWithMana>
+        <manaCostPerDamageAbsorbed>0</manaCostPerDamageAbsorbed>
+        <maxRange>16</maxRange>
+        <breakWhenCasterDowned>true</breakWhenCasterDowned>
+        <breakWhenTargetDowned>false</breakWhenTargetDowned>
+        <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+        <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+        <impactFleckDef>BulletShieldAreaEffect</impactFleckDef>
+        <impactSoundDef>EnergyShield_AbsorbDamage</impactSoundDef>
+        <ambientFleckDef></ambientFleckDef>
+        <ambientFleckIntervalTicks>90</ambientFleckIntervalTicks>
+        <ambientFleckScale>1.05</ambientFleckScale>
+        <ambientColorHex>#65B8FFFF</ambientColorHex>
+        <sustainedOverlayTexturePath></sustainedOverlayTexturePath>
+        <sustainedOverlayScale>1.25</sustainedOverlayScale>
+        <sustainedOverlayColorHex>#65B8FF73</sustainedOverlayColorHex>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>
