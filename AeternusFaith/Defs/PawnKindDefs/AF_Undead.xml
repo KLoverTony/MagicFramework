@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <PawnKindDef ParentName="BasePlayerPawnKind">
+    <defName>AF_Skeleton</defName>
+    <label>skeleton</label>
+    <race>Human</race>
+    <defaultFactionDef>PlayerColony</defaultFactionDef>
+    <combatPower>45</combatPower>
+    <isFighter>true</isFighter>
+    <apparelMoney>0~0</apparelMoney>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <initialResistanceRange>0~0</initialResistanceRange>
+    <initialWillRange>0~0</initialWillRange>
+  </PawnKindDef>
+
+</Defs>

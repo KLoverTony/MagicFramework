@@ -15,4 +15,18 @@
     <casualInterruptible>true</casualInterruptible>
   </JobDef>
 
+  <JobDef>
+    <defName>AF_PerformSkeletonRite</defName>
+    <driverClass>AeternusFaith.JobDriver_PerformSkeletonRite</driverClass>
+    <reportString>performing a skeleton rite.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_AttendSkeletonRite</defName>
+    <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
+    <reportString>attending a skeleton rite.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+  </JobDef>
+
 </Defs>
