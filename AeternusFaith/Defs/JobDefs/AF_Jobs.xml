@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>AF_PerformOssuaryRite</defName>
+    <driverClass>AeternusFaith.JobDriver_PerformOssuaryRite</driverClass>
+    <reportString>performing an ossuary rite.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_AttendOssuaryRite</defName>
+    <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
+    <reportString>attending an ossuary rite.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+  </JobDef>
+
+</Defs>

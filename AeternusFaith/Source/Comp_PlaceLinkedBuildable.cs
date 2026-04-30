@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace AeternusFaith
@@ -21,9 +23,9 @@ namespace AeternusFaith
     {
         private CompProperties_PlaceLinkedBuildable Props => (CompProperties_PlaceLinkedBuildable)this.props;
 
-        public override IEnumerable<Gizmo> CompGetGizmosInOrder()
+        public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            foreach (var gizmo in base.CompGetGizmosInOrder())
+            foreach (var gizmo in base.CompGetGizmosExtra())
                 yield return gizmo;
 
             yield return new Command_Action
@@ -44,7 +46,7 @@ namespace AeternusFaith
             if (!buildLoc.InBounds(parent.Map))
                 return;
 
-            GenConstruct.PlaceBlueprintForBuild(Props.targetDef, buildLoc, parent.Map, Rot4.North, Faction.OfPlayer);
+            GenConstruct.PlaceBlueprintForBuild(Props.targetDef, buildLoc, parent.Map, Rot4.North, Faction.OfPlayer, null, null, null, false);
         }
     }
 }

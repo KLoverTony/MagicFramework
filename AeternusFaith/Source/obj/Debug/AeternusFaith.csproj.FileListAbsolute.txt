@@ -4,3 +4,7 @@ D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.AssemblyInfoInputs
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.AssemblyInfo.cs
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.csproj.CoreCompileInputs.cache
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.sourcelink.json
+D:\RimWorld\Mods\AeternusFaith\Assemblies\AeternusFaith.dll
+D:\RimWorld\Mods\AeternusFaith\Assemblies\AeternusFaith.pdb
+D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.dll
+D:\RimWorld\Mods\AeternusFaith\Source\obj\Debug\AeternusFaith.pdb
