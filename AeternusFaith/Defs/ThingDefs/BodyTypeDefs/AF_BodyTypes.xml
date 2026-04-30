@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <BodyTypeDef ParentName="Thin">
-    <defName>AF_SkeletonThin</defName>
-    <label>skeleton thin</label>
-  </BodyTypeDef>
+  <!-- AF_SkeletonThin is defined in AF_SkeletonGraphics.xml with custom graphics -->
+  <!-- This file can be used for additional body type definitions if needed -->
 
 </Defs>

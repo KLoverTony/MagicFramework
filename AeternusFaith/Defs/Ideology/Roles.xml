@@ -1,100 +1,146 @@
-  <!-- ========== -->
-  <!-- ROLES      -->
-  <!-- ========== -->
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
 
-<PreceptDef>
-  <defName>AET_Role_HighTheomarch</defName>
-  <label>high theomarch</label>
-  <description>The colony's divine arbiter, charged with keeping all sacred forces in accord.</description>
-  <preceptClass>Precept_Role</preceptClass>
-  <issue>Leader</issue>
-  <impact>High</impact>
-  <displayOrderInIssue>1000</displayOrderInIssue>
-  <roleSinglePawnOnly>true</roleSinglePawnOnly>
-  <roleRequirements>
-    <li Class="RoleRequirement_Skill">
-      <skill>Social</skill>
-      <minLevel>6</minLevel>
-    </li>
-  </roleRequirements>
-  <roleEffects>
-    <li>LeaderSpeech</li>
-    <li>CombatCommand</li>
-    <li>WorkDrive</li>
-  </roleEffects>
-  <requiredApparel>
-    <li>AET_Apparel_BalanceVestments</li>
-  </requiredApparel>
-</PreceptDef>
+  <PreceptDef ParentName="PreceptRoleSingleBase">
+    <defName>AET_Role_HighTheomarch</defName>
+    <label>high theomarch</label>
+    <description>The colony's divine arbiter, charged with keeping all sacred forces in accord.</description>
+    <iconPath>UI/Roles/Leader</iconPath>
+    <leaderRole>true</leaderRole>
+    <displayOrderInImpact>1100</displayOrderInImpact>
+    <requiredMemes>
+      <li>AET_CosmicBalance</li>
+    </requiredMemes>
+    <grantedAbilities>
+      <li>LeaderSpeech</li>
+      <li>WorkDrive</li>
+      <li>CombatCommand</li>
+      <li>Trial</li>
+    </grantedAbilities>
+    <roleTags>
+      <li>Leader</li>
+    </roleTags>
+  </PreceptDef>
 
-  <PreceptDef>
+  <PreceptDef ParentName="PreceptRoleSingleBase">
     <defName>AET_Role_VoiceOfBalance</defName>
     <label>voice of balance</label>
     <description>A counselor-priest who interprets omens, resolves disputes, and reminds the faithful that no single truth may devour the rest.</description>
-    <preceptClass>Precept_Role</preceptClass>
-    <roleRequirements>
-      <li>
-        <requirement>SocialSkill</requirement>
-        <minSkill>5</minSkill>
-      </li>
-    </roleRequirements>
-    <roleEffects>
-      <li>Counsel</li>
+    <iconPath>UI/Roles/Moralist</iconPath>
+    <displayOrderInImpact>1101</displayOrderInImpact>
+    <requiredMemes>
+      <li>AET_CosmicBalance</li>
+    </requiredMemes>
+    <grantedAbilities>
       <li>Convert</li>
-    </roleEffects>
-    <displayOrderInIssue>1001</displayOrderInIssue>
+      <li>Counsel</li>
+      <li>Reassure</li>
+      <li>ConversionRitual</li>
+      <li>PreachHealth</li>
+    </grantedAbilities>
+    <roleRequiredWorkTags>
+      <li>Social</li>
+    </roleRequiredWorkTags>
+    <roleTags>
+      <li>Moralist</li>
+    </roleTags>
   </PreceptDef>
 
-  <PreceptDef>
+  <PreceptDef ParentName="PreceptRoleMultiBase">
     <defName>AET_Role_Soulwarden</defName>
     <label>soulwarden</label>
     <description>A keeper of tombs, names, last words, and ancestral obligations.</description>
-    <preceptClass>Precept_Role</preceptClass>
+    <iconPath>UI/Roles/SpecialistResearch</iconPath>
+    <displayOrderInImpact>1102</displayOrderInImpact>
+    <requiredMemes>
+      <li>AET_DeathStewardship</li>
+    </requiredMemes>
     <roleRequirements>
-      <li>
-        <requirement>IntellectualSkill</requirement>
-        <minSkill>5</minSkill>
+      <li Class="RoleRequirement_MinSkillAny">
+        <skills>
+          <Intellectual>6</Intellectual>
+        </skills>
       </li>
     </roleRequirements>
+    <roleRequiredWorkTags>
+      <li>Intellectual</li>
+    </roleRequiredWorkTags>
     <roleEffects>
-      <li>FuneralQuality</li>
-      <li>MedicalTendQuality</li>
+      <li Class="RoleEffect_PawnStatOffset">
+        <statDef>ResearchSpeed</statDef>
+        <modifier>0.35</modifier>
+      </li>
     </roleEffects>
-    <displayOrderInIssue>1002</displayOrderInIssue>
   </PreceptDef>
 
-  <PreceptDef>
+  <PreceptDef ParentName="PreceptRoleMultiBase">
     <defName>AET_Role_VerdantKeeper</defName>
     <label>verdant keeper</label>
     <description>A steward of crops, beasts, groves, and the breathing land.</description>
-    <preceptClass>Precept_Role</preceptClass>
+    <iconPath>UI/Roles/SpecialistPlants</iconPath>
+    <displayOrderInImpact>1103</displayOrderInImpact>
+    <requiredMemes>
+      <li>AET_VerdantConcord</li>
+    </requiredMemes>
     <roleRequirements>
-      <li>
-        <requirement>PlantsSkill</requirement>
-        <minSkill>5</minSkill>
+      <li Class="RoleRequirement_MinSkillAny">
+        <skills>
+          <Plants>6</Plants>
+        </skills>
       </li>
     </roleRequirements>
+    <roleRequiredWorkTags>
+      <li>PlantWork</li>
+    </roleRequiredWorkTags>
     <roleEffects>
-      <li>PlantWorkSpeed</li>
-      <li>AnimalGatherYield</li>
+      <li Class="RoleEffect_PawnStatOffset">
+        <statDef>PlantWorkSpeed</statDef>
+        <modifier>0.35</modifier>
+      </li>
+      <li Class="RoleEffect_PawnStatOffset">
+        <statDef>PlantHarvestYield</statDef>
+        <modifier>0.15</modifier>
+      </li>
     </roleEffects>
-    <displayOrderInIssue>1003</displayOrderInIssue>
+    <grantedAbilities>
+      <li>FarmingCommand</li>
+    </grantedAbilities>
   </PreceptDef>
 
-  <PreceptDef>
+  <PreceptDef ParentName="PreceptRoleMultiBase">
     <defName>AET_Role_Forgewarden</defName>
     <label>forgewarden</label>
     <description>A ritual artisan who sanctifies metal, stone, and useful labor.</description>
-    <preceptClass>Precept_Role</preceptClass>
+    <iconPath>UI/Roles/SpecialistProduction</iconPath>
+    <displayOrderInImpact>1104</displayOrderInImpact>
+    <requiredMemes>
+      <li>AET_StoicCraft</li>
+    </requiredMemes>
     <roleRequirements>
-      <li>
-        <requirement>CraftingSkill</requirement>
-        <minSkill>6</minSkill>
+      <li Class="RoleRequirement_MinSkillAny">
+        <skills>
+          <Crafting>6</Crafting>
+          <Construction>6</Construction>
+        </skills>
       </li>
     </roleRequirements>
+    <roleRequiredWorkTagAny>
+      <li>Crafting</li>
+      <li>Constructing</li>
+    </roleRequiredWorkTagAny>
     <roleEffects>
-      <li>CraftingSpeed</li>
-      <li>ConstructionSpeed</li>
+      <li Class="RoleEffect_PawnStatOffset">
+        <statDef>ConstructionSpeed</statDef>
+        <modifier>0.25</modifier>
+      </li>
+      <li Class="RoleEffect_PawnStatOffset">
+        <statDef>GeneralLaborSpeed</statDef>
+        <modifier>0.25</modifier>
+      </li>
     </roleEffects>
-    <displayOrderInIssue>1004</displayOrderInIssue>
+    <grantedAbilities>
+      <li>ProductionCommand</li>
+    </grantedAbilities>
   </PreceptDef>
+
+</Defs>

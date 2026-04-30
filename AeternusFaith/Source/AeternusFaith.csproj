@@ -6,27 +6,36 @@
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>../Assemblies</OutputPath>
     <LangVersion>latest</LangVersion>
+    <RimWorldDir Condition="'$(RimWorldDir)' == ''">D:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldDir>
+    <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(RimWorldDir)\Mods\AeternusFaith</ModDeployDir>
+    <DeployToRimWorldMod Condition="'$(DeployToRimWorldMod)' == ''">false</DeployToRimWorldMod>
   </PropertyGroup>
+
+  <Target Name="CheckRimWorldInstall" BeforeTargets="ResolveReferences">
+    <Error
+      Condition="!Exists('$(RimWorldDir)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll')"
+      Text="RimWorld assemblies were not found. Set the RimWorldDir MSBuild property to your game install path." />
+  </Target>
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>D:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MagicFramework">
@@ -34,5 +43,42 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <AboutContent Include="..\About\**\*.*" />
+    <DefContent Include="..\Defs\**\*.*" />
+    <TextureContent Include="..\Textures\**\*.*" />
+  </ItemGroup>
+
+  <Target Name="DeployToRimWorldModFolder" AfterTargets="Build" Condition="'$(DeployToRimWorldMod)' == 'true'">
+    <PropertyGroup>
+      <ModDeployAssembliesDir>$(ModDeployDir)\Assemblies</ModDeployAssembliesDir>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(ModDeployDir)" />
+    <MakeDir Directories="$(ModDeployAssembliesDir)" />
+
+    <RemoveDir Directories="$(ModDeployDir)\About" Condition="Exists('$(ModDeployDir)\About')" />
+    <RemoveDir Directories="$(ModDeployDir)\Defs" Condition="Exists('$(ModDeployDir)\Defs')" />
+    <RemoveDir Directories="$(ModDeployDir)\Textures" Condition="Exists('$(ModDeployDir)\Textures')" />
+
+    <MakeDir Directories="$(ModDeployDir)\About" />
+    <MakeDir Directories="$(ModDeployDir)\Defs" />
+    <MakeDir Directories="$(ModDeployDir)\Textures" />
+
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDeployAssembliesDir)" SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(AboutContent)"
+      DestinationFiles="@(AboutContent->'$(ModDeployDir)\About\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(DefContent)"
+      DestinationFiles="@(DefContent->'$(ModDeployDir)\Defs\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(TextureContent)"
+      DestinationFiles="@(TextureContent->'$(ModDeployDir)\Textures\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+  </Target>
 
 </Project>

@@ -101,20 +101,33 @@ if ($Deploy) {
     }
 
     foreach ($proj in $Projects) {
-        $srcPath = "$ModsDir\$proj\Assemblies"
-        $dstPath = "$RimWorldModsPath\$proj\Assemblies"
+        $srcModPath = "$ModsDir\$proj"
+        $dstModPath = "$RimWorldModsPath\$proj"
+        $payloadDirs = @('About', 'Assemblies', 'Defs', 'Textures')
 
-        if (-not (Test-Path $srcPath)) {
-            Write-Host "  [SKIP] $proj (no assemblies found)" -ForegroundColor Yellow
+        if (-not (Test-Path $srcModPath)) {
+            Write-Host "  [SKIP] $proj (mod folder not found)" -ForegroundColor Yellow
             continue
         }
 
-        # Create destination if needed
-        $dstDir = Split-Path -Parent "$dstPath"
-        New-Item -ItemType Directory -Path $dstDir -Force -ErrorAction SilentlyContinue | Out-Null
+        New-Item -ItemType Directory -Path $dstModPath -Force -ErrorAction SilentlyContinue | Out-Null
 
-        # Copy assemblies
-        Copy-Item "$srcPath\*" $dstPath -Force
+        foreach ($payloadDir in $payloadDirs) {
+            $srcPath = Join-Path $srcModPath $payloadDir
+            $dstPath = Join-Path $dstModPath $payloadDir
+
+            if (-not (Test-Path $srcPath)) {
+                Write-Host "  [SKIP] $proj/$payloadDir (not found)" -ForegroundColor Yellow
+                continue
+            }
+
+            if (Test-Path $dstPath) {
+                Remove-Item $dstPath -Recurse -Force
+            }
+
+            Copy-Item $srcPath $dstModPath -Recurse -Force
+        }
+
         Write-Host "  [OK] Deployed $proj" -ForegroundColor Green
     }
 

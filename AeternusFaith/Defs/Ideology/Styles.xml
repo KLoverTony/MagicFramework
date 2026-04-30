@@ -1,15 +1,11 @@
-
-  <!-- ===================== -->
-  <!-- IDEO STYLE CATEGORY   -->
-  <!-- ===================== -->
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
 
   <StyleCategoryDef>
     <defName>AET_EternalBalance</defName>
     <label>eternal balance</label>
     <description>A sacred aesthetic of sun and moon, root and stone, forge and grave. Followers of the Aeternic Covenant adorn their halls with signs of harmony between all divine powers.</description>
-    <graphicData>
-      <texPath>Things/Style/Aeternus/EternalBalance</texPath>
-    </graphicData>
+    <iconPath>UI/StyleCategories/Christian</iconPath>
   </StyleCategoryDef>
 
- 
+</Defs>

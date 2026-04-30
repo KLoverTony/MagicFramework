@@ -1,12 +1,27 @@
-<!-- ========== -->
-  <!-- PRECEPTS   -->
-  <!-- ========== -->
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <IssueDef>
+    <defName>AET_Burial</defName>
+    <label>burial customs</label>
+    <allowMultiplePrecepts>true</allowMultiplePrecepts>
+  </IssueDef>
+
+  <IssueDef>
+    <defName>AET_Pollution</defName>
+    <label>pollution</label>
+  </IssueDef>
+
+  <IssueDef>
+    <defName>AET_Crafting</defName>
+    <label>crafting</label>
+  </IssueDef>
 
   <PreceptDef>
     <defName>AET_Balance_Sacred</defName>
     <label>balance: sacred</label>
     <description>Harmony among opposed forces is the central virtue of the Covenant.</description>
-    <issue>IdeologicalDiversity</issue>
+    <issue>IdeoDiversity</issue>
     <impact>Low</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
   </PreceptDef>
@@ -15,7 +30,7 @@
     <defName>AET_Extremism_Abhorrent</defName>
     <label>extremism: abhorrent</label>
     <description>Those who serve only light, only shadow, only order, or only ruin are viewed as spiritually dangerous.</description>
-    <issue>IdeologicalDiversity</issue>
+    <issue>IdeoDiversity</issue>
     <impact>Medium</impact>
     <displayOrderInIssue>1001</displayOrderInIssue>
   </PreceptDef>
@@ -24,7 +39,7 @@
     <defName>AET_Diversity_Respected</defName>
     <label>many paths: respected</label>
     <description>Different callings are necessary parts of the divine weave.</description>
-    <issue>IdeologicalDiversity</issue>
+    <issue>IdeoDiversity</issue>
     <impact>Low</impact>
     <displayOrderInIssue>1002</displayOrderInIssue>
   </PreceptDef>
@@ -42,7 +57,7 @@
     <defName>AET_Funerals_Required</defName>
     <label>funerals: required</label>
     <description>The soul's passage must be witnessed by the living.</description>
-    <issue>Burial</issue>
+    <issue>AET_Burial</issue>
     <impact>Medium</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
   </PreceptDef>
@@ -51,7 +66,7 @@
     <defName>AET_Tombs_Sacred</defName>
     <label>tombs: sacred</label>
     <description>Burial places are houses of memory, not storage rooms for the forgotten.</description>
-    <issue>Burial</issue>
+    <issue>AET_Burial</issue>
     <impact>Medium</impact>
     <displayOrderInIssue>1001</displayOrderInIssue>
   </PreceptDef>
@@ -69,7 +84,7 @@
     <defName>AET_Pollution_Abhorrent</defName>
     <label>pollution: abhorrent</label>
     <description>To poison the land is to tear the Covenant's green scripture.</description>
-    <issue>Pollution</issue>
+    <issue>AET_Pollution</issue>
     <impact>High</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
   </PreceptDef>
@@ -96,7 +111,7 @@
     <defName>AET_Craft_Honorable</defName>
     <label>crafting: honorable</label>
     <description>The maker's art reflects Thrain and Dvalin's sacred endurance.</description>
-    <issue>Crafting</issue>
+    <issue>AET_Crafting</issue>
     <impact>Low</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
   </PreceptDef>
@@ -109,3 +124,5 @@
     <impact>Low</impact>
     <displayOrderInIssue>1001</displayOrderInIssue>
   </PreceptDef>
+
+</Defs>

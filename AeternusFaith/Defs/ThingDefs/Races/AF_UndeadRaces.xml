@@ -71,7 +71,6 @@
       <intelligence>Humanlike</intelligence>
       <renderTree>Humanlike</renderTree>
       <body>Human</body>
-      <bodyType>AF_SkeletonThin</bodyType>
       <baseBodySize>0.95</baseBodySize>
       <baseHealthScale>1.15</baseHealthScale>
       <foodType>None</foodType>
@@ -80,7 +79,7 @@
       <hasMeat>false</hasMeat>
       <hasGenders>true</hasGenders>
       <lifeExpectancy>2000</lifeExpectancy>
-      <fleshType>Mechanoid</fleshType>
+      <fleshType>NonWarm</fleshType>
       <makesFootprints>true</makesFootprints>
       <manhunterOnDamageChance>0</manhunterOnDamageChance>
       <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
