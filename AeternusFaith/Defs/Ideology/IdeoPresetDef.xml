@@ -1,0 +1,52 @@
+ <!-- ================ -->
+  <!-- IDEO PRESET      -->
+  <!-- ================ -->
+
+  <IdeoPresetDef>
+    <defName>AET_CovenantOfEternalBalance</defName>
+    <label>Covenant of the Eternal Balance</label>
+    <description>A collective Aeternus pantheon ideology venerating Aeonar's creation through equilibrium among light, shadow, wilderness, craft, knowledge, death, and renewal.</description>
+    <classic>false</classic>
+    <memes>
+      <li>AET_CosmicBalance</li>
+      <li>AET_VerdantConcord</li>
+      <li>AET_DeathStewardship</li>
+      <li>AET_StoicCraft</li>
+    </memes>
+    <style>AET_EternalBalance</style>
+    <precepts>
+      <li>AET_Balance_Sacred</li>
+      <li>AET_Extremism_Abhorrent</li>
+      <li>AET_Diversity_Respected</li>
+      <li>AET_Corpses_Respected</li>
+      <li>AET_Funerals_Required</li>
+      <li>AET_Tombs_Sacred</li>
+      <li>AET_Nature_Respected</li>
+      <li>AET_Pollution_Abhorrent</li>
+      <li>AET_Hunting_Ritualized</li>
+      <li>AET_Work_Divine</li>
+      <li>AET_Craft_Honorable</li>
+      <li>AET_Laziness_Shameful</li>
+      <li>AET_Role_HighTheomarch</li>
+      <li>AET_Role_VoiceOfBalance</li>
+      <li>AET_Role_Soulwarden</li>
+      <li>AET_Role_VerdantKeeper</li>
+      <li>AET_Role_Forgewarden</li>
+    </precepts>
+    <rituals>
+      <li>AET_FestivalOfVerdantia</li>
+      <li>AET_NightOfReflection</li>
+      <li>AET_RiteOfPassing</li>
+      <li>AET_TrialOfFlameAndShadow</li>
+    </rituals>
+    <relics>
+      <li>AET_Relic_HammerOfThrain</li>
+      <li>AET_Relic_MoonglassMirror</li>
+      <li>AET_Relic_SeedstoneOfTerra</li>
+      <li>AET_Relic_FirstSparkOfAeonar</li>
+    </relics>
+    <apparelRequirements>
+      <li>AET_Apparel_BalanceVestments</li>
+      <li>AET_Apparel_SoulwardenMask</li>
+    </apparelRequirements>
+  </IdeoPresetDef>

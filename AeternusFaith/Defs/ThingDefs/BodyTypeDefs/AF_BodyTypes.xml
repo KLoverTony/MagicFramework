@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <BodyTypeDef ParentName="Thin">
+    <defName>AF_SkeletonThin</defName>
+    <label>skeleton thin</label>
+  </BodyTypeDef>
+
+</Defs>

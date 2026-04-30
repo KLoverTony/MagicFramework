@@ -1,0 +1,58 @@
+ <!-- ========== -->
+  <!-- RELICS     -->
+  <!-- ========== -->
+
+  <ThingDef ParentName="BaseMeleeWeapon">
+    <defName>AET_Relic_HammerOfThrain</defName>
+    <label>hammer of Thrain</label>
+    <description>A sacred forge-hammer said to echo with the first oath of stone and steel.</description>
+    <graphicData>
+      <texPath>Things/Relics/AET_HammerOfThrain</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <thingCategories>
+      <li>WeaponsMelee</li>
+    </thingCategories>
+    <weaponTags>
+      <li>AET_Relic</li>
+    </weaponTags>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseArt">
+    <defName>AET_Relic_MoonglassMirror</defName>
+    <label>moonglass mirror of Lunaria</label>
+    <description>A silver-black mirror used for dreams, omens, and self-judgment beneath moonlight.</description>
+    <graphicData>
+      <texPath>Things/Relics/AET_MoonglassMirror</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <thingCategories>
+      <li>BuildingsArt</li>
+    </thingCategories>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseArt">
+    <defName>AET_Relic_SeedstoneOfTerra</defName>
+    <label>seedstone of Terra</label>
+    <description>A green-veined stone carried from shrine to shrine during planting rites.</description>
+    <graphicData>
+      <texPath>Things/Relics/AET_SeedstoneOfTerra</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <thingCategories>
+      <li>BuildingsArt</li>
+    </thingCategories>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseArt">
+    <defName>AET_Relic_FirstSparkOfAeonar</defName>
+    <label>first spark of Aeonar</label>
+    <description>A small vessel of impossible light, revered as a symbol of creation's first breath.</description>
+    <graphicData>
+      <texPath>Things/Relics/AET_FirstSparkOfAeonar</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <thingCategories>
+      <li>BuildingsArt</li>
+    </thingCategories>
+  </ThingDef>

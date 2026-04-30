@@ -4,7 +4,7 @@
   <PawnKindDef ParentName="BasePlayerPawnKind">
     <defName>AF_Skeleton</defName>
     <label>skeleton</label>
-    <race>Human</race>
+    <race>AF_SkeletonRace</race>
     <defaultFactionDef>PlayerColony</defaultFactionDef>
     <combatPower>45</combatPower>
     <isFighter>true</isFighter>
@@ -13,6 +13,12 @@
     <chemicalAddictionChance>0</chemicalAddictionChance>
     <initialResistanceRange>0~0</initialResistanceRange>
     <initialWillRange>0~0</initialWillRange>
+    <lifeStages>
+      <li>
+        <label>skeleton</label>
+        <labelPlural>skeletons</labelPlural>
+      </li>
+    </lifeStages>
   </PawnKindDef>
 
 </Defs>

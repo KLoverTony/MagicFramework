@@ -1,0 +1,100 @@
+  <!-- ========== -->
+  <!-- ROLES      -->
+  <!-- ========== -->
+
+<PreceptDef>
+  <defName>AET_Role_HighTheomarch</defName>
+  <label>high theomarch</label>
+  <description>The colony's divine arbiter, charged with keeping all sacred forces in accord.</description>
+  <preceptClass>Precept_Role</preceptClass>
+  <issue>Leader</issue>
+  <impact>High</impact>
+  <displayOrderInIssue>1000</displayOrderInIssue>
+  <roleSinglePawnOnly>true</roleSinglePawnOnly>
+  <roleRequirements>
+    <li Class="RoleRequirement_Skill">
+      <skill>Social</skill>
+      <minLevel>6</minLevel>
+    </li>
+  </roleRequirements>
+  <roleEffects>
+    <li>LeaderSpeech</li>
+    <li>CombatCommand</li>
+    <li>WorkDrive</li>
+  </roleEffects>
+  <requiredApparel>
+    <li>AET_Apparel_BalanceVestments</li>
+  </requiredApparel>
+</PreceptDef>
+
+  <PreceptDef>
+    <defName>AET_Role_VoiceOfBalance</defName>
+    <label>voice of balance</label>
+    <description>A counselor-priest who interprets omens, resolves disputes, and reminds the faithful that no single truth may devour the rest.</description>
+    <preceptClass>Precept_Role</preceptClass>
+    <roleRequirements>
+      <li>
+        <requirement>SocialSkill</requirement>
+        <minSkill>5</minSkill>
+      </li>
+    </roleRequirements>
+    <roleEffects>
+      <li>Counsel</li>
+      <li>Convert</li>
+    </roleEffects>
+    <displayOrderInIssue>1001</displayOrderInIssue>
+  </PreceptDef>
+
+  <PreceptDef>
+    <defName>AET_Role_Soulwarden</defName>
+    <label>soulwarden</label>
+    <description>A keeper of tombs, names, last words, and ancestral obligations.</description>
+    <preceptClass>Precept_Role</preceptClass>
+    <roleRequirements>
+      <li>
+        <requirement>IntellectualSkill</requirement>
+        <minSkill>5</minSkill>
+      </li>
+    </roleRequirements>
+    <roleEffects>
+      <li>FuneralQuality</li>
+      <li>MedicalTendQuality</li>
+    </roleEffects>
+    <displayOrderInIssue>1002</displayOrderInIssue>
+  </PreceptDef>
+
+  <PreceptDef>
+    <defName>AET_Role_VerdantKeeper</defName>
+    <label>verdant keeper</label>
+    <description>A steward of crops, beasts, groves, and the breathing land.</description>
+    <preceptClass>Precept_Role</preceptClass>
+    <roleRequirements>
+      <li>
+        <requirement>PlantsSkill</requirement>
+        <minSkill>5</minSkill>
+      </li>
+    </roleRequirements>
+    <roleEffects>
+      <li>PlantWorkSpeed</li>
+      <li>AnimalGatherYield</li>
+    </roleEffects>
+    <displayOrderInIssue>1003</displayOrderInIssue>
+  </PreceptDef>
+
+  <PreceptDef>
+    <defName>AET_Role_Forgewarden</defName>
+    <label>forgewarden</label>
+    <description>A ritual artisan who sanctifies metal, stone, and useful labor.</description>
+    <preceptClass>Precept_Role</preceptClass>
+    <roleRequirements>
+      <li>
+        <requirement>CraftingSkill</requirement>
+        <minSkill>6</minSkill>
+      </li>
+    </roleRequirements>
+    <roleEffects>
+      <li>CraftingSpeed</li>
+      <li>ConstructionSpeed</li>
+    </roleEffects>
+    <displayOrderInIssue>1004</displayOrderInIssue>
+  </PreceptDef>

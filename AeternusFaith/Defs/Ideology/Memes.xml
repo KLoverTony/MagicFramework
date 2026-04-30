@@ -1,0 +1,74 @@
+ <!-- ========== -->
+  <!-- MEMES      -->
+  <!-- ========== -->
+
+  <MemeDef>
+    <defName>AET_CosmicBalance</defName>
+    <label>cosmic balance</label>
+    <description>Life and death, light and shadow, wildness and order are all sacred. To enthrone one principle above the others is the first step toward ruin.</description>
+    <impact>2</impact>
+    <displayOrder>1000</displayOrder>
+    <iconPath>UI/Ideoligions/Memes/AET_CosmicBalance</iconPath>
+    <styleCategories>
+      <li>AET_EternalBalance</li>
+    </styleCategories>
+    <symbolPack>AET_EternalBalance</symbolPack>
+    <allowedPrecepts>
+      <li>AET_Balance_Sacred</li>
+      <li>AET_Extremism_Abhorrent</li>
+      <li>AET_Diversity_Respected</li>
+    </allowedPrecepts>
+  </MemeDef>
+
+  <MemeDef>
+    <defName>AET_DeathStewardship</defName>
+    <label>death stewardship</label>
+    <description>The dead are not refuse. They are memory, warning, inheritance, and law. Their bodies must be honored and their passage guarded.</description>
+    <impact>2</impact>
+    <displayOrder>1001</displayOrder>
+    <iconPath>UI/Ideoligions/Memes/AET_DeathStewardship</iconPath>
+    <styleCategories>
+      <li>AET_EternalBalance</li>
+    </styleCategories>
+    <allowedPrecepts>
+      <li>AET_Corpses_Respected</li>
+      <li>AET_Funerals_Required</li>
+      <li>AET_Tombs_Sacred</li>
+    </allowedPrecepts>
+  </MemeDef>
+
+  <MemeDef>
+    <defName>AET_VerdantConcord</defName>
+    <label>verdant concord</label>
+    <description>The land is a living covenant. Wood, water, beast, soil, and settlement must flourish together, or all shall wither apart.</description>
+    <impact>2</impact>
+    <displayOrder>1002</displayOrder>
+    <iconPath>UI/Ideoligions/Memes/AET_VerdantConcord</iconPath>
+    <styleCategories>
+      <li>AET_EternalBalance</li>
+    </styleCategories>
+    <allowedPrecepts>
+      <li>AET_Nature_Respected</li>
+      <li>AET_Pollution_Abhorrent</li>
+      <li>AET_Hunting_Ritualized</li>
+    </allowedPrecepts>
+  </MemeDef>
+
+  <MemeDef>
+    <defName>AET_StoicCraft</defName>
+    <label>stoic craft</label>
+    <description>Stone remembers. Iron obeys. Labor is prayer when done with discipline, purpose, and honor.</description>
+    <impact>1</impact>
+    <displayOrder>1003</displayOrder>
+    <iconPath>UI/Ideoligions/Memes/AET_StoicCraft</iconPath>
+    <styleCategories>
+      <li>AET_EternalBalance</li>
+    </styleCategories>
+    <allowedPrecepts>
+      <li>AET_Work_Divine</li>
+      <li>AET_Craft_Honorable</li>
+      <li>AET_Laziness_Shameful</li>
+    </allowedPrecepts>
+  </MemeDef>
+
+  

@@ -1,0 +1,70 @@
+  <!-- ========== -->
+  <!-- APPAREL    -->
+  <!-- ========== -->
+
+  <ThingDef ParentName="ApparelMakeableBase">
+    <defName>AET_Apparel_BalanceVestments</defName>
+    <label>vestments of balance</label>
+    <description>Layered ceremonial robes bearing sun, moon, root, stone, and star motifs.</description>
+    <thingClass>Apparel</thingClass>
+    <graphicData>
+      <texPath>Things/Apparel/AET_BalanceVestments/AET_BalanceVestments</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <apparel>
+      <bodyPartGroups>
+        <li>Torso</li>
+        <li>Shoulders</li>
+      </bodyPartGroups>
+      <layers>
+        <li>Shell</li>
+      </layers>
+      <tags>
+        <li>AET_Religious</li>
+        <li>AET_EternalBalance</li>
+      </tags>
+    </apparel>
+    <costList>
+      <Cloth>80</Cloth>
+      <Gold>2</Gold>
+    </costList>
+    <recipeMaker>
+      <workSpeedStat>TailoringSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Tailor</effectWorking>
+      <soundWorking>Recipe_Tailor</soundWorking>
+    </recipeMaker>
+  </ThingDef>
+
+  <ThingDef ParentName="ApparelMakeableBase">
+    <defName>AET_Apparel_SoulwardenMask</defName>
+    <label>soulwarden mask</label>
+    <description>A pale funerary mask worn by keepers of names and last rites.</description>
+    <thingClass>Apparel</thingClass>
+    <graphicData>
+      <texPath>Things/Apparel/AET_SoulwardenMask/AET_SoulwardenMask</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <apparel>
+      <bodyPartGroups>
+        <li>FullHead</li>
+      </bodyPartGroups>
+      <layers>
+        <li>Overhead</li>
+      </layers>
+      <tags>
+        <li>AET_Religious</li>
+        <li>AET_DeathStewardship</li>
+      </tags>
+    </apparel>
+    <costList>
+      <Cloth>30</Cloth>
+      <Steel>10</Steel>
+    </costList>
+    <recipeMaker>
+      <workSpeedStat>TailoringSpeed</workSpeedStat>
+      <workSkill>Crafting</workSkill>
+      <effectWorking>Tailor</effectWorking>
+      <soundWorking>Recipe_Tailor</soundWorking>
+    </recipeMaker>
+  </ThingDef>

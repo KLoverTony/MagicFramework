@@ -1,0 +1,110 @@
+<!-- ========== -->
+  <!-- RITUALS    -->
+  <!-- ========== -->
+
+  <RitualPatternDef>
+    <defName>AET_FestivalOfVerdantia</defName>
+    <label>festival of Verdantia</label>
+    <description>A fivefold spring celebration in honor of Terra's bounty. The faithful feast, plant, sing, and renew their oath to the living land.</description>
+    <ritualBehavior>Celebration</ritualBehavior>
+    <durationTicks>5000</durationTicks>
+    <iconPath>UI/Ideoligions/Rituals/AET_FestivalOfVerdantia</iconPath>
+    <outcomeEffect>AET_BlessingOfRenewal</outcomeEffect>
+  </RitualPatternDef>
+
+  <RitualPatternDef>
+    <defName>AET_NightOfReflection</defName>
+    <label>night of reflection</label>
+    <description>A moonlit vigil of silence, confession, and contemplation sacred to Lunaria and Umbra.</description>
+    <ritualBehavior>SocialFestival</ritualBehavior>
+    <durationTicks>4000</durationTicks>
+    <iconPath>UI/Ideoligions/Rituals/AET_NightOfReflection</iconPath>
+    <outcomeEffect>AET_SilverClarity</outcomeEffect>
+  </RitualPatternDef>
+
+  <RitualPatternDef>
+    <defName>AET_RiteOfPassing</defName>
+    <label>rite of passing</label>
+    <description>A solemn funeral in which the dead are named, remembered, and entrusted to the boundary beyond breath.</description>
+    <ritualBehavior>Funeral</ritualBehavior>
+    <durationTicks>3500</durationTicks>
+    <iconPath>UI/Ideoligions/Rituals/AET_RiteOfPassing</iconPath>
+    <outcomeEffect>AET_AncestralPeace</outcomeEffect>
+  </RitualPatternDef>
+
+  <RitualPatternDef>
+    <defName>AET_TrialOfFlameAndShadow</defName>
+    <label>trial of flame and shadow</label>
+    <description>An ordeal of endurance and symbolic combat. The initiate must prove they can bear both radiance and darkness without being consumed by either.</description>
+    <ritualBehavior>GladiatorDuel</ritualBehavior>
+    <durationTicks>3000</durationTicks>
+    <iconPath>UI/Ideoligions/Rituals/AET_TrialOfFlameAndShadow</iconPath>
+    <outcomeEffect>AET_TemperedSpirit</outcomeEffect>
+  </RitualPatternDef>
+
+  <!-- ===================== -->
+  <!-- RITUAL OUTCOME EFFECTS -->
+  <!-- ===================== -->
+
+  <RitualOutcomeEffectDef>
+    <defName>AET_BlessingOfRenewal</defName>
+    <label>blessing of renewal</label>
+    <description>The colony feels renewed by Terra's bounty.</description>
+    <comps>
+      <li Class="RitualOutcomeComp_PawnStatOffset">
+        <stat>PlantWorkSpeed</stat>
+        <offset>0.10</offset>
+        <durationDays>6</durationDays>
+      </li>
+      <li Class="RitualOutcomeComp_Mood">
+        <moodOffset>6</moodOffset>
+        <durationDays>6</durationDays>
+      </li>
+    </comps>
+  </RitualOutcomeEffectDef>
+
+  <RitualOutcomeEffectDef>
+    <defName>AET_SilverClarity</defName>
+    <label>silver clarity</label>
+    <description>The faithful carry quiet insight from their vigil.</description>
+    <comps>
+      <li Class="RitualOutcomeComp_PawnStatOffset">
+        <stat>ResearchSpeed</stat>
+        <offset>0.08</offset>
+        <durationDays>4</durationDays>
+      </li>
+      <li Class="RitualOutcomeComp_Mood">
+        <moodOffset>4</moodOffset>
+        <durationDays>4</durationDays>
+      </li>
+    </comps>
+  </RitualOutcomeEffectDef>
+
+  <RitualOutcomeEffectDef>
+    <defName>AET_AncestralPeace</defName>
+    <label>ancestral peace</label>
+    <description>The dead are remembered, and the living feel steadied by continuity.</description>
+    <comps>
+      <li Class="RitualOutcomeComp_Mood">
+        <moodOffset>8</moodOffset>
+        <durationDays>5</durationDays>
+      </li>
+    </comps>
+  </RitualOutcomeEffectDef>
+
+  <RitualOutcomeEffectDef>
+    <defName>AET_TemperedSpirit</defName>
+    <label>tempered spirit</label>
+    <description>The initiate emerges hardened by ordeal and humbled by balance.</description>
+    <comps>
+      <li Class="RitualOutcomeComp_PawnStatOffset">
+        <stat>MeleeHitChance</stat>
+        <offset>0.05</offset>
+        <durationDays>5</durationDays>
+      </li>
+      <li Class="RitualOutcomeComp_Mood">
+        <moodOffset>5</moodOffset>
+        <durationDays>5</durationDays>
+      </li>
+    </comps>
+  </RitualOutcomeEffectDef>

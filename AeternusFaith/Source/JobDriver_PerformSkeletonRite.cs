@@ -139,8 +139,10 @@ namespace AeternusFaith
             if (skeleton.story == null)
                 return;
 
-            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("Thin");
-            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("Skull");
+            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("AF_SkeletonThin") ??
+                                      DefDatabase<BodyTypeDef>.GetNamedSilentFail("Thin");
+            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("AF_SkeletonHead") ??
+                                      DefDatabase<HeadTypeDef>.GetNamedSilentFail("Skull");
             HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
             if (bodyTypeDef != null)
                 skeleton.story.bodyType = bodyTypeDef;

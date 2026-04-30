@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BasePawn">
+    <defName>AF_SkeletonRace</defName>
+    <label>skeleton</label>
+    <description>A ritually bound skeleton animated by Ossanith bone rites. It has no living appetites, no breath, and only enough will to obey its binder.</description>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <statBases>
+      <MarketValue>0</MarketValue>
+      <Mass>42</Mass>
+      <MoveSpeed>3.7</MoveSpeed>
+      <Flammability>0.4</Flammability>
+      <ArmorRating_Blunt>0.08</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.22</ArmorRating_Sharp>
+      <ArmorRating_Heat>0.12</ArmorRating_Heat>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>100</ComfyTemperatureMax>
+      <PsychicSensitivity>0</PsychicSensitivity>
+      <ToxicResistance>1</ToxicResistance>
+      <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+      <MeatAmount>0</MeatAmount>
+      <LeatherAmount>0</LeatherAmount>
+    </statBases>
+    <tools>
+      <li>
+        <label>left fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2.2</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+      </li>
+      <li>
+        <label>right fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2.2</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+      </li>
+      <li>
+        <label>teeth</label>
+        <capacities>
+          <li>Bite</li>
+        </capacities>
+        <power>7</power>
+        <cooldownTime>2.5</cooldownTime>
+        <linkedBodyPartsGroup>Teeth</linkedBodyPartsGroup>
+        <chanceFactor>0.04</chanceFactor>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>5</power>
+        <cooldownTime>2.3</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.12</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
+      <intelligence>Humanlike</intelligence>
+      <renderTree>Humanlike</renderTree>
+      <body>Human</body>
+      <bodyType>AF_SkeletonThin</bodyType>
+      <baseBodySize>0.95</baseBodySize>
+      <baseHealthScale>1.15</baseHealthScale>
+      <foodType>None</foodType>
+      <baseHungerRate>0</baseHungerRate>
+      <needsRest>false</needsRest>
+      <hasMeat>false</hasMeat>
+      <hasGenders>true</hasGenders>
+      <lifeExpectancy>2000</lifeExpectancy>
+      <fleshType>Mechanoid</fleshType>
+      <makesFootprints>true</makesFootprints>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
+      <specialShadowData>
+        <volume>(0.25, 0.65, 0.32)</volume>
+        <offset>(0,0,-0.3)</offset>
+      </specialShadowData>
+      <ageGenerationCurve>
+        <points>
+          <li>(0, 0)</li>
+          <li>(1, 100)</li>
+          <li>(2000, 0)</li>
+        </points>
+      </ageGenerationCurve>
+      <lifeStageAges>
+        <li>
+          <def>HumanlikeAdult</def>
+          <minAge>0</minAge>
+        </li>
+      </lifeStageAges>
+      <lifeStageWorkSettings>
+        <Firefighter>3</Firefighter>
+        <Patient>0</Patient>
+        <PatientBedRest>0</PatientBedRest>
+        <BasicWorker>3</BasicWorker>
+        <Construction>7</Construction>
+        <Mining>7</Mining>
+        <Hauling>3</Hauling>
+        <Cleaning>3</Cleaning>
+      </lifeStageWorkSettings>
+    </race>
+    <recipes>
+      <li>RemoveBodyPart</li>
+      <li>Anesthetize</li>
+    </recipes>
+    <butcherProducts>
+      <Bone>8</Bone>
+    </butcherProducts>
+  </ThingDef>
+
+</Defs>

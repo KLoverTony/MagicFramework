@@ -1,0 +1,8 @@
+D:\RimWorld\Mods\MagicFramework\Source\bin\Release\MagicFramework.dll
+D:\RimWorld\Mods\MagicFramework\Source\bin\Release\MagicFramework.pdb
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.csproj.AssemblyReference.cache
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.GeneratedMSBuildEditorConfig.editorconfig
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.csproj.CoreCompileInputs.cache
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.sourcelink.json
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.dll
+D:\RimWorld\Mods\MagicFramework\Source\obj\Release\MagicFramework.pdb

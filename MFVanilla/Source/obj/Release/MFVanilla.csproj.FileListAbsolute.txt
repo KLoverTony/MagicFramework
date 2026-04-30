@@ -1,0 +1,8 @@
+D:\RimWorld\Mods\MFVanilla\Source\bin\Release\MFVanilla.dll
+D:\RimWorld\Mods\MFVanilla\Source\bin\Release\MFVanilla.pdb
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.csproj.AssemblyReference.cache
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.GeneratedMSBuildEditorConfig.editorconfig
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.csproj.CoreCompileInputs.cache
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.sourcelink.json
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.dll
+D:\RimWorld\Mods\MFVanilla\Source\obj\Release\MFVanilla.pdb

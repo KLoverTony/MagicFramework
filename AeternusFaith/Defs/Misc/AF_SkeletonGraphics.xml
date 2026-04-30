@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <BodyTypeDef>
+    <defName>AF_SkeletonThin</defName>
+    <bodyNakedGraphicPath>Things/Undead/Skeleton_Body</bodyNakedGraphicPath>
+    <bodyDessicatedGraphicPath>Things/Undead/Skeleton_Body</bodyDessicatedGraphicPath>
+  </BodyTypeDef>
+
+  <HeadTypeDef ParentName="AverageBase">
+    <defName>AF_SkeletonHead</defName>
+    <graphicPath>Things/Undead/Skeleton_Head</graphicPath>
+  </HeadTypeDef>
+
+</Defs>
