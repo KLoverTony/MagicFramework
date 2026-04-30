@@ -32,6 +32,10 @@ namespace AeternusFaith
             this.FailOnCannotTouch(CorpseInd, PathEndMode.ClosestTouch);
             this.FailOnCannotTouch(LecternInd, PathEndMode.InteractionCell);
 
+            yield return Toils_Reserve.Reserve(CorpseInd);
+            yield return Toils_Reserve.Reserve(LecternInd);
+            yield return Toils_Reserve.Reserve(OssuaryInd);
+
             yield return Toils_Goto.GotoThing(CorpseInd, PathEndMode.ClosestTouch)
                 .FailOnSomeonePhysicallyInteracting(CorpseInd);
 
