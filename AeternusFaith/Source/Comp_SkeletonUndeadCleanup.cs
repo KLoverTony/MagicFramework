@@ -125,8 +125,6 @@ namespace AeternusFaith
             pawn.gender = Gender.None;
             pawn.relations?.ClearAllRelations();
 
-            ClearIdeoWithoutCallbacks(pawn);
-
             if (pawn.story == null)
                 return;
 

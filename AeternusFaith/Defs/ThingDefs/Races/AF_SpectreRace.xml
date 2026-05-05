@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BasePawn">
+    <defName>AF_SpectreRace</defName>
+    <label>spectre</label>
+    <description>A disembodied spirit bound to the mortal world, made briefly visible through the Animara rite. It has no flesh, no hunger, and no will of its own — only an echo of the life it once carried.</description>
+
+    <graphicData>
+      <texPath>Things/Undead/Spectre/Spectre</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(1.5, 1.5)</drawSize>
+      <shadowData>
+        <volume>(0.2, 0.1, 0.2)</volume>
+        <offset>(0, 0, -0.4)</offset>
+      </shadowData>
+      <shaderType>TransparentPostLight</shaderType>
+    </graphicData>
+
+    <soundImpactDefault>BulletImpact_Flesh</soundImpactDefault>
+
+    <statBases>
+      <MarketValue>0</MarketValue>
+      <Mass>0</Mass>
+      <MoveSpeed>3.2</MoveSpeed>
+      <Flammability>0</Flammability>
+      <ArmorRating_Blunt>0</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0</ArmorRating_Sharp>
+      <ArmorRating_Heat>1</ArmorRating_Heat>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>100</ComfyTemperatureMax>
+      <PsychicSensitivity>2</PsychicSensitivity>
+      <GlobalLearningFactor>0</GlobalLearningFactor>
+      <ToxicResistance>1</ToxicResistance>
+      <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+      <MeatAmount>0</MeatAmount>
+      <LeatherAmount>0</LeatherAmount>
+    </statBases>
+
+    <race>
+      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
+      <intelligence>Humanlike</intelligence>
+      <!-- Use the animal render tree to draw the single graphic sprite instead of humanlike layers -->
+      <renderTree>Animal</renderTree>
+      <body>Human</body>
+      <baseBodySize>0.8</baseBodySize>
+      <baseHealthScale>0.6</baseHealthScale>
+      <foodType>None</foodType>
+      <baseHungerRate>0</baseHungerRate>
+      <needsRest>false</needsRest>
+      <hasMeat>false</hasMeat>
+      <hasGenders>false</hasGenders>
+      <nameCategory>NoName</nameCategory>
+      <alwaysAwake>true</alwaysAwake>
+      <isImmuneToInfections>true</isImmuneToInfections>
+      <bleedRateFactor>0</bleedRateFactor>
+      <lifeExpectancy>2000</lifeExpectancy>
+      <fleshType>Mechanoid</fleshType>
+      <makesFootprints>false</makesFootprints>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
+      <butcherProducts>
+        <Steel>20</Steel>
+        <ComponentIndustrial>5</ComponentIndustrial>
+      </butcherProducts>
+      <ageGenerationCurve>
+        <points>
+          <li>(0, 0)</li>
+          <li>(1, 100)</li>
+          <li>(2000, 0)</li>
+        </points>
+      </ageGenerationCurve>
+      <lifeStageAges>
+        <li>
+          <def>HumanlikeAdult</def>
+          <minAge>0</minAge>
+        </li>
+      </lifeStageAges>
+    </race>
+
+  </ThingDef>
+
+</Defs>

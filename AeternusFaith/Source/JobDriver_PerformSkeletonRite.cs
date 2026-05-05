@@ -104,10 +104,11 @@ namespace AeternusFaith
             string corpseLabel = corpse.LabelShortCap;
             string sourceName = ResolveSourceName(corpse);
             Gender sourceGender = ResolveGenerationGender(corpse);
+            Ideo sourceIdeo = ModsConfig.IdeologyActive ? corpse.InnerPawn?.ideo?.Ideo : null;
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
             corpse.Destroy(DestroyMode.Vanish);
 
-            Pawn skeleton = CreateSkeletonPawn(sourceName, sourceGender);
+            Pawn skeleton = CreateSkeletonPawn(sourceName, sourceGender, sourceIdeo);
             if (skeleton == null)
             {
                 Messages.Message("The skeleton rite consumed " + corpseLabel + ", but no skeleton could be raised.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
@@ -123,7 +124,7 @@ namespace AeternusFaith
             Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
-        private Pawn CreateSkeletonPawn(string sourceName, Gender sourceGender)
+        private Pawn CreateSkeletonPawn(string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
         {
             PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton");
             if (pawnKindDef == null)
@@ -158,13 +159,23 @@ namespace AeternusFaith
             if (skeleton == null)
                 return null;
 
+            // Assign the deceased pawn's Ideo to the skeleton so it retains its former faith.
+            // This also prevents a NullReferenceException in Pawn_InteractionsTracker when
+            // Ideology DLC is active and the internal ideo field is left null by forceNoIdeo.
+            if (ModsConfig.IdeologyActive && skeleton.ideo != null)
+            {
+                Ideo ideoToApply = sourceIdeo ?? Faction.OfPlayer?.ideos?.PrimaryIdeo;
+                if (ideoToApply != null)
+                    skeleton.ideo.SetIdeo(ideoToApply);
+            }
+
             skeleton.def = pawnKindDef.race;
             skeleton.kindDef = pawnKindDef;
             SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
             AttachSkeletonCleanupComp(skeleton);
             ApplySkeletonAppearance(skeleton);
             SkeletonUndeadUtility.EnforceUndeadState(skeleton, resetSkills: true);
-            skeleton.Name = new NameSingle("Skeleton of " + sourceName);
+            skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
             return skeleton;
         }
 

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Base class for Animara floor coverings -->
+  <ThingDef Name="AF_AnimaraFloorBase" ParentName="BuildingBase" Abstract="True">
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <altitudeLayer>FloorCoverings</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>0</pathCost>
+    <fillPercent>0</fillPercent>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <blocksAltitudes>
+      <li>FloorCoverings</li>
+    </blocksAltitudes>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>400</WorkToBuild>
+      <Flammability>0.3</Flammability>
+      <Beauty>2</Beauty>
+      <Mass>10</Mass>
+    </statBases>
+    <costList>
+      <Cloth>30</Cloth>
+      <Steel>10</Steel>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+  </ThingDef>
+
+  <!-- Center Piece -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualCenter</defName>
+    <label>animara ritual center</label>
+    <description>The central focal point of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_center</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4,3)</drawSize>
+    </graphicData>
+    <size>(4,3)</size>
+    <uiOrder>2070</uiOrder>
+    <rotatable>false</rotatable>
+    <statBases>
+      <WorkToBuild>800</WorkToBuild>
+      <Beauty>5</Beauty>
+    </statBases>
+    <costList>
+      <Cloth>60</Cloth>
+      <Steel>20</Steel>
+    </costList>
+    <comps>
+      <li Class="AeternusFaith.CompProperties_PlaceLinkedBuildable">
+        <targetDef>AF_OssuaryBoneBox</targetDef>
+        <offset>(0,0,0)</offset>
+        <commandLabel>Build ossuary bone box</commandLabel>
+        <commandDescription>Place a normal construction blueprint for an ossuary bone box in the center of this circle.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+      <!-- Gizmo that places blueprints for all surrounding ritual room pieces -->
+      <li Class="AeternusFaith.CompProperties_PlaceRitualRoomBlueprints">
+        <commandLabel>Place ritual room blueprints</commandLabel>
+        <commandDescription>Place construction blueprints for all surrounding Animara ritual room pieces (edges and corners). Already-built or already-blueprinted pieces are skipped.</commandDescription>
+        <commandIconPath>UI/Commands/AddToArea</commandIconPath>
+        <pieces>
+          <!-- Top edge (4x2): directly above center (center is 4 wide, 3 tall) -->
+          <li>
+            <def>AF_AnimaraRitualEdge_Top</def>
+            <offset>(0,0,2)</offset>
+          </li>
+          <!-- Bottom edge (4x2): directly below center -->
+          <li>
+            <def>AF_AnimaraRitualEdge_Bottom</def>
+            <offset>(0,0,-3)</offset>
+          </li>
+          <!-- Left edge (2x3): directly left of center (center is 4 wide) -->
+          <li>
+            <def>AF_AnimaraRitualEdge_Left</def>
+            <offset>(-3,0,0)</offset>
+          </li>
+          <!-- Right edge (2x3): directly right of center -->
+          <li>
+            <def>AF_AnimaraRitualEdge_Right</def>
+            <offset>(3,0,0)</offset>
+          </li>
+          <!-- Top-left corner (2x2) -->
+          <li>
+            <def>AF_AnimaraRitualCorner_TL</def>
+            <offset>(-3,0,2)</offset>
+          </li>
+          <!-- Top-right corner (2x2) -->
+          <li>
+            <def>AF_AnimaraRitualCorner_TR</def>
+            <offset>(3,0,2)</offset>
+          </li>
+          <!-- Bottom-left corner (2x2) -->
+          <li>
+            <def>AF_AnimaraRitualCorner_BL</def>
+            <offset>(-3,0,-3)</offset>
+          </li>
+          <!-- Bottom-right corner (2x2) -->
+          <li>
+            <def>AF_AnimaraRitualCorner_BR</def>
+            <offset>(3,0,-3)</offset>
+          </li>
+        </pieces>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- Top Edge Piece -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualEdge_Top</defName>
+    <label>animara ritual edge (top)</label>
+    <description>The top edge piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_edge_top</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4,2)</drawSize>
+    </graphicData>
+    <size>(4,2)</size>
+    <uiOrder>2071</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Bottom Edge Piece -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualEdge_Bottom</defName>
+    <label>animara ritual edge (bottom)</label>
+    <description>The bottom edge piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_edge_bottom</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(4,2)</drawSize>
+    </graphicData>
+    <size>(4,2)</size>
+    <uiOrder>2071</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Left Edge Piece -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualEdge_Left</defName>
+    <label>animara ritual edge (left)</label>
+    <description>The left edge piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_edge_left</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,3)</drawSize>
+    </graphicData>
+    <size>(2,3)</size>
+    <uiOrder>2071</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Right Edge Piece -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualEdge_Right</defName>
+    <label>animara ritual edge (right)</label>
+    <description>The right edge piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_edge_right</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,3)</drawSize>
+    </graphicData>
+    <size>(2,3)</size>
+    <uiOrder>2071</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Top-Left Corner -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualCorner_TL</defName>
+    <label>animara ritual corner (top-left)</label>
+    <description>The top-left corner piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_tl</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <uiOrder>2072</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Top-Right Corner -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualCorner_TR</defName>
+    <label>animara ritual corner (top-right)</label>
+    <description>The top-right corner piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_tr</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <uiOrder>2073</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Bottom-Left Corner -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualCorner_BL</defName>
+    <label>animara ritual corner (bottom-left)</label>
+    <description>The bottom-left corner piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_bl</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <uiOrder>2074</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Bottom-Right Corner -->
+  <ThingDef ParentName="AF_AnimaraFloorBase">
+    <defName>AF_AnimaraRitualCorner_BR</defName>
+    <label>animara ritual corner (bottom-right)</label>
+    <description>The bottom-right corner piece of the Animara ritual room floor.</description>
+    <graphicData>
+      <texPath>Things/RitualRoom/Animara_Ritual_br</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <size>(2,2)</size>
+    <uiOrder>2075</uiOrder>
+    <rotatable>false</rotatable>
+  </ThingDef>
+
+  <!-- Animara Lectern -->
+  <ThingDef ParentName="BuildingBase">
+    <defName>AF_AnimaraLectern</defName>
+    <label>animara lectern</label>
+    <description>A ceremonial lectern used for Animara sacred rites, attuned to the Animara ritual center.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/RitualLectern/Ossanith_Lectern</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <drawSize>(1,1)</drawSize>
+    </graphicData>
+    <drawerType>MapMeshOnly</drawerType>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <fillPercent>0.35</fillPercent>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <rotatable>true</rotatable>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <hasInteractionCell>true</hasInteractionCell>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2076</uiOrder>
+    <thingCategories>
+      <li>BuildingsFurniture</li>
+    </thingCategories>
+    <statBases>
+      <MaxHitPoints>140</MaxHitPoints>
+      <WorkToBuild>700</WorkToBuild>
+      <Flammability>0.20</Flammability>
+      <Beauty>5</Beauty>
+      <Mass>25</Mass>
+    </statBases>
+    <costList>
+      <WoodLog>45</WoodLog>
+    </costList>
+    <building>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <surfaceType>Item</surfaceType>
+    <comps>
+      <li Class="CompProperties_Forbiddable"/>
+      <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
+        <circleDef>AF_AnimaraRitualCenter</circleDef>
+        <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
+        <commandLabel>Begin animara ossuary rite</commandLabel>
+        <commandDescription>Begin an Animara ossuary rite. Requires an orthogonally adjacent Animara Ritual Center with a completed ossuary in its center.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+      <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
+        <circleDef>AF_AnimaraRitualCenter</circleDef>
+        <commandLabel>Raise skeleton</commandLabel>
+        <commandDescription>Begin an Animara rite to raise a corpse as a skeleton. Requires an orthogonally adjacent Animara Ritual Center.</commandDescription>
+        <commandIconPath>Things/RitualRoom/Animara_Ritual_center</commandIconPath>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>
