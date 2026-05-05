@@ -6,16 +6,8 @@
     <label>spectre</label>
     <description>A disembodied spirit bound to the mortal world, made briefly visible through the Animara rite. It has no flesh, no hunger, and no will of its own — only an echo of the life it once carried.</description>
 
-    <graphicData>
-      <texPath>Things/Undead/Spectre/Spectre</texPath>
-      <graphicClass>Graphic_Single</graphicClass>
-      <drawSize>(1.5, 1.5)</drawSize>
-      <shadowData>
-        <volume>(0.2, 0.1, 0.2)</volume>
-        <offset>(0, 0, -0.4)</offset>
-      </shadowData>
-      <shaderType>TransparentPostLight</shaderType>
-    </graphicData>
+    <!-- Humanlike pawns do not use this top-level graphicData for their body.
+         The torso/body texture is supplied through a BodyTypeDef below. -->
 
     <soundImpactDefault>BulletImpact_Flesh</soundImpactDefault>
 
@@ -41,8 +33,8 @@
       <thinkTreeMain>Humanlike</thinkTreeMain>
       <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
       <intelligence>Humanlike</intelligence>
-      <!-- Use the animal render tree to draw the single graphic sprite instead of humanlike layers -->
-      <renderTree>Animal</renderTree>
+      <!-- Keep this humanlike. Animal render nodes call CurKindLifeStage and will error on humanlike pawns. -->
+      <renderTree>Humanlike</renderTree>
       <body>Human</body>
       <baseBodySize>0.8</baseBodySize>
       <baseHealthScale>0.6</baseHealthScale>
@@ -52,6 +44,8 @@
       <hasMeat>false</hasMeat>
       <hasGenders>false</hasGenders>
       <nameCategory>NoName</nameCategory>
+      <nameGenerator>NamerAnimalGenericMale</nameGenerator>
+      <nameGeneratorFemale>NamerAnimalGenericFemale</nameGeneratorFemale>
       <alwaysAwake>true</alwaysAwake>
       <isImmuneToInfections>true</isImmuneToInfections>
       <bleedRateFactor>0</bleedRateFactor>
@@ -61,10 +55,6 @@
       <manhunterOnDamageChance>0</manhunterOnDamageChance>
       <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
       <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
-      <butcherProducts>
-        <Steel>20</Steel>
-        <ComponentIndustrial>5</ComponentIndustrial>
-      </butcherProducts>
       <ageGenerationCurve>
         <points>
           <li>(0, 0)</li>
@@ -80,6 +70,39 @@
       </lifeStageAges>
     </race>
 
+    <!-- Spirits should not butcher into mechanoid resources. -->
+
   </ThingDef>
+
+  <!--
+    Body texture setup:
+    Rename/place your three torso textures like this:
+      Textures/Things/Undead/Spectre/SpectreBody_south.png  = front
+      Textures/Things/Undead/Spectre/SpectreBody_north.png  = back
+      Textures/Things/Undead/Spectre/SpectreBody_east.png   = side
+    RimWorld mirrors east for west.
+  -->
+  <BodyTypeDef>
+    <defName>AF_SpectreBody</defName>
+    <label>spectral body</label>
+    <bodyNakedGraphicPath>Things/Undead/Spectre/SpectreBody</bodyNakedGraphicPath>
+    <bodyDessicatedGraphicPath>Things/Undead/Spectre/SpectreBody</bodyDessicatedGraphicPath>
+  </BodyTypeDef>
+
+  <!--
+    Optional but recommended: add transparent head textures so the humanlike render tree
+    does not draw a normal human head over the spectral torso.
+
+    Expected files:
+      Textures/Things/Undead/Spectre/SpectreHead_south.png
+      Textures/Things/Undead/Spectre/SpectreHead_north.png
+      Textures/Things/Undead/Spectre/SpectreHead_east.png
+  -->
+  <HeadTypeDef>
+    <defName>AF_SpectreHead</defName>
+    <label>spectral head</label>
+    <graphicPath>Things/Undead/Spectre/SpectreHead</graphicPath>
+    <gender>None</gender>
+  </HeadTypeDef>
 
 </Defs>

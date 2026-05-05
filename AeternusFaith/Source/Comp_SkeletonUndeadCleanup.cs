@@ -108,6 +108,12 @@ namespace AeternusFaith
                 if (needDef != null && pawn.needs.TryGetNeed(needDef) != null)
                     RemoveNeedMethod?.Invoke(pawn.needs, new object[] { needDef });
             }
+
+            foreach (Need need in new List<Need>(pawn.needs.AllNeeds))
+            {
+                if (need?.def?.defName?.StartsWith("Chemical_") == true)
+                    RemoveNeedMethod?.Invoke(pawn.needs, new object[] { need.def });
+            }
         }
 
         public static void StripGear(Pawn pawn)
@@ -143,7 +149,8 @@ namespace AeternusFaith
 
         public static void NormalizeSkeletonLifeStage(Pawn pawn)
         {
-            if (pawn?.ageTracker == null || pawn.def?.defName != "AF_SkeletonRace")
+            if (pawn?.ageTracker == null ||
+                (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
                 return;
 
             LockedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);

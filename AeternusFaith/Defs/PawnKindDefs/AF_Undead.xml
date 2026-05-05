@@ -31,6 +31,8 @@
     <race>AF_SpectreRace</race>
     <combatPower>0</combatPower>
     <isFighter>false</isFighter>
+    <nameMaker>NamerAnimalGenericMale</nameMaker>
+    <nameMakerFemale>NamerAnimalGenericFemale</nameMakerFemale>
     <apparelMoney>0~0</apparelMoney>
     <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
     <chemicalAddictionChance>0</chemicalAddictionChance>

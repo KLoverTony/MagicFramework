@@ -109,31 +109,50 @@ namespace AeternusFaith.Undead.Spectral
 
             if (cachedPawn == null || (!persistentPawn && cachedPawn.Dead))
             {
-                // Resolve the spectre kind; fall back to Colonist if the def hasn't loaded yet.
-                PawnKindDef spectreKind = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Spectre")
-                                         ?? (pawnKind ?? PawnKindDefOf.Colonist);
+                PawnKindDef spectreKind = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Spectre");
+                if (spectreKind == null)
+                {
+                    Log.Error("[AeternusFaith] Could not manifest a spectre because PawnKindDef AF_Spectre is missing.");
+                    return;
+                }
 
                 PawnGenerationRequest request = new PawnGenerationRequest(
-                    kind: spectreKind,
+                    kind: PawnKindDefOf.Colonist,
                     faction: faction ?? Faction.OfPlayer,
                     context: PawnGenerationContext.NonPlayer,
                     tile: CurrentMap.Tile,
                     forceGenerateNewPawn: true,
-                    forceNoIdeo: false,
-                    forceNoBackstory: true,
+                    allowDead: false,
+                    allowDowned: false,
                     canGeneratePawnRelations: false,
+                    mustBeCapableOfViolence: false,
+                    colonistRelationChanceFactor: 0f,
+                    forceNoBackstory: true,
                     allowPregnant: false,
                     allowFood: false,
                     allowAddictions: false,
+                    fixedGender: Gender.Male,
+                    forceNoIdeo: true,
+                    developmentalStages: DevelopmentalStage.Adult,
                     dontGiveWeapon: true,
+                    maximumAgeTraits: 0,
+                    minimumAgeTraits: 0,
                     forceNoGear: true);
                 cachedPawn = PawnGenerator.GeneratePawn(request);
+                cachedPawn.def = spectreKind.race;
+                cachedPawn.kindDef = spectreKind;
                 cachedPawn.Name = new NameTriple("", label, "");
 
-                // Strip any gear the generator may still have added.
-                cachedPawn.apparel?.DestroyAll(DestroyMode.Vanish);
-                cachedPawn.equipment?.DestroyAllEquipment(DestroyMode.Vanish);
-                cachedPawn.inventory?.DestroyAll(DestroyMode.Vanish);
+                if (ModsConfig.IdeologyActive && cachedPawn.ideo != null)
+                {
+                    Ideo ideoToApply = Faction.OfPlayer?.ideos?.PrimaryIdeo;
+                    if (ideoToApply != null)
+                        cachedPawn.ideo.SetIdeo(ideoToApply);
+                }
+
+                SkeletonUndeadUtility.EnforceUndeadState(cachedPawn, resetSkills: true);
+                ApplySpectreAppearance(cachedPawn);
+                cachedPawn.Name = new NameTriple("", label, "");
             }
 
             GenSpawn.Spawn(cachedPawn, lastKnownPosition, CurrentMap);
@@ -147,6 +166,29 @@ namespace AeternusFaith.Undead.Spectral
             
             FleckMaker.ThrowDustPuff(lastKnownPosition, CurrentMap, 2f);
             Messages.Message($"Debug: {label} has manifested.", MessageTypeDefOf.NeutralEvent);
+        }
+
+        private void ApplySpectreAppearance(Pawn spectre)
+        {
+            if (spectre?.story == null)
+                return;
+
+            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("AF_SpectreBody");
+            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("AF_SpectreHead");
+            HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
+
+            if (bodyTypeDef != null)
+                spectre.story.bodyType = bodyTypeDef;
+            if (headTypeDef != null)
+                spectre.story.headType = headTypeDef;
+            if (hairDef != null)
+                spectre.story.hairDef = hairDef;
+
+            BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
+            if (beardDef != null && spectre.style != null)
+                spectre.style.beardDef = beardDef;
+
+            spectre.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public void Despawn()
