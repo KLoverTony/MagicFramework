@@ -3,13 +3,19 @@
 
   <BodyTypeDef>
     <defName>AF_SkeletonThin</defName>
+    <headOffset>(0.09, 0.34)</headOffset>
     <bodyNakedGraphicPath>Things/Undead/Skeleton_Body</bodyNakedGraphicPath>
     <bodyDessicatedGraphicPath>Things/Undead/Skeleton_Body</bodyDessicatedGraphicPath>
+    <bodyGraphicScale>(0.6, 1)</bodyGraphicScale>
+    <woundAnchors />
   </BodyTypeDef>
 
   <HeadTypeDef ParentName="AverageBase">
     <defName>AF_SkeletonHead</defName>
     <graphicPath>Things/Undead/Skeleton_Head</graphicPath>
+    <selectionWeight>0</selectionWeight>
+    <randomChosen>false</randomChosen>
+    <gender>None</gender>
   </HeadTypeDef>
 
 </Defs>

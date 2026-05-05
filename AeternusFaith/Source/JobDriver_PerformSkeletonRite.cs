@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -101,10 +102,12 @@ namespace AeternusFaith
                 return;
 
             string corpseLabel = corpse.LabelShortCap;
+            string sourceName = ResolveSourceName(corpse);
+            Gender sourceGender = ResolveGenerationGender(corpse);
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
             corpse.Destroy(DestroyMode.Vanish);
 
-            Pawn skeleton = CreateSkeletonPawn();
+            Pawn skeleton = CreateSkeletonPawn(sourceName, sourceGender);
             if (skeleton == null)
             {
                 Messages.Message("The skeleton rite consumed " + corpseLabel + ", but no skeleton could be raised.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
@@ -120,18 +123,85 @@ namespace AeternusFaith
             Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
-        private Pawn CreateSkeletonPawn()
+        private Pawn CreateSkeletonPawn(string sourceName, Gender sourceGender)
         {
-            PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton") ?? PawnKindDefOf.Colonist;
-            PawnGenerationRequest request = new PawnGenerationRequest(pawnKindDef, Faction.OfPlayer, PawnGenerationContext.NonPlayer, Map.Tile);
+            PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton");
+            if (pawnKindDef == null)
+            {
+                Log.Error("AeternusFaith skeleton rite could not find PawnKindDef AF_Skeleton.");
+                return null;
+            }
+
+            PawnGenerationRequest request = new PawnGenerationRequest(
+                kind: PawnKindDefOf.Colonist,
+                faction: Faction.OfPlayer,
+                context: PawnGenerationContext.NonPlayer,
+                tile: Map.Tile,
+                forceGenerateNewPawn: true,
+                allowDead: false,
+                allowDowned: false,
+                canGeneratePawnRelations: false,
+                mustBeCapableOfViolence: false,
+                colonistRelationChanceFactor: 0f,
+                allowPregnant: false,
+                allowFood: false,
+                allowAddictions: false,
+                fixedGender: sourceGender,
+                forceNoIdeo: true,
+                forceNoBackstory: true,
+                developmentalStages: DevelopmentalStage.Adult,
+                dontGiveWeapon: true,
+                maximumAgeTraits: 0,
+                minimumAgeTraits: 0,
+                forceNoGear: true);
             Pawn skeleton = PawnGenerator.GeneratePawn(request);
             if (skeleton == null)
                 return null;
 
+            skeleton.def = pawnKindDef.race;
+            skeleton.kindDef = pawnKindDef;
+            SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
+            AttachSkeletonCleanupComp(skeleton);
             ApplySkeletonAppearance(skeleton);
-            StripApparel(skeleton);
-            skeleton.Name = new NameSingle("Skeleton");
+            SkeletonUndeadUtility.EnforceUndeadState(skeleton, resetSkills: true);
+            skeleton.Name = new NameSingle("Skeleton of " + sourceName);
             return skeleton;
+        }
+
+        private void AttachSkeletonCleanupComp(Pawn skeleton)
+        {
+            if (skeleton.GetComp<Comp_SkeletonUndeadCleanup>() != null)
+                return;
+
+            CompProperties_SkeletonUndeadCleanup compProperties = skeleton.def.comps?
+                .OfType<CompProperties_SkeletonUndeadCleanup>()
+                .FirstOrDefault();
+            if (compProperties == null)
+                return;
+
+            Comp_SkeletonUndeadCleanup comp = new Comp_SkeletonUndeadCleanup
+            {
+                parent = skeleton
+            };
+            comp.Initialize(compProperties);
+            skeleton.AllComps.Add(comp);
+        }
+
+        private string ResolveSourceName(Corpse corpse)
+        {
+            string name = corpse?.InnerPawn?.Name?.ToStringShort;
+            if (name.NullOrEmpty())
+                name = corpse?.InnerPawn?.LabelShort;
+            if (name.NullOrEmpty())
+                name = "the dead";
+
+            return name;
+        }
+
+        private Gender ResolveGenerationGender(Corpse corpse)
+        {
+            Gender gender = corpse?.InnerPawn?.gender ?? Gender.None;
+            return gender == Gender.Female ? Gender.Female : Gender.Male;
         }
 
         private void ApplySkeletonAppearance(Pawn skeleton)
@@ -155,19 +225,6 @@ namespace AeternusFaith
             if (beardDef != null && skeleton.style != null)
                 skeleton.style.beardDef = beardDef;
             skeleton.Drawer?.renderer?.SetAllGraphicsDirty();
-        }
-
-        private void StripApparel(Pawn skeleton)
-        {
-            if (skeleton.apparel == null)
-                return;
-
-            List<Apparel> wornApparel = new List<Apparel>(skeleton.apparel.WornApparel);
-            foreach (Apparel apparel in wornApparel)
-            {
-                skeleton.apparel.Remove(apparel);
-                apparel.Destroy(DestroyMode.Vanish);
-            }
         }
 
         private IntVec3 ResolveSpawnCell(IntVec3 preferredCell)

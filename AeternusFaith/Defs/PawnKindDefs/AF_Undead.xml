@@ -8,9 +8,13 @@
     <defaultFactionDef>PlayerColony</defaultFactionDef>
     <combatPower>45</combatPower>
     <isFighter>true</isFighter>
+    <nameMaker>NamerAnimalGenericMale</nameMaker>
+    <nameMakerFemale>NamerAnimalGenericFemale</nameMakerFemale>
     <apparelMoney>0~0</apparelMoney>
     <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
     <chemicalAddictionChance>0</chemicalAddictionChance>
+    <destroyGearOnDrop>true</destroyGearOnDrop>
+    <canStrip>false</canStrip>
     <initialResistanceRange>0~0</initialResistanceRange>
     <initialWillRange>0~0</initialWillRange>
     <lifeStages>

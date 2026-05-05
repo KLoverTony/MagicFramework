@@ -59,6 +59,29 @@
   </ThingDef>
 
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_Fireball</defName>
+    <label>spell scroll (fireball)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast Fireball.</description>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Fireball</spell>
+        <requiredResearch>
+          <li>MFV_Pyromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_Heal</defName>
     <label>spell scroll (heal)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast Heal.</description>

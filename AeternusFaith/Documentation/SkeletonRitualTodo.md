@@ -5,6 +5,10 @@ Current first slice:
 - A conductor brings a corpse to the circle, performs the rite, destroys the corpse, and spawns a player-faction skeleton pawn.
 - The spawned pawn is currently a simple humanlike pawn using vanilla fallback graphics.
 
+## Resources
+
+- Use https://rimworldwiki.com/wiki/Modding_Tutorials as a reference if needed.
+
 ## Visuals
 
 - Use the provided `Textures/Things/Undead/Skeleton_*` art for the raised pawn.

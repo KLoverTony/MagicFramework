@@ -10,6 +10,9 @@
     <label>vestments of balance</label>
     <description>Layered ceremonial robes bearing sun, moon, root, stone, and star motifs.</description>
     <thingClass>Apparel</thingClass>
+    <statBases>
+      <Mass>1</Mass>
+    </statBases>
     <graphicData>
       <texPath>Things/Apparel/AET_BalanceVestments/AET_BalanceVestments</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -32,7 +35,7 @@
       <Gold>2</Gold>
     </costList>
     <recipeMaker>
-      <workSpeedStat>TailoringSpeed</workSpeedStat>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
       <workSkill>Crafting</workSkill>
       <effectWorking>Tailor</effectWorking>
       <soundWorking>Recipe_Tailor</soundWorking>
@@ -44,6 +47,9 @@
     <label>soulwarden mask</label>
     <description>A pale funerary mask worn by keepers of names and last rites.</description>
     <thingClass>Apparel</thingClass>
+    <statBases>
+      <Mass>1</Mass>
+    </statBases>
     <graphicData>
       <texPath>Things/Apparel/AET_SoulwardenMask/AET_SoulwardenMask</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -65,7 +71,7 @@
       <Steel>10</Steel>
     </costList>
     <recipeMaker>
-      <workSpeedStat>TailoringSpeed</workSpeedStat>
+      <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
       <workSkill>Crafting</workSkill>
       <effectWorking>Tailor</effectWorking>
       <soundWorking>Recipe_Tailor</soundWorking>

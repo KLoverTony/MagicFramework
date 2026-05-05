@@ -6,6 +6,7 @@
     <label>high theomarch</label>
     <description>The colony's divine arbiter, charged with keeping all sacred forces in accord.</description>
     <iconPath>UI/Roles/Leader</iconPath>
+    <nameMaker>AET_NamerRoleHighTheomarch</nameMaker>
     <leaderRole>true</leaderRole>
     <displayOrderInImpact>1100</displayOrderInImpact>
     <requiredMemes>
@@ -27,10 +28,35 @@
     <label>voice of balance</label>
     <description>A counselor-priest who interprets omens, resolves disputes, and reminds the faithful that no single truth may devour the rest.</description>
     <iconPath>UI/Roles/Moralist</iconPath>
+    <nameMaker>AET_NamerRoleVoiceOfBalance</nameMaker>
     <displayOrderInImpact>1101</displayOrderInImpact>
     <requiredMemes>
       <li>AET_CosmicBalance</li>
     </requiredMemes>
+    <roleApparelRequirements>
+      <li>
+        <requirement>
+          <bodyPartGroupsMatchAny>
+            <li>Torso</li>
+            <li>Neck</li>
+            <li>Shoulders</li>
+          </bodyPartGroupsMatchAny>
+          <requiredDefs>
+            <li>Apparel_FormalVest</li>
+          </requiredDefs>
+        </requirement>
+      </li>
+      <li>
+        <requirement>
+          <bodyPartGroupsMatchAny>
+            <li>FullHead</li>
+          </bodyPartGroupsMatchAny>
+          <requiredDefs>
+            <li>Apparel_VisageMask</li>
+          </requiredDefs>
+        </requirement>
+      </li>
+    </roleApparelRequirements>
     <grantedAbilities>
       <li>Convert</li>
       <li>Counsel</li>
@@ -51,6 +77,7 @@
     <label>soulwarden</label>
     <description>A keeper of tombs, names, last words, and ancestral obligations.</description>
     <iconPath>UI/Roles/SpecialistResearch</iconPath>
+    <nameMaker>AET_NamerRoleSoulwarden</nameMaker>
     <displayOrderInImpact>1102</displayOrderInImpact>
     <requiredMemes>
       <li>AET_DeathStewardship</li>
@@ -78,10 +105,27 @@
     <label>verdant keeper</label>
     <description>A steward of crops, beasts, groves, and the breathing land.</description>
     <iconPath>UI/Roles/SpecialistPlants</iconPath>
+    <nameMaker>AET_NamerRoleVerdantKeeper</nameMaker>
     <displayOrderInImpact>1103</displayOrderInImpact>
     <requiredMemes>
       <li>AET_VerdantConcord</li>
     </requiredMemes>
+    <roleApparelRequirements>
+      <li>
+        <requirement>
+          <bodyPartGroupsMatchAny>
+            <li>Neck</li>
+            <li>Torso</li>
+            <li>Shoulders</li>
+            <li>Arms</li>
+            <li>Legs</li>
+          </bodyPartGroupsMatchAny>
+          <requiredDefs>
+            <li>Apparel_Cape</li>
+          </requiredDefs>
+        </requirement>
+      </li>
+    </roleApparelRequirements>
     <roleRequirements>
       <li Class="RoleRequirement_MinSkillAny">
         <skills>
@@ -112,10 +156,23 @@
     <label>forgewarden</label>
     <description>A ritual artisan who sanctifies metal, stone, and useful labor.</description>
     <iconPath>UI/Roles/SpecialistProduction</iconPath>
+    <nameMaker>AET_NamerRoleForgewarden</nameMaker>
     <displayOrderInImpact>1104</displayOrderInImpact>
     <requiredMemes>
       <li>AET_StoicCraft</li>
     </requiredMemes>
+    <roleApparelRequirements>
+      <li>
+        <requirement>
+          <bodyPartGroupsMatchAny>
+            <li>Torso</li>
+          </bodyPartGroupsMatchAny>
+          <requiredDefs>
+            <li>Apparel_FlakVest</li>
+          </requiredDefs>
+        </requirement>
+      </li>
+    </roleApparelRequirements>
     <roleRequirements>
       <li Class="RoleRequirement_MinSkillAny">
         <skills>
@@ -142,5 +199,60 @@
       <li>ProductionCommand</li>
     </grantedAbilities>
   </PreceptDef>
+
+  <RulePackDef>
+    <defName>AET_NamerRoleHighTheomarch</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_roleName->high theomarch</li>
+        <li>r_roleName->theomarch</li>
+        <li>r_roleName->arbiter of balance</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>AET_NamerRoleVoiceOfBalance</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_roleName->voice of balance</li>
+        <li>r_roleName->covenant voice</li>
+        <li>r_roleName->oracle of balance</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>AET_NamerRoleSoulwarden</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_roleName->soulwarden</li>
+        <li>r_roleName->keeper of names</li>
+        <li>r_roleName->warden of the dead</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>AET_NamerRoleVerdantKeeper</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_roleName->verdant keeper</li>
+        <li>r_roleName->grovewarden</li>
+        <li>r_roleName->keeper of renewal</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
+
+  <RulePackDef>
+    <defName>AET_NamerRoleForgewarden</defName>
+    <rulePack>
+      <rulesStrings>
+        <li>r_roleName->forgewarden</li>
+        <li>r_roleName->ritual artisan</li>
+        <li>r_roleName->keeper of craft</li>
+      </rulesStrings>
+    </rulePack>
+  </RulePackDef>
 
 </Defs>

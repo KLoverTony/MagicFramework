@@ -48,6 +48,9 @@
     <defName>AET_Corpses_Respected</defName>
     <label>corpses: respected</label>
     <description>A corpse must be handled with care. Desecration of the dead is a grave sin.</description>
+    <requiredMemes>
+      <li>AET_DeathStewardship</li>
+    </requiredMemes>
     <issue>Corpses</issue>
     <impact>Medium</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
@@ -84,6 +87,9 @@
     <defName>AET_Pollution_Abhorrent</defName>
     <label>pollution: abhorrent</label>
     <description>To poison the land is to tear the Covenant's green scripture.</description>
+    <requiredMemes>
+      <li>AET_VerdantConcord</li>
+    </requiredMemes>
     <issue>AET_Pollution</issue>
     <impact>High</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
@@ -102,6 +108,9 @@
     <defName>AET_Work_Divine</defName>
     <label>labor: divine</label>
     <description>Work is a liturgy of hand, tool, and will.</description>
+    <requiredMemes>
+      <li>AET_StoicCraft</li>
+    </requiredMemes>
     <issue>WorkDrive</issue>
     <impact>Medium</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
@@ -111,6 +120,9 @@
     <defName>AET_Craft_Honorable</defName>
     <label>crafting: honorable</label>
     <description>The maker's art reflects Thrain and Dvalin's sacred endurance.</description>
+    <requiredMemes>
+      <li>AET_StoicCraft</li>
+    </requiredMemes>
     <issue>AET_Crafting</issue>
     <impact>Low</impact>
     <displayOrderInIssue>1000</displayOrderInIssue>
@@ -120,6 +132,9 @@
     <defName>AET_Laziness_Shameful</defName>
     <label>idleness: shameful</label>
     <description>Rest has its place, but wasted purpose dulls the soul.</description>
+    <requiredMemes>
+      <li>AET_StoicCraft</li>
+    </requiredMemes>
     <issue>WorkDrive</issue>
     <impact>Low</impact>
     <displayOrderInIssue>1001</displayOrderInIssue>

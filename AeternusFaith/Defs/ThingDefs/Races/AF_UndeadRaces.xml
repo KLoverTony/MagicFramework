@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <FleshTypeDef>
+    <defName>AF_Bone</defName>
+    <corpseCategory>CorpsesAnimal</corpseCategory>
+    <damageEffecter>Damage_HitMechanoid</damageEffecter>
+    <isOrganic>false</isOrganic>
+    <genericWounds>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechA</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechB</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechC</texture>
+      </li>
+    </genericWounds>
+  </FleshTypeDef>
+
   <ThingDef ParentName="BasePawn">
     <defName>AF_SkeletonRace</defName>
     <label>skeleton</label>
@@ -17,6 +35,7 @@
       <ComfyTemperatureMin>-100</ComfyTemperatureMin>
       <ComfyTemperatureMax>100</ComfyTemperatureMax>
       <PsychicSensitivity>0</PsychicSensitivity>
+      <GlobalLearningFactor>0</GlobalLearningFactor>
       <ToxicResistance>1</ToxicResistance>
       <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
       <MeatAmount>0</MeatAmount>
@@ -77,9 +96,13 @@
       <baseHungerRate>0</baseHungerRate>
       <needsRest>false</needsRest>
       <hasMeat>false</hasMeat>
-      <hasGenders>true</hasGenders>
+      <hasGenders>false</hasGenders>
+      <nameCategory>NoName</nameCategory>
+      <alwaysAwake>true</alwaysAwake>
+      <isImmuneToInfections>true</isImmuneToInfections>
+      <bleedRateFactor>0</bleedRateFactor>
       <lifeExpectancy>2000</lifeExpectancy>
-      <fleshType>NonWarm</fleshType>
+      <fleshType>AF_Bone</fleshType>
       <makesFootprints>true</makesFootprints>
       <manhunterOnDamageChance>0</manhunterOnDamageChance>
       <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
@@ -116,9 +139,9 @@
       <li>RemoveBodyPart</li>
       <li>Anesthetize</li>
     </recipes>
-    <butcherProducts>
-      <Bone>8</Bone>
-    </butcherProducts>
+    <comps>
+      <li Class="AeternusFaith.CompProperties_SkeletonUndeadCleanup" />
+    </comps>
   </ThingDef>
 
 </Defs>

@@ -9,6 +9,43 @@
     <groupDef>Misc</groupDef>
     <impact>2</impact>
     <renderOrder>1000</renderOrder>
+    <generalRules>
+      <rulesStrings>
+        <li>memeAdjective->balanced</li>
+        <li>memeAdjective->aeternic</li>
+        <li>memeAdjective->covenant</li>
+        <li>memeCreed->covenant</li>
+        <li>memeCreed->accord</li>
+        <li>memeCreed->concord</li>
+        <li>memeHyphenPrefix->aetern</li>
+        <li>memeHyphenPrefix->balance</li>
+        <li>memeConcept->balance</li>
+        <li>memeConcept->equilibrium</li>
+        <li>memeConcept->harmony</li>
+        <li>memeGod->Arbiter</li>
+        <li>memeGod->Keeper</li>
+        <li>memeLeaderNoun->theomarch</li>
+        <li>memeLeaderNoun->arbiter</li>
+        <li>memeLeaderAdjective->high</li>
+        <li>memeLeaderAdjective->aeternic</li>
+        <li>memeMoralist->voice</li>
+        <li>memeMoralist->oracle</li>
+      </rulesStrings>
+    </generalRules>
+    <symbolPacks>
+      <li>
+        <ideoName>Covenant of the Eternal Balance</ideoName>
+        <theme>balance</theme>
+        <adjective>aeternic</adjective>
+        <member>covenanter</member>
+      </li>
+      <li>
+        <ideoName>Aeternic Concord</ideoName>
+        <theme>harmony</theme>
+        <adjective>aeternic</adjective>
+        <member>concordant</member>
+      </li>
+    </symbolPacks>
   </MemeDef>
 
   <MemeDef>
@@ -19,6 +56,38 @@
     <groupDef>Misc</groupDef>
     <impact>2</impact>
     <renderOrder>1001</renderOrder>
+    <generalRules>
+      <rulesStrings>
+        <li>memeAdjective->ancestral</li>
+        <li>memeAdjective->funereal</li>
+        <li>memeAdjective->sepulchral</li>
+        <li>memeCreed->ossuary</li>
+        <li>memeCreed->rite</li>
+        <li>memeCreed->vigil</li>
+        <li>memeHyphenPrefix->death</li>
+        <li>memeHyphenPrefix->soul</li>
+        <li>memeConcept->death</li>
+        <li>memeConcept->memory</li>
+        <li>memeConcept->ancestry</li>
+        <li>memeConcept->the dead</li>
+        <li>memeGod->Warden</li>
+        <li>memeGod->Judge</li>
+        <li>memeLeaderNoun->soulwarden</li>
+        <li>memeLeaderNoun->tombkeeper</li>
+        <li>memeLeaderAdjective->grave</li>
+        <li>memeLeaderAdjective->ancestral</li>
+        <li>memeMoralist->mourner</li>
+        <li>memeMoralist->soulkeeper</li>
+      </rulesStrings>
+    </generalRules>
+    <symbolPacks>
+      <li>
+        <ideoName>Death Stewardship</ideoName>
+        <theme>memory</theme>
+        <adjective>ancestral</adjective>
+        <member>soulwarden</member>
+      </li>
+    </symbolPacks>
   </MemeDef>
 
   <MemeDef>
@@ -29,6 +98,38 @@
     <groupDef>Misc</groupDef>
     <impact>2</impact>
     <renderOrder>1002</renderOrder>
+    <generalRules>
+      <rulesStrings>
+        <li>memeAdjective->verdant</li>
+        <li>memeAdjective->green</li>
+        <li>memeAdjective->living</li>
+        <li>memeCreed->grove</li>
+        <li>memeCreed->garden</li>
+        <li>memeCreed->concord</li>
+        <li>memeHyphenPrefix->verdant</li>
+        <li>memeHyphenPrefix->root</li>
+        <li>memeConcept->nature</li>
+        <li>memeConcept->growth</li>
+        <li>memeConcept->the wilds</li>
+        <li>memeConcept->renewal</li>
+        <li>memeGod->Greenkeeper</li>
+        <li>memeGod->Grovekeeper</li>
+        <li>memeLeaderNoun->keeper</li>
+        <li>memeLeaderNoun->warden</li>
+        <li>memeLeaderAdjective->verdant</li>
+        <li>memeLeaderAdjective->green</li>
+        <li>memeMoralist->grovespeaker</li>
+        <li>memeMoralist->keeper</li>
+      </rulesStrings>
+    </generalRules>
+    <symbolPacks>
+      <li>
+        <ideoName>Verdant Concord</ideoName>
+        <theme>renewal</theme>
+        <adjective>verdant</adjective>
+        <member>keeper</member>
+      </li>
+    </symbolPacks>
   </MemeDef>
 
   <MemeDef>
@@ -39,6 +140,38 @@
     <groupDef>Misc</groupDef>
     <impact>1</impact>
     <renderOrder>1003</renderOrder>
+    <generalRules>
+      <rulesStrings>
+        <li>memeAdjective->stoic</li>
+        <li>memeAdjective->forged</li>
+        <li>memeAdjective->honored</li>
+        <li>memeCreed->forge</li>
+        <li>memeCreed->craft</li>
+        <li>memeCreed->guild</li>
+        <li>memeHyphenPrefix->forge</li>
+        <li>memeHyphenPrefix->stone</li>
+        <li>memeConcept->craft</li>
+        <li>memeConcept->labor</li>
+        <li>memeConcept->stone</li>
+        <li>memeConcept->iron</li>
+        <li>memeGod->Maker</li>
+        <li>memeGod->Smith</li>
+        <li>memeLeaderNoun->forgewarden</li>
+        <li>memeLeaderNoun->artisan</li>
+        <li>memeLeaderAdjective->stoic</li>
+        <li>memeLeaderAdjective->forged</li>
+        <li>memeMoralist->forgemaster</li>
+        <li>memeMoralist->artisan</li>
+      </rulesStrings>
+    </generalRules>
+    <symbolPacks>
+      <li>
+        <ideoName>Stoic Craft</ideoName>
+        <theme>craft</theme>
+        <adjective>stoic</adjective>
+        <member>artisan</member>
+      </li>
+    </symbolPacks>
   </MemeDef>
 
 </Defs>
