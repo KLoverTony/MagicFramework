@@ -42,7 +42,7 @@
             <li>Shoulders</li>
           </bodyPartGroupsMatchAny>
           <requiredDefs>
-            <li>Apparel_FormalVest</li>
+            <li>AET_Apparel_BalanceVestments</li>
           </requiredDefs>
         </requirement>
       </li>

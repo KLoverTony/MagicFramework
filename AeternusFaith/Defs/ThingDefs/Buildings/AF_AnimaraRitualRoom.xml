@@ -40,7 +40,7 @@
     <label>animara ritual center</label>
     <description>The central focal point of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_center</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_center</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(4,3)</drawSize>
     </graphicData>
@@ -120,7 +120,7 @@
     <label>animara ritual edge (top)</label>
     <description>The top edge piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_edge_top</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_edge_top</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(4,2)</drawSize>
     </graphicData>
@@ -135,7 +135,7 @@
     <label>animara ritual edge (bottom)</label>
     <description>The bottom edge piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_edge_bottom</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_edge_bottom</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(4,2)</drawSize>
     </graphicData>
@@ -150,7 +150,7 @@
     <label>animara ritual edge (left)</label>
     <description>The left edge piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_edge_left</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_edge_left</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,3)</drawSize>
     </graphicData>
@@ -165,7 +165,7 @@
     <label>animara ritual edge (right)</label>
     <description>The right edge piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_edge_right</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_edge_right</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,3)</drawSize>
     </graphicData>
@@ -180,7 +180,7 @@
     <label>animara ritual corner (top-left)</label>
     <description>The top-left corner piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_tl</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_tl</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
@@ -195,7 +195,7 @@
     <label>animara ritual corner (top-right)</label>
     <description>The top-right corner piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_tr</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_tr</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
@@ -210,7 +210,7 @@
     <label>animara ritual corner (bottom-left)</label>
     <description>The bottom-left corner piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_bl</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_bl</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
@@ -225,7 +225,7 @@
     <label>animara ritual corner (bottom-right)</label>
     <description>The bottom-right corner piece of the Animara ritual room floor.</description>
     <graphicData>
-      <texPath>Things/RitualRoom/Animara_Ritual_br</texPath>
+      <texPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_br</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
@@ -293,7 +293,7 @@
         <circleDef>AF_AnimaraRitualCenter</circleDef>
         <commandLabel>Raise skeleton</commandLabel>
         <commandDescription>Begin an Animara rite to raise a corpse as a skeleton. Requires an orthogonally adjacent Animara Ritual Center.</commandDescription>
-        <commandIconPath>Things/RitualRoom/Animara_Ritual_center</commandIconPath>
+        <commandIconPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_center</commandIconPath>
       </li>
     </comps>
   </ThingDef>

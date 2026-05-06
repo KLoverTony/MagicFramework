@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <FleshTypeDef>
+    <defName>AF_SpectralFlesh</defName>
+    <corpseCategory>CorpsesAnimal</corpseCategory>
+    <damageEffecter>Damage_HitFlesh</damageEffecter>
+    <isOrganic>false</isOrganic>
+    <genericWounds>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechA</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechB</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechC</texture>
+      </li>
+    </genericWounds>
+  </FleshTypeDef>
+
   <ThingDef ParentName="BasePawn">
     <defName>AF_SpectreRace</defName>
     <label>spectre</label>
@@ -42,7 +60,7 @@
       <baseHungerRate>0</baseHungerRate>
       <needsRest>false</needsRest>
       <hasMeat>false</hasMeat>
-      <hasGenders>false</hasGenders>
+      <hasGenders>true</hasGenders>
       <nameCategory>NoName</nameCategory>
       <nameGenerator>NamerAnimalGenericMale</nameGenerator>
       <nameGeneratorFemale>NamerAnimalGenericFemale</nameGeneratorFemale>
@@ -50,7 +68,7 @@
       <isImmuneToInfections>true</isImmuneToInfections>
       <bleedRateFactor>0</bleedRateFactor>
       <lifeExpectancy>2000</lifeExpectancy>
-      <fleshType>Mechanoid</fleshType>
+      <fleshType>AF_SpectralFlesh</fleshType>
       <makesFootprints>false</makesFootprints>
       <manhunterOnDamageChance>0</manhunterOnDamageChance>
       <manhunterOnTameFailChance>0</manhunterOnTameFailChance>

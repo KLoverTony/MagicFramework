@@ -106,9 +106,8 @@ namespace AeternusFaith
             Gender sourceGender = ResolveGenerationGender(corpse);
             Ideo sourceIdeo = ModsConfig.IdeologyActive ? corpse.InnerPawn?.ideo?.Ideo : null;
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
-            corpse.Destroy(DestroyMode.Vanish);
 
-            Pawn skeleton = CreateSkeletonPawn(sourceName, sourceGender, sourceIdeo);
+            Pawn skeleton = CreateSkeletonPawn(corpse, sourceName, sourceGender, sourceIdeo);
             if (skeleton == null)
             {
                 Messages.Message("The skeleton rite consumed " + corpseLabel + ", but no skeleton could be raised.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
@@ -116,15 +115,17 @@ namespace AeternusFaith
                 return;
             }
 
-            GenSpawn.Spawn(skeleton, spawnCell, Map);
+            if (!skeleton.Spawned)
+                GenSpawn.Spawn(skeleton, spawnCell, Map);
             if (skeleton.Faction != Faction.OfPlayer)
                 skeleton.SetFaction(Faction.OfPlayer);
+            ConvertPawnToSkeleton(skeleton, DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton"), sourceName, sourceIdeo);
 
             ReleaseAttendees();
             Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
-        private Pawn CreateSkeletonPawn(string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
+        private Pawn CreateSkeletonPawn(Corpse corpse, string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
         {
             PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton");
             if (pawnKindDef == null)
@@ -132,6 +133,9 @@ namespace AeternusFaith
                 Log.Error("AeternusFaith skeleton rite could not find PawnKindDef AF_Skeleton.");
                 return null;
             }
+
+            if (corpse != null && !corpse.Destroyed)
+                corpse.Destroy(DestroyMode.Vanish);
 
             PawnGenerationRequest request = new PawnGenerationRequest(
                 kind: PawnKindDefOf.Colonist,
@@ -149,7 +153,7 @@ namespace AeternusFaith
                 allowAddictions: false,
                 fixedGender: sourceGender,
                 forceNoIdeo: true,
-                forceNoBackstory: true,
+                forceNoBackstory: false,
                 developmentalStages: DevelopmentalStage.Adult,
                 dontGiveWeapon: true,
                 maximumAgeTraits: 0,
@@ -159,9 +163,15 @@ namespace AeternusFaith
             if (skeleton == null)
                 return null;
 
-            // Assign the deceased pawn's Ideo to the skeleton so it retains its former faith.
-            // This also prevents a NullReferenceException in Pawn_InteractionsTracker when
-            // Ideology DLC is active and the internal ideo field is left null by forceNoIdeo.
+            ConvertPawnToSkeleton(skeleton, pawnKindDef, sourceName, sourceIdeo);
+            return skeleton;
+        }
+
+        private void ConvertPawnToSkeleton(Pawn skeleton, PawnKindDef pawnKindDef, string sourceName, Ideo sourceIdeo)
+        {
+            if (skeleton == null || pawnKindDef == null)
+                return;
+
             if (ModsConfig.IdeologyActive && skeleton.ideo != null)
             {
                 Ideo ideoToApply = sourceIdeo ?? Faction.OfPlayer?.ideos?.PrimaryIdeo;
@@ -174,9 +184,20 @@ namespace AeternusFaith
             SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
             AttachSkeletonCleanupComp(skeleton);
             ApplySkeletonAppearance(skeleton);
+            SkeletonUndeadUtility.RemoveLivingResurrectionHediffs(skeleton);
             SkeletonUndeadUtility.EnforceUndeadState(skeleton, resetSkills: true);
+            skeleton.def = pawnKindDef.race;
+            skeleton.kindDef = pawnKindDef;
+            SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
+            SkeletonUndeadUtility.ApplyUndeadHediffs(skeleton, "AF_SkeletalBody");
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(skeleton);
             skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
-            return skeleton;
+            skeleton.Drawer?.renderer?.SetAllGraphicsDirty();
+            Log.Message("[AeternusFaith] Raised skeleton conversion result: def=" + skeleton.def?.defName +
+                        ", kindDef=" + skeleton.kindDef?.defName +
+                        ", xenotype=" + (ModsConfig.BiotechActive ? skeleton.genes?.Xenotype?.defName : "BiotechInactive") +
+                        ", undead=" + SkeletonUndeadUtility.IsUndead(skeleton) +
+                        ", skeletal=" + SkeletonUndeadUtility.IsSkeletonUndead(skeleton));
         }
 
         private void AttachSkeletonCleanupComp(Pawn skeleton)

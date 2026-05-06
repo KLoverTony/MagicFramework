@@ -96,7 +96,7 @@
       <baseHungerRate>0</baseHungerRate>
       <needsRest>false</needsRest>
       <hasMeat>false</hasMeat>
-      <hasGenders>false</hasGenders>
+      <hasGenders>true</hasGenders>
       <nameCategory>NoName</nameCategory>
       <alwaysAwake>true</alwaysAwake>
       <isImmuneToInfections>true</isImmuneToInfections>

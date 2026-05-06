@@ -21,6 +21,8 @@ namespace AeternusFaith
         {
             base.PostSpawnSetup(respawningAfterLoad);
             SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
         }
 
         public override void PostExposeData()
@@ -34,6 +36,8 @@ namespace AeternusFaith
         {
             base.CompTickRare();
             SkeletonUndeadUtility.EnforceUndeadNeeds(Pawn);
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
         }
     }
 
@@ -97,6 +101,76 @@ namespace AeternusFaith
                 ResetSkills(pawn);
         }
 
+        public static void ApplyUndeadHediffs(Pawn pawn, string specializedHediffDefName)
+        {
+            if (pawn?.health?.hediffSet == null)
+                return;
+
+            AddHediffIfMissing(pawn, "AF_UndeadNature");
+            AddHediffIfMissing(pawn, specializedHediffDefName);
+        }
+
+        public static void ApplyRaceBasedUndeadHediffs(Pawn pawn)
+        {
+            if (pawn?.def?.defName == "AF_SkeletonRace")
+                ApplyUndeadHediffs(pawn, "AF_SkeletalBody");
+            else if (pawn?.def?.defName == "AF_SpectreRace")
+                ApplyUndeadHediffs(pawn, "AF_SpectralForm");
+        }
+
+        public static void ApplyRaceBasedUndeadXenotype(Pawn pawn)
+        {
+            if (!ModsConfig.BiotechActive || pawn?.genes == null)
+                return;
+
+            if (pawn.def?.defName == "AF_SkeletonRace")
+                ApplyXenotype(pawn, "AF_SkeletonXenotype");
+            else if (pawn.def?.defName == "AF_SpectreRace")
+                ApplyXenotype(pawn, "AF_SpectreXenotype");
+        }
+
+        public static void RemoveLivingResurrectionHediffs(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet?.hediffs == null)
+                return;
+
+            string[] removedDefNames =
+            {
+                "CryptosleepSickness",
+                "ResurrectionSickness",
+                "ResurrectionPsychosis"
+            };
+
+            foreach (string defName in removedDefNames)
+            {
+                HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(defName);
+                if (hediffDef == null)
+                    continue;
+
+                Hediff hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                while (hediff != null)
+                {
+                    pawn.health.RemoveHediff(hediff);
+                    hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
+                }
+            }
+        }
+
+        public static bool IsUndead(Pawn pawn)
+        {
+            return HasHediff(pawn, "AF_UndeadNature");
+        }
+
+        public static bool IsSkeletonUndead(Pawn pawn)
+        {
+            return HasHediff(pawn, "AF_SkeletalBody");
+        }
+
+        public static bool IsSpectralUndead(Pawn pawn)
+        {
+            return HasHediff(pawn, "AF_SpectralForm");
+        }
+
         public static void EnforceUndeadNeeds(Pawn pawn)
         {
             if (pawn?.needs == null)
@@ -134,8 +208,6 @@ namespace AeternusFaith
             if (pawn.story == null)
                 return;
 
-            ChildhoodField?.SetValue(pawn.story, null);
-            AdulthoodField?.SetValue(pawn.story, null);
             TitleField?.SetValue(pawn.story, null);
             BirthLastNameField?.SetValue(pawn.story, null);
 
@@ -180,6 +252,41 @@ namespace AeternusFaith
                 skill.xpSinceLastLevel = 0f;
                 skill.xpSinceMidnight = 0f;
             }
+        }
+
+        private static void AddHediffIfMissing(Pawn pawn, string hediffDefName)
+        {
+            if (pawn == null || hediffDefName.NullOrEmpty())
+                return;
+
+            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(hediffDefName);
+            if (hediffDef == null)
+            {
+                Log.Warning("[AeternusFaith] Missing undead HediffDef " + hediffDefName + "; marker could not be applied to " + pawn.LabelShort);
+                return;
+            }
+
+            if (pawn.health.hediffSet.HasHediff(hediffDef))
+                return;
+
+            Hediff hediff = HediffMaker.MakeHediff(hediffDef, pawn);
+            hediff.Severity = 1f;
+            pawn.health.AddHediff(hediff);
+        }
+
+        private static bool HasHediff(Pawn pawn, string hediffDefName)
+        {
+            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(hediffDefName);
+            return hediffDef != null && pawn?.health?.hediffSet?.HasHediff(hediffDef) == true;
+        }
+
+        private static void ApplyXenotype(Pawn pawn, string xenotypeDefName)
+        {
+            XenotypeDef xenotypeDef = DefDatabase<XenotypeDef>.GetNamedSilentFail(xenotypeDefName);
+            if (xenotypeDef == null || pawn.genes.Xenotype == xenotypeDef)
+                return;
+
+            pawn.genes.SetXenotypeDirect(xenotypeDef);
         }
     }
 }

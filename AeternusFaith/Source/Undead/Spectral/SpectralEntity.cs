@@ -151,6 +151,7 @@ namespace AeternusFaith.Undead.Spectral
                 }
 
                 SkeletonUndeadUtility.EnforceUndeadState(cachedPawn, resetSkills: true);
+                SkeletonUndeadUtility.ApplyUndeadHediffs(cachedPawn, "AF_SpectralForm");
                 ApplySpectreAppearance(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
             }
