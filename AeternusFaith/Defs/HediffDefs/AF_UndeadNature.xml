@@ -21,12 +21,76 @@
   </HediffDef>
 
   <HediffDef>
+    <defName>AF_SkeletalLimitations</defName>
+    <label>skeletal limitations</label>
+    <description>This skeletal body has limited awareness and dexterity.</description>
+    <hediffClass>Hediff</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>0.25</setMax>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <setMax>0.25</setMax>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <setMax>0.75</setMax>
+          </li>
+          <li>
+            <capacity>Talking</capacity>
+            <setMax>0</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <defaultLabelColor>(0.65, 0.65, 0.65)</defaultLabelColor>
+  </HediffDef>
+
+  <HediffDef>
     <defName>AF_SpectralForm</defName>
     <label>spectral form</label>
     <description>This pawn has an incorporeal or partially manifested undead form.</description>
     <hediffClass>Hediff</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
+    <defaultLabelColor>(0.45, 0.65, 0.9)</defaultLabelColor>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>AF_SpectralLimitations</defName>
+    <label>spectral limitations</label>
+    <description>This spectral body can drift freely, but has little physical control.</description>
+    <hediffClass>Hediff</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>0.75</setMax>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <setMax>0</setMax>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <setMax>1</setMax>
+          </li>
+          <li>
+            <capacity>Talking</capacity>
+            <setMax>0.25</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
     <defaultLabelColor>(0.45, 0.65, 0.9)</defaultLabelColor>
   </HediffDef>
 

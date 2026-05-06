@@ -1,8 +1,10 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using System.Linq;
+using MagicFramework.Core;
 using RimWorld;
 using Verse;
+using Verse.AI;
 
 namespace MFVanilla.Core;
 
@@ -39,6 +41,21 @@ public static class MFVanillaPatcher
         harmony.Patch(
             AccessTools.PropertyGetter(typeof(MainTabWindow_Research), nameof(MainTabWindow_Research.VisibleResearchProjects)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(MainTabWindow_Research_VisibleResearchProjects_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(SpellRuntimeGameComponent), nameof(SpellRuntimeGameComponent.HasArcaneGift)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(SpellRuntimeGameComponent_HasArcaneGift_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(SpellRuntimeGameComponent), nameof(SpellRuntimeGameComponent.SetArcaneGift)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(SpellRuntimeGameComponent_SetArcaneGift_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(ResearchManager), nameof(ResearchManager.ResearchPerformed)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchManager_ResearchPerformed_Postfix))
         );
 
         _isPatched = true;
@@ -140,6 +157,34 @@ public static class MFVanillaPatcher
         __result = __result
             .Where(project => !IsResearchSuppressed(project))
             .ToList();
+    }
+
+    private static void SpellRuntimeGameComponent_HasArcaneGift_Postfix(Pawn pawn, ref bool __result)
+    {
+        if (!__result && ArcaneGiftUtility.HasArcaneGiftTrait(pawn))
+        {
+            __result = true;
+        }
+    }
+
+    private static void SpellRuntimeGameComponent_SetArcaneGift_Postfix(Pawn pawn, bool value)
+    {
+        if (value)
+        {
+            ArcaneGiftUtility.TryGiveArcaneGiftTraitOnly(pawn);
+        }
+        else
+        {
+            ArcaneGiftUtility.TryRemoveArcaneGiftTrait(pawn);
+        }
+    }
+
+    private static void ResearchManager_ResearchPerformed_Postfix(Pawn researcher)
+    {
+        if (researcher?.CurJob == null) return;
+
+        Thing bench = researcher.CurJob.GetTarget(TargetIndex.A).Thing;
+        ArcaneGiftStudyGameComponent.Instance?.NotifyResearchPerformed(researcher, bench);
     }
 
     private static void RefreshOpenResearchWindows()

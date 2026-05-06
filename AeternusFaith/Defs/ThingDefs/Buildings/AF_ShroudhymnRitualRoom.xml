@@ -291,8 +291,8 @@
       </li>
       <li Class="AeternusFaith.Undead.Spectral.CompProperties_SummonSpectre">
         <circleDef>AF_ShroudhymnRitualCenter</circleDef>
-        <commandLabel>Summon spectre</commandLabel>
-        <commandDescription>Summon a test spectre at the adjacent Shroudhymn ritual center.</commandDescription>
+        <commandLabel>Begin Shroudhymn spectre rite</commandLabel>
+        <commandDescription>Begin a Shroudhymn rite to manifest a spectre at the adjacent ritual center.</commandDescription>
         <commandIconPath>Things/RitualRooms/ShroudhymnRitualRoom/Shroudhymn_Ritual_center</commandIconPath>
       </li>
     </comps>

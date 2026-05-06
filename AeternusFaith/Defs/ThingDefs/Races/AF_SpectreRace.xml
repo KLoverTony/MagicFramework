@@ -90,6 +90,10 @@
 
     <!-- Spirits should not butcher into mechanoid resources. -->
 
+    <comps>
+      <li Class="AeternusFaith.CompProperties_SkeletonUndeadCleanup" />
+    </comps>
+
   </ThingDef>
 
   <!--

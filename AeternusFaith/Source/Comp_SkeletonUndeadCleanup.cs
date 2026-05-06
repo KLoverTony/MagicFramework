@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using RimWorld;
 using Verse;
@@ -113,9 +114,15 @@ namespace AeternusFaith
         public static void ApplyRaceBasedUndeadHediffs(Pawn pawn)
         {
             if (pawn?.def?.defName == "AF_SkeletonRace")
+            {
                 ApplyUndeadHediffs(pawn, "AF_SkeletalBody");
+                AddHediffIfMissing(pawn, "AF_SkeletalLimitations");
+            }
             else if (pawn?.def?.defName == "AF_SpectreRace")
+            {
                 ApplyUndeadHediffs(pawn, "AF_SpectralForm");
+                AddHediffIfMissing(pawn, "AF_SpectralLimitations");
+            }
         }
 
         public static void ApplyRaceBasedUndeadXenotype(Pawn pawn)
@@ -153,6 +160,30 @@ namespace AeternusFaith
                     pawn.health.RemoveHediff(hediff);
                     hediff = pawn.health.hediffSet.GetFirstHediffOfDef(hediffDef);
                 }
+            }
+        }
+
+        public static void RemoveNonUndeadHediffs(Pawn pawn)
+        {
+            if (pawn?.health?.hediffSet?.hediffs == null)
+                return;
+
+            HashSet<string> preservedHediffDefNames = new HashSet<string>
+            {
+                "AF_UndeadNature",
+                "AF_SkeletalBody",
+                "AF_SkeletalLimitations",
+                "AF_SpectralForm",
+                "AF_SpectralLimitations"
+            };
+
+            List<Hediff> hediffs = new List<Hediff>(pawn.health.hediffSet.hediffs);
+            foreach (Hediff hediff in hediffs)
+            {
+                if (hediff?.def == null || preservedHediffDefNames.Contains(hediff.def.defName))
+                    continue;
+
+                pawn.health.RemoveHediff(hediff);
             }
         }
 
@@ -197,6 +228,25 @@ namespace AeternusFaith
             pawn?.inventory?.DestroyAll(DestroyMode.Vanish);
         }
 
+        public static void EnsureUndeadCleanupComp(Pawn pawn)
+        {
+            if (pawn == null || pawn.GetComp<Comp_SkeletonUndeadCleanup>() != null)
+                return;
+
+            CompProperties_SkeletonUndeadCleanup compProperties = pawn.def?.comps?
+                .OfType<CompProperties_SkeletonUndeadCleanup>()
+                .FirstOrDefault();
+            if (compProperties == null)
+                return;
+
+            Comp_SkeletonUndeadCleanup comp = new Comp_SkeletonUndeadCleanup
+            {
+                parent = pawn
+            };
+            comp.Initialize(compProperties);
+            pawn.AllComps.Add(comp);
+        }
+
         public static void ClearHumanIdentity(Pawn pawn)
         {
             if (pawn == null)
@@ -217,6 +267,33 @@ namespace AeternusFaith
             List<Trait> traits = new List<Trait>(pawn.story.traits.TraitsSorted);
             foreach (Trait trait in traits)
                 pawn.story.traits.RemoveTrait(trait, false);
+        }
+
+        public static void CopyBackstoriesFromSource(Pawn sourcePawn, Pawn targetPawn)
+        {
+            if (sourcePawn?.story == null || targetPawn?.story == null)
+                return;
+
+            ChildhoodField?.SetValue(targetPawn.story, ChildhoodField?.GetValue(sourcePawn.story));
+            AdulthoodField?.SetValue(targetPawn.story, AdulthoodField?.GetValue(sourcePawn.story));
+        }
+
+        public static void CopySkillsFromSource(Pawn sourcePawn, Pawn targetPawn)
+        {
+            if (sourcePawn?.skills?.skills == null || targetPawn?.skills == null)
+                return;
+
+            foreach (SkillRecord sourceSkill in sourcePawn.skills.skills)
+            {
+                SkillRecord targetSkill = targetPawn.skills.GetSkill(sourceSkill.def);
+                if (targetSkill == null)
+                    continue;
+
+                targetSkill.Level = sourceSkill.Level;
+                targetSkill.passion = sourceSkill.passion;
+                targetSkill.xpSinceLastLevel = sourceSkill.xpSinceLastLevel;
+                targetSkill.xpSinceMidnight = sourceSkill.xpSinceMidnight;
+            }
         }
 
         public static void NormalizeSkeletonLifeStage(Pawn pawn)

@@ -23,6 +23,8 @@ namespace AeternusFaith.Undead.Spectral
         
         public Pawn cachedPawn;
         public bool persistentPawn = false;
+        public Pawn sourcePawn;
+        public Ideo sourceIdeo;
         
         public string lastActionSummary = "Created";
 
@@ -56,6 +58,8 @@ namespace AeternusFaith.Undead.Spectral
             Scribe_Values.Look(ref manifestationEndTick, "manifestationEndTick", -1);
             Scribe_References.Look(ref cachedPawn, "cachedPawn");
             Scribe_Values.Look(ref persistentPawn, "persistentPawn", false);
+            Scribe_References.Look(ref sourcePawn, "sourcePawn");
+            Scribe_References.Look(ref sourceIdeo, "sourceIdeo");
             Scribe_Values.Look(ref lastActionSummary, "lastActionSummary", "Loaded");
         }
 
@@ -141,19 +145,30 @@ namespace AeternusFaith.Undead.Spectral
                 cachedPawn = PawnGenerator.GeneratePawn(request);
                 cachedPawn.def = spectreKind.race;
                 cachedPawn.kindDef = spectreKind;
+                SkeletonUndeadUtility.NormalizeSkeletonLifeStage(cachedPawn);
+                SkeletonUndeadUtility.EnsureUndeadCleanupComp(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
 
                 if (ModsConfig.IdeologyActive && cachedPawn.ideo != null)
                 {
-                    Ideo ideoToApply = Faction.OfPlayer?.ideos?.PrimaryIdeo;
+                    Ideo ideoToApply = sourceIdeo ?? Faction.OfPlayer?.ideos?.PrimaryIdeo;
                     if (ideoToApply != null)
                         cachedPawn.ideo.SetIdeo(ideoToApply);
                 }
 
                 SkeletonUndeadUtility.EnforceUndeadState(cachedPawn, resetSkills: true);
-                SkeletonUndeadUtility.ApplyUndeadHediffs(cachedPawn, "AF_SpectralForm");
+                SkeletonUndeadUtility.CopyBackstoriesFromSource(sourcePawn, cachedPawn);
+                SkeletonUndeadUtility.CopySkillsFromSource(sourcePawn, cachedPawn);
+                SkeletonUndeadUtility.RemoveNonUndeadHediffs(cachedPawn);
+                SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(cachedPawn);
+                SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(cachedPawn);
                 ApplySpectreAppearance(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
+                Log.Message("[AeternusFaith] Manifested spectre conversion result: def=" + cachedPawn.def?.defName +
+                            ", kindDef=" + cachedPawn.kindDef?.defName +
+                            ", xenotype=" + (ModsConfig.BiotechActive ? cachedPawn.genes?.Xenotype?.defName : "BiotechInactive") +
+                            ", undead=" + SkeletonUndeadUtility.IsUndead(cachedPawn) +
+                            ", spectral=" + SkeletonUndeadUtility.IsSpectralUndead(cachedPawn));
             }
 
             GenSpawn.Spawn(cachedPawn, lastKnownPosition, CurrentMap);

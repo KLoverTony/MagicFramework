@@ -29,4 +29,18 @@
     <casualInterruptible>true</casualInterruptible>
   </JobDef>
 
+  <JobDef>
+    <defName>AF_PerformSpectreRite</defName>
+    <driverClass>AeternusFaith.Undead.Spectral.JobDriver_PerformSpectreRite</driverClass>
+    <reportString>performing a spectre rite.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_AttendSpectreRite</defName>
+    <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
+    <reportString>attending a spectre rite.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+  </JobDef>
+
 </Defs>

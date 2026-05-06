@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <TraitDef>
+    <defName>MFV_ArcaneGift</defName>
+    <commonality>0.35</commonality>
+    <degreeDatas>
+      <li>
+        <label>arcane gift</label>
+        <description>{PAWN_nameDef} has a rare inborn sensitivity to mana, allowing {PAWN_objective} to learn and cast spells through the Magic Framework.</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
+</Defs>

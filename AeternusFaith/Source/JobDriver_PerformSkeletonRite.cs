@@ -102,12 +102,13 @@ namespace AeternusFaith
                 return;
 
             string corpseLabel = corpse.LabelShortCap;
+            Pawn sourcePawn = corpse.InnerPawn;
             string sourceName = ResolveSourceName(corpse);
             Gender sourceGender = ResolveGenerationGender(corpse);
-            Ideo sourceIdeo = ModsConfig.IdeologyActive ? corpse.InnerPawn?.ideo?.Ideo : null;
+            Ideo sourceIdeo = ModsConfig.IdeologyActive ? sourcePawn?.ideo?.Ideo : null;
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
 
-            Pawn skeleton = CreateSkeletonPawn(corpse, sourceName, sourceGender, sourceIdeo);
+            Pawn skeleton = CreateSkeletonPawn(corpse, sourcePawn, sourceName, sourceGender, sourceIdeo);
             if (skeleton == null)
             {
                 Messages.Message("The skeleton rite consumed " + corpseLabel + ", but no skeleton could be raised.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
@@ -119,13 +120,13 @@ namespace AeternusFaith
                 GenSpawn.Spawn(skeleton, spawnCell, Map);
             if (skeleton.Faction != Faction.OfPlayer)
                 skeleton.SetFaction(Faction.OfPlayer);
-            ConvertPawnToSkeleton(skeleton, DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton"), sourceName, sourceIdeo);
+            ConvertPawnToSkeleton(skeleton, DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton"), sourcePawn, sourceName, sourceIdeo);
 
             ReleaseAttendees();
             Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
-        private Pawn CreateSkeletonPawn(Corpse corpse, string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
+        private Pawn CreateSkeletonPawn(Corpse corpse, Pawn sourcePawn, string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
         {
             PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton");
             if (pawnKindDef == null)
@@ -163,11 +164,11 @@ namespace AeternusFaith
             if (skeleton == null)
                 return null;
 
-            ConvertPawnToSkeleton(skeleton, pawnKindDef, sourceName, sourceIdeo);
+            ConvertPawnToSkeleton(skeleton, pawnKindDef, sourcePawn, sourceName, sourceIdeo);
             return skeleton;
         }
 
-        private void ConvertPawnToSkeleton(Pawn skeleton, PawnKindDef pawnKindDef, string sourceName, Ideo sourceIdeo)
+        private void ConvertPawnToSkeleton(Pawn skeleton, PawnKindDef pawnKindDef, Pawn sourcePawn, string sourceName, Ideo sourceIdeo)
         {
             if (skeleton == null || pawnKindDef == null)
                 return;
@@ -186,10 +187,14 @@ namespace AeternusFaith
             ApplySkeletonAppearance(skeleton);
             SkeletonUndeadUtility.RemoveLivingResurrectionHediffs(skeleton);
             SkeletonUndeadUtility.EnforceUndeadState(skeleton, resetSkills: true);
+            SkeletonUndeadUtility.CopyBackstoriesFromSource(sourcePawn, skeleton);
+            SkeletonUndeadUtility.CopySkillsFromSource(sourcePawn, skeleton);
+            SkeletonUndeadUtility.RemoveNonUndeadHediffs(skeleton);
             skeleton.def = pawnKindDef.race;
             skeleton.kindDef = pawnKindDef;
             SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
             SkeletonUndeadUtility.ApplyUndeadHediffs(skeleton, "AF_SkeletalBody");
+            SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(skeleton);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(skeleton);
             skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
             skeleton.Drawer?.renderer?.SetAllGraphicsDirty();
