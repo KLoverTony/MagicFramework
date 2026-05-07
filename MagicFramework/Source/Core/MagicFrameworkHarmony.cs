@@ -98,6 +98,7 @@ public static class MagicFrameworkPawnGizmoPatch
         {
             yield return SpellDebugCasting.CreateCasterLevelGizmo(__instance);
             yield return SpellDebugCasting.CreateArcaneGiftGizmo(__instance);
+            yield return SpellDebugCasting.CreateEnhancementDiagnosticsGizmo(__instance);
             yield return SpellDebugCasting.CreateScalingBoltGizmo(__instance);
             yield return SpellDebugCasting.CreateFireboltGizmo(__instance);
             yield return SpellDebugCasting.CreateFireballGizmo(__instance);
@@ -123,6 +124,11 @@ public static class MagicFrameworkPawnGizmoPatch
 
         if (__instance != null && (__instance.IsColonistPlayerControlled || __instance.IsPrisonerOfColony || __instance.IsSlaveOfColony))
         {
+            if (SpellRuntimeGameComponent.Instance?.HasArcaneGift(__instance) == true)
+            {
+                yield return new SpellManaGizmo(__instance);
+            }
+
             Gizmo knownSpellsGizmo = SpellGizmoUtility.CreateKnownSpellsGizmo(__instance);
             if (knownSpellsGizmo != null)
             {

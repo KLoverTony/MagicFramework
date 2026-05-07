@@ -1,6 +1,7 @@
 using MagicFramework.Context;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using Verse;
 
 namespace MagicFramework.Costs;
@@ -16,8 +17,9 @@ public sealed class ManaCostWorker : SpellCostWorker
         }
 
         SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
-        runtime?.SpendMana(context?.caster, manaCostDef.amount);
-        Log.Message($"[MagicFramework] Spent {manaCostDef.amount:0.##} mana for {context?.spellDef?.defName ?? "<unknown spell>"}.");
+        float resolvedAmount = SpellEnhancementUtility.ResolveManaCost(context, manaCostDef.amount);
+        runtime?.SpendMana(context?.caster, resolvedAmount);
+        Log.Message($"[MagicFramework] Spent {resolvedAmount:0.##} mana for {context?.spellDef?.defName ?? "<unknown spell>"}.");
     }
 }
 
@@ -32,7 +34,8 @@ public sealed class CooldownCostWorker : SpellCostWorker
         }
 
         SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
-        runtime?.StartCooldown(context?.caster, context?.spellDef, cooldownCostDef.cooldownTicks);
-        Log.Message($"[MagicFramework] Started cooldown of {cooldownCostDef.cooldownTicks} ticks for {context?.spellDef?.defName ?? "<unknown spell>"}.");
+        int resolvedTicks = SpellEnhancementUtility.ResolveCooldownTicks(context, cooldownCostDef.cooldownTicks);
+        runtime?.StartCooldown(context?.caster, context?.spellDef, resolvedTicks);
+        Log.Message($"[MagicFramework] Started cooldown of {resolvedTicks} ticks for {context?.spellDef?.defName ?? "<unknown spell>"}.");
     }
 }

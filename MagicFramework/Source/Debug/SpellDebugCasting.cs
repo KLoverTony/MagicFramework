@@ -2,6 +2,7 @@ using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using MagicFramework.Context;
 using MagicFramework.Core;
+using System.Collections.Generic;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -164,6 +165,46 @@ public static class SpellDebugCasting
                 Messages.Message($"Magic Framework Arcane gift {(newValue ? "enabled" : "disabled")} for {pawn.LabelShortCap}.", pawn, MessageTypeDefOf.TaskCompletion, false);
             }
         };
+    }
+
+    public static Gizmo CreateEnhancementDiagnosticsGizmo(Pawn pawn)
+    {
+        return new Command_Action
+        {
+            defaultLabel = "Debug: Spell Enhancements",
+            defaultDesc = "Logs active enhancement rules and final modifier factors for a selected spell.",
+            icon = ContentFinder<Texture2D>.Get("UI/Commands/DesirePower", true),
+            action = () => OpenEnhancementDiagnosticsMenu(pawn)
+        };
+    }
+
+    private static void OpenEnhancementDiagnosticsMenu(Pawn pawn)
+    {
+        List<SpellDef> spells = DefDatabase<SpellDef>.AllDefsListForReading.ListFullCopy();
+        spells.Sort((left, right) => string.Compare(left.LabelCap, right.LabelCap, System.StringComparison.OrdinalIgnoreCase));
+
+        List<FloatMenuOption> options = new();
+        for (int i = 0; i < spells.Count; i++)
+        {
+            SpellDef spellDef = spells[i];
+            if (spellDef == null)
+            {
+                continue;
+            }
+
+            options.Add(new FloatMenuOption(spellDef.LabelCap, () =>
+            {
+                SpellDebugUtility.LogSpellEnhancementReport(pawn, spellDef);
+                Messages.Message($"Logged enhancement report for {spellDef.LabelCap}.", pawn, MessageTypeDefOf.TaskCompletion, false);
+            }));
+        }
+
+        if (options.Count == 0)
+        {
+            options.Add(new FloatMenuOption("No Magic Framework spells loaded", null));
+        }
+
+        Find.WindowStack.Add(new FloatMenu(options));
     }
 
     private static Gizmo CreateSpellGizmo(Pawn pawn, SpellDef spellDef, string label, string description, string fallbackIconPath, System.Action<Pawn> beginTargeting = null)

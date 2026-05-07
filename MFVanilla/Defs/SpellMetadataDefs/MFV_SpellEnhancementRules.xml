@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellEnhancementRuleDef>
+    <defName>MFV_SolarFlareEmpowersFireMagic</defName>
+    <label>solar flare empowers fire magic</label>
+    <description>Fire spells resonate with solar flare conditions, reducing mana cost and cooldown.</description>
+
+    <affectedElements>
+      <li>MF_Element_Fire</li>
+    </affectedElements>
+
+    <activeDuringConditions>
+      <li>SolarFlare</li>
+    </activeDuringConditions>
+
+    <manaCostFactor>0.9</manaCostFactor>
+    <cooldownFactor>0.9</cooldownFactor>
+  </MagicFramework.Definitions.SpellEnhancementRuleDef>
+</Defs>

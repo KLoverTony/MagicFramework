@@ -1,6 +1,7 @@
 using MagicFramework.Context;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using Verse;
 
 namespace MagicFramework.Requirements;
@@ -19,14 +20,15 @@ public sealed class ManaRequirementWorker : SpellRequirementWorker
             return false;
         }
 
-        if (runtime.HasEnoughMana(context?.caster, requiredAmount))
+        float resolvedAmount = SpellEnhancementUtility.ResolveManaCost(context, requiredAmount);
+        if (runtime.HasEnoughMana(context?.caster, resolvedAmount))
         {
             reason = null;
             return true;
         }
 
         float currentMana = runtime.GetCurrentMana(context?.caster);
-        reason = $"Not enough mana. Required {requiredAmount:0.##}, current {currentMana:0.##}.";
+        reason = $"Not enough mana. Required {resolvedAmount:0.##}, current {currentMana:0.##}.";
         return false;
     }
 }

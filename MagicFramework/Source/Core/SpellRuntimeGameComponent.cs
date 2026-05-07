@@ -33,6 +33,11 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         return GetOrCreateState(caster).currentMana;
     }
 
+    public float GetMaxMana(Thing caster)
+    {
+        return DefaultStartingMana;
+    }
+
     public bool HasArcaneGift(Pawn pawn)
     {
         return pawn != null && GetOrCreateState(pawn).hasArcaneGift;
