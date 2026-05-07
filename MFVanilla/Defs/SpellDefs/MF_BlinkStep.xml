@@ -8,6 +8,24 @@
     <range>14</range>
     <castTimeTicks>20</castTimeTicks>
 
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Movement</li>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Self</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Cell</primaryTargetType>

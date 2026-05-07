@@ -37,6 +37,7 @@ namespace AeternusFaith
         {
             base.CompTickRare();
             SkeletonUndeadUtility.EnforceUndeadNeeds(Pawn);
+            SkeletonUndeadUtility.SuppressUndeadSocialInteractions(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
         }
@@ -88,6 +89,9 @@ namespace AeternusFaith
         private static readonly FieldInfo BirthLastNameField = typeof(Pawn_StoryTracker).GetField(
             "birthLastName",
             BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly FieldInfo InteractionLastInteractTimeField = typeof(Pawn_InteractionsTracker).GetField(
+            "lastInteractTime",
+            BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
 
         public static void EnforceUndeadState(Pawn pawn, bool resetSkills)
         {
@@ -96,6 +100,7 @@ namespace AeternusFaith
 
             NormalizeSkeletonLifeStage(pawn);
             EnforceUndeadNeeds(pawn);
+            SuppressUndeadSocialInteractions(pawn);
             StripGear(pawn);
             ClearHumanIdentity(pawn);
             if (resetSkills)
@@ -219,6 +224,17 @@ namespace AeternusFaith
                 if (need?.def?.defName?.StartsWith("Chemical_") == true)
                     RemoveNeedMethod?.Invoke(pawn.needs, new object[] { need.def });
             }
+        }
+
+        public static void SuppressUndeadSocialInteractions(Pawn pawn)
+        {
+            if (pawn?.interactions == null ||
+                (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
+            {
+                return;
+            }
+
+            InteractionLastInteractTimeField?.SetValue(pawn.interactions, Find.TickManager.TicksGame + 9999999);
         }
 
         public static void StripGear(Pawn pawn)

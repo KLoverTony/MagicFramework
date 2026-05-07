@@ -31,7 +31,7 @@ namespace AeternusFaith
 
         public string commandLabel = "Place ritual room blueprints";
         public string commandDescription = "Place construction blueprints for all surrounding ritual room pieces.";
-        public string commandIconPath = "UI/Commands/AddToArea";
+        public string commandIconPath = "Things/Graves/OssuaryBox_south";
 
         public CompProperties_PlaceRitualRoomBlueprints()
         {

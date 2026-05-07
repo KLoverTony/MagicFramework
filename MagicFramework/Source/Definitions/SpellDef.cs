@@ -19,9 +19,20 @@ public class SpellDef : Def
     public float fxIntensityMultiplier = 1f;
     public bool disableProceduralFx;
     public bool disableDecal;
+    public SpellMetaProperties meta = new();
+    public SpellLearningProperties learning = new();
+    public SpellCastingProperties casting = new();
     public SpellPowerDef power;
     public SpellTargetingDef targeting = new();
     public List<SpellRequirementDef> requirements = new();
     public List<SpellCostDef> costs = new();
     public List<SpellActionDef> actions = new();
+
+    public override void PostLoad()
+    {
+        base.PostLoad();
+        meta ??= new SpellMetaProperties();
+        learning ??= new SpellLearningProperties();
+        casting ??= new SpellCastingProperties();
+    }
 }

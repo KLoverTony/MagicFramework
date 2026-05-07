@@ -8,6 +8,25 @@
     <castTimeTicks>30</castTimeTicks>
     <gizmoIconPath>UI/Gizmos/Spells/MF_Firebolt</gizmoIconPath>
 
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Fire</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Pyromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Projectile</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
     <power>
       <casterLevelFactor>1</casterLevelFactor>
       <tiers>

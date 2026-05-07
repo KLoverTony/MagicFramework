@@ -120,7 +120,6 @@ namespace AeternusFaith
                 GenSpawn.Spawn(skeleton, spawnCell, Map);
             if (skeleton.Faction != Faction.OfPlayer)
                 skeleton.SetFaction(Faction.OfPlayer);
-            ConvertPawnToSkeleton(skeleton, DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton"), sourcePawn, sourceName, sourceIdeo);
 
             ReleaseAttendees();
             Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
@@ -196,6 +195,7 @@ namespace AeternusFaith
             SkeletonUndeadUtility.ApplyUndeadHediffs(skeleton, "AF_SkeletalBody");
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(skeleton);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(skeleton);
+            SkeletonUndeadUtility.SuppressUndeadSocialInteractions(skeleton);
             skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
             skeleton.Drawer?.renderer?.SetAllGraphicsDirty();
             Log.Message("[AeternusFaith] Raised skeleton conversion result: def=" + skeleton.def?.defName +

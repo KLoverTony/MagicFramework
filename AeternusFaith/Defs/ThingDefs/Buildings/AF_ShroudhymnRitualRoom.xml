@@ -67,7 +67,7 @@
       <li Class="AeternusFaith.CompProperties_PlaceRitualRoomBlueprints">
         <commandLabel>Place ritual room blueprints</commandLabel>
         <commandDescription>Place construction blueprints for all surrounding Shroudhymn ritual room pieces (edges and corners). Already-built or already-blueprinted pieces are skipped.</commandDescription>
-        <commandIconPath>UI/Commands/AddToArea</commandIconPath>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
         <pieces>
           <!-- Top edge (4x2): directly above center (center is 4 wide, 3 tall) -->
           <li>

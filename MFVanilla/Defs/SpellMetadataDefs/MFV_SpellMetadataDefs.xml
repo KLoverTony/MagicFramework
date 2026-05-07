@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <!-- Elements -->
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Fire</defName>
+    <label>fire</label>
+    <labelShort>fire</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Frost</defName>
+    <label>frost</label>
+    <labelShort>frost</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Lightning</defName>
+    <label>lightning</label>
+    <labelShort>lightning</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Earth</defName>
+    <label>earth</label>
+    <labelShort>earth</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Water</defName>
+    <label>water</label>
+    <labelShort>water</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Air</defName>
+    <label>air</label>
+    <labelShort>air</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Life</defName>
+    <label>life</label>
+    <labelShort>life</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Death</defName>
+    <label>death</label>
+    <labelShort>death</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Spirit</defName>
+    <label>spirit</label>
+    <labelShort>spirit</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Arcane</defName>
+    <label>arcane</label>
+    <labelShort>arcane</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Shadow</defName>
+    <label>shadow</label>
+    <labelShort>shadow</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Light</defName>
+    <label>light</label>
+    <labelShort>light</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
+  <!-- Domains -->
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Pyromancy</defName>
+    <label>pyromancy</label>
+    <primaryElement>MF_Element_Fire</primaryElement>
+    <displayOrder>10</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Cryomancy</defName>
+    <label>cryomancy</label>
+    <primaryElement>MF_Element_Frost</primaryElement>
+    <displayOrder>20</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Aeromancy</defName>
+    <label>aeromancy</label>
+    <primaryElement>MF_Element_Air</primaryElement>
+    <displayOrder>30</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Geomancy</defName>
+    <label>geomancy</label>
+    <primaryElement>MF_Element_Earth</primaryElement>
+    <displayOrder>40</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Aquamancy</defName>
+    <label>aquamancy</label>
+    <primaryElement>MF_Element_Water</primaryElement>
+    <displayOrder>50</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Vitalism</defName>
+    <label>vitalism</label>
+    <primaryElement>MF_Element_Life</primaryElement>
+    <displayOrder>60</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Necromancy</defName>
+    <label>necromancy</label>
+    <primaryElement>MF_Element_Death</primaryElement>
+    <displayOrder>70</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Summoning</defName>
+    <label>summoning</label>
+    <primaryElement>MF_Element_Spirit</primaryElement>
+    <displayOrder>80</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Warding</defName>
+    <label>warding</label>
+    <primaryElement>MF_Element_Arcane</primaryElement>
+    <displayOrder>90</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Illusion</defName>
+    <label>illusion</label>
+    <primaryElement>MF_Element_Shadow</primaryElement>
+    <displayOrder>100</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Transformation</defName>
+    <label>transformation</label>
+    <primaryElement>MF_Element_Arcane</primaryElement>
+    <displayOrder>110</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Divination</defName>
+    <label>divination</label>
+    <primaryElement>MF_Element_Light</primaryElement>
+    <displayOrder>120</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Soulcraft</defName>
+    <label>soulcraft</label>
+    <primaryElement>MF_Element_Spirit</primaryElement>
+    <displayOrder>130</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <!-- Disciplines -->
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Combat</defName>
+    <label>combat</label>
+    <displayOrder>10</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Healing</defName>
+    <label>healing</label>
+    <displayOrder>20</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Utility</defName>
+    <label>utility</label>
+    <displayOrder>30</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Movement</defName>
+    <label>movement</label>
+    <displayOrder>40</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Summoning</defName>
+    <label>summoning</label>
+    <displayOrder>50</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Warding</defName>
+    <label>warding</label>
+    <displayOrder>60</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Ritual</defName>
+    <label>ritual</label>
+    <displayOrder>70</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Crafting</defName>
+    <label>crafting</label>
+    <displayOrder>80</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <MagicFramework.Definitions.SpellDisciplineDef>
+    <defName>MF_Discipline_Control</defName>
+    <label>control</label>
+    <displayOrder>90</displayOrder>
+  </MagicFramework.Definitions.SpellDisciplineDef>
+
+  <!-- Tags -->
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Projectile</defName>
+    <label>projectile</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Area</defName>
+    <label>area</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Touch</defName>
+    <label>touch</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Self</defName>
+    <label>self</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Hostile</defName>
+    <label>hostile</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Beneficial</defName>
+    <label>beneficial</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Summon</defName>
+    <label>summon</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_CorpseRequired</defName>
+    <label>corpse required</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_WeatherSensitive</defName>
+    <label>weather sensitive</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Channelled</defName>
+    <label>channelled</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_RitualSpell</defName>
+    <label>ritual spell</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Buff</defName>
+    <label>buff</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Debuff</defName>
+    <label>debuff</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_DirectDamage</defName>
+    <label>direct damage</label>
+  </MagicFramework.Definitions.SpellTagDef>
+
+  <MagicFramework.Definitions.SpellTagDef>
+    <defName>MF_Tag_Transformation</defName>
+    <label>transformation</label>
+  </MagicFramework.Definitions.SpellTagDef>
+</Defs>

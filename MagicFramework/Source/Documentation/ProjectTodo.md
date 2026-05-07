@@ -239,6 +239,74 @@ End of quick notes...
 
 ## Framework Follow-Ups
 
+- Add structured spell metadata, learning requirements, and enhancement synergies.
+  Goal:
+  - expand `SpellDef` with additive, grouped metadata and learning/casting configuration
+  - keep existing spell behavior loading unchanged when metadata is absent
+  - preserve the current split between cast validation requirements and post-validation costs
+  - support future systems such as spell books, research unlocks, AI spell choice, equipment bonuses, and weather/celestial spell modifiers
+  Current state:
+  - Batch A foundation is implemented in code
+  - `SpellDef` now has additive `meta`, `learning`, and `casting` grouped properties
+  - `SpellMetaProperties`, `SpellLearningProperties`, and `SpellCastingProperties` define the first-pass grouped data shape
+  - `SpellElementDef`, `SpellDomainDef`, `SpellDisciplineDef`, and `SpellTagDef` provide moddable taxonomy defs
+  - `SpellMetadataUtility` provides null-safe metadata query helpers by def reference and defName
+  - MFVanilla defines initial taxonomy XML in `Defs/SpellMetadataDefs/MFV_SpellMetadataDefs.xml`
+  - validation spell metadata has been added to `MF_Firebolt`, `MF_Heal`, and `MF_BlinkStep`
+  - `dotnet build Source.sln --no-restore -p:DeployToModAssemblies=true` passes
+  Guardrails:
+  - do not remove existing top-level `SpellDef.requirements` or `SpellDef.costs` until compatibility migration is deliberate
+  - do not replace legacy procedural FX fields (`element`, `delivery`, `effectShape`) in the first pass
+  - use moddable `Def` references rather than enums for elements, domains, disciplines, and tags
+  - keep metadata separate from requirements
+  - keep learning requirements separate from casting requirements and casting costs
+  - keep enhancement rules separate from spell definitions and avoid hardcoded spell-specific logic
+  - treat missing metadata and null lists as valid empty data
+  - update only a small number of validation spells first
+  Batch A, safe metadata foundation:
+  - completed first pass
+  - add `SpellMetaProperties` with `tier`, `elements`, `domains`, `disciplines`, and `tags`
+  - add `SpellLearningProperties` with `canBeLearned`, visibility flags, `researchPrerequisites`, and learning `requirements`
+  - add `SpellCastingProperties` with casting `requirements` and casting `costs`
+  - add grouped `meta`, `learning`, and `casting` fields to `SpellDef` with null protection in a lifecycle hook and/or utility methods
+  - add taxonomy defs: `SpellElementDef`, `SpellDomainDef`, `SpellDisciplineDef`, and `SpellTagDef`
+  - prefer clear defName prefixes such as `MF_Element_Fire`, `MF_Domain_Pyromancy`, `MF_Discipline_Combat`, and `MF_Tag_Projectile`
+  - add MFVanilla taxonomy XML under a metadata-focused folder such as `Defs/SpellMetadataDefs/MFV_SpellMetadataDefs.xml`
+  - add query helpers such as `HasElement`, `HasDomain`, `HasDiscipline`, and `HasTag`
+  Acceptance for Batch A:
+  - project compiles
+  - existing spells still load without grouped metadata
+  - MFVanilla can define new spell elements, domains, disciplines, and tags through XML
+  - metadata helper calls are null-safe
+  Batch B, learning and casting requirements:
+  - extend `SpellRequirementWorker` with quiet default `CanLearn` and `CanCast` methods
+  - keep `ArcaneGiftRequirementWorker` and `CasterLevelRequirementWorker` applicable to both learning and casting
+  - keep `ManaRequirementWorker` and `CooldownRequirementWorker` casting-only by default
+  - add or expand `SpellRequirementUtility` with `CanLearnSpell(Pawn pawn, SpellDef spell, out string reason)` and `CanCastSpell(SpellContext context, SpellDef spell, out string reason)`
+  - have learning checks cover `learning.canBeLearned`, completed `learning.researchPrerequisites`, and `learning.requirements`
+  - have casting checks cover existing known-spell runtime state, legacy top-level requirements, and new `casting.requirements`
+  - have casting cost application support both legacy top-level costs and new `casting.costs`, with duplicate spending avoided during migration
+  - use existing `SpellRuntimeGameComponent.KnowsSpell`, `LearnSpell`, `ForgetSpell`, and `GetKnownSpells`
+  - update only 1-3 validation spells first, such as `MF_Firebolt`, `MF_Heal`, and `MF_BlinkStep`
+  Acceptance for Batch B:
+  - a spell can require Arcane Gift to learn
+  - a spell can require completed research to learn
+  - a spell can require mana and cooldown to cast
+  - casting still spends mana and starts cooldown after successful validation only
+  - failure reasons are returned cleanly for unmet learning and casting requirements
+  Batch C, enhancement synergies:
+  - add `SpellEnhancementRuleDef` targeting affected elements, domains, disciplines, required tags, and active game conditions
+  - add `SpellModifierSet` with factors for damage, radius, duration, mana cost, and cooldown
+  - add `SpellEnhancementUtility.GetActiveRules(SpellDef spell, Map map)` and `GetModifiers(SpellContext context)`
+  - document matching semantics: empty affected lists match any spell, affected element/domain/discipline lists match any listed def, required tags must all be present, and active conditions match any listed condition
+  - start with centralized mana/cooldown modifier support if straightforward, then add damage/radius/duration integration only after identifying the safest central calculation points
+  - avoid scattering solar flare, fire, or pyromancy checks into individual spell workers
+  Acceptance for Batch C:
+  - a `SpellEnhancementRuleDef` can target fire spells by metadata
+  - the rule can activate during a map condition such as `SolarFlare`
+  - the framework can calculate an aggregated modifier set for a spell context
+  - at least one centralized spell value, preferably mana cost or cooldown first, can be modified through the enhancement system
+
 - Improve displacement destination resolution around obstacles.
   Current push/pull logic is intentionally simple and may need smarter fallback cell selection for diagonal or blocked paths.
 

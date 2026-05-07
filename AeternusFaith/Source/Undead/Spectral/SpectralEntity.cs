@@ -162,6 +162,7 @@ namespace AeternusFaith.Undead.Spectral
                 SkeletonUndeadUtility.RemoveNonUndeadHediffs(cachedPawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(cachedPawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(cachedPawn);
+                SkeletonUndeadUtility.SuppressUndeadSocialInteractions(cachedPawn);
                 ApplySpectreAppearance(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
                 Log.Message("[AeternusFaith] Manifested spectre conversion result: def=" + cachedPawn.def?.defName +
@@ -172,10 +173,7 @@ namespace AeternusFaith.Undead.Spectral
             }
 
             GenSpawn.Spawn(cachedPawn, lastKnownPosition, CurrentMap);
-
-            // Suppress social interactions — the spectre doesn't chat.
-            // if (cachedPawn.interactions != null)
-            //     cachedPawn.interactions.lastInteractTime = Find.TickManager.TicksGame + 9999999;
+            SkeletonUndeadUtility.SuppressUndeadSocialInteractions(cachedPawn);
             state = SpectralState.Manifesting;
             manifestationEndTick = Find.TickManager.TicksGame + 2500; // Roughly 1 in-game hour
             lastActionSummary = "Manifested.";

@@ -8,6 +8,23 @@
     <range>16</range>
     <castTimeTicks>25</castTimeTicks>
 
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Life</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Healing</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Touch</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>
