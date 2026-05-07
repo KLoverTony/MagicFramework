@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JoyGiverDef>
+    <defName>AF_VisitFilledAlcove</defName>
+    <giverClass>AeternusFaith.JoyGiver_VisitFilledAlcove</giverClass>
+    <baseChance>1</baseChance>
+    <pctPawnsEverDo>0.4</pctPawnsEverDo>
+    <jobDef>AF_VisitFilledAlcove</jobDef>
+    <joyKind>Meditative</joyKind>
+  </JoyGiverDef>
+
+</Defs>

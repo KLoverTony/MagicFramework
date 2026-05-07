@@ -60,7 +60,7 @@
   <ThingDef ParentName="BuildingBase">
     <defName>AF_OssuaryBoneBox</defName>
     <label>ossuary bone box</label>
-    <description>A small Ossanith bone box for a sealed ossuary rite. This first version is decorative and does not store remains.</description>
+    <description>A small Ossanith bone box for a sealed ossuary rite. Once filled, it can be placed within an alcove wall.</description>
     <thingClass>Building</thingClass>
     <category>Building</category>
     <graphicData>
@@ -101,6 +101,12 @@
     </building>
     <comps>
       <li Class="AeternusFaith.CompProperties_OssuaryObituary"/>
+      <li Class="AeternusFaith.CompProperties_PlaceOssuaryInAlcove">
+        <graniteAlcoveWallDef>AF_AlcoveWallGranite</graniteAlcoveWallDef>
+        <slateAlcoveWallDef>AF_AlcoveWallSlate</slateAlcoveWallDef>
+        <filledGraniteAlcoveWallDef>AF_AlcoveWallFilledGranite</filledGraniteAlcoveWallDef>
+        <filledSlateAlcoveWallDef>AF_AlcoveWallFilledSlate</filledSlateAlcoveWallDef>
+      </li>
     </comps>
   </ThingDef>
 
@@ -171,7 +177,7 @@
         <circleDef>AF_OssanithCircle</circleDef>
         <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
         <commandLabel>Begin ossuary rite</commandLabel>
-        <commandDescription>Begin a placeholder Ossanith ossuary rite. Requires an orthogonally adjacent Ossanith circle with a completed ossuary in its center.</commandDescription>
+        <commandDescription>Begin an Ossanith ossuary rite. Requires an orthogonally adjacent Ossanith circle with an empty ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
       </li>
 

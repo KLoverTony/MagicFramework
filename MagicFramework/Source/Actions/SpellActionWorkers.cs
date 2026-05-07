@@ -179,9 +179,14 @@ public sealed class DelayActionWorker : SpellActionWorker
         }
 
         int executeAtTick = (Find.TickManager?.TicksGame ?? 0) + delayDef.delayTicks;
+        if (delayDef.replaceExistingForCaster)
+        {
+            scheduler.RemoveExistingForCasterSpellGroup(context, delayDef);
+        }
+
         foreach (SpellActionDef childAction in delayDef.actions)
         {
-            scheduler.Schedule(context, executeAtTick, childAction);
+            scheduler.Schedule(context, executeAtTick, childAction, delayDef);
         }
     }
 }
@@ -208,6 +213,11 @@ public sealed class RepeatActionWorker : SpellActionWorker
         int currentTick = Find.TickManager?.TicksGame ?? 0;
         int firstScheduledPulse = repeatDef.includeImmediate ? 1 : 0;
 
+        if (repeatDef.replaceExistingForCaster)
+        {
+            scheduler.RemoveExistingForCasterSpellGroup(context, repeatDef);
+        }
+
         if (repeatDef.includeImmediate)
         {
             runner.RunActions(context, repeatDef.actions);
@@ -219,7 +229,7 @@ public sealed class RepeatActionWorker : SpellActionWorker
             int executeAtTick = currentTick + (intervalTicks * delayMultiplier);
             foreach (SpellActionDef childAction in repeatDef.actions)
             {
-                scheduler.Schedule(context, executeAtTick, childAction);
+                scheduler.Schedule(context, executeAtTick, childAction, repeatDef);
             }
         }
     }

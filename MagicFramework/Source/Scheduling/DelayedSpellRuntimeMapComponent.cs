@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MagicFramework.Context;
+using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using Verse;
 
@@ -44,6 +45,25 @@ public sealed class DelayedSpellRuntimeMapComponent : MapComponent
 
         scheduledActions.Insert(insertIndex, scheduledAction);
         return true;
+    }
+
+    public void RemoveForCasterSpellGroup(Thing caster, SpellDef spellDef, IReadOnlyList<int> replacementGroupPath)
+    {
+        if (scheduledActions == null || scheduledActions.Count == 0 || spellDef == null || replacementGroupPath == null)
+        {
+            return;
+        }
+
+        for (int i = scheduledActions.Count - 1; i >= 0; i--)
+        {
+            ScheduledSpellAction scheduledAction = scheduledActions[i];
+            if (scheduledAction?.Caster == caster
+                && scheduledAction.SpellDef == spellDef
+                && PathsEqual(scheduledAction.ReplacementGroupPath, replacementGroupPath))
+            {
+                scheduledActions.RemoveAt(i);
+            }
+        }
     }
 
     public override void MapComponentTick()
@@ -151,5 +171,23 @@ public sealed class DelayedSpellRuntimeMapComponent : MapComponent
 
         Log.Message($"[MagicFramework] Executing delayed action {scheduledAction.DebugLabel}.");
         actionRunner.RunAction(context, actionDef);
+    }
+
+    private static bool PathsEqual(IReadOnlyList<int> first, IReadOnlyList<int> second)
+    {
+        if (first == null || second == null || first.Count != second.Count)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < first.Count; i++)
+        {
+            if (first[i] != second[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

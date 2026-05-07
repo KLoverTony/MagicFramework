@@ -9,7 +9,23 @@ namespace MagicFramework.Scheduling;
 /// </summary>
 public sealed class SpellScheduler
 {
-    public void Schedule(SpellContext context, int executeAtTick, SpellActionDef actionDef)
+    public void RemoveExistingForCasterSpellGroup(SpellContext context, SpellActionDef replacementGroupDef)
+    {
+        if (context?.spellDef == null || replacementGroupDef == null || context.map == null)
+        {
+            return;
+        }
+
+        if (!SpellActionPathUtility.TryCreatePath(context.spellDef, replacementGroupDef, out var replacementGroupPath))
+        {
+            Log.Warning($"[MagicFramework] Failed to remove existing scheduled actions for {replacementGroupDef.GetType().Name} because its path in {context.spellDef.defName} could not be resolved.");
+            return;
+        }
+
+        context.map.GetComponent<DelayedSpellRuntimeMapComponent>()?.RemoveForCasterSpellGroup(context.caster, context.spellDef, replacementGroupPath);
+    }
+
+    public void Schedule(SpellContext context, int executeAtTick, SpellActionDef actionDef, SpellActionDef replacementGroupDef = null)
     {
         if (context?.spellDef == null || actionDef == null || context.map == null)
         {
@@ -19,6 +35,17 @@ public sealed class SpellScheduler
         if (!SpellActionPathUtility.TryCreatePath(context.spellDef, actionDef, out var actionPath))
         {
             Log.Warning($"[MagicFramework] Failed to schedule delayed action {actionDef.GetType().Name} because its path in {context.spellDef.defName} could not be resolved.");
+            return;
+        }
+
+        if (replacementGroupDef == null)
+        {
+            replacementGroupDef = actionDef;
+        }
+
+        if (!SpellActionPathUtility.TryCreatePath(context.spellDef, replacementGroupDef, out var replacementGroupPath))
+        {
+            Log.Warning($"[MagicFramework] Failed to schedule delayed action {actionDef.GetType().Name} because its replacement group path in {context.spellDef.defName} could not be resolved.");
             return;
         }
 
@@ -34,7 +61,8 @@ public sealed class SpellScheduler
             context.power?.tier ?? 0,
             context.randomSeed,
             context.executionState?.variables,
-            actionPath);
+            actionPath,
+            replacementGroupPath);
 
         DelayedSpellRuntimeMapComponent runtime = context.map.GetComponent<DelayedSpellRuntimeMapComponent>();
         if (runtime == null || !runtime.Enqueue(scheduledAction))

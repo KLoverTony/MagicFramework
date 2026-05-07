@@ -100,8 +100,15 @@ namespace AeternusFaith
             if (corpse == null || corpse.Destroyed)
                 return;
 
+            Comp_OssuaryObituary ossuaryContents = (Ossuary as ThingWithComps)?.GetComp<Comp_OssuaryObituary>();
+            if (ossuaryContents?.HasRemains == true)
+            {
+                Messages.Message("The ossuary bone box is already filled.", Ossuary ?? Lectern, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             Pawn deceased = corpse.InnerPawn;
-            (Ossuary as ThingWithComps)?.GetComp<Comp_OssuaryObituary>()?.Record(corpse, pawn);
+            ossuaryContents?.Record(corpse, pawn);
             string corpseLabel = corpse.LabelShortCap;
             MarkFuneralObligationsCompleted(deceased);
             corpse.Destroy(DestroyMode.Vanish);

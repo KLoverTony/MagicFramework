@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase" Name="AF_DecorativeWallBase" Abstract="True">
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <noRightClickDraftAttack>true</noRightClickDraftAttack>
+    <replaceTags>
+      <li>Wall</li>
+    </replaceTags>
+    <statBases>
+      <MaxHitPoints>300</MaxHitPoints>
+      <WorkToBuild>135</WorkToBuild>
+      <Flammability>0</Flammability>
+      <MeditationFocusStrength>0.22</MeditationFocusStrength>
+    </statBases>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>Impassable</passability>
+    <blockWind>true</blockWind>
+    <castEdgeShadows>true</castEdgeShadows>
+    <fillPercent>1</fillPercent>
+    <coversFloor>true</coversFloor>
+    <drawStyleCategory>Walls</drawStyleCategory>
+    <tickerType>Never</tickerType>
+    <rotatable>true</rotatable>
+    <defaultPlacingRot>South</defaultPlacingRot>
+    <selectable>true</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <holdsRoof>true</holdsRoof>
+    <staticSunShadowHeight>1.0</staticSunShadowHeight>
+    <blockLight>true</blockLight>
+    <canOverlapZones>false</canOverlapZones>
+    <fertility>0</fertility>
+    <building>
+      <isInert>true</isInert>
+      <isWall>true</isWall>
+      <isPlaceOverableWall>true</isPlaceOverableWall>
+      <ai_chillDestination>false</ai_chillDestination>
+      <supportsWallAttachments>true</supportsWallAttachments>
+      <blueprintGraphicData>
+        <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+      </blueprintGraphicData>
+      <relatedBuildCommands>
+        <li>Door</li>
+        <li>Autodoor</li>
+        <li>OrnateDoor</li>
+        <li MayRequire="Ludeon.RimWorld.Anomaly">SecurityDoor</li>
+        <li MayRequire="Ludeon.RimWorld.Odyssey">VacBarrier</li>
+        <li>Cooler</li>
+        <li>Vent</li>
+      </relatedBuildCommands>
+    </building>
+    <comps>
+      <li Class="CompProperties_MeditationFocus">
+        <statDef>MeditationFocusStrength</statDef>
+        <focusTypes>
+          <li>Minimal</li>
+        </focusTypes>
+      </li>
+    </comps>
+    <damageMultipliers>
+      <li>
+        <damageDef>Bomb</damageDef>
+        <multiplier>2</multiplier>
+      </li>
+      <li>
+        <damageDef>Thump</damageDef>
+        <multiplier>2</multiplier>
+      </li>
+    </damageMultipliers>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_AlcoveWallGranite</defName>
+    <label>granite alcove wall</label>
+    <description>An impassable granite wall inset with a dark devotional alcove.</description>
+    <graphicData>
+      <texPath>Things/Walls/Alcove wall</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>2001</uiOrder>
+    <costList>
+      <BlocksGranite>5</BlocksGranite>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_AlcoveWallSlate</defName>
+    <label>slate alcove wall</label>
+    <description>An impassable slate wall inset with a dark devotional alcove.</description>
+    <graphicData>
+      <texPath>Things/Walls/Alcove wall</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>2002</uiOrder>
+    <costList>
+      <BlocksSlate>5</BlocksSlate>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_FlatWallGranite</defName>
+    <label>granite flat wall</label>
+    <description>An impassable granite wall faced with austere ceremonial stonework.</description>
+    <graphicData>
+      <texPath>Things/Walls/Flat wall 1</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>2003</uiOrder>
+    <costList>
+      <BlocksGranite>5</BlocksGranite>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_FlatWallSlate</defName>
+    <label>slate flat wall</label>
+    <description>An impassable slate wall faced with austere ceremonial stonework.</description>
+    <graphicData>
+      <texPath>Things/Walls/Flat wall 1</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>2004</uiOrder>
+    <costList>
+      <BlocksSlate>5</BlocksSlate>
+    </costList>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_AlcoveWallFilledGranite</defName>
+    <label>filled granite alcove wall</label>
+    <description>An impassable granite alcove wall sealing an ossuary bone box within its recess.</description>
+    <thingClass>AeternusFaith.Building_FilledAlcoveWall</thingClass>
+    <graphicData>
+      <texPath>Things/Walls/Alcove wall - filled</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="CompProperties_MeditationFocus">
+        <statDef>MeditationFocusStrength</statDef>
+        <focusTypes>
+          <li>Minimal</li>
+        </focusTypes>
+      </li>
+      <li Class="AeternusFaith.CompProperties_OssuaryObituary"/>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="AF_DecorativeWallBase">
+    <defName>AF_AlcoveWallFilledSlate</defName>
+    <label>filled slate alcove wall</label>
+    <description>An impassable slate alcove wall sealing an ossuary bone box within its recess.</description>
+    <thingClass>AeternusFaith.Building_FilledAlcoveWall</thingClass>
+    <graphicData>
+      <texPath>Things/Walls/Alcove wall - filled</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <comps>
+      <li Class="CompProperties_MeditationFocus">
+        <statDef>MeditationFocusStrength</statDef>
+        <focusTypes>
+          <li>Minimal</li>
+        </focusTypes>
+      </li>
+      <li Class="AeternusFaith.CompProperties_OssuaryObituary"/>
+    </comps>
+  </ThingDef>
+
+</Defs>

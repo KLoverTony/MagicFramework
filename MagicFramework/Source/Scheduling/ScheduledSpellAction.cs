@@ -22,6 +22,7 @@ public sealed class ScheduledSpellAction : IExposable
     private int powerTier;
     private int randomSeed;
     private SpellVariableStore variables = new();
+    private List<int> replacementGroupPath = new();
 
     public ScheduledSpellAction()
     {
@@ -39,7 +40,8 @@ public sealed class ScheduledSpellAction : IExposable
         int powerTier,
         int randomSeed,
         SpellVariableStore variables,
-        IEnumerable<int> actionPath)
+        IEnumerable<int> actionPath,
+        IEnumerable<int> replacementGroupPath)
     {
         this.executeAtTick = executeAtTick;
         this.spellDef = spellDef;
@@ -53,6 +55,7 @@ public sealed class ScheduledSpellAction : IExposable
         this.randomSeed = randomSeed;
         this.variables = variables?.Clone() ?? new SpellVariableStore();
         this.actionPath = actionPath != null ? new List<int>(actionPath) : new List<int>();
+        this.replacementGroupPath = replacementGroupPath != null ? new List<int>(replacementGroupPath) : new List<int>();
     }
 
     public int ExecuteAtTick => executeAtTick;
@@ -60,6 +63,8 @@ public sealed class ScheduledSpellAction : IExposable
     public Thing Caster => caster;
 
     public SpellDef SpellDef => spellDef;
+
+    public IReadOnlyList<int> ReplacementGroupPath => replacementGroupPath;
 
     public string DebugLabel => TryResolveActionDef(out SpellActionDef actionDef)
         ? actionDef.debugLabel ?? actionDef.GetType().Name
@@ -131,10 +136,16 @@ public sealed class ScheduledSpellAction : IExposable
         Scribe_Values.Look(ref randomSeed, "randomSeed");
         Scribe_Deep.Look(ref variables, "variables");
         Scribe_Collections.Look(ref actionPath, "actionPath", LookMode.Value);
+        Scribe_Collections.Look(ref replacementGroupPath, "replacementGroupPath", LookMode.Value);
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit && actionPath == null)
         {
             actionPath = new List<int>();
+        }
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit && replacementGroupPath == null)
+        {
+            replacementGroupPath = new List<int>();
         }
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit && currentTargets == null)

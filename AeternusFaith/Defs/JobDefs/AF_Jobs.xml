@@ -16,6 +16,16 @@
   </JobDef>
 
   <JobDef>
+    <defName>AF_VisitFilledAlcove</defName>
+    <driverClass>AeternusFaith.JobDriver_VisitFilledAlcove</driverClass>
+    <reportString>visiting a filled alcove.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <joyDuration>4000</joyDuration>
+    <joyKind>Meditative</joyKind>
+    <joyGainRate>1</joyGainRate>
+  </JobDef>
+
+  <JobDef>
     <defName>AF_PerformSkeletonRite</defName>
     <driverClass>AeternusFaith.JobDriver_PerformSkeletonRite</driverClass>
     <reportString>performing a skeleton rite.</reportString>

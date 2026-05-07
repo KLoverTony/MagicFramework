@@ -1,9 +1,13 @@
-# Skeleton Ritual TODO
+# Skeleton Ritual Status And TODO
 
-Current first slice:
+Current implemented slice:
 - The Ossanith lectern can start a skeleton rite when orthogonally adjacent to an Ossanith Circle.
 - A conductor brings a corpse to the circle, performs the rite, destroys the corpse, and spawns a player-faction skeleton pawn.
-- The spawned pawn is currently a simple humanlike pawn using vanilla fallback graphics.
+- The raised pawn is converted to `AF_SkeletonRace` / `AF_Skeleton` and named after the source corpse.
+- Skeletons use custom body/head defs and the provided skeleton graphics through `AF_SkeletonThin` and `AF_SkeletonHead`.
+- Skeletons receive undead cleanup/state handling through `Comp_SkeletonUndeadCleanup`, `AF_UndeadNature`, `AF_SkeletalBody`, and `AF_SkeletonXenotype` when available.
+- The race has no hunger/rest/breath, no bleeding, no learning, strong temperature/tox resistance, psychic immunity, modest armor, slower movement, and a restricted work set.
+- Rite attendees can be assigned through the dialog and are released when the ritual finishes.
 
 ## Resources
 
@@ -11,44 +15,28 @@ Current first slice:
 
 ## Visuals
 
-- Use the provided `Textures/Things/Undead/Skeleton_*` art for the raised pawn.
-- Avoid crashing RimWorld's startup texture atlas; prefer an approach that loads/applies these textures only when needed or uses a properly supported pawn-rendering path.
-- Confirm expected RimWorld directional naming and orientation:
+- Current skeleton pawn visuals use the provided `Textures/Things/Undead/Skeleton_*` art through supported body/head defs.
+- Confirm in-game orientation and atlas behavior:
   - south/front
   - east
   - north/back
   - west mirrored from east, if supported
 - Revisit and improve the skeleton art after the functional pawn behavior is stable.
-- Add an appropriate low-memory-safe gizmo icon for the ritual.
+- The current ritual command icon uses the Ossanith Circle texture; add a dedicated low-memory-safe skeleton rite icon later.
 
 ## Undead Pawn Definition
 
-- Define the skeleton as a real undead minion, not just a renamed colonist.
-- Decide whether the implementation should be:
-  - custom pawn race,
-  - humanlike pawn with undead hediff/comps,
-  - or animal/minion-style pawn with restricted work and master behavior.
+- The skeleton is currently a custom humanlike pawn race with undead hediff/comps and restricted work behavior.
 - Preserve save/load behavior for any custom master binding or undead state.
 
 ## Core Biology
 
-- Does not eat.
-- Does not sleep.
-- Does not breathe.
-- Immune to tox gas and other breath-dependent hazards.
-- Does not experience fear, panic, or terror-style mental breaks.
-- Does not learn skills.
-- Does not lose skills over time.
-- Does not need recreation or comfort, unless a later design intentionally adds a necromantic upkeep need.
-- Consider whether skeletons should bleed, bleed less, or use a non-blood filth.
-- Consider whether skeletons should feel pain or have reduced pain impact.
-- Consider whether skeletons should be immune to disease, infection, food poisoning, hypothermia, heatstroke, and age-related conditions.
+- Implemented: no eating, no sleeping, no breathing, no bleeding, no learning, no skill decay by learning factor, no recreation/comfort by undead cleanup, infection immunity, toxic resistance, wide comfortable temperature range, and psychic immunity.
+- Still verify in game: fear/panic/terror-style mental breaks, disease/food poisoning leakage, heatstroke/hypothermia edge cases, and whether pain should be normal, reduced, or absent.
 
 ## Stats And Balance
 
-- Tougher than a normal pawn.
-- At least slightly resistant to most damage.
-- Slower than a normal pawn.
+- Implemented first pass: tougher than a normal pawn, slightly armored, slower than a normal pawn, non-flammable compared with living pawns, and modest melee attacks.
 - Decide whether resistance is best represented through:
   - armor stats,
   - hediff stat offsets,
@@ -61,21 +49,8 @@ Current first slice:
 
 ## Work And Behavior
 
-- Restrict to a limited task set.
-- Proposed allowed tasks:
-  - firefighting, if thematically acceptable,
-  - patient/self-maintenance only if needed by RimWorld systems,
-  - hauling,
-  - cleaning,
-  - basic construction or mining if desired,
-  - combat.
-- Proposed disallowed tasks:
-  - doctoring,
-  - social/warden/childcare,
-  - art,
-  - research,
-  - cooking,
-  - plants/animals, unless later design wants labor-specialized undead.
+- Implemented allowed work settings: firefighting, basic work, construction, mining, hauling, cleaning, plus combat behavior through the pawn kind.
+- Disallowed work remains the default absence from the skeleton race work settings: doctoring, social/warden/childcare, art, research, cooking, plants, animals, and other skilled living-colonist roles.
 - Do not allow learning or skill decay even if the pawn performs work.
 - Ensure work restrictions are visible and understandable in the Work tab.
 
@@ -123,6 +98,8 @@ Current first slice:
 - Load test with the custom textures enabled.
 - Start rite with valid circle/corpse/conductor.
 - Try missing circle, forbidden corpse, reserved corpse, unreachable corpse, and interrupted conductor.
+- Verify the raised pawn is `AF_SkeletonRace` / `AF_Skeleton`, not a renamed colonist.
+- Verify undead hediffs/xenotype apply and persist after save/load.
 - Verify skeleton follows master when drafted.
 - Verify skeleton attacks hostile threats to master.
 - Verify no food, rest, breath, fear, skill learning, or skill decay behavior leaks through.

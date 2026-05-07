@@ -2,6 +2,15 @@
 
 This mod adds vanilla content extensions for Magic Framework, including an arcane research tree, items, spells, creatures, and optional suppression of vanilla technology research.
 
+## Current Status
+
+- The `Arcane` research tab and the current foundation, school, advanced, and forbidden research tree are implemented in XML.
+- The standard arcane research bench is available without research; the advanced bench is unlocked by `MFV_ArcaneSecrets` and required by late research.
+- Vanilla tech suppression is implemented as Harmony patches over research visibility/startability rather than by deleting defs.
+- Pawns can gain the `MFV_ArcaneGift` trait after sustained research work at arcane benches, with higher awakening odds at the advanced bench.
+- Spell scroll items currently teach `MF_Firebolt`, `MF_Fireball`, and `MF_Heal` after the pawn has Arcane Gift and the required research.
+- Validation spell content and matching gizmo icons currently live in this mod under `Defs/SpellDefs` and `Textures/UI/Gizmos/Spells`.
+
 ## Folder Structure
 
 ```
@@ -79,9 +88,9 @@ Tier 3 - Arcane Secrets:
 | Def | Label | Cost | Prerequisites | Unlock intent |
 |-----|-------|------|---------------|---------------|
 | `MFV_ArcaneSecrets` | Arcane Secrets | 1800 | Elementalism, Transformation, Vitalism, Illusion, Summoning | Gate node for deeper colony-scale magic. |
-| `MFV_Infrastructure` | Infrastructure | 1800 | Advanced Schools, Leyline Sensitivity, Runic Inscription | Arcane power replacements, wards, teleport anchors, mana wells. Requires advanced arcane research bench. |
-| `MFV_Soulcraft` | Soulcraft | 2400 | Advanced Schools, Necromancy, Vitalism | Soul gems, resurrection-adjacent effects, sustained buffs with backlash. Requires advanced arcane research bench. |
-| `MFV_PlanarMagic` | Planar Magic | 2600 | Advanced Schools, Leyline Sensitivity | Summons, portals, banishment, planar hazards. Requires advanced arcane research bench. |
+| `MFV_Infrastructure` | Infrastructure | 1800 | Arcane Secrets, Leyline Sensitivity, Runic Inscription | Arcane power replacements, wards, teleport anchors, mana wells. Requires advanced arcane research bench. |
+| `MFV_Soulcraft` | Soulcraft | 2400 | Arcane Secrets, Necromancy, Vitalism | Soul gems, resurrection-adjacent effects, sustained buffs with backlash. Requires advanced arcane research bench. |
+| `MFV_PlanarMagic` | Planar Magic | 2600 | Arcane Secrets, Leyline Sensitivity | Summons, portals, banishment, planar hazards. Requires advanced arcane research bench. |
 | `MFV_GrandSorcery` | Grand Sorcery | 3200 | Infrastructure, Planar Magic | Endgame spells, large rituals, colony-scale effects. Requires advanced arcane research bench. |
 
 Review note: `MFV_ArcaneSecrets` has replaced the old `MFV_AdvancedSchools` gate. Live XML should not reference `MFV_AdvancedSchools`.
@@ -107,7 +116,7 @@ Current layout coordinates:
 | `MFV_RunicInscription` | 2 | 3.5 |
 | `MFV_Enchantment` | 2 | 4.5 |
 | `MFV_Spellcraft` | 2 | 5.5 |
-| `MFV_Elementalism` | 4 | 0 |
+| `MFV_Elementalism` | 4 | 2.5 |
 | `MFV_Pyromancy` | 6 | 0 |
 | `MFV_Aquamancy` | 6 | 0.75 |
 | `MFV_Aeromancy` | 6 | 1.5 |
@@ -119,13 +128,13 @@ Current layout coordinates:
 | `MFV_Necromancy` | 6 | 4.5 |
 | `MFV_ArcaneSecrets` | 8 | 2.25 |
 | `MFV_Infrastructure` | 8 | 0.75 |
-| `MFV_Soulcraft` | 10 | 2.25 |
+| `MFV_Soulcraft` | 10 | 1.5 |
 | `MFV_PlanarMagic` | 10 | 3 |
-| `MFV_GrandSorcery` | 10 | 2.25 |
+| `MFV_GrandSorcery` | 12 | 4 |
 | `MFV_ForbiddenLore` | 4 | 7 |
 | `MFV_Fleshcraft` | 8 | 4.5 |
 | `MFV_InfernalPact` | 10 | 3.75 |
-| `MFV_Chronomancy` | 12 | 4.35 |
+| `MFV_Chronomancy` | 14 | 4.35 |
 
 Implementation notes:
 - Use `MFV_` prefixes for MFVanilla content to avoid colliding with framework validation defs.
@@ -152,8 +161,10 @@ Implementation notes:
 - Prefer cloning known-valid vanilla parents or author full `ThingDef`s from working vanilla examples.
 - Avoid placeholder fields from older RimWorld versions; validate every field against RimWorld 1.6.
 - Do not add texture paths until the matching files exist under `Textures`.
-- The standard arcane research bench is available without research. The advanced arcane research bench should be unlocked by the current advanced gate, likely `MFV_ArcaneSecrets`.
+- The standard arcane research bench is available without research. The advanced arcane research bench is unlocked by `MFV_ArcaneSecrets`.
 - `MFV_AlchemyTable` is a production work table unlocked by `MFV_Alchemy` and uses `Things/Building/Production/AlchemyTable`.
+- Implemented first-pass spell scrolls reuse safe vanilla schematic graphics and teach specific MagicFramework spells through `CompUseEffect_LearnSpell`.
+- Next item work should add recipes/traders/loot sources for scroll acquisition, then expand scroll coverage by school.
 
 ### 3. Spell Extensions
 
@@ -190,6 +201,7 @@ Current implementation:
 - The suppression roots are `Electricity`, `MicroelectronicsBasics`, and `MultiAnalyzer`.
 - The patch hides those core projects and downstream core projects that depend on them.
 - The mod settings menu can restore vanilla technology research.
+- The same patch layer synchronizes the `MFV_ArcaneGift` trait with MagicFramework's learned-spell runtime and tracks research-bench study for awakening Arcane Gift.
 
 Design rules:
 - Suppression must not filter `DefDatabase<ThingDef>` globally.
@@ -198,17 +210,18 @@ Design rules:
 
 ## Implementation Priority
 
-1. Phase 1: Research foundation
+1. Phase 1: Research foundation - implemented
    - Add `MFV_Arcane` research tab.
    - Add the Tier 0 and Tier 1 research projects.
    - Verify no XML errors in RimWorld.
 
-2. Phase 2: Spell-school content
+2. Phase 2: Spell-school content - in progress
    - Add spell-school research.
    - Expand the migrated validation spells into balanced content per school using existing MagicFramework primitives.
    - Add simple valid item unlocks only after matching textures or safe vanilla graphics are chosen.
+   - Add more scroll defs and connect them to school research.
 
-3. Phase 3: Advanced and forbidden content
+3. Phase 3: Advanced and forbidden content - partially scaffolded
    - Add advanced research gates.
    - Prototype forbidden branch consequences.
    - Balance costs, unlock pacing, and storyteller impact.

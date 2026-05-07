@@ -2,6 +2,21 @@
 
 This file tracks framework work that is incomplete, rough, or intentionally deferred.
 
+Quick notes (if you see these while reviewing, please update, reorganize appropriately, and expand accordingly. Feel free to add interesting ideas here if you have any)
+  1. Summon skeleton ritual should not allow targeting of non-humanlike corpses which excludes undead and animals
+  2. The Ossanith bone box ritual should not allow targeting of non-humanlike corpses though pets might be acceptable if possible.
+  3. Celestial events such as solar eclipse and auroras are opportunities for interesting in game events and effects...
+  4. Some summon undead rituals should preserve a sort of pseudo relationship list for family members in particular. However, they can't be ordinary relationships because it would cause strange and inappropriate behavior if an undead skeleton tries to resume a relationship with their husband/wife for example. This effect also needs to apply to the related pawns as well.
+  5. Need to build custom wall atlas and auto-joining function
+  6. Need to build torch sconces as well as arcane torches to replace electric lighting.
+  7. Area effect fire spells should melt snow / ice
+  8. The freeze spell produces snow / ice but should have a thaw effect when the spell ends.
+  9. Rituals dialog box could be prettier. Can we include an avatar selection instead of checkbox selector? Perhaps something similar to wedding dialog.
+
+
+End of quick notes...
+
+
 ## Implemented Recently
 
 - Basic summon/spawn primitive.
@@ -120,8 +135,9 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
   - `TerrainPatchActionDef` mutates cells in a radius around an authored center source
   - terrain patches can convert water-like terrain to authored replacement terrain such as `Ice`
   - terrain patches can add snow depth to non-water cells, with optional roof skipping
+  - the debug fallback Freeze spell combines procedural burst FX, terrain patching, and a lingering frost area marker
   Validation spells:
-  - `MF_Freeze`
+  - `MF_Freeze` debug fallback
 
 - Real projectile launch primitive.
   Current state:
@@ -333,6 +349,8 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
 ## Content / Runtime Polish
 
 - Add explicit Harmony dependency metadata in `About/About.xml` so load order is enforced by mod metadata.
+  Current state:
+  - MagicFramework uses Harmony patches internally and references Harmony in source, but `About/About.xml` does not yet declare a Harmony package dependency.
 
 - Keep debug fallback spells lightweight. Authored validation spell XML has moved to MFVanilla content.
 
@@ -350,7 +368,7 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
   - maintained shield spell (`MF_ForceField` and `MF_ManaShield` cover first-pass protective field behavior)
   - delayed branching chain spell (`MF_ChainLightning` covers purpose-built chain behavior)
   - direct heal / healing-over-time spells (`MF_Heal` and `MF_Regeneration` cover first-pass wound recovery behavior)
-  - teleport / displacement regression spell
+  - teleport / displacement regression spell (`MF_BlinkStep` covers the current basic teleport path; add dedicated swap/rescue/enemy-blink validation spells)
 
 - Review caster-self-affect policy on persistent effects.
   Current behavior is authored per spell, but it is worth documenting clear conventions for:
@@ -374,7 +392,16 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
 
 - Consider persistent world-object representations for more spells, not just traps and walls.
 
-- Build a small authoring guide for common spell patterns:
+- Write a full MagicFramework spell design guide.
+  Target coverage:
+  - top-level `SpellDef` fields, including label, description, icon, range, cast time, targeting, requirements, costs, power, and action tree structure
+  - targeting options, pawn-affinity rules, self-target policy, line-of-sight behavior, and category filters
+  - requirement and cost authoring, including mana and cooldown conventions
+  - action options and required fields for damage, healing, hediffs, explosions, projectiles, delays, repeats, triggers, persistent effects, zones, summons, spawned things, terrain patches, teleport/displacement, stat modifiers, sustained effects, force fields, conditionals, and target queries
+  - replacement/lifecycle policy, including default `replaceExistingForCaster` behavior and when to opt into stacking
+  - scaling/power authoring with `ScalableFloatDef`, power tiers, and validation expectations
+  - procedural FX metadata and explicit visual/sound action options
+  - common spell patterns:
   - projectile spell
   - delayed rune
   - triggered trap
@@ -382,3 +409,4 @@ This file tracks framework work that is incomplete, rough, or intentionally defe
   - aura / area field
   - displacement spell
   - buff / debuff spell
+  - design requirements for safe validation spells, including target safety, cleanup behavior, debug logging expectations, and regression coverage

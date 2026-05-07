@@ -57,6 +57,7 @@ public sealed class ProceduralFXActionDef : SpellActionDef
 public sealed class DelayActionDef : SpellActionDef
 {
     public int delayTicks;
+    public bool replaceExistingForCaster = true;
     public List<SpellActionDef> actions = new();
 
     public override IEnumerable<SpellActionDef> GetChildActions() => actions;
@@ -74,6 +75,7 @@ public sealed class RepeatActionDef : SpellActionDef
     public int repeatCount = 1;
     public ScalableFloatDef scalableRepeatCount;
     public bool includeImmediate = true;
+    public bool replaceExistingForCaster = true;
     public List<SpellActionDef> actions = new();
 
     public override IEnumerable<SpellActionDef> GetChildActions() => actions;
@@ -194,7 +196,7 @@ public sealed class SpawnThingActionDef : SpellActionDef
     public int durationTicks = -1;
     public ScalableFloatDef scalableDurationTicks;
     public bool forbidden;
-    public bool replaceExistingForCasterSpell;
+    public bool replaceExistingForCasterSpell = true;
 
     public override SpellActionWorker CreateWorker() => new SpawnThingActionWorker();
 }

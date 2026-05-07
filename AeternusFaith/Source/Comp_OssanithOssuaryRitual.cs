@@ -67,11 +67,11 @@ namespace AeternusFaith
                     continue;
 
                 ossuary = circle.Position.GetThingList(parent.Map).FirstOrDefault(t => t.def == Props.ossuaryDef);
-                if (ossuary != null)
+                if (ossuary != null && !IsFilledOssuary(ossuary))
                     return true;
             }
 
-            failReason = "Requires an orthogonally adjacent Ossanith circle with a completed ossuary bone box in its center.";
+            failReason = "Requires an orthogonally adjacent Ossanith circle with an empty ossuary bone box in its center.";
             return false;
         }
 
@@ -102,6 +102,12 @@ namespace AeternusFaith
             if (!IsEligibleConductor(conductor, corpse, ossuary))
             {
                 Messages.Message("The selected conductor cannot reach and reserve the corpse, lectern, and ossuary.", corpse, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            if (IsFilledOssuary(ossuary))
+            {
+                Messages.Message("The selected ossuary bone box is already filled.", ossuary, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -157,6 +163,11 @@ namespace AeternusFaith
             return pawn.CanReserveAndReach(corpse, PathEndMode.ClosestTouch, Danger.Deadly) &&
                    pawn.CanReserveAndReach(parent, PathEndMode.InteractionCell, Danger.Deadly) &&
                    pawn.CanReserveAndReach(ossuary, PathEndMode.Touch, Danger.Deadly);
+        }
+
+        private static bool IsFilledOssuary(Thing ossuary)
+        {
+            return (ossuary as ThingWithComps)?.GetComp<Comp_OssuaryObituary>()?.HasRemains == true;
         }
 
         internal bool IsEligibleAudience(Pawn pawn)
