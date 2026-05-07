@@ -1,5 +1,6 @@
 using MagicFramework.Context;
 using MagicFramework.Definitions;
+using System.Collections.Generic;
 
 namespace MagicFramework.Execution;
 
@@ -10,12 +11,13 @@ public sealed class SpellCostProcessor
 {
     public void ApplyCosts(SpellContext context)
     {
-        if (context?.spellDef?.costs == null)
+        List<SpellCostDef> costs = ResolveCosts(context?.spellDef);
+        if (costs == null)
         {
             return;
         }
 
-        foreach (SpellCostDef costDef in context.spellDef.costs)
+        foreach (SpellCostDef costDef in costs)
         {
             if (costDef == null)
             {
@@ -26,5 +28,15 @@ public sealed class SpellCostProcessor
         }
 
         context.executionState.costsApplied = true;
+    }
+
+    private static List<SpellCostDef> ResolveCosts(SpellDef spellDef)
+    {
+        if (spellDef?.casting?.costs != null && spellDef.casting.costs.Count > 0)
+        {
+            return spellDef.casting.costs;
+        }
+
+        return spellDef?.costs;
     }
 }

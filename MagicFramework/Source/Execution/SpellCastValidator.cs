@@ -26,28 +26,15 @@ public sealed class SpellCastValidator
             return false;
         }
 
-        if (context.spellDef.requirements == null)
+        if (SpellRequirementUtility.CanCastSpell(context, context.spellDef, out string reason))
         {
             return true;
         }
 
-        foreach (SpellRequirementDef requirementDef in context.spellDef.requirements)
-        {
-            if (requirementDef == null)
-            {
-                continue;
-            }
-
-            if (!requirementDef.CreateWorker().CanCast(context, requirementDef, out string reason))
-            {
-                context.executionState.failed = true;
-                context.executionState.failureReason = reason;
-                Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {reason}");
-                return false;
-            }
-        }
-
-        return true;
+        context.executionState.failed = true;
+        context.executionState.failureReason = reason;
+        Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {reason}");
+        return false;
     }
 
     private static bool TryValidateTargeting(SpellContext context, out string reason)

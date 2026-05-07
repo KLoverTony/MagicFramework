@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using RimWorld;
 using Verse;
 
@@ -85,15 +86,15 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
             return "This scroll is not linked to a spell.";
         }
 
-        if (runtime.KnowsSpell(pawn, spellDef))
-        {
-            return $"{pawn.LabelShortCap} already knows {spellDef.LabelCap}.";
-        }
-
         ResearchProjectDef missingResearch = FirstMissingResearch();
         if (missingResearch != null)
         {
             return $"Requires completed research: {missingResearch.LabelCap}.";
+        }
+
+        if (!SpellRequirementUtility.CanLearnSpell(pawn, spellDef, out string reason))
+        {
+            return reason;
         }
 
         return true;

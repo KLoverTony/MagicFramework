@@ -56,7 +56,17 @@ public sealed class CooldownRequirementWorker : SpellRequirementWorker
 
 public sealed class ArcaneGiftRequirementWorker : SpellRequirementWorker
 {
+    public override bool CanLearn(SpellContext context, SpellRequirementDef requirementDef, out string reason)
+    {
+        return HasArcaneGift(context, out reason);
+    }
+
     public override bool CanCast(SpellContext context, SpellRequirementDef requirementDef, out string reason)
+    {
+        return HasArcaneGift(context, out reason);
+    }
+
+    private static bool HasArcaneGift(SpellContext context, out string reason)
     {
         if (context?.caster is not Pawn pawn)
         {
@@ -84,7 +94,17 @@ public sealed class ArcaneGiftRequirementWorker : SpellRequirementWorker
 
 public sealed class CasterLevelRequirementWorker : SpellRequirementWorker
 {
+    public override bool CanLearn(SpellContext context, SpellRequirementDef requirementDef, out string reason)
+    {
+        return HasRequiredCasterLevel(context, requirementDef, out reason);
+    }
+
     public override bool CanCast(SpellContext context, SpellRequirementDef requirementDef, out string reason)
+    {
+        return HasRequiredCasterLevel(context, requirementDef, out reason);
+    }
+
+    private static bool HasRequiredCasterLevel(SpellContext context, SpellRequirementDef requirementDef, out string reason)
     {
         CasterLevelRequirementDef casterLevelRequirementDef = requirementDef as CasterLevelRequirementDef;
         int minimumLevel = casterLevelRequirementDef?.minimumLevel ?? 1;

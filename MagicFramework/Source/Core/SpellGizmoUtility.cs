@@ -184,42 +184,14 @@ public static class SpellGizmoUtility
             return false;
         }
 
-        SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
-        if (runtime?.HasArcaneGift(pawn) != true)
+        if (SpellRuntimeGameComponent.Instance?.HasArcaneGift(pawn) != true)
         {
             reason = "Arcane gift required.";
             return false;
         }
 
-        if (spellDef.requirements == null)
-        {
-            return true;
-        }
-
-        SpellContext context = new()
-        {
-            caster = pawn,
-            map = pawn.Map,
-            spellDef = spellDef,
-            power = SpellPowerUtility.ComputePower(spellDef, pawn),
-            randomSeed = Find.TickManager?.TicksGame ?? 0
-        };
-
-        foreach (SpellRequirementDef requirementDef in spellDef.requirements)
-        {
-            if (requirementDef == null)
-            {
-                continue;
-            }
-
-            if (!requirementDef.CreateWorker().CanCast(context, requirementDef, out reason))
-            {
-                return false;
-            }
-        }
-
-        reason = null;
-        return true;
+        SpellContext context = SpellRequirementUtility.CreatePawnContext(pawn, spellDef);
+        return SpellRequirementUtility.CanCastSpell(context, spellDef, out reason, true);
     }
 
     private static TargetingParameters BuildTargetingParameters(Pawn caster, SpellDef spellDef)

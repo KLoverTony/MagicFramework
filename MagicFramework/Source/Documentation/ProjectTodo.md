@@ -253,7 +253,16 @@ End of quick notes...
   - `SpellMetadataUtility` provides null-safe metadata query helpers by def reference and defName
   - MFVanilla defines initial taxonomy XML in `Defs/SpellMetadataDefs/MFV_SpellMetadataDefs.xml`
   - validation spell metadata has been added to `MF_Firebolt`, `MF_Heal`, and `MF_BlinkStep`
+  - Batch B first pass is implemented in code
+  - `SpellRequirementWorker` now supports quiet default `CanLearn` and `CanCast` checks
+  - `ArcaneGiftRequirementWorker` and `CasterLevelRequirementWorker` now apply to learning and casting
+  - `SpellRequirementUtility` centralizes learning checks, research prerequisites, known-spell checks, and casting requirement evaluation
+  - `SpellCastValidator` and player-facing known-spell gizmos now use the shared casting requirement utility
+  - `SpellCostProcessor` supports grouped `casting.costs` while falling back to legacy top-level `costs`
+  - MFVanilla scroll learning now honors spell-level `learning` requirements in addition to scroll-specific requirements
+  - `MF_Firebolt`, `MF_Heal`, and `MF_BlinkStep` now include first-pass `learning` blocks
   - `dotnet build Source.sln --no-restore -p:DeployToModAssemblies=true` passes
+  - `dotnet build .\MFVanilla.csproj --no-restore -p:DeployToRimWorldMod=true -p:DeployToModAssemblies=true` passes after the framework assembly is rebuilt
   Guardrails:
   - do not remove existing top-level `SpellDef.requirements` or `SpellDef.costs` until compatibility migration is deliberate
   - do not replace legacy procedural FX fields (`element`, `delivery`, `effectShape`) in the first pass
@@ -279,6 +288,7 @@ End of quick notes...
   - MFVanilla can define new spell elements, domains, disciplines, and tags through XML
   - metadata helper calls are null-safe
   Batch B, learning and casting requirements:
+  - completed first pass
   - extend `SpellRequirementWorker` with quiet default `CanLearn` and `CanCast` methods
   - keep `ArcaneGiftRequirementWorker` and `CasterLevelRequirementWorker` applicable to both learning and casting
   - keep `ManaRequirementWorker` and `CooldownRequirementWorker` casting-only by default
