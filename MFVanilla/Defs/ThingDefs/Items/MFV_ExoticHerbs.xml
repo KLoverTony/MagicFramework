@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>MFV_ExoticHerbs</defName>
+    <label>exotic herbs</label>
+    <description>Freshly cut magical herbs with pungent oils and useful occult properties. They can be refined into alchemical reagents and arcane inks.</description>
+    <graphicData>
+      <texPath>Things/Item/Herbs</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <thingCategories>
+      <li>PlantMatter</li>
+    </thingCategories>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>1.4</MarketValue>
+      <Mass>0.03</Mass>
+      <Flammability>1.2</Flammability>
+      <DeteriorationRate>6</DeteriorationRate>
+    </statBases>
+    <tickerType>Rare</tickerType>
+    <tradeability>Sellable</tradeability>
+    <healthAffectsPrice>false</healthAffectsPrice>
+    <comps>
+      <li Class="CompProperties_Rottable">
+        <daysToRotStart>30</daysToRotStart>
+        <rotDestroys>true</rotDestroys>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

@@ -21,6 +21,10 @@
       Text="RimWorld assemblies were not found. Set the RimWorldDir MSBuild property to your game install path." />
   </Target>
 
+  <Target Name="GenerateSpellScrollDefs" BeforeTargets="BeforeBuild">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\GenerateSpellScrollDefs.ps1&quot; -ModRoot &quot;$(MSBuildProjectDirectory)\..&quot;" />
+  </Target>
+
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>$(RimWorldDir)\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -67,7 +71,6 @@
     <PropertyGroup>
       <ModDeployAssembliesDir>$(ModDeployDir)\Assemblies</ModDeployAssembliesDir>
     </PropertyGroup>
-
     <MakeDir Directories="$(ModDeployDir)" />
     <MakeDir Directories="$(ModDeployAssembliesDir)" />
 

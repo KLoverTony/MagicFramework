@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <WorkGiverDef>
+    <defName>MFV_DoBillsParchmenteryBench</defName>
+    <label>make parchment</label>
+    <giverClass>WorkGiver_DoBill</giverClass>
+    <workType>Crafting</workType>
+    <priorityInType>85</priorityInType>
+    <fixedBillGiverDefs>
+      <li>MFV_ParchmenteryBench</li>
+    </fixedBillGiverDefs>
+    <verb>make parchment at</verb>
+    <gerund>making parchment at</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>MFV_DoBillsScribingTable</defName>
+    <label>scribe spell scrolls</label>
+    <giverClass>WorkGiver_DoBill</giverClass>
+    <workType>Crafting</workType>
+    <priorityInType>84</priorityInType>
+    <fixedBillGiverDefs>
+      <li>MFV_ScribingTable</li>
+    </fixedBillGiverDefs>
+    <verb>scribe at</verb>
+    <gerund>scribing at</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>MFV_DoBillsAlchemyTable</defName>
+    <label>make alchemical reagents</label>
+    <giverClass>WorkGiver_DoBill</giverClass>
+    <workType>Crafting</workType>
+    <priorityInType>83</priorityInType>
+    <fixedBillGiverDefs>
+      <li>MFV_AlchemyTable</li>
+    </fixedBillGiverDefs>
+    <verb>work at</verb>
+    <gerund>working at</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+</Defs>

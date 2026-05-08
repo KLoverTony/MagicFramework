@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>MFV_ArcaneInk</defName>
+    <label>arcane ink</label>
+    <description>A concentrated magical ink prepared from exotic herbs. It holds runic notation cleanly enough for scrollwork and other ritual writing.</description>
+    <graphicData>
+      <texPath>Things/Item/Arcane_ink</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <thingCategories>
+      <li>ResourcesRaw</li>
+    </thingCategories>
+    <stackLimit>75</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>8</MarketValue>
+      <Mass>0.05</Mass>
+      <Flammability>0.4</Flammability>
+      <DeteriorationRate>1</DeteriorationRate>
+    </statBases>
+    <tradeability>Sellable</tradeability>
+  </ThingDef>
+
+</Defs>

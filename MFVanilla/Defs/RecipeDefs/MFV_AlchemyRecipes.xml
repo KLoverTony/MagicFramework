@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <RecipeDef>
+    <defName>MFV_MakeArcaneInk</defName>
+    <label>make arcane ink</label>
+    <description>Steep and reduce exotic herbs into a concentrated ink suitable for magical writing.</description>
+    <jobString>Making arcane ink.</jobString>
+    <workAmount>350</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Cook</effectWorking>
+    <soundWorking>Recipe_CookMeal</soundWorking>
+    <researchPrerequisite>MFV_Alchemy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ExoticHerbs</li>
+          </thingDefs>
+        </filter>
+        <count>10</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_ExoticHerbs</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_ArcaneInk>1</MFV_ArcaneInk>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_AlchemyTable</li>
+    </recipeUsers>
+  </RecipeDef>
+
+</Defs>

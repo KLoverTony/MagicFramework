@@ -40,10 +40,12 @@ public sealed class MFVanillaMod : Mod
     /// Static accessor for settings from anywhere in the mod.
     /// </summary>
     public static MFVanillaSettings Settings { get; private set; }
+    public static ModContentPack ContentPack { get; private set; }
 
     public MFVanillaMod(ModContentPack content)
         : base(content)
     {
+        ContentPack = content;
         Settings = GetSettings<MFVanillaSettings>();
         
         // Initialize Harmony
