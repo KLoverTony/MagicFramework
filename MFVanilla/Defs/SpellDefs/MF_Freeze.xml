@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Freeze</defName>
+    <label>freeze</label>
+    <description>Unleashes a frost burst that chills the ground, freezes water, and slows enemies caught in the lingering cold.</description>
+    <range>24</range>
+    <castTimeTicks>45</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Freeze</gizmoIconPath>
+    <element>Frost</element>
+    <delivery>Burst</delivery>
+    <effectShape>Pulse</effectShape>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Frost</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Cryomancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Elementalism</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>PawnOrCell</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>24</range>
+      <radius>3.6</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Freeze</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Freeze cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Freeze</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Freeze cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Freeze sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Freeze burst FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.TerrainPatchActionDef">
+            <debugLabel>Freeze terrain patch</debugLabel>
+            <centerSource>CurrentCell</centerSource>
+            <radius>3.6</radius>
+            <replaceWater>true</replaceWater>
+            <waterReplacementTerrainDef>Ice</waterReplacementTerrainDef>
+            <addSnow>true</addSnow>
+            <snowDepth>0.45</snowDepth>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Freeze lingering field</debugLabel>
+            <markerThingDef>MF_FreezeMarker</markerThingDef>
+            <zoneRadius>3.6</zoneRadius>
+            <pulseIntervalTicks>60</pulseIntervalTicks>
+            <visualPulseIntervalTicks>90</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>600</durationTicks>
+            <failsafeDurationTicks>720</failsafeDurationTicks>
+            <pawnAffinity>Foe</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <actions>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Freeze frostbite damage</debugLabel>
+                <amount>4</amount>
+                <damageDef>Frostbite</damageDef>
+                <armorPenetration>0.05</armorPenetration>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+                <debugLabel>Freeze movement slow</debugLabel>
+                <durationTicks>90</durationTicks>
+                <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+                <statusCue>
+                  <hediffDef>MF_Frozen</hediffDef>
+                  <severity>0.01</severity>
+                  <removeOnExpire>true</removeOnExpire>
+                </statusCue>
+                <modifiers>
+                  <li>
+                    <statDef>MoveSpeed</statDef>
+                    <factor>0.55</factor>
+                  </li>
+                </modifiers>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

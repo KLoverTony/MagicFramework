@@ -16,6 +16,8 @@ public sealed class PersistentAreaZone : IExposable
     private IntVec3 centerCell = IntVec3.Invalid;
     private List<Thing> markerThings = new();
     private int randomSeed;
+    private float powerValue;
+    private int powerTier;
     private SpellVariableStore variables = new();
     private SpellPawnAffinity pawnAffinity = SpellPawnAffinity.All;
     private bool includeCaster;
@@ -27,6 +29,11 @@ public sealed class PersistentAreaZone : IExposable
     private int visualPulseIntervalTicks = 30;
     private bool emitVisualFromMarkers = true;
     private int maxVisualMarkersPerPulse = -1;
+    private bool pulseAtCenter;
+    private bool requiresConcentration;
+    private bool breakWhenCasterDowned = true;
+    private bool breakWhenCasterStunned = true;
+    private bool breakWhenCasterMentalState = true;
     private int nextVisualTick;
     private int expireAtTick = -1;
 
@@ -40,6 +47,7 @@ public sealed class PersistentAreaZone : IExposable
         IntVec3 centerCell,
         IEnumerable<Thing> markerThings,
         int randomSeed,
+        SpellPowerContext power,
         SpellVariableStore variables,
         IEnumerable<int> actionPath,
         SpellPawnAffinity pawnAffinity,
@@ -51,6 +59,11 @@ public sealed class PersistentAreaZone : IExposable
         int visualPulseIntervalTicks,
         bool emitVisualFromMarkers,
         int maxVisualMarkersPerPulse,
+        bool pulseAtCenter,
+        bool requiresConcentration,
+        bool breakWhenCasterDowned,
+        bool breakWhenCasterStunned,
+        bool breakWhenCasterMentalState,
         int expireAtTick)
     {
         this.caster = caster;
@@ -58,6 +71,8 @@ public sealed class PersistentAreaZone : IExposable
         this.centerCell = centerCell;
         this.markerThings = markerThings != null ? new List<Thing>(markerThings) : new List<Thing>();
         this.randomSeed = randomSeed;
+        powerValue = power?.value ?? 0f;
+        powerTier = power?.tier ?? 0;
         this.variables = variables?.Clone() ?? new SpellVariableStore();
         this.actionPath = actionPath != null ? new List<int>(actionPath) : new List<int>();
         this.pawnAffinity = pawnAffinity;
@@ -69,6 +84,11 @@ public sealed class PersistentAreaZone : IExposable
         this.visualPulseIntervalTicks = visualPulseIntervalTicks > 0 ? visualPulseIntervalTicks : 30;
         this.emitVisualFromMarkers = emitVisualFromMarkers;
         this.maxVisualMarkersPerPulse = maxVisualMarkersPerPulse;
+        this.pulseAtCenter = pulseAtCenter;
+        this.requiresConcentration = requiresConcentration;
+        this.breakWhenCasterDowned = breakWhenCasterDowned;
+        this.breakWhenCasterStunned = breakWhenCasterStunned;
+        this.breakWhenCasterMentalState = breakWhenCasterMentalState;
         nextPulseTick = Find.TickManager?.TicksGame ?? 0;
         nextVisualTick = Find.TickManager?.TicksGame ?? 0;
         this.expireAtTick = expireAtTick;
@@ -87,6 +107,8 @@ public sealed class PersistentAreaZone : IExposable
     public int NextVisualTick => nextVisualTick;
     public bool EmitVisualFromMarkers => emitVisualFromMarkers;
     public int MaxVisualMarkersPerPulse => maxVisualMarkersPerPulse;
+    public bool PulseAtCenter => pulseAtCenter;
+    public bool RequiresConcentration => requiresConcentration;
     public int ExpireAtTick => expireAtTick;
 
     public string DebugLabel => TryResolveActionDef(out PersistentAreaZoneActionDef actionDef)
@@ -102,6 +124,52 @@ public sealed class PersistentAreaZone : IExposable
     public bool IsExpired(int currentTick)
     {
         return expireAtTick >= 0 && currentTick >= expireAtTick;
+    }
+
+    public bool IsConcentrationBroken(out string reason)
+    {
+        reason = null;
+        if (!requiresConcentration)
+        {
+            return false;
+        }
+
+        if (caster == null || caster.Destroyed)
+        {
+            reason = "caster invalid";
+            return true;
+        }
+
+        if (caster is not Pawn casterPawn)
+        {
+            return false;
+        }
+
+        if (casterPawn.Dead)
+        {
+            reason = "caster dead";
+            return true;
+        }
+
+        if (breakWhenCasterDowned && casterPawn.Downed)
+        {
+            reason = "caster downed";
+            return true;
+        }
+
+        if (breakWhenCasterStunned && casterPawn.stances?.stunner?.Stunned == true)
+        {
+            reason = "caster stunned";
+            return true;
+        }
+
+        if (breakWhenCasterMentalState && casterPawn.MentalState != null)
+        {
+            reason = "caster mental state";
+            return true;
+        }
+
+        return false;
     }
 
     public bool TryCreateExecutionContext(Map map, Pawn triggeringPawn, out SpellContext context)
@@ -120,6 +188,11 @@ public sealed class PersistentAreaZone : IExposable
             initialTarget = new LocalTargetInfo(centerCell),
             currentTarget = triggeringPawn != null ? new LocalTargetInfo(triggeringPawn) : new LocalTargetInfo(centerCell),
             currentCell = triggeringPawn?.Position ?? centerCell,
+            power = new SpellPowerContext
+            {
+                value = powerValue,
+                tier = powerTier
+            },
             randomSeed = randomSeed
         };
         context.executionState.costsApplied = true;
@@ -130,6 +203,35 @@ public sealed class PersistentAreaZone : IExposable
             context.currentTargets.Add(new LocalTargetInfo(triggeringPawn));
         }
 
+        return true;
+    }
+
+    public bool TryCreateCenterExecutionContext(Map map, out SpellContext context)
+    {
+        context = null;
+        if (spellDef == null || map == null || !centerCell.IsValid)
+        {
+            return false;
+        }
+
+        context = new SpellContext
+        {
+            caster = caster,
+            map = map,
+            spellDef = spellDef,
+            initialTarget = new LocalTargetInfo(centerCell),
+            currentTarget = new LocalTargetInfo(centerCell),
+            currentCell = centerCell,
+            power = new SpellPowerContext
+            {
+                value = powerValue,
+                tier = powerTier
+            },
+            randomSeed = randomSeed
+        };
+        context.executionState.costsApplied = true;
+        context.executionState.variables = variables?.Clone() ?? new SpellVariableStore();
+        context.currentTargets.Add(new LocalTargetInfo(centerCell));
         return true;
     }
 
@@ -168,6 +270,8 @@ public sealed class PersistentAreaZone : IExposable
         Scribe_Values.Look(ref centerCell, "centerCell", IntVec3.Invalid);
         Scribe_Collections.Look(ref markerThings, "markerThings", LookMode.Reference);
         Scribe_Values.Look(ref randomSeed, "randomSeed");
+        Scribe_Values.Look(ref powerValue, "powerValue");
+        Scribe_Values.Look(ref powerTier, "powerTier");
         Scribe_Deep.Look(ref variables, "variables");
         Scribe_Collections.Look(ref actionPath, "actionPath", LookMode.Value);
         Scribe_Values.Look(ref pawnAffinity, "pawnAffinity", SpellPawnAffinity.All);
@@ -180,6 +284,11 @@ public sealed class PersistentAreaZone : IExposable
         Scribe_Values.Look(ref visualPulseIntervalTicks, "visualPulseIntervalTicks", 30);
         Scribe_Values.Look(ref emitVisualFromMarkers, "emitVisualFromMarkers", true);
         Scribe_Values.Look(ref maxVisualMarkersPerPulse, "maxVisualMarkersPerPulse", -1);
+        Scribe_Values.Look(ref pulseAtCenter, "pulseAtCenter");
+        Scribe_Values.Look(ref requiresConcentration, "requiresConcentration");
+        Scribe_Values.Look(ref breakWhenCasterDowned, "breakWhenCasterDowned", true);
+        Scribe_Values.Look(ref breakWhenCasterStunned, "breakWhenCasterStunned", true);
+        Scribe_Values.Look(ref breakWhenCasterMentalState, "breakWhenCasterMentalState", true);
         Scribe_Values.Look(ref nextVisualTick, "nextVisualTick");
         Scribe_Values.Look(ref expireAtTick, "expireAtTick", -1);
 

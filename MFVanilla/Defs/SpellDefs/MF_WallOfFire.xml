@@ -8,6 +8,40 @@
     <range>22</range>
     <castTimeTicks>60</castTimeTicks>
 
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Fire</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Pyromancy</li>
+        <li>MF_Domain_Warding</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Warding</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Pyromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Wall</shape>
       <primaryTargetType>Cell</primaryTargetType>

@@ -1,0 +1,584 @@
+# Proposal: Water’s Embrace Spell
+
+## Implementation Status
+
+First foundation pass completed:
+
+* Shared water terrain detection added through `SpellTerrainUtility`.
+* Spell targeting can now require a valid water cell through `SpellTargetingDef.requireWaterCell`.
+* `MF_WatersEmbrace` now exists as an MVP Aquamancy validation spell.
+* `MF_Waterbound` now exists as the first visible restraint status.
+* Dev-mode pawns now have `Debug: Cast Water's Embrace` for direct smoke testing.
+* Repeated aura pulses now refresh matching timed stat modifiers in place, and routine timed modifier logging is quieted.
+* Status-cued timed stat modifiers are idempotent by status hediff, so overlapping same-status effects refresh instead of stacking across casters.
+* Scheduled hediff removals now refresh matching pawn/hediff/body-part removals.
+* `ApplyHediffActionDef` now supports coalesced progressive statuses with `preserveHigherSeverity`, `maxSeverity`, `scalableSeverity`, and `scalableMaxSeverity`.
+* `MF_HeldUnder` now provides the first nonlethal staged consciousness-pressure effect.
+* Overlapping Held Under applications refresh duration and can increase severity up to the cap, but do not reset stronger suffocation progress downward.
+* Persistent area zones can now require concentration and break on hard caster interruption.
+* Water's Embrace now collapses if the caster is dead/invalid, downed, stunned, or in a mental state.
+* Water's Embrace intentionally has no caster-distance or line-of-sight leash yet; those need UI feedback before use.
+* Concentration-based area zones are treated as maintained spells by known-spell and debug gizmos, so Water's Embrace can be toggled off.
+* `MovePawnTowardPointActionDef` now provides a reusable point-centered pawn pull.
+* Water's Embrace now uses undertow pulses to pull hostile pawns back toward the enchanted water.
+* `SpellDrowningHediff` now provides lethal drowning only at the highest Held Under severity, with a 600-tick downed grace period.
+* Persistent area zones now preserve the original cast's spell power value and tier across pulses, so level-scaled aura actions resolve correctly.
+* Water's Embrace Held Under severity gain and cap now scale with caster power; the retuned curve starts gently but lets level-20 casters reach the heavy 75% consciousness-pressure stage after sustained exposure.
+* Held Under severity 0.65 applies heavy -75% consciousness pressure, while lethal drowning/grace starts at severity 0.9.
+* If Water's Embrace ends during the grace period and Held Under expires, the pawn survives.
+
+Deferred until after MVP validation:
+
+* Manual release/capture behavior.
+* Rescue and escape jobs.
+* Water-source strength scaling.
+
+## Objective
+
+Develop a new water-themed spell called **Water’s Embrace** for the RimWorld magic framework.
+
+The first implementation step is **not** to build the spell immediately, but to evaluate whether the current mechanics already support the required behavior. After that evaluation, the spell should be developed in commensurate stages so that each mechanic can be tested independently before advancing to more complex behavior.
+
+Water’s Embrace should make water magic feel distinct from generic elemental damage. The spell should not behave like a “blue fireball.” Instead, it should make nearby water dangerous by allowing it to restrain, submerge, incapacitate, and potentially kill or capture enemies.
+
+---
+
+## Spell Concept
+
+**Water’s Embrace** animates a body of water into a hostile magical force. Enemies who approach the enchanted water may be seized, restrained, and dragged 'under'. The spell reduces consciousness over time rather than dealing normal damage.
+
+When the victim reaches unconsciousness, they enter a short grace state instead of dying immediately. During this grace period, the caster may release the victim to allow capture, or continue the spell until death.
+
+This creates a spell with several possible outcomes:
+
+* Battlefield control
+* Nonlethal capture
+* Execution
+* Area denial
+* Environmental ambush
+
+---
+
+## Desired Gameplay Identity
+
+Water magic should be:
+
+* **Conditional**: strongest near water or created springs
+* **Environmental**: interacts with terrain rather than just firing projectiles
+* **Dangerous**: potentially lethal if ignored
+* **Tactical**: can be countered by disrupting the caster, rescuing the victim, or using protection
+* **Exotic**: more powerful in the right circumstances than generic damage spells
+
+The spell should reward preparation and positioning. A water mage near a river, marsh, pond, or magically-created spring should feel especially dangerous.
+
+# Phase 1: Evaluate Existing Framework Support
+
+Before implementation, Codex should inspect the existing magic framework and determine what is already supported.
+
+## Spell Targeting
+
+Determine whether the framework currently supports:
+
+* Targeting terrain cells
+* Targeting specific terrain types
+* Detecting water, marsh, shallow water, deep water, river, or modded water terrain
+* Targeting an area around a selected cell
+* Applying effects only to hostile pawns within an area
+* Refreshing effects periodically over the spell duration
+
+If terrain targeting does not exist, identify the smallest reusable targeting abstraction needed. Targeting a space and limiting the effect to nearby water terrain is perfect.
+
+## Persistent Spell Effects
+
+Determine whether the framework supports:
+
+* Duration-based spell effects
+* Area aura effects
+* Periodic ticks
+* Concentration-style spells
+* Effects that end when the caster is stunned, downed, killed, mentally broken, moved, or begins another concentration spell
+* Cleanup when the spell expires
+
+If concentration does not exist, propose a generic concentration component that can be reused by future spells.
+
+## Pawn Restraint
+
+Determine whether the framework already supports:
+
+* Rooting a pawn in place
+* Severely slowing movement
+* Interrupting jobs
+* Preventing ranged attacks
+* Preventing spellcasting
+* Applying a hediff that modifies movement, consciousness, breathing, or other capacities
+
+If full immobilization is not currently supported, use an initial movement penalty instead of hard-rooting.
+
+The Earth Call spell introduced a mechanic to pull chunks towards the center point. Can that be modified to move a pawn in the same way? Force pull also has a similar mechanic.
+
+## Consciousness Reduction
+
+Determine whether hediffs can already:
+
+* Reduce consciousness over time
+* Scale severity over time
+* Pause, decay, or clear when the spell ends
+* Detect when consciousness reaches zero or when the pawn becomes downed
+
+If consciousness-based progression is not yet supported, create a simple hediff that reduces consciousness through severity.
+
+## Downed State / Hediff Presentation
+
+Codex should evaluate existing RimWorld-compatible downed-state concepts before creating custom pawn-state logic.
+
+Potential existing or familiar state models include:
+
+* **Paralysis**: useful if the water restraint should feel like the victim is physically unable to move.
+* **Coma**: useful if the spell reduces consciousness to the point where the pawn is alive but fully incapacitated.
+* **Unconscious**: useful as a generic nonlethal downed state.
+* **Drowning / Held Under**: useful as the spell-specific active danger state.
+* **Near-Drowned**: useful as the temporary recovery state after release.
+
+The implementation should check whether existing hediff classes, capacity modifiers, health tab labels, or downed-state behaviors can support these states before adding custom systems.
+
+Preferred approach:
+
+> existing downed/coma/paralysis behavior + custom Water’s Embrace hediff severity
+
+Avoid, if possible:
+
+> an entirely new pawn state system
+
+The ideal implementation is one where Water’s Embrace controls **when and why** the pawn enters the state, while RimWorld’s existing health, downed, rescue, and capture systems handle as much of the actual behavior as possible.
+
+## Death Grace State
+
+Determine whether the framework can support:
+
+* A grace timer after downing
+* A nonlethal downed state
+* Delayed death if the effect remains active
+* Manual release before death
+* Capturable pawns after release
+
+The grace period does not necessarily need to be a separate pawn state. It may be implemented as a timer on the active **Held Under** or **Drowning** hediff after the pawn becomes downed, unconscious, paralyzed, or coma-like.
+
+If this is difficult, implement the spell first as nonlethal, then add the death grace behavior later.
+
+## Rescue / Escape Mechanics
+
+Determine whether the framework supports or can reasonably support:
+
+* Victim struggle checks
+* Ally rescue action
+* Pulling or dragging a pawn out of the effect area
+* Breaking the effect if the victim leaves range
+* Breaking the effect if the caster loses concentration
+
+Rescue action can be deferred if needed. The minimum viable version should still allow escape by concentration break and effect expiration.
+
+## Defensive Items and Immunities
+
+Determine whether the framework can check for:
+
+* Equipped apparel
+* Worn items
+* Hediffs
+* Traits
+* Magic effects
+* Body parts
+* Custom “water breathing” or “drowning immunity” tags
+
+This will support items such as **Siren’s Pearl** later.
+
+---
+
+# Phase 2: Minimum Viable Spell
+
+Build the simplest working version of Water’s Embrace.
+
+## MVP Behavior
+
+* Caster targets a water cell or valid water terrain.
+* Spell creates a temporary aura around the target water.
+* Hostile pawns in the aura receive a status effect.
+* Status effect reduces movement and consciousness over time.
+* Effect ends when the spell duration expires.
+
+## MVP Restrictions
+
+For the first version, do not include:
+
+* Pulling
+* Rescue jobs
+* Manual release
+* Death grace
+* Water-source scaling
+* Item defenses
+* Complex visuals
+* Multiple stages
+
+## MVP Success Criteria
+
+The MVP is successful if:
+
+* The spell can only be used on valid water terrain.
+* Hostile pawns near the enchanted water are affected.
+* Pawns become progressively impaired.
+* The effect ends cleanly.
+* No lingering invisible hediffs remain after spell expiration.
+* Friendly pawns are not affected unless the spell is intentionally configured for friendly fire.
+
+---
+
+# Phase 3: Add Concentration
+
+Add concentration mechanics once the base effect works.
+
+## Desired Concentration Rules
+
+Water’s Embrace should end if the caster:
+
+* Is downed
+* Dies
+* Is stunned
+* Is mentally broken
+* Leaves the allowed range
+* Begins another concentration spell
+* Loses line of sight, if LOS is part of the spell framework
+
+Optional:
+
+* Taking damage can trigger a concentration check.
+* The check can scale with caster skill, pain, manipulation, psychic sensitivity, or magic stat equivalents.
+
+## Success Criteria
+
+* Interrupting the caster ends the spell.
+* Affected pawns stop losing consciousness when concentration breaks.
+* Visual and hediff cleanup still works correctly.
+* Concentration logic is reusable for future spells.
+
+---
+
+# Phase 4: Add Restraint Staging
+
+Once concentration works, split the spell into staged behavior.
+
+## Stage 1: Waterbound
+
+The victim is seized by animated water.
+
+Effects:a
+
+* Heavy movement penalty
+* Job interruption
+* Reduced aiming or attack effectiveness
+* Possible spellcasting interruption
+* Prevents easy escape from water-adjacent cells
+
+This stage may be implemented similarly to paralysis or severe movement suppression if the framework already supports that behavior.
+
+## Stage 2: Held Under
+
+After a short delay, or if the pawn is standing directly in water, the victim begins drowning.
+
+Effects:
+
+* Consciousness reduction over time
+* Breathing penalty if supported
+* Increasing severity while held
+* Greater danger for pawns already suffering consciousness reduction from blood loss, pain, drugs, illness, toxic buildup, heatstroke, or other hediffs
+
+## Stage 3: Drowning Grace
+
+When the victim reaches unconsciousness:
+
+* Pawn is downed but not immediately killed.
+* A grace timer begins.
+* If the effect ends during the grace timer, the pawn survives and can be captured.
+* If the effect continues past the grace timer, the pawn dies.
+
+This can be implemented using an existing coma-like or unconscious/downed state if available.
+
+## Success Criteria
+
+* The player can understand the stage progression.
+* The spell does not instantly kill healthy pawns.
+* Already-weakened pawns are more vulnerable because their consciousness is already reduced.
+* Downed pawns can be captured if released in time.
+
+---
+
+# Phase 5: Add Caster Release / Capture Interaction
+
+Add an active caster command or automatic mode allowing the caster to release victims.
+
+## Preferred Behavior
+
+While maintaining Water’s Embrace, the caster can release selected victims who have been downed by the spell.
+
+Possible command names:
+
+* **Release the Embrace**
+* **Let Them Surface**
+* **Spare the Drowned**
+* **Release Captive**
+
+## Capture Logic
+
+When released during the grace period:
+
+* Drowning effect is removed.
+* Pawn remains downed.
+* Pawn may receive a temporary recovery hediff such as **Near-Drowned** or **Waterlogged Lungs**.
+* Pawn can be captured using normal RimWorld prisoner mechanics.
+
+## Optional Modes
+
+If practical, Water’s Embrace may eventually support two behavior modes:
+
+### Mercy Mode
+
+* Automatically releases pawns when they are downed.
+* Intended for capture.
+* Lower risk of accidental death.
+
+### Judgment Mode
+
+* Continues holding pawns after downing.
+* Intended for lethal use.
+* Requires manual release if the caster wants captives.
+
+If two modes are too complex, use one default behavior: down first, brief grace period, then death unless released or interrupted.
+
+## Success Criteria
+
+* The spell can be used intentionally for capture.
+* The caster does not need to cancel the whole spell to spare one target, unless simpler implementation requires full cancellation.
+* Released pawns do not immediately stand up unless that is intended by their consciousness recovery.
+
+---
+
+# Phase 6: Add Escape and Rescue Mechanics
+
+After the core spell is stable, add counterplay.
+
+## Victim Struggle Checks
+
+A trapped pawn periodically attempts to escape.
+
+Possible modifiers:
+
+* Moving capacity
+* Manipulation
+* Body size
+* Melee skill
+* Consciousness
+* Pain
+* Armor weight
+* Magic resistance
+* Water affinity or water weakness
+
+Low-consciousness pawns should struggle poorly.
+
+## Ally Rescue Action
+
+Nearby pawns may attempt a rescue job.
+
+Possible job names:
+
+* **Pull Free**
+* **Drag from Water**
+* **Break the Embrace**
+
+Rules:
+
+* Rescuer must be adjacent to victim or adjacent to affected water.
+* Action takes time.
+* Action can be interrupted.
+* Rescuer may be at risk if standing inside the spell area.
+* Success frees the victim or moves them out of the danger radius.
+
+## Success Criteria
+
+* Enemy pawns can attempt to save each other.
+* Colonists can save allies.
+* Rescue attempts create risk and drama.
+* Rescue does not trivialize the spell.
+
+---
+
+# Phase 7: Add Defensive Items and Immunities
+
+Add support for water-breathing and drowning-resistance effects.
+
+## Example Item: Siren’s Pearl
+
+**Siren’s Pearl** is a magical charm or relic that protects the wearer from magical drowning.
+
+Suggested effect:
+
+* Prevents or greatly slows consciousness loss from drowning effects.
+* Does not prevent restraint.
+* Does not prevent dragging, slowing, or job interruption.
+* May reduce panic or mental impact from water spells.
+
+This prevents the item from making Water’s Embrace useless. It counters the lethal component but not the control component.
+
+## Other Possible Defenses
+
+* **Mariner’s Lung**: hediff or implant that delays drowning
+* **Shellglass Helm**: apparel that provides sealed breathing
+* **Blessing of the Deep**: temporary buff against drowning
+* **Pearl of the Abyss**: stronger artifact-level version
+
+## Success Criteria
+
+* Defensive items can interact cleanly with the spell.
+* Protection is readable to the player.
+* Items protect against suffocation/consciousness loss, not necessarily restraint.
+* Immunity checks are reusable for future drowning or suffocation spells.
+
+---
+
+# Phase 8: Add Water Source Scaling
+
+Once the spell works reliably, add environmental scaling.
+
+## Scaling Ideas
+
+The spell should become stronger depending on the size or type of water source.
+
+| Water Source                    | Suggested Strength                   |
+| ------------------------------- | ------------------------------------ |
+| Created spring / small puddle   | Weak restraint, short duration       |
+| Marsh / shallow water           | Moderate slow and consciousness loss |
+| River / pond / lake edge        | Strong restraint and drowning        |
+| Deep water / ocean-like terrain | Highest danger, larger radius        |
+
+## Possible Scaling Variables
+
+* Radius
+* Duration
+* Consciousness loss rate
+* Escape difficulty
+* Number of simultaneous victims
+* Pull chance
+* Grace duration
+* Cooldown
+
+## Success Criteria
+
+* Natural water sources feel powerful.
+* Artificial water sources are useful but not dominant.
+* The spell rewards terrain planning.
+* Scaling does not make dry maps useless for water casters if paired with Well Spring or similar spells.
+
+---
+
+# Phase 9: Add Visuals and Player Feedback
+
+The spell needs clear feedback because it has a delayed lethal effect.
+
+## Visual Feedback
+
+Possible effects:
+
+* Ripple pulse around enchanted water
+* Darkened water overlay
+* Surging wave animation
+* Water tendrils or splash motes near victims
+* Blue/black shimmer around restrained pawn
+* Stronger visual when entering Held Under stage
+
+## UI / Text Feedback
+
+Use clear status names.
+
+Suggested hediff/status names:
+
+* **Waterbound**
+* **Held Under**
+* **Drowning Grace**
+* **Near-Drowned**
+* **Waterlogged Lungs**
+* **Siren’s Pearl Protection**
+
+Player-readable messages:
+
+* “Water seizes [Pawn].”
+* “[Pawn] is being held under.”
+* “[Pawn] will drown if not released.”
+* “[Pawn] is protected by Siren’s Pearl.”
+* “Water’s Embrace collapses as concentration breaks.”
+
+## Success Criteria
+
+* Player understands why the pawn is losing consciousness.
+* Player understands how to counter it.
+* The death grace timer is visible or otherwise obvious.
+* The spell does not feel like a random invisible kill effect.
+
+---
+
+# Implementation Priority
+
+Recommended order:
+
+1. Validate terrain targeting and area effects.
+2. Create MVP aura that applies a simple hediff.
+3. Add consciousness reduction.
+4. Add concentration break.
+5. Add staged Waterbound → Held Under behavior.
+6. Add downed grace period.
+7. Add caster release for capture.
+8. Add escape/rescue mechanics.
+9. Add Siren’s Pearl or equivalent defense.
+10. Add water-source scaling.
+11. Add visuals, messages, polish, and balance.
+
+---
+
+# Balance Notes
+
+Water’s Embrace should be powerful because it is conditional.
+
+It should be weaker or unusable in dry terrain, but extremely dangerous near valid water. This makes the spell situational rather than generically useful.
+
+Important tuning levers:
+
+* Cast range
+* Valid terrain requirements
+* Aura radius
+* Duration
+* Concentration fragility
+* Consciousness reduction rate
+* Escape chance
+* Rescue speed
+* Grace duration
+* Number of affected pawns
+* Cooldown
+* Mana/resource cost
+* Friendly fire behavior
+
+Recommended default balance:
+
+* Strong against isolated or wounded targets
+* Dangerous near rivers and marshes
+* Poor against enemies who stay at range
+* Countered by disrupting the caster
+* Countered by water-breathing magic/items
+* Useful for capture, but risky if overheld
+
+---
+
+# Design Summary
+
+**Water’s Embrace** should establish water magic as environmental, conditional, and terrifying.
+
+The spell should not simply damage enemies. It should use water as a battlefield hazard that restrains victims, lowers consciousness, and creates a dramatic choice: release for capture, or continue until death.
+
+The first technical task is to evaluate whether existing framework systems can support terrain targeting, persistent area effects, hediff progression, concentration, release behavior, rescue actions, defensive item checks, and existing downed-state presentation such as coma or paralysis.
+
+After that evaluation, the spell should be developed incrementally, beginning with a minimal aura-and-hediff implementation and gradually expanding into the full staged capture/drowning system.

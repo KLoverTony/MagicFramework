@@ -165,17 +165,14 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         activeStatModifiers ??= new List<ActiveSpellStatModifier>();
-        if (replaceExistingFromCasterSpell)
-        {
-            RemoveStatModifiers(target, caster, spellDef);
-        }
+        int expireAtTick = (Find.TickManager?.TicksGame ?? 0) + (durationTicks > 0 ? durationTicks : 1);
 
         ActiveSpellStatModifier modifier = new()
         {
             target = target,
             caster = caster,
             spellDef = spellDef,
-            expireAtTick = (Find.TickManager?.TicksGame ?? 0) + (durationTicks > 0 ? durationTicks : 1),
+            expireAtTick = expireAtTick,
             indicatorSeverity = statusCue?.severity ?? 0.01f,
             removeIndicatorOnExpire = statusCue?.removeOnExpire ?? true,
             statusCueLabel = ResolveStatusCueLabel(statusCue, spellDef),
@@ -215,9 +212,19 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
+        if (replaceExistingFromCasterSpell && TryRefreshStatModifier(target, caster, spellDef, modifier))
+        {
+            EnsureIndicatorApplied(modifier);
+            return;
+        }
+
+        if (replaceExistingFromCasterSpell)
+        {
+            RemoveStatModifiers(target, caster, spellDef);
+        }
+
         activeStatModifiers.Add(modifier);
         EnsureIndicatorApplied(modifier);
-        Log.Message($"[MagicFramework] Applied {modifier.modifiers.Count} timed stat modifier(s) to {target.LabelCap} for {durationTicks} ticks.");
     }
 
     public void ApplySustainedStatModifiers(
@@ -516,6 +523,12 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             }
         }
 
+        Map map = caster.MapHeld;
+        if (map?.GetComponent<PersistentAreaZoneMapComponent>()?.HasForCasterSpell(caster, spellDef) == true)
+        {
+            return true;
+        }
+
         return false;
     }
 
@@ -615,6 +628,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
                     forceFieldBreakRecords.Add(new ForceFieldBreakRecord(forceField, "manually cancelled"));
                 }
             }
+        }
+
+        Map map = caster.MapHeld;
+        PersistentAreaZoneMapComponent areaZoneRuntime = map?.GetComponent<PersistentAreaZoneMapComponent>();
+        if (areaZoneRuntime != null)
+        {
+            removedCount += areaZoneRuntime.RemoveForCasterSpell(caster, spellDef);
         }
 
         for (int i = 0; i < statBreakRecords.Count; i++)
@@ -818,6 +838,61 @@ public sealed class SpellRuntimeGameComponent : GameComponent
                 CleanupModifier(modifier);
             }
         }
+    }
+
+    private bool TryRefreshStatModifier(Thing target, Thing caster, SpellDef spellDef, ActiveSpellStatModifier replacement)
+    {
+        if (activeStatModifiers == null || replacement == null)
+        {
+            return false;
+        }
+
+        for (int i = activeStatModifiers.Count - 1; i >= 0; i--)
+        {
+            ActiveSpellStatModifier existing = activeStatModifiers[i];
+            if (existing == null || existing.target == null || existing.target.Destroyed)
+            {
+                activeStatModifiers.RemoveAt(i);
+                continue;
+            }
+
+            if (existing.isSustained || !CanRefreshStatModifier(existing, target, caster, spellDef, replacement))
+            {
+                continue;
+            }
+
+            existing.expireAtTick = replacement.expireAtTick;
+            existing.indicatorHediffDef = replacement.indicatorHediffDef;
+            existing.indicatorSeverity = replacement.indicatorSeverity;
+            existing.removeIndicatorOnExpire = replacement.removeIndicatorOnExpire;
+            existing.statusCueLabel = replacement.statusCueLabel;
+            existing.statusCueDescription = replacement.statusCueDescription;
+            existing.modifiers = replacement.modifiers;
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool CanRefreshStatModifier(
+        ActiveSpellStatModifier existing,
+        Thing target,
+        Thing caster,
+        SpellDef spellDef,
+        ActiveSpellStatModifier replacement)
+    {
+        if (existing?.target != target || replacement == null)
+        {
+            return false;
+        }
+
+        if (existing.caster == caster && existing.spellDef == spellDef)
+        {
+            return true;
+        }
+
+        return existing.indicatorHediffDef != null
+            && existing.indicatorHediffDef == replacement.indicatorHediffDef;
     }
 
     private void RemoveForceFields(Thing target, Thing caster, SpellDef spellDef)

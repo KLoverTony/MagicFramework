@@ -12,7 +12,7 @@ Quick notes (if you see these while reviewing, please update, reorganize appropr
   7. Area effect fire spells should melt snow / ice
   8. The freeze spell produces snow / ice but should have a thaw effect when the spell ends.
   9. Rituals dialog box could be prettier. Can we include an avatar selection instead of checkbox selector? Perhaps something similar to wedding dialog.
-
+  10. Build a dynamic scroll generator to produce spell scrolls for each spell in spelldefs rather than statically building each one.
 
 End of quick notes...
 
@@ -135,9 +135,9 @@ End of quick notes...
   - `TerrainPatchActionDef` mutates cells in a radius around an authored center source
   - terrain patches can convert water-like terrain to authored replacement terrain such as `Ice`
   - terrain patches can add snow depth to non-water cells, with optional roof skipping
-  - the debug fallback Freeze spell combines procedural burst FX, terrain patching, and a lingering frost area marker
+  - `MF_Freeze` combines procedural burst FX, terrain patching, and a lingering frost area marker
   Validation spells:
-  - `MF_Freeze` debug fallback
+  - `MF_Freeze`
 
 - Real projectile launch primitive.
   Current state:
@@ -170,6 +170,59 @@ End of quick notes...
   - `conditionLabel` is descriptive only
   - conditions do not yet read arbitrary execution variables
   - no query-count, mana/cooldown, weather/time, reachability/pathing, or line-crossing conditions yet
+
+- Stone chunk movement primitive.
+  Current state:
+  - `MoveStoneChunksActionDef` moves nearby stone chunks one cell per pulse toward a resolved center point
+  - `PersistentAreaZoneActionDef.pulseAtCenter` lets persistent area zones run child actions at their anchor point even when no pawn is inside
+  Validation spell:
+  - `MF_EarthCall`, a Geomancy spell that calls chunks toward a selected cell with level-scaled radius and duration
+  - Earth Call now uses a wider radius and slower movement cadence for clearer testing: base radius 9, scalable pull radius up to 16, pulse interval 60 ticks
+  - dev-mode pawns have a `Debug: Cast Earth Call` gizmo, with an authored-spell lookup and debug fallback
+  Next validation:
+  - smoke test with loose stone chunks around the target point on flat and hilly/mountainous maps
+  - verify chunks step inward every pulse, respect occupied/invalid destination cells, and receive the Geomancy hilliness enhancement where applicable
+
+- Water terrain targeting and Water's Embrace MVP.
+  Current state:
+  - `SpellTerrainUtility` centralizes water terrain detection for authored targeting and terrain actions
+  - `SpellTargetingDef.requireWaterCell` blocks casts unless the selected cell is water-like terrain
+  - player-facing and debug targeting validators both respect `requireWaterCell`
+  - `MF_WatersEmbraceMarker` anchors the persistent water aura
+  - `MF_Waterbound` provides the first visible hostile water restraint status
+  - `MF_WatersEmbrace` is authored as an Aquamancy validation spell: target a water cell, create a hostile aura, and repeatedly slow foes with a timed Waterbound status cue
+  - dev-mode pawns have a `Debug: Cast Water's Embrace` gizmo, with authored-spell lookup and debug fallback
+  - repeated timed stat modifiers now refresh matching non-sustained caster/spell/target effects in place instead of removing and recreating duplicate records every pulse
+  - status-cued timed stat modifiers are idempotent by status hediff: a second caster applying the same status refreshes/replaces the active effect rather than stacking it
+  - routine timed stat modifier application logging is quieted so aura spells do not bury real errors in the log
+  - scheduled hediff removals now refresh matching pawn/hediff/body-part removals, allowing aura pulses to keep timed hediffs alive cleanly
+  - `ApplyHediffActionDef` supports coalesced progressive statuses with `preserveHigherSeverity`, `maxSeverity`, `scalableSeverity`, and `scalableMaxSeverity`
+  - `MF_HeldUnder` adds a first nonlethal consciousness-pressure status with staged consciousness offsets as severity rises
+  - Water's Embrace now applies both Waterbound movement restraint and progressive Held Under consciousness pressure while hostile pawns remain in the aura
+  - overlapping Held Under applications refresh duration and can increase severity up to the cap, but do not reset stronger suffocation progress downward
+  - `PersistentAreaZoneActionDef` supports hard-interruption concentration breaks through `requiresConcentration`, `breakWhenCasterDowned`, `breakWhenCasterStunned`, and `breakWhenCasterMentalState`
+  - Water's Embrace now requires concentration and collapses if the caster is dead/invalid, downed, stunned, or in a mental state
+  - Water's Embrace intentionally has no caster-distance or line-of-sight leash yet; those need UI/feedback before use
+  - concentration-based area zones are treated as maintained spells by known-spell and debug gizmos, so Water's Embrace can be toggled off by the caster
+  - `MovePawnTowardPointActionDef` pulls the current pawn target toward an authored point while respecting walkability/standability options
+  - Water's Embrace now applies an undertow pull toward the enchanted water each pulse so restrained pawns do not simply walk out of the aura
+  - `SpellDrowningHediff` adds lethal drowning behavior only at the highest Held Under severity, with a 600-tick downed grace period
+  - persistent area zones now preserve the original cast's spell power value and tier across pulses, so level-scaled aura actions resolve correctly
+  - Water's Embrace Held Under severity gain and cap now scale with caster power; the retuned curve starts gently but lets level-20 casters reach the heavy 75% consciousness-pressure stage after sustained exposure
+  - Held Under severity 0.65 applies heavy -75% consciousness pressure, while lethal drowning/grace starts at severity 0.9
+  - if Water's Embrace ends during the grace period and Held Under expires, the pawn survives
+  Next validation:
+  - smoke test that Water's Embrace can only target water, marsh, mud, or other waterBodyType terrain
+  - confirm hostile pawns in the aura receive and then cleanly lose Waterbound after the aura ends or they leave pulse range
+  - confirm hostile pawns receive Held Under, show escalating nonlethal consciousness reduction while exposed, and recover after leaving the aura
+  - confirm Water's Embrace collapses when the caster is downed, stunned, or mentally broken
+  - confirm the Water's Embrace gizmo switches to cancel while active and cleanly removes the aura when toggled off
+  - confirm undertow pull keeps hostile pawns near the water without pushing them into invalid/deep-water cells
+  - confirm high-level Water's Embrace can escalate Held Under to the 0.65 heavy-pressure stage and, with continued exposure, into the 0.9 lethal grace stage
+  - confirm cancelling or breaking concentration during the grace period lets the pawn survive once Held Under expires
+  - confirm rain activates `MFV_RainEmpowersAquamancy` for the spell through the enhancement diagnostics gizmo
+  Next implementation:
+  - defer manual release/capture, rescue/escape jobs, water-source scaling, and richer feedback/visuals for later reconsideration
 
 ## Current Priority
 
@@ -245,7 +298,7 @@ End of quick notes...
   - `SpellElementDef`, `SpellDomainDef`, `SpellDisciplineDef`, and `SpellTagDef` provide moddable XML taxonomy
   - `SpellMetadataUtility` provides null-safe metadata query helpers by def reference and defName
   - MFVanilla defines initial taxonomy XML in `Defs/SpellMetadataDefs/MFV_SpellMetadataDefs.xml`
-  - validation spell metadata and first-pass learning blocks have been added to `MF_Firebolt`, `MF_Heal`, and `MF_BlinkStep`
+  - MFVanilla validation spells now have metadata and first-pass learning blocks where their element/domain/research fit is clear
   - `SpellRequirementWorker` supports quiet default `CanLearn` and `CanCast` checks
   - `ArcaneGiftRequirementWorker` and `CasterLevelRequirementWorker` apply to learning and casting
   - `SpellRequirementUtility` centralizes learning checks, research prerequisites, known-spell checks, and casting requirement evaluation
@@ -256,13 +309,16 @@ End of quick notes...
   - `SpellEnhancementUtility` matches active rules and aggregates `SpellModifierSet` factors
   - mana requirements, mana costs, and cooldown costs now consume enhancement modifiers centrally
   - MFVanilla defines `MFV_SolarFlareEmpowersFireMagic`, which targets fire spells during `SolarFlare`
+  - enhancement rules can also match active weather and map hilliness
+  - MFVanilla defines `MFV_RainEmpowersAquamancy` and `MFV_HillsEmpowerGeomancy`
   - selected controllable pawns with Arcane Gift now show a mana gizmo with current/max mana and percent
   - dev-mode pawns now get a `Debug: Spell Enhancements` gizmo that logs active enhancement rules and final modifier factors for a selected spell
   Remaining work:
   - wire enhancement `damageFactor` into `DamageActionWorker` and `ExplosionActionWorker`
   - wire `radiusFactor` and `durationFactor` into the safest central calculation points for scalable spell values
-  - add more sample enhancement rules once diagnostics are comfortable, such as rain weakening fire, eclipse empowering death/shadow, and aurora empowering arcane/spirit
-  - add metadata and learning blocks to more MFVanilla validation spells in small batches
+  - add more sample enhancement rules once diagnostics are comfortable, such as rain weakening fire, eclipse empowering death/shadow, aurora empowering arcane/spirit, and wind empowering Aeromancy after scalar support exists
+  - smoke test `MF_WatersEmbrace` so rain enhancement rules have direct in-game test coverage
+  - add a dedicated consciousness/drowning hediff primitive once the Waterbound aura is stable
   - decide whether domain `defaultResearchPrerequisite` should ever be used as a fallback when spell-level prerequisites are empty
   - eventually migrate authored spells from top-level `requirements`/`costs` to grouped `casting.requirements`/`casting.costs`, with compatibility retained until intentionally removed
   - consider a player-facing spell details UI that can display metadata, learning requirements, cost, cooldown, and active modifiers without relying on dev logs

@@ -121,6 +121,12 @@ public sealed class SpellCastValidator
                 reason = "Target cell was not walkable.";
                 return false;
             }
+
+            if (targeting.requireWaterCell && !SpellTerrainUtility.IsWaterCell(context.map, targetCell))
+            {
+                reason = "Target cell was not water terrain.";
+                return false;
+            }
         }
 
         reason = null;

@@ -8,6 +8,40 @@
     <castTimeTicks>45</castTimeTicks>
     <gizmoIconPath>UI/Gizmos/Spells/MF_ChainLightning</gizmoIconPath>
 
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Lightning</li>
+        <li>MF_Element_Air</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aeromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aeromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>

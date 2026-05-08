@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using RimWorld;
+using RimWorld.Planet;
 using Verse;
 
 namespace MagicFramework.Definitions;
@@ -14,6 +15,8 @@ public class SpellEnhancementRuleDef : Def
     public List<SpellDisciplineDef> affectedDisciplines;
     public List<SpellTagDef> requiredTags;
     public List<GameConditionDef> activeDuringConditions;
+    public List<WeatherDef> activeDuringWeather;
+    public List<Hilliness> activeOnHilliness;
     public float damageFactor = 1f;
     public float radiusFactor = 1f;
     public float durationFactor = 1f;

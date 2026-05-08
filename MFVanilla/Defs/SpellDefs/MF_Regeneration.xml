@@ -8,6 +8,36 @@
     <range>16</range>
     <castTimeTicks>35</castTimeTicks>
 
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Life</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Healing</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Vitalism</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>

@@ -8,6 +8,37 @@
     <range>14</range>
     <castTimeTicks>30</castTimeTicks>
 
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Spirit</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Summoning</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Summoning</li>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Summon</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Summoning</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Cell</primaryTargetType>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_WatersEmbrace</defName>
+    <label>water's embrace</label>
+    <description>Animates a body of water into a hostile grasp that slows enemies near the chosen water.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_WatersEmbrace</gizmoIconPath>
+    <range>24</range>
+    <castTimeTicks>60</castTimeTicks>
+    <element>Water</element>
+    <delivery>Aura</delivery>
+    <effectShape>Pulse</effectShape>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Water</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aquamancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Control</li>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aquamancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <tiers>
+        <li>
+          <minPower>3</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>7</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>11</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireWaterCell>true</requireWaterCell>
+      <range>24</range>
+      <radius>5</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Water's Embrace</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Water's Embrace cooldown ready</debugLabel>
+        <cooldownTicks>360</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Water's Embrace</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Water's Embrace cooldown</debugLabel>
+        <cooldownTicks>360</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Water's Embrace sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Water's Embrace pulse FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Water's Embrace hostile water aura</debugLabel>
+            <markerThingDef>MF_WatersEmbraceMarker</markerThingDef>
+            <zoneRadius>5</zoneRadius>
+            <pulseIntervalTicks>45</pulseIntervalTicks>
+            <visualPulseIntervalTicks>90</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>900</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>900</baseValue>
+              <perPower>36</perPower>
+              <max>1500</max>
+            </scalableDurationTicks>
+            <failsafeDurationTicks>1620</failsafeDurationTicks>
+            <requiresConcentration>true</requiresConcentration>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenCasterStunned>true</breakWhenCasterStunned>
+            <breakWhenCasterMentalState>true</breakWhenCasterMentalState>
+            <pawnAffinity>Foe</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <actions>
+              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+                <debugLabel>Water's Embrace restraining slow</debugLabel>
+                <durationTicks>90</durationTicks>
+                <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+                <statusCue>
+                  <hediffDef>MF_Waterbound</hediffDef>
+                  <severity>0.01</severity>
+                  <removeOnExpire>true</removeOnExpire>
+                </statusCue>
+                <modifiers>
+                  <li>
+                    <statDef>MoveSpeed</statDef>
+                    <factor>0.35</factor>
+                  </li>
+                </modifiers>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+                <debugLabel>Water's Embrace held under pressure</debugLabel>
+                <hediffDef>MF_HeldUnder</hediffDef>
+                <severity>0.02</severity>
+                <scalableSeverity>
+                  <baseValue>0.02</baseValue>
+                  <perPower>0.005</perPower>
+                  <max>0.12</max>
+                </scalableSeverity>
+                <addMode>Default</addMode>
+                <preserveHigherSeverity>true</preserveHigherSeverity>
+                <maxSeverity>1</maxSeverity>
+                <scalableMaxSeverity>
+                  <baseValue>0.35</baseValue>
+                  <perPower>0.04</perPower>
+                  <max>1</max>
+                </scalableMaxSeverity>
+                <removeAfterDuration>true</removeAfterDuration>
+                <durationTicks>180</durationTicks>
+              </li>
+              <li Class="MagicFramework.Definitions.MovePawnTowardPointActionDef">
+                <debugLabel>Water's Embrace undertow pull</debugLabel>
+                <centerSource>InitialTarget</centerSource>
+                <distance>1</distance>
+                <minDistanceFromCenter>1</minDistanceFromCenter>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <requireStandableDestination>false</requireStandableDestination>
+                <stopCurrentPath>true</stopCurrentPath>
+                <cancelBusyStance>true</cancelBusyStance>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

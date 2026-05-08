@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MagicFramework.Context;
 using MagicFramework.Definitions;
 using RimWorld;
+using RimWorld.Planet;
 using UnityEngine;
 using Verse;
 
@@ -63,7 +64,9 @@ public static class SpellEnhancementUtility
             && MatchesAny(rule.affectedDomains, spell.meta?.domains)
             && MatchesAny(rule.affectedDisciplines, spell.meta?.disciplines)
             && MatchesAll(rule.requiredTags, spell.meta?.tags)
-            && MatchesAnyActiveCondition(rule.activeDuringConditions, map);
+            && MatchesAnyActiveCondition(rule.activeDuringConditions, map)
+            && MatchesAnyActiveWeather(rule.activeDuringWeather, map)
+            && MatchesAnyHilliness(rule.activeOnHilliness, map);
     }
 
     private static bool MatchesAny<TDef>(List<TDef> filterDefs, List<TDef> spellDefs)
@@ -132,6 +135,54 @@ public static class SpellEnhancementUtility
         {
             GameConditionDef conditionDef = conditionDefs[i];
             if (conditionDef != null && map.gameConditionManager.ConditionIsActive(conditionDef))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool MatchesAnyActiveWeather(List<WeatherDef> weatherDefs, Map map)
+    {
+        if (weatherDefs == null || weatherDefs.Count == 0)
+        {
+            return true;
+        }
+
+        WeatherDef currentWeather = map?.weatherManager?.curWeather;
+        if (currentWeather == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < weatherDefs.Count; i++)
+        {
+            if (weatherDefs[i] != null && weatherDefs[i] == currentWeather)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static bool MatchesAnyHilliness(List<Hilliness> hillinessValues, Map map)
+    {
+        if (hillinessValues == null || hillinessValues.Count == 0)
+        {
+            return true;
+        }
+
+        if (map?.TileInfo == null)
+        {
+            return false;
+        }
+
+        Hilliness mapHilliness = map.TileInfo.hilliness;
+        for (int i = 0; i < hillinessValues.Count; i++)
+        {
+            if (hillinessValues[i] == mapHilliness)
             {
                 return true;
             }

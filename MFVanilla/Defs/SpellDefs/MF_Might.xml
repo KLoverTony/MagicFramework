@@ -8,6 +8,37 @@
     <castTimeTicks>30</castTimeTicks>
     <gizmoIconPath>UI/Gizmos/Spells/MF_Might</gizmoIconPath>
 
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+        <li>MF_Tag_Channelled</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Enchantment</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>

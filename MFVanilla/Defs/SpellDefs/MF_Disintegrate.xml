@@ -8,6 +8,40 @@
     <range>22</range>
     <castTimeTicks>45</castTimeTicks>
 
+    <meta>
+      <tier>3</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+        <li>MF_Element_Death</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+        <li>MF_Domain_Necromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_Transformation</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_ArcaneSecrets</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>5</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>PawnOrThing</primaryTargetType>

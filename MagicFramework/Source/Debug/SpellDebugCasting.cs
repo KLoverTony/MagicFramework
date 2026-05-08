@@ -78,6 +78,16 @@ public static class SpellDebugCasting
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetFreeze(), "Debug: Cast Freeze", "Starts target selection and casts the current debug Freeze spell through Magic Framework.", "UI/Commands/Attack");
     }
 
+    public static Gizmo CreateEarthCallGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetEarthCall(), "Debug: Cast Earth Call", "Starts target selection and casts the current debug Earth Call spell through Magic Framework.", "UI/Commands/DesirePower");
+    }
+
+    public static Gizmo CreateWatersEmbraceGizmo(Pawn pawn)
+    {
+        return CreateMaintainedSpellGizmo(pawn, SpellDebugSpellLibrary.GetWatersEmbrace(), "Debug: Cast Water's Embrace", "Debug: Cancel Water's Embrace", "Starts target selection and casts the current debug Water's Embrace spell through Magic Framework.", "Cleanly ends the active Water's Embrace aura.", "UI/Commands/DesirePower");
+    }
+
     public static Gizmo CreateForcePushGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetForcePush(), "Debug: Cast Force Push", "Starts target selection and casts the current debug Force Push spell through Magic Framework.", "UI/Commands/Attack");
@@ -421,6 +431,11 @@ public static class SpellDebugCasting
             }
 
             if (targeting.requireWalkableCell && !targetCell.Walkable(caster.Map))
+            {
+                return false;
+            }
+
+            if (targeting.requireWaterCell && !SpellTerrainUtility.IsWaterCell(caster.Map, targetCell))
             {
                 return false;
             }

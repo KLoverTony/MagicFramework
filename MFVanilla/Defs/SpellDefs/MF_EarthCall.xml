@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_EarthCall</defName>
+    <label>earth call</label>
+    <description>Calls nearby stone chunks to roll toward a chosen point for a short time.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_EarthCall</gizmoIconPath>
+    <range>22</range>
+    <castTimeTicks>45</castTimeTicks>
+    <element>Earth</element>
+    <delivery>Pulse</delivery>
+    <effectShape>Pulse</effectShape>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Earth</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Geomancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Geomancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <tiers>
+        <li>
+          <minPower>3</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>6</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>10</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireWalkableCell>true</requireWalkableCell>
+      <range>22</range>
+      <radius>9</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Earth Call</debugLabel>
+        <amount>14</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Earth Call cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Earth Call</debugLabel>
+        <amount>14</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Earth Call cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Earth Call sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Earth Call pulse FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Earth Call stone pull field</debugLabel>
+            <markerThingDef>MF_EarthCallMarker</markerThingDef>
+            <zoneRadius>9</zoneRadius>
+            <pulseIntervalTicks>60</pulseIntervalTicks>
+            <visualPulseIntervalTicks>90</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>360</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>360</baseValue>
+              <perPower>24</perPower>
+              <max>720</max>
+            </scalableDurationTicks>
+            <failsafeDurationTicks>840</failsafeDurationTicks>
+            <pulseAtCenter>true</pulseAtCenter>
+            <pawnAffinity>All</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <actions>
+              <li Class="MagicFramework.Definitions.MoveStoneChunksActionDef">
+                <debugLabel>Earth Call draw stone chunks</debugLabel>
+                <centerSource>CurrentCell</centerSource>
+                <radius>9</radius>
+                <scalableRadius>
+                  <baseValue>9</baseValue>
+                  <perPower>0.5</perPower>
+                  <max>16</max>
+                </scalableRadius>
+                <maxChunksPerPulse>8</maxChunksPerPulse>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <requireStandableDestination>true</requireStandableDestination>
+                <allowDestinationOccupiedByItems>true</allowDestinationOccupiedByItems>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

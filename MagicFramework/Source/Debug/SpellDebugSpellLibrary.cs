@@ -63,6 +63,16 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_Freeze", CreateFallbackFreeze);
     }
 
+    public static SpellDef GetEarthCall()
+    {
+        return GetSpellOrFallback("MF_EarthCall", CreateFallbackEarthCall);
+    }
+
+    public static SpellDef GetWatersEmbrace()
+    {
+        return GetSpellOrFallback("MF_WatersEmbrace", CreateFallbackWatersEmbrace);
+    }
+
     public static SpellDef GetForcePush()
     {
         return GetSpellOrFallback("MF_ForcePush", CreateFallbackForcePush);
@@ -540,7 +550,7 @@ public static class SpellDebugSpellLibrary
                             markerThingDef = "MF_WallOfFireMarker",
                             wallLength = 5,
                             pulseRadius = 0.95f,
-                            pulseIntervalTicks = 60,
+                            pulseIntervalTicks = 45,
                             durationTicks = 900,
                             failsafeDurationTicks = 1200,
                             pawnAffinity = SpellPawnAffinity.All,
@@ -828,6 +838,229 @@ public static class SpellDebugSpellLibrary
                                             factor = 0.55f
                                         }
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackEarthCall()
+    {
+        return new SpellDef
+        {
+            defName = "MF_EarthCall_DebugFallback",
+            label = "earth call debug fallback",
+            description = "Built-in debug spell that draws nearby stone chunks toward a selected point.",
+            range = 22f,
+            castTimeTicks = 45,
+            element = "Earth",
+            delivery = "Pulse",
+            effectShape = "Pulse",
+            power = new SpellPowerDef
+            {
+                casterLevelFactor = 1f,
+                tiers = new List<SpellPowerTierDef>
+                {
+                    new() { minPower = 3f, tier = 1 },
+                    new() { minPower = 6f, tier = 2 },
+                    new() { minPower = 10f, tier = 3 }
+                }
+            },
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Radius,
+                primaryTargetType = SpellPrimaryTargetType.Cell,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = false,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                requireLineOfSight = true,
+                requireWalkableCell = true,
+                range = 22f,
+                radius = 9f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Earth Call fallback sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new ProceduralFXActionDef
+                        {
+                            debugLabel = "Earth Call fallback pulse FX",
+                            fxEvent = MagicFXEvent.AreaPulse,
+                            locationSource = SpellEffectLocationSource.CurrentCell
+                        },
+                        new PersistentAreaZoneActionDef
+                        {
+                            debugLabel = "Earth Call fallback stone pull field",
+                            markerThingDef = "MF_EarthCallMarker",
+                            zoneRadius = 9f,
+                            pulseIntervalTicks = 60,
+                            visualPulseIntervalTicks = 90,
+                            emitVisualFromMarkers = false,
+                            maxVisualMarkersPerPulse = 1,
+                            durationTicks = 360,
+                            scalableDurationTicks = new ScalableFloatDef
+                            {
+                                baseValue = 360f,
+                                perPower = 24f,
+                                max = 720f
+                            },
+                            failsafeDurationTicks = 840,
+                            pulseAtCenter = true,
+                            pawnAffinity = SpellPawnAffinity.All,
+                            includeCaster = false,
+                            replaceExistingForCaster = true,
+                            actions = new List<SpellActionDef>
+                            {
+                                new MoveStoneChunksActionDef
+                                {
+                                    debugLabel = "Earth Call fallback draw stone chunks",
+                                    centerSource = TargetQueryCenterSource.CurrentCell,
+                                    radius = 9f,
+                                    scalableRadius = new ScalableFloatDef
+                                    {
+                                        baseValue = 9f,
+                                        perPower = 0.5f,
+                                        max = 16f
+                                    },
+                                    maxChunksPerPulse = 8,
+                                    requireWalkableDestination = true,
+                                    requireStandableDestination = true,
+                                    allowDestinationOccupiedByItems = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackWatersEmbrace()
+    {
+        return new SpellDef
+        {
+            defName = "MF_WatersEmbrace_DebugFallback",
+            label = "water's embrace debug fallback",
+            description = "Built-in debug spell that creates a hostile slowing aura around a selected water cell.",
+            range = 24f,
+            castTimeTicks = 60,
+            element = "Water",
+            delivery = "Aura",
+            effectShape = "Pulse",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Radius,
+                primaryTargetType = SpellPrimaryTargetType.Cell,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = false,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                requireLineOfSight = true,
+                requireWaterCell = true,
+                range = 24f,
+                radius = 5f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Water's Embrace fallback sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new ProceduralFXActionDef
+                        {
+                            debugLabel = "Water's Embrace fallback pulse FX",
+                            fxEvent = MagicFXEvent.AreaPulse,
+                            locationSource = SpellEffectLocationSource.CurrentCell
+                        },
+                        new PersistentAreaZoneActionDef
+                        {
+                            debugLabel = "Water's Embrace fallback hostile water aura",
+                            markerThingDef = "MF_WatersEmbraceMarker",
+                            zoneRadius = 5f,
+                            pulseIntervalTicks = 60,
+                            visualPulseIntervalTicks = 90,
+                            emitVisualFromMarkers = false,
+                            maxVisualMarkersPerPulse = 1,
+                            durationTicks = 900,
+                            scalableDurationTicks = new ScalableFloatDef
+                            {
+                                baseValue = 900f,
+                                perPower = 36f,
+                                max = 1500f
+                            },
+                            failsafeDurationTicks = 1620,
+                            requiresConcentration = true,
+                            breakWhenCasterDowned = true,
+                            breakWhenCasterStunned = true,
+                            breakWhenCasterMentalState = true,
+                            pawnAffinity = SpellPawnAffinity.Foe,
+                            includeCaster = false,
+                            replaceExistingForCaster = true,
+                            actions = new List<SpellActionDef>
+                            {
+                                new ApplyStatModifierActionDef
+                                {
+                                    debugLabel = "Water's Embrace fallback restraining slow",
+                                    durationTicks = 90,
+                                    replaceExistingFromCasterSpell = true,
+                                    statusCue = new SpellStatusCueDef
+                                    {
+                                        hediffDef = "MF_Waterbound",
+                                        severity = 0.01f,
+                                        removeOnExpire = true
+                                    },
+                                    modifiers = new List<SpellStatModifierDef>
+                                    {
+                                        new()
+                                        {
+                                            statDef = "MoveSpeed",
+                                            factor = 0.35f
+                                        }
+                                    }
+                                },
+                                new ApplyHediffActionDef
+                                {
+                                    debugLabel = "Water's Embrace fallback held under pressure",
+                                    hediffDef = "MF_HeldUnder",
+                                    severity = 0.02f,
+                                    scalableSeverity = new ScalableFloatDef
+                                    {
+                                        baseValue = 0.02f,
+                                        perPower = 0.005f,
+                                        max = 0.12f
+                                    },
+                                    addMode = HediffAddMode.Default,
+                                    preserveHigherSeverity = true,
+                                    maxSeverity = 1f,
+                                    scalableMaxSeverity = new ScalableFloatDef
+                                    {
+                                        baseValue = 0.35f,
+                                        perPower = 0.04f,
+                                        max = 1f
+                                    },
+                                    removeAfterDuration = true,
+                                    durationTicks = 180
+                                },
+                                new MovePawnTowardPointActionDef
+                                {
+                                    debugLabel = "Water's Embrace fallback undertow pull",
+                                    centerSource = TargetQueryCenterSource.InitialTarget,
+                                    distance = 1,
+                                    minDistanceFromCenter = 1,
+                                    requireWalkableDestination = true,
+                                    requireStandableDestination = false,
+                                    stopCurrentPath = true,
+                                    cancelBusyStance = true
                                 }
                             }
                         }

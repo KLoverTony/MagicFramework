@@ -39,13 +39,14 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
         return true;
     }
 
-    public void RemoveForCasterSpell(Thing caster, SpellDef spellDef)
+    public int RemoveForCasterSpell(Thing caster, SpellDef spellDef)
     {
         if (areaZones == null)
         {
-            return;
+            return 0;
         }
 
+        int removedCount = 0;
         for (int i = areaZones.Count - 1; i >= 0; i--)
         {
             PersistentAreaZone areaZone = areaZones[i];
@@ -53,8 +54,30 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
             {
                 areaZone.DestroyMarkers();
                 areaZones.RemoveAt(i);
+                removedCount++;
             }
         }
+
+        return removedCount;
+    }
+
+    public bool HasForCasterSpell(Thing caster, SpellDef spellDef)
+    {
+        if (caster == null || spellDef == null || areaZones == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < areaZones.Count; i++)
+        {
+            PersistentAreaZone areaZone = areaZones[i];
+            if (areaZone?.Caster == caster && areaZone.SpellDef == spellDef)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public override void MapComponentTick()
@@ -71,6 +94,14 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
             if (areaZone == null || areaZone.Caster != null && areaZone.Caster.Destroyed)
             {
                 areaZone?.DestroyMarkers();
+                areaZones.RemoveAt(i);
+                continue;
+            }
+
+            if (areaZone.IsConcentrationBroken(out string breakReason))
+            {
+                Log.Message($"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} ended because concentration broke: {breakReason ?? "unknown reason"}.");
+                areaZone.DestroyMarkers();
                 areaZones.RemoveAt(i);
                 continue;
             }
@@ -161,6 +192,11 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
         {
             Log.Warning("[MagicFramework] Dropped area zone because its authored node could not be resolved.");
             return;
+        }
+
+        if (areaZone.PulseAtCenter && areaZone.TryCreateCenterExecutionContext(map, out SpellContext centerContext))
+        {
+            actionRunner.RunActions(centerContext, actionDef.actions);
         }
 
         List<Pawn> candidatePawns = new();

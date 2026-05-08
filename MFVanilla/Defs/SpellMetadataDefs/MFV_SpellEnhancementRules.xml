@@ -16,4 +16,44 @@
     <manaCostFactor>0.9</manaCostFactor>
     <cooldownFactor>0.9</cooldownFactor>
   </MagicFramework.Definitions.SpellEnhancementRuleDef>
+
+  <MagicFramework.Definitions.SpellEnhancementRuleDef>
+    <defName>MFV_RainEmpowersAquamancy</defName>
+    <label>rain empowers aquamancy</label>
+    <description>Aquamancy spells draw strength from active rainfall.</description>
+
+    <affectedDomains>
+      <li>MF_Domain_Aquamancy</li>
+    </affectedDomains>
+
+    <activeDuringWeather>
+      <li>Rain</li>
+      <li>RainyThunderstorm</li>
+      <li>FoggyRain</li>
+    </activeDuringWeather>
+
+    <manaCostFactor>0.9</manaCostFactor>
+    <cooldownFactor>0.95</cooldownFactor>
+    <durationFactor>1.1</durationFactor>
+  </MagicFramework.Definitions.SpellEnhancementRuleDef>
+
+  <MagicFramework.Definitions.SpellEnhancementRuleDef>
+    <defName>MFV_HillsEmpowerGeomancy</defName>
+    <label>hills empower geomancy</label>
+    <description>Geomancy spells are steadier and cheaper on rugged stone-rich maps.</description>
+
+    <affectedDomains>
+      <li>MF_Domain_Geomancy</li>
+    </affectedDomains>
+
+    <activeOnHilliness>
+      <li>LargeHills</li>
+      <li>Mountainous</li>
+      <li>Impassable</li>
+    </activeOnHilliness>
+
+    <manaCostFactor>0.9</manaCostFactor>
+    <cooldownFactor>0.95</cooldownFactor>
+    <radiusFactor>1.1</radiusFactor>
+  </MagicFramework.Definitions.SpellEnhancementRuleDef>
 </Defs>

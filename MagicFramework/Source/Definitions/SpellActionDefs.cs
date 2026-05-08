@@ -156,6 +156,11 @@ public sealed class PersistentAreaZoneActionDef : SpellActionDef
     public ScalableFloatDef scalableDurationTicks;
     public int failsafeDurationTicks = -1;
     public ScalableFloatDef scalableFailsafeDurationTicks;
+    public bool pulseAtCenter;
+    public bool requiresConcentration;
+    public bool breakWhenCasterDowned = true;
+    public bool breakWhenCasterStunned = true;
+    public bool breakWhenCasterMentalState = true;
     public SpellPawnAffinity pawnAffinity = SpellPawnAffinity.All;
     public bool includeCaster;
     public bool replaceExistingForCaster = true;
@@ -221,6 +226,22 @@ public sealed class TerrainPatchActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Moves nearby stone chunks one cell toward a resolved point.
+/// </summary>
+public sealed class MoveStoneChunksActionDef : SpellActionDef
+{
+    public TargetQueryCenterSource centerSource = TargetQueryCenterSource.CurrentCell;
+    public float radius = 6f;
+    public ScalableFloatDef scalableRadius;
+    public int maxChunksPerPulse = 6;
+    public bool requireWalkableDestination = true;
+    public bool requireStandableDestination = true;
+    public bool allowDestinationOccupiedByItems = true;
+
+    public override SpellActionWorker CreateWorker() => new MoveStoneChunksActionWorker();
+}
+
+/// <summary>
 /// Pushes the current target away from the caster by a configured number of cells.
 /// </summary>
 public sealed class KnockbackActionDef : SpellActionDef
@@ -244,6 +265,22 @@ public sealed class PullActionDef : SpellActionDef
     public int minDistanceFromCaster = 1;
 
     public override SpellActionWorker CreateWorker() => new PullActionWorker();
+}
+
+/// <summary>
+/// Pulls the current pawn target toward an authored point.
+/// </summary>
+public sealed class MovePawnTowardPointActionDef : SpellActionDef
+{
+    public TargetQueryCenterSource centerSource = TargetQueryCenterSource.CurrentCell;
+    public int distance = 1;
+    public int minDistanceFromCenter;
+    public bool requireStandableDestination = true;
+    public bool requireWalkableDestination = true;
+    public bool stopCurrentPath = true;
+    public bool cancelBusyStance = true;
+
+    public override SpellActionWorker CreateWorker() => new MovePawnTowardPointActionWorker();
 }
 
 /// <summary>
@@ -466,12 +503,16 @@ public sealed class ApplyHediffActionDef : SpellActionDef
 {
     public string hediffDef;
     public float severity;
+    public ScalableFloatDef scalableSeverity;
     public string bodyPartDef;
     public HediffAddMode addMode = HediffAddMode.Default;
     public bool removeAfterDuration;
     public int durationTicks;
     public ScalableFloatDef scalableDurationTicks;
     public bool checkIfAlreadyHas;
+    public bool preserveHigherSeverity;
+    public float maxSeverity = -1f;
+    public ScalableFloatDef scalableMaxSeverity;
 
     public override SpellActionWorker CreateWorker() => new ApplyHediffActionWorker();
 }

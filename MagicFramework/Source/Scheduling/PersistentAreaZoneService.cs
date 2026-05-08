@@ -54,6 +54,7 @@ public sealed class PersistentAreaZoneService
             context.currentCell,
             markerThings,
             context.randomSeed,
+            context.power,
             context.executionState?.variables,
             actionPath,
             actionDef.pawnAffinity,
@@ -65,6 +66,11 @@ public sealed class PersistentAreaZoneService
             actionDef.visualPulseIntervalTicks,
             actionDef.emitVisualFromMarkers,
             actionDef.maxVisualMarkersPerPulse,
+            actionDef.pulseAtCenter,
+            actionDef.requiresConcentration,
+            actionDef.breakWhenCasterDowned,
+            actionDef.breakWhenCasterStunned,
+            actionDef.breakWhenCasterMentalState,
             expireAtTick);
 
         PersistentAreaZoneMapComponent runtime = context.map.GetComponent<PersistentAreaZoneMapComponent>();

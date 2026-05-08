@@ -291,6 +291,11 @@ public static class SpellGizmoUtility
             {
                 return false;
             }
+
+            if (targeting.requireWaterCell && !SpellTerrainUtility.IsWaterCell(caster.Map, targetCell))
+            {
+                return false;
+            }
         }
 
         return true;

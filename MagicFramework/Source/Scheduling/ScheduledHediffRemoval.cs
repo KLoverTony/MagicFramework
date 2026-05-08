@@ -26,6 +26,18 @@ public sealed class ScheduledHediffRemoval : IExposable
 
     public string DebugLabel => hediffDef?.defName ?? "<null hediff>";
 
+    public bool Matches(Pawn otherPawn, HediffDef otherHediffDef, string otherBodyPartDef)
+    {
+        return pawn == otherPawn
+            && hediffDef == otherHediffDef
+            && string.Equals(bodyPartDef ?? string.Empty, otherBodyPartDef ?? string.Empty, System.StringComparison.Ordinal);
+    }
+
+    public bool Matches(ScheduledHediffRemoval other)
+    {
+        return other != null && Matches(other.pawn, other.hediffDef, other.bodyPartDef);
+    }
+
     public bool TryExecute()
     {
         if (pawn == null || pawn.Destroyed || pawn.health?.hediffSet == null || hediffDef == null)
@@ -97,6 +109,21 @@ public sealed class HediffRemovalMapComponent : MapComponent
         }
 
         scheduledRemovals ??= new List<ScheduledHediffRemoval>();
+        for (int i = scheduledRemovals.Count - 1; i >= 0; i--)
+        {
+            ScheduledHediffRemoval existingRemoval = scheduledRemovals[i];
+            if (existingRemoval == null)
+            {
+                scheduledRemovals.RemoveAt(i);
+                continue;
+            }
+
+            if (scheduledRemoval.Matches(existingRemoval))
+            {
+                scheduledRemovals.RemoveAt(i);
+            }
+        }
+
         int insertIndex = scheduledRemovals.Count;
         for (int i = 0; i < scheduledRemovals.Count; i++)
         {

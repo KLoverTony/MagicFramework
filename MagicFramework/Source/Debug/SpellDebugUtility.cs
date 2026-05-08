@@ -57,6 +57,8 @@ public static class SpellDebugUtility
                 builder.AppendLine($"      affectedDisciplines: {FormatDefNames(rule.affectedDisciplines)}");
                 builder.AppendLine($"      requiredTags: {FormatDefNames(rule.requiredTags)}");
                 builder.AppendLine($"      activeDuringConditions: {FormatDefNames(rule.activeDuringConditions)}");
+                builder.AppendLine($"      activeDuringWeather: {FormatDefNames(rule.activeDuringWeather)}");
+                builder.AppendLine($"      activeOnHilliness: {FormatValues(rule.activeOnHilliness)}");
                 builder.AppendLine($"      factors: damage {rule.damageFactor:0.###}, radius {rule.radiusFactor:0.###}, duration {rule.durationFactor:0.###}, mana {rule.manaCostFactor:0.###}, cooldown {rule.cooldownFactor:0.###}");
             }
         }
@@ -194,5 +196,26 @@ public static class SpellDebugUtility
         }
 
         return builder.Length == 0 ? "<none>" : builder.ToString();
+    }
+
+    private static string FormatValues<TValue>(List<TValue> values)
+    {
+        if (values == null || values.Count == 0)
+        {
+            return "<none>";
+        }
+
+        StringBuilder builder = new();
+        for (int i = 0; i < values.Count; i++)
+        {
+            if (builder.Length > 0)
+            {
+                builder.Append(", ");
+            }
+
+            builder.Append(values[i]);
+        }
+
+        return builder.ToString();
     }
 }

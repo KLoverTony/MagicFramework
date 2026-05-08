@@ -372,7 +372,7 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
                 continue;
             }
 
-            bool isWater = IsWaterTerrain(currentTerrain);
+            bool isWater = SpellTerrainUtility.IsWaterTerrain(currentTerrain);
             if (terrainPatchActionDef.onlyAffectNaturalTerrain && currentTerrain.IsFloor)
             {
                 continue;
@@ -390,7 +390,7 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
                 context.map.terrainGrid.SetTerrain(cell, replacementTerrain);
                 changedTerrain++;
                 currentTerrain = replacementTerrain;
-                isWater = IsWaterTerrain(currentTerrain);
+                isWater = SpellTerrainUtility.IsWaterTerrain(currentTerrain);
             }
 
             if (terrainPatchActionDef.addSnow && !isWater)
@@ -434,21 +434,148 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
         return terrainDefs;
     }
 
-    private static bool IsWaterTerrain(TerrainDef terrainDef)
+}
+
+public sealed class MoveStoneChunksActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
     {
-        if (terrainDef == null)
+        MoveStoneChunksActionDef moveDef = actionDef as MoveStoneChunksActionDef;
+        if (moveDef == null || context?.map == null)
+        {
+            return;
+        }
+
+        IntVec3 center = TargetQueryUtility.ResolvePoint(context, moveDef.centerSource);
+        if (!center.IsValid)
+        {
+            return;
+        }
+
+        float radius = Mathf.Max(0.1f, SpellPowerUtility.ResolveScalableFloat(context, moveDef.radius, moveDef.scalableRadius));
+        List<Thing> chunks = FindStoneChunks(context.map, center, radius);
+        if (chunks.Count == 0)
+        {
+            return;
+        }
+
+        chunks.Sort((left, right) => left.Position.DistanceTo(center).CompareTo(right.Position.DistanceTo(center)));
+        int movedCount = 0;
+        int maxChunks = Mathf.Max(1, moveDef.maxChunksPerPulse);
+        for (int i = 0; i < chunks.Count && movedCount < maxChunks; i++)
+        {
+            Thing chunk = chunks[i];
+            if (TryMoveChunkOneStep(chunk, center, context.map, moveDef))
+            {
+                movedCount++;
+            }
+        }
+
+        if (movedCount > 0)
+        {
+            Log.Message($"[MagicFramework] Earth call moved {movedCount} stone chunk(s) toward {center}.");
+        }
+    }
+
+    private static List<Thing> FindStoneChunks(Map map, IntVec3 center, float radius)
+    {
+        List<Thing> chunks = new();
+        List<Thing> allThings = map.listerThings?.AllThings;
+        if (allThings == null)
+        {
+            return chunks;
+        }
+
+        for (int i = 0; i < allThings.Count; i++)
+        {
+            Thing thing = allThings[i];
+            if (thing != null && !thing.Destroyed && thing.Spawned && IsStoneChunk(thing)
+                && thing.Position.DistanceTo(center) <= radius && thing.Position != center)
+            {
+                chunks.Add(thing);
+            }
+        }
+
+        return chunks;
+    }
+
+    private static bool IsStoneChunk(Thing thing)
+    {
+        ThingDef thingDef = thing?.def;
+        if (thingDef == null || thingDef.category != ThingCategory.Item)
         {
             return false;
         }
 
-        if (terrainDef.waterBodyType != WaterBodyType.None)
+        if (thingDef.IsWithinCategory(ThingCategoryDefOf.StoneChunks))
         {
             return true;
         }
 
-        string defName = terrainDef.defName;
-        return defName != null
-            && (defName.StartsWith("Water") || defName == "Marsh" || defName == "Mud");
+        return thingDef.defName != null && thingDef.defName.StartsWith("Chunk");
+    }
+
+    private static bool TryMoveChunkOneStep(Thing chunk, IntVec3 center, Map map, MoveStoneChunksActionDef moveDef)
+    {
+        IntVec3 start = chunk.Position;
+        IntVec3 direction = new(
+            center.x == start.x ? 0 : center.x > start.x ? 1 : -1,
+            0,
+            center.z == start.z ? 0 : center.z > start.z ? 1 : -1);
+        if (direction == IntVec3.Zero)
+        {
+            return false;
+        }
+
+        IntVec3 destination = start + direction;
+        if (!IsValidChunkDestination(destination, map, moveDef))
+        {
+            return false;
+        }
+
+        chunk.DeSpawn();
+        GenSpawn.Spawn(chunk, destination, map);
+        return true;
+    }
+
+    private static bool IsValidChunkDestination(IntVec3 cell, Map map, MoveStoneChunksActionDef moveDef)
+    {
+        if (!cell.InBounds(map))
+        {
+            return false;
+        }
+
+        if (moveDef.requireWalkableDestination && !cell.Walkable(map))
+        {
+            return false;
+        }
+
+        if (moveDef.requireStandableDestination && !cell.Standable(map))
+        {
+            return false;
+        }
+
+        List<Thing> things = cell.GetThingList(map);
+        for (int i = 0; i < things.Count; i++)
+        {
+            Thing thing = things[i];
+            if (thing == null)
+            {
+                continue;
+            }
+
+            if (thing.def.category == ThingCategory.Building || thing is Pawn)
+            {
+                return false;
+            }
+
+            if (!moveDef.allowDestinationOccupiedByItems && thing.def.category == ThingCategory.Item)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
 
@@ -634,6 +761,120 @@ public sealed class PullActionWorker : SpellActionWorker
         if (actionDef.requireStandableDestination && !cell.Standable(map))
         {
             return false;
+        }
+
+        return true;
+    }
+}
+
+public sealed class MovePawnTowardPointActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        MovePawnTowardPointActionDef moveActionDef = actionDef as MovePawnTowardPointActionDef;
+        Pawn targetPawn = context?.currentTarget.Thing as Pawn;
+        Map map = context?.map;
+        if (moveActionDef == null || targetPawn == null || targetPawn.Destroyed || map == null)
+        {
+            return;
+        }
+
+        IntVec3 center = TargetQueryUtility.ResolvePoint(context, moveActionDef.centerSource);
+        if (!center.IsValid || !center.InBounds(map))
+        {
+            return;
+        }
+
+        if (!TryResolveDestination(targetPawn, center, map, moveActionDef, out IntVec3 destination))
+        {
+            return;
+        }
+
+        if (moveActionDef.stopCurrentPath)
+        {
+            targetPawn.pather?.StopDead();
+        }
+
+        targetPawn.Position = destination;
+        if (moveActionDef.cancelBusyStance)
+        {
+            targetPawn.stances?.CancelBusyStanceHard();
+        }
+
+        context.SetCurrentTarget(new LocalTargetInfo(targetPawn));
+    }
+
+    private static bool TryResolveDestination(Pawn targetPawn, IntVec3 center, Map map, MovePawnTowardPointActionDef actionDef, out IntVec3 destination)
+    {
+        destination = IntVec3.Invalid;
+        IntVec3 start = targetPawn.Position;
+        int dx = center.x - start.x;
+        int dz = center.z - start.z;
+        if (dx == 0 && dz == 0)
+        {
+            return false;
+        }
+
+        IntVec3 direction = new(
+            dx == 0 ? 0 : dx > 0 ? 1 : -1,
+            0,
+            dz == 0 ? 0 : dz > 0 ? 1 : -1);
+
+        IntVec3 bestCell = start;
+        for (int step = 1; step <= (actionDef.distance > 0 ? actionDef.distance : 1); step++)
+        {
+            IntVec3 candidate = start + (direction * step);
+            if (!candidate.InBounds(map))
+            {
+                break;
+            }
+
+            if (actionDef.minDistanceFromCenter > 0 && candidate.DistanceTo(center) < actionDef.minDistanceFromCenter)
+            {
+                break;
+            }
+
+            if (!IsValidDestination(candidate, map, actionDef))
+            {
+                break;
+            }
+
+            bestCell = candidate;
+        }
+
+        if (bestCell == start)
+        {
+            return false;
+        }
+
+        destination = bestCell;
+        return true;
+    }
+
+    private static bool IsValidDestination(IntVec3 cell, Map map, MovePawnTowardPointActionDef actionDef)
+    {
+        if (!cell.InBounds(map))
+        {
+            return false;
+        }
+
+        if (actionDef.requireWalkableDestination && !cell.Walkable(map))
+        {
+            return false;
+        }
+
+        if (actionDef.requireStandableDestination && !cell.Standable(map))
+        {
+            return false;
+        }
+
+        List<Thing> things = cell.GetThingList(map);
+        for (int i = 0; i < things.Count; i++)
+        {
+            if (things[i] is Pawn)
+            {
+                return false;
+            }
         }
 
         return true;
@@ -1472,33 +1713,38 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
 
         // Apply hediff based on add mode
         Hediff hediff = null;
+        float resolvedSeverity = SpellPowerUtility.ResolveScalableFloat(context, hediffActionDef.severity, hediffActionDef.scalableSeverity);
         switch (hediffActionDef.addMode)
         {
             case HediffAddMode.Replace:
                 RemoveExistingHediffs(targetPawn, resolvedHediffDef, targetBodyPart);
                 hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
-                SetSeverity(hediff, hediffActionDef.severity);
+                SetSeverity(context, hediff, resolvedSeverity, hediffActionDef);
                 break;
             case HediffAddMode.TryAdd:
                 hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
                 if (hediff == null)
                 {
                     hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
-                    SetSeverity(hediff, hediffActionDef.severity);
+                    SetSeverity(context, hediff, resolvedSeverity, hediffActionDef);
+                }
+                else if (!hediffActionDef.preserveHigherSeverity)
+                {
+                    SetSeverity(context, hediff, hediff.Severity, hediffActionDef);
                 }
                 break;
             case HediffAddMode.SoftReplace:
                 hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
                 if (hediff != null)
                 {
-                    hediff.Severity += hediffActionDef.severity;
+                    SetSeverity(context, hediff, hediff.Severity + resolvedSeverity, hediffActionDef);
                 }
                 else
                 {
                     hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
                     if (hediff != null)
                     {
-                        hediff.Severity = hediffActionDef.severity;
+                        SetSeverity(context, hediff, resolvedSeverity, hediffActionDef);
                     }
                 }
                 break;
@@ -1507,12 +1753,12 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
                 hediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
                 if (hediff != null)
                 {
-                    hediff.Severity += hediffActionDef.severity;
+                    SetSeverity(context, hediff, hediff.Severity + resolvedSeverity, hediffActionDef);
                 }
                 else
                 {
                     hediff = targetPawn.health.AddHediff(resolvedHediffDef, targetBodyPart);
-                    SetSeverity(hediff, hediffActionDef.severity);
+                    SetSeverity(context, hediff, resolvedSeverity, hediffActionDef);
                 }
                 break;
         }
@@ -1526,7 +1772,7 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
             }
         }
 
-        Log.Message($"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {hediffActionDef.severity} to {targetPawn.LabelCap} (mode: {hediffActionDef.addMode}, bodyPart: {hediffActionDef.bodyPartDef ?? "none"}).");
+        Log.Message($"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {resolvedSeverity} to {targetPawn.LabelCap} (mode: {hediffActionDef.addMode}, bodyPart: {hediffActionDef.bodyPartDef ?? "none"}).");
     }
 
     private static HediffDef ResolveHediffDef(ApplyHediffActionDef hediffActionDef)
@@ -1588,12 +1834,26 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
         return null;
     }
 
-    private static void SetSeverity(Hediff hediff, float severity)
+    private static void SetSeverity(SpellContext context, Hediff hediff, float severity, ApplyHediffActionDef hediffActionDef)
     {
-        if (hediff != null)
+        if (hediff == null)
         {
-            hediff.Severity = severity;
+            return;
         }
+
+        float finalSeverity = severity;
+        if (hediffActionDef?.preserveHigherSeverity == true && hediff.Severity > finalSeverity)
+        {
+            finalSeverity = hediff.Severity;
+        }
+
+        float maxSeverity = SpellPowerUtility.ResolveScalableFloat(context, hediffActionDef?.maxSeverity ?? -1f, hediffActionDef?.scalableMaxSeverity);
+        if (maxSeverity >= 0f && finalSeverity > maxSeverity)
+        {
+            finalSeverity = maxSeverity;
+        }
+
+        hediff.Severity = finalSeverity;
     }
 
     private static void RemoveExistingHediffs(Pawn pawn, HediffDef hediffDef, BodyPartRecord bodyPart)
