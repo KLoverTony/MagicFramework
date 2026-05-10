@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using Verse;
@@ -45,7 +46,7 @@ public sealed class PersistentSpellEffectService
             return;
         }
 
-        Log.Message($"[MagicFramework] Created persistent effect {markerDef.defName} at {context.currentCell} for {context.spellDef.defName}.");
+        MagicLog.Message(MagicLogSubsystem.PersistentEffects, $"[MagicFramework] Created persistent effect {markerDef.defName} at {context.currentCell} for {context.spellDef.defName}.");
     }
 
     public void RemovePersistentEffectsForCasterSpell(Map map, Thing caster, SpellDef spellDef)
@@ -65,8 +66,8 @@ public sealed class PersistentSpellEffectService
 
     private static int ResolveExpireTick(SpellContext context, int currentTick, PersistentEffectActionDef actionDef)
     {
-        int durationTicks = SpellPowerUtility.ResolveScalableInt(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
-        int failsafeDurationTicks = SpellPowerUtility.ResolveScalableInt(context, actionDef.failsafeDurationTicks, actionDef.scalableFailsafeDurationTicks);
+        int durationTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
+        int failsafeDurationTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.failsafeDurationTicks, actionDef.scalableFailsafeDurationTicks);
         int durationTick = durationTicks > 0 ? currentTick + durationTicks : -1;
         int failsafeTick = failsafeDurationTicks > 0 ? currentTick + failsafeDurationTicks : -1;
 

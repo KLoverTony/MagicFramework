@@ -92,6 +92,8 @@
             <requireStandableDestination>true</requireStandableDestination>
             <requireWalkableDestination>true</requireWalkableDestination>
             <allowTeleportOntoCaster>true</allowTeleportOntoCaster>
+            <preserveDrafted>true</preserveDrafted>
+            <postTeleportStunTicks>30</postTeleportStunTicks>
           </li>
           <li Class="MagicFramework.Definitions.EffectActionDef">
             <debugLabel>Blink Step arrival</debugLabel>

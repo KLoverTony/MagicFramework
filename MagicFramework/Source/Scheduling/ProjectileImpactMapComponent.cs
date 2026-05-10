@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using Verse;
@@ -93,11 +94,11 @@ public sealed class ProjectileImpactMapComponent : MapComponent
 
         if (context.caster != null && context.caster.Destroyed)
         {
-            Log.Message($"[MagicFramework] Skipped {pendingImpact.DebugLabel} because the caster no longer exists.");
+            MagicLog.Message(MagicLogSubsystem.Projectiles, $"[MagicFramework] Skipped {pendingImpact.DebugLabel} because the caster no longer exists.");
             return;
         }
 
-        Log.Message($"[MagicFramework] Executing {pendingImpact.DebugLabel} at {context.currentCell}.");
+        MagicLog.Message(MagicLogSubsystem.Projectiles, $"[MagicFramework] Executing {pendingImpact.DebugLabel} at {context.currentCell}.");
         foreach (SpellActionDef actionDef in pendingImpact.ResolveActions())
         {
             if (context.executionState.cancelled || context.executionState.failed)

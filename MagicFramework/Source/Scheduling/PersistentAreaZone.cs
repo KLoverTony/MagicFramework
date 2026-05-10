@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using Verse;
 
 namespace MagicFramework.Scheduling;
@@ -34,6 +35,7 @@ public sealed class PersistentAreaZone : IExposable
     private bool breakWhenCasterDowned = true;
     private bool breakWhenCasterStunned = true;
     private bool breakWhenCasterMentalState = true;
+    private SpellMaintenanceDef maintenance;
     private int nextVisualTick;
     private int expireAtTick = -1;
 
@@ -64,6 +66,7 @@ public sealed class PersistentAreaZone : IExposable
         bool breakWhenCasterDowned,
         bool breakWhenCasterStunned,
         bool breakWhenCasterMentalState,
+        SpellMaintenanceDef maintenance,
         int expireAtTick)
     {
         this.caster = caster;
@@ -89,6 +92,7 @@ public sealed class PersistentAreaZone : IExposable
         this.breakWhenCasterDowned = breakWhenCasterDowned;
         this.breakWhenCasterStunned = breakWhenCasterStunned;
         this.breakWhenCasterMentalState = breakWhenCasterMentalState;
+        this.maintenance = maintenance;
         nextPulseTick = Find.TickManager?.TicksGame ?? 0;
         nextVisualTick = Find.TickManager?.TicksGame ?? 0;
         this.expireAtTick = expireAtTick;
@@ -129,6 +133,11 @@ public sealed class PersistentAreaZone : IExposable
     public bool IsConcentrationBroken(out string reason)
     {
         reason = null;
+        if (maintenance?.profiles != null && maintenance.profiles.Count > 0)
+        {
+            return SpellMaintenanceUtility.IsMaintenanceBroken(maintenance, caster, null, caster?.MapHeld, centerCell, out reason);
+        }
+
         if (!requiresConcentration)
         {
             return false;
@@ -289,6 +298,7 @@ public sealed class PersistentAreaZone : IExposable
         Scribe_Values.Look(ref breakWhenCasterDowned, "breakWhenCasterDowned", true);
         Scribe_Values.Look(ref breakWhenCasterStunned, "breakWhenCasterStunned", true);
         Scribe_Values.Look(ref breakWhenCasterMentalState, "breakWhenCasterMentalState", true);
+        Scribe_Deep.Look(ref maintenance, "maintenance");
         Scribe_Values.Look(ref nextVisualTick, "nextVisualTick");
         Scribe_Values.Look(ref expireAtTick, "expireAtTick", -1);
 

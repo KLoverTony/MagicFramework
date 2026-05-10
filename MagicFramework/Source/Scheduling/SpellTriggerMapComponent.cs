@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using MagicFramework.Targeting;
@@ -186,7 +187,7 @@ public sealed class SpellTriggerMapComponent : MapComponent
             persistentEffectService.RemovePersistentEffectsForCasterSpell(map, trigger.Caster, trigger.SpellDef);
         }
 
-        Log.Message($"[MagicFramework] Triggered armed spell {trigger.DebugLabel} at {trigger.ArmedCell} from {trigger.SpellDef?.defName ?? "<null>"}.");
+        MagicLog.Message(MagicLogSubsystem.Triggers, $"[MagicFramework] Triggered armed spell {trigger.DebugLabel} at {trigger.ArmedCell} from {trigger.SpellDef?.defName ?? "<null>"}.");
         actionRunner.RunActions(context, actionDef.actions);
     }
 }

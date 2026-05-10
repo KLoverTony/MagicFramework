@@ -1,5 +1,6 @@
 using System.Linq;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using RimWorld;
@@ -67,12 +68,12 @@ public sealed class SummonedPawnService
             summonPawnActionDef.replaceExistingForCaster);
 
         context.SetCurrentTarget(new LocalTargetInfo(summonedPawn));
-        Log.Message($"[MagicFramework] Summoned {summonedPawn.LabelCap} at {spawnCell} for {durationTicks} ticks.");
+        MagicLog.Message(MagicLogSubsystem.Summons, $"[MagicFramework] Summoned {summonedPawn.LabelCap} at {spawnCell} for {durationTicks} ticks.");
     }
 
     private static int ResolveDurationTicks(SpellContext context, SummonPawnActionDef summonPawnActionDef)
     {
-        int durationTicks = SpellPowerUtility.ResolveScalableInt(context, summonPawnActionDef.durationTicks, summonPawnActionDef.scalableDurationTicks);
+        int durationTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, summonPawnActionDef.durationTicks, summonPawnActionDef.scalableDurationTicks);
         return durationTicks > 0 ? durationTicks : 1;
     }
 
@@ -152,7 +153,7 @@ public sealed class SummonedPawnService
 
             if (!summonedPawn.training.CanAssignToTrain(trainableDef))
             {
-                Log.Message($"[MagicFramework] Skipped trainable def '{trainableDef.defName}' for {summonedPawn.LabelCap} because this pawn cannot learn it.");
+                MagicLog.Message(MagicLogSubsystem.Summons, $"[MagicFramework] Skipped trainable def '{trainableDef.defName}' for {summonedPawn.LabelCap} because this pawn cannot learn it.");
                 continue;
             }
 

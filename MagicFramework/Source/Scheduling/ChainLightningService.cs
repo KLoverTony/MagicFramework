@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using MagicFramework.Targeting;
@@ -62,14 +63,15 @@ public sealed class ChainLightningService
 
         Thing sourceThing = pulse.SourceThing != null && !pulse.SourceThing.Destroyed ? pulse.SourceThing : null;
         IntVec3 sourceCell = pulse.SourceCell.IsValid ? pulse.SourceCell : sourceThing?.Position ?? pulse.Caster?.Position ?? pulse.TargetThing.Position;
-        StrikeTarget(map, pulse.Caster, pulse.SpellDef, sourceThing, sourceCell, pulse.TargetThing, actionDef);
+        SpellContext pulseContext = BuildEnhancementContext(map, pulse.Caster, pulse.SpellDef);
+        StrikeTarget(pulseContext, sourceThing, sourceCell, pulse.TargetThing, actionDef);
 
         if (pulse.HopIndex >= actionDef.maxHops)
         {
             return;
         }
 
-        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, sourceCell, pulse.TargetThing, actionDef);
+        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, pulse.SpellDef, sourceCell, pulse.TargetThing, actionDef);
         if (nextTargets.Count == 0)
         {
             return;
@@ -93,8 +95,11 @@ public sealed class ChainLightningService
         }
     }
 
-    private void StrikeTarget(Map map, Thing caster, SpellDef spellDef, Thing sourceThing, IntVec3 sourceCell, Thing targetThing, ChainLightningActionDef actionDef)
+    private void StrikeTarget(SpellContext pulseContext, Thing sourceThing, IntVec3 sourceCell, Thing targetThing, ChainLightningActionDef actionDef)
     {
+        Map map = pulseContext?.map;
+        Thing caster = pulseContext?.caster;
+        SpellDef spellDef = pulseContext?.spellDef;
         DrawLightning(map, sourceThing, sourceCell, targetThing, actionDef);
 
         if (actionDef.onHitActions != null && actionDef.onHitActions.Count > 0)
@@ -116,7 +121,8 @@ public sealed class ChainLightningService
         else
         {
             DamageDef damageDef = ResolveDamageDef(actionDef.damageDef);
-            DamageInfo damageInfo = new(damageDef, actionDef.damageAmount, actionDef.armorPenetration, instigator: caster);
+            float damageAmount = SpellEnhancementUtility.ResolveDamageAmount(pulseContext, actionDef.damageAmount);
+            DamageInfo damageInfo = new(damageDef, damageAmount, actionDef.armorPenetration, instigator: caster);
             targetThing.TakeDamage(damageInfo);
 
             if (targetThing is Pawn targetPawn && actionDef.stunChance > 0f && Rand.Chance(actionDef.stunChance))
@@ -125,7 +131,7 @@ public sealed class ChainLightningService
                 SpawnFleck(map, targetPawn.DrawPos, actionDef.stunFleckDef, 1f);
             }
 
-            Log.Message($"[MagicFramework] Chain lightning struck {targetThing.LabelCap} for {actionDef.damageAmount:0.##} {damageDef.defName} damage.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Chain lightning struck {targetThing.LabelCap} for {damageAmount:0.##} {damageDef.defName} damage.");
         }
 
         if (!string.IsNullOrWhiteSpace(actionDef.soundDef))
@@ -138,10 +144,12 @@ public sealed class ChainLightningService
         }
     }
 
-    private static List<Thing> FindNextTargets(Map map, Thing caster, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef)
+    private static List<Thing> FindNextTargets(Map map, Thing caster, SpellDef spellDef, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef)
     {
         List<Thing> candidates = new();
         Vector2 forward = ResolveForward(caster, sourceCell, currentThing);
+        SpellContext filterContext = BuildEnhancementContext(map, caster, spellDef);
+        float jumpRadius = SpellEnhancementUtility.ResolveRadius(filterContext, actionDef.jumpRadius);
         foreach (Thing thing in map.listerThings?.AllThings ?? new List<Thing>())
         {
             if (thing == null || thing.Destroyed || thing == currentThing)
@@ -150,7 +158,7 @@ public sealed class ChainLightningService
             }
 
             if (!TargetQueryUtility.MatchesThingFilter(
-                    BuildFilterContext(map, caster),
+                    filterContext,
                     thing,
                     includePawns: true,
                     includeBuildings: false,
@@ -162,7 +170,7 @@ public sealed class ChainLightningService
             }
 
             float distance = thing.Position.DistanceTo(currentThing.Position);
-            if (distance > actionDef.jumpRadius)
+            if (distance > jumpRadius)
             {
                 continue;
             }
@@ -208,12 +216,13 @@ public sealed class ChainLightningService
         return results;
     }
 
-    private static SpellContext BuildFilterContext(Map map, Thing caster)
+    private static SpellContext BuildEnhancementContext(Map map, Thing caster, SpellDef spellDef)
     {
         return new SpellContext
         {
             caster = caster,
-            map = map
+            map = map,
+            spellDef = spellDef
         };
     }
 

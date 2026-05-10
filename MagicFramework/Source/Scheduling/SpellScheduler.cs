@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using Verse;
 
@@ -72,7 +73,7 @@ public sealed class SpellScheduler
         }
 
         context.executionState.scheduledActions.Add(scheduledAction);
-        Log.Message($"[MagicFramework] Scheduled {scheduledAction.DebugLabel} for tick {executeAtTick}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Scheduled {scheduledAction.DebugLabel} for tick {executeAtTick}.");
     }
 
     public void FlushDebugSchedule(SpellContext context)
@@ -82,6 +83,6 @@ public sealed class SpellScheduler
             return;
         }
 
-        Log.Message($"[MagicFramework] {context.executionState.scheduledActions.Count} delayed action(s) queued.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] {context.executionState.scheduledActions.Count} delayed action(s) queued.");
     }
 }

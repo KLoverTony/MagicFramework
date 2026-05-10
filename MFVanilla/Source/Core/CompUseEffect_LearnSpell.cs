@@ -52,6 +52,18 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
         }
     }
 
+    public override string CompInspectStringExtra()
+    {
+        string baseText = base.CompInspectStringExtra();
+        string details = SpellDescriptionUtility.GetDetails(Props.spell);
+        if (string.IsNullOrWhiteSpace(details))
+        {
+            return baseText;
+        }
+
+        return string.IsNullOrWhiteSpace(baseText) ? details : baseText + "\n" + details;
+    }
+
     private AcceptanceReport ValidateUse(Pawn pawn)
     {
         if (pawn == null)

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Tornado</defName>
+    <label>Tornado</label>
+    <description>A magical new spell.</description>
+    <range>24</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Tornado</gizmoIconPath>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>PawnOrCell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>24</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Tornado</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Tornado cooldown ready</debugLabel>
+        <cooldownTicks>120</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Tornado</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Tornado cooldown</debugLabel>
+        <cooldownTicks>120</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Tornado sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Create Tornado persistent zone</debugLabel>
+            <durationTicks>600</durationTicks>
+            <zoneRadius>3</zoneRadius>
+            <pulseIntervalTicks>60</pulseIntervalTicks>
+            <onPulseActions>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Apply Tornado damage</debugLabel>
+                <amount>10</amount>
+                <damageDef>Wind</damageDef>
+              </li>
+              <li Class="MagicFramework.Definitions.KnockbackActionDef">
+                <debugLabel>Apply Tornado knockback</debugLabel>
+                <distance>1</distance>
+              </li>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Play Tornado effect</debugLabel>
+                <effectDef>MF_NewEffect</effectDef>
+                <soundDef>MF_WhooshSound</soundDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>false</attachToTarget>
+              </li>
+            </onPulseActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

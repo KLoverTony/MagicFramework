@@ -88,14 +88,14 @@ namespace AeternusFaith
 
         internal bool IsValidCorpseTarget(Corpse corpse)
         {
-            return corpse != null && !corpse.Destroyed && corpse.Spawned && corpse.Map == parent.Map;
+            return RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, parent.Map);
         }
 
         private void TryStartRitualJobs(Pawn conductor, List<Pawn> audience, Corpse corpse, Thing circle, Thing ossuary)
         {
             if (!IsValidCorpseTarget(corpse))
             {
-                Messages.Message("Select a reachable corpse on this map.", parent, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("Select a reachable humanlike mortal corpse on this map.", parent, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 

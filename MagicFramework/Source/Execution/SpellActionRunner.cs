@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using Verse;
 
@@ -41,7 +42,7 @@ public sealed class SpellActionRunner
     public void RunAction(SpellContext context, SpellActionDef actionDef)
     {
         string label = actionDef.debugLabel ?? actionDef.GetType().Name;
-        Log.Message($"[MagicFramework] Running action {label}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Running action {label}.");
         context.executionState.debugHistory.Add(new(label));
         actionDef.CreateWorker().Execute(context, actionDef, this);
     }

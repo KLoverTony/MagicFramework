@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_BlessingOfVigor</defName>
+    <label>blessing of vigor</label>
+    <description>Releases a bright blessing that invigorates nearby allies, excluding the caster.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_BlessingOfVigor</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>40</castTimeTicks>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Warding</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+        <li>MF_Discipline_Warding</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Enchantment</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Blessing of Vigor</debugLabel>
+        <amount>14</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Blessing of Vigor cooldown ready</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Blessing of Vigor</debugLabel>
+        <amount>14</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Blessing of Vigor cooldown</debugLabel>
+        <cooldownTicks>300</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Blessing of Vigor sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Blessing of Vigor cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Blessing of Vigor ally radius query</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+              <debugLabel>All nearby allies except caster</debugLabel>
+              <radius>6</radius>
+              <centerSource>Caster</centerSource>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>false</includeCaster>
+              <pawnAffinity>Ally</pawnAffinity>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Blessing of Vigor target effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+                <debugLabel>Blessing of Vigor buff</debugLabel>
+                <targetSource>CurrentTarget</targetSource>
+                <durationTicks>900</durationTicks>
+                <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+                <statusCue>
+                  <hediffDef>MF_BlessedVigor</hediffDef>
+                  <severity>0.01</severity>
+                  <removeOnExpire>true</removeOnExpire>
+                </statusCue>
+                <modifiers>
+                  <li>
+                    <statDef>MoveSpeed</statDef>
+                    <factor>1.12</factor>
+                  </li>
+                  <li>
+                    <statDef>GeneralLaborSpeed</statDef>
+                    <factor>1.10</factor>
+                  </li>
+                </modifiers>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

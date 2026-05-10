@@ -43,13 +43,62 @@ public static class SpellEnhancementUtility
 
     public static float ResolveManaCost(SpellContext context, float baseAmount)
     {
-        float factor = GetModifiers(context).manaCostFactor;
+        float factor = GetModifiers(context).manaCostFactor * SpellPowerUtility.ResolveManaCostScalar(context);
         return Mathf.Max(0f, baseAmount * factor);
+    }
+
+    public static float ResolveDamageAmount(SpellContext context, float baseAmount)
+    {
+        float factor = GetModifiers(context).damageFactor * SpellPowerUtility.ResolveDamageScalar(context);
+        return Mathf.Max(0f, baseAmount * factor);
+    }
+
+    public static float ResolveScalableDamageAmount(SpellContext context, float fallbackValue, ScalableFloatDef scalableFloat)
+    {
+        return ResolveDamageAmount(context, SpellPowerUtility.ResolveScalableFloat(context, fallbackValue, scalableFloat));
+    }
+
+    public static float ResolveHealingAmount(SpellContext context, float baseAmount)
+    {
+        float factor = SpellPowerUtility.ResolveHealingScalar(context);
+        return Mathf.Max(0f, baseAmount * factor);
+    }
+
+    public static float ResolveScalableHealingAmount(SpellContext context, float fallbackValue, ScalableFloatDef scalableFloat)
+    {
+        return ResolveHealingAmount(context, SpellPowerUtility.ResolveScalableFloat(context, fallbackValue, scalableFloat));
+    }
+
+    public static float ResolveRadius(SpellContext context, float baseRadius)
+    {
+        float factor = GetModifiers(context).radiusFactor * SpellPowerUtility.ResolveRadiusScalar(context);
+        return Mathf.Max(0f, baseRadius * factor);
+    }
+
+    public static float ResolveScalableRadius(SpellContext context, float fallbackValue, ScalableFloatDef scalableFloat)
+    {
+        return ResolveRadius(context, SpellPowerUtility.ResolveScalableFloat(context, fallbackValue, scalableFloat));
+    }
+
+    public static int ResolveDurationTicks(SpellContext context, int baseTicks)
+    {
+        if (baseTicks <= 0)
+        {
+            return baseTicks;
+        }
+
+        float factor = GetModifiers(context).durationFactor * SpellPowerUtility.ResolveDurationScalar(context);
+        return Mathf.Max(1, Mathf.RoundToInt(baseTicks * factor));
+    }
+
+    public static int ResolveScalableDurationTicks(SpellContext context, int fallbackValue, ScalableFloatDef scalableFloat)
+    {
+        return ResolveDurationTicks(context, SpellPowerUtility.ResolveScalableInt(context, fallbackValue, scalableFloat));
     }
 
     public static int ResolveCooldownTicks(SpellContext context, int baseTicks)
     {
-        float factor = GetModifiers(context).cooldownFactor;
+        float factor = GetModifiers(context).cooldownFactor * SpellPowerUtility.ResolveCooldownScalar(context);
         return Mathf.Max(0, Mathf.RoundToInt(baseTicks * factor));
     }
 

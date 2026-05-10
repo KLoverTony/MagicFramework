@@ -96,6 +96,8 @@
             <requireStandableDestination>true</requireStandableDestination>
             <requireWalkableDestination>true</requireWalkableDestination>
             <allowHitCasterCell>false</allowHitCasterCell>
+            <impactDamageAmount>6</impactDamageAmount>
+            <impactDamageDef>Blunt</impactDamageDef>
           </li>
         </actions>
       </li>

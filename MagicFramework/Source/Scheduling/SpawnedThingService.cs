@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using RimWorld;
@@ -50,7 +51,7 @@ public sealed class SpawnedThingService
         }
 
         context.SetCurrentTarget(new LocalTargetInfo(placedThing));
-        Log.Message($"[MagicFramework] Spawned {placedThing.LabelCap} at {placedThing.Position}.");
+        MagicLog.Message(MagicLogSubsystem.Summons, $"[MagicFramework] Spawned {placedThing.LabelCap} at {placedThing.Position}.");
     }
 
     private static ThingDef ResolveThingDef(SpellContext context, SpawnThingActionDef actionDef)
@@ -91,6 +92,6 @@ public sealed class SpawnedThingService
 
     private static int ResolveDurationTicks(SpellContext context, SpawnThingActionDef actionDef)
     {
-        return SpellPowerUtility.ResolveScalableInt(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
+        return SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
     }
 }

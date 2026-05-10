@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using MagicFramework.Targeting;
@@ -36,6 +37,7 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
         }
 
         areaZones.Add(areaZone);
+        RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Create);
         return true;
     }
 
@@ -52,6 +54,7 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
             PersistentAreaZone areaZone = areaZones[i];
             if (areaZone?.Caster == caster && areaZone.SpellDef == spellDef)
             {
+                RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Remove);
                 areaZone.DestroyMarkers();
                 areaZones.RemoveAt(i);
                 removedCount++;
@@ -93,6 +96,7 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
             PersistentAreaZone areaZone = areaZones[i];
             if (areaZone == null || areaZone.Caster != null && areaZone.Caster.Destroyed)
             {
+                RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Break);
                 areaZone?.DestroyMarkers();
                 areaZones.RemoveAt(i);
                 continue;
@@ -100,7 +104,8 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
 
             if (areaZone.IsConcentrationBroken(out string breakReason))
             {
-                Log.Message($"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} ended because concentration broke: {breakReason ?? "unknown reason"}.");
+                MagicLog.Message(MagicLogSubsystem.AreaZones, $"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} ended because concentration broke: {breakReason ?? "unknown reason"}.");
+                RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Break);
                 areaZone.DestroyMarkers();
                 areaZones.RemoveAt(i);
                 continue;
@@ -108,12 +113,14 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
 
             if (!HasAnyActiveMarker(areaZone))
             {
+                RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Break);
                 areaZones.RemoveAt(i);
                 continue;
             }
 
             if (areaZone.IsExpired(currentTick))
             {
+                RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Expire);
                 areaZone.DestroyMarkers();
                 areaZones.RemoveAt(i);
                 continue;
@@ -194,6 +201,8 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
             return;
         }
 
+        RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Pulse, actionDef);
+
         if (areaZone.PulseAtCenter && areaZone.TryCreateCenterExecutionContext(map, out SpellContext centerContext))
         {
             actionRunner.RunActions(centerContext, actionDef.actions);
@@ -236,6 +245,43 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
 
             actionRunner.RunActions(context, actionDef.actions);
         }
+    }
+
+    private void RunAreaZoneLifecycleActions(PersistentAreaZone areaZone, AreaZoneLifecycleEvent lifecycleEvent, PersistentAreaZoneActionDef resolvedActionDef = null)
+    {
+        if (areaZone == null ||
+            (resolvedActionDef == null && !areaZone.TryResolveActionDef(out resolvedActionDef)) ||
+            !areaZone.TryCreateCenterExecutionContext(map, out SpellContext context))
+        {
+            return;
+        }
+
+        List<SpellActionDef> specificActions = lifecycleEvent switch
+        {
+            AreaZoneLifecycleEvent.Create => resolvedActionDef.onCreateActions,
+            AreaZoneLifecycleEvent.Pulse => resolvedActionDef.onPulseActions,
+            AreaZoneLifecycleEvent.Expire => resolvedActionDef.onExpireActions,
+            AreaZoneLifecycleEvent.Remove => resolvedActionDef.onRemoveActions,
+            AreaZoneLifecycleEvent.Break => resolvedActionDef.onBreakActions,
+            _ => null
+        };
+
+        if (specificActions != null && specificActions.Count > 0)
+        {
+            actionRunner.RunActions(context, specificActions);
+        }
+
+        if (IsTerminalLifecycleEvent(lifecycleEvent) && resolvedActionDef.onEndActions != null && resolvedActionDef.onEndActions.Count > 0)
+        {
+            actionRunner.RunActions(context, resolvedActionDef.onEndActions);
+        }
+    }
+
+    private static bool IsTerminalLifecycleEvent(AreaZoneLifecycleEvent lifecycleEvent)
+    {
+        return lifecycleEvent == AreaZoneLifecycleEvent.Expire
+            || lifecycleEvent == AreaZoneLifecycleEvent.Remove
+            || lifecycleEvent == AreaZoneLifecycleEvent.Break;
     }
 
     private static bool HasAnyActiveMarker(PersistentAreaZone areaZone)
@@ -308,5 +354,14 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
                 SoundStarter.PlayOneShot(soundDef, targetInfo);
             }
         }
+    }
+
+    private enum AreaZoneLifecycleEvent
+    {
+        Create,
+        Pulse,
+        Expire,
+        Remove,
+        Break
     }
 }

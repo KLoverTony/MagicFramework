@@ -59,6 +59,39 @@ public static class SpellPowerUtility
         return Mathf.RoundToInt(ResolveScalableFloat(context, fallbackValue, scalableFloat));
     }
 
+    public static float ResolveDamageScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.damageScalar);
+
+    public static float ResolveHealingScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.healingScalar);
+
+    public static float ResolveRadiusScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.radiusScalar);
+
+    public static float ResolveDurationScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.durationScalar);
+
+    public static float ResolveManaCostScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.manaCostScalar);
+
+    public static float ResolveCooldownScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.cooldownScalar);
+
+    private static float ResolveScalar(SpellContext context, SpellPowerScalarDef scalarDef)
+    {
+        if (scalarDef == null)
+        {
+            return 1f;
+        }
+
+        float value = scalarDef.baseValue + ((context?.power?.value ?? 0f) * scalarDef.perPower);
+        if (value < scalarDef.min)
+        {
+            return scalarDef.min;
+        }
+
+        if (value > scalarDef.max)
+        {
+            return scalarDef.max;
+        }
+
+        return value;
+    }
+
     private static float ComputeCasterSkillContribution(SpellPowerDef powerDef, Thing caster)
     {
         if (string.IsNullOrWhiteSpace(powerDef.casterSkillDef) || caster is not Pawn pawn || pawn.skills == null)

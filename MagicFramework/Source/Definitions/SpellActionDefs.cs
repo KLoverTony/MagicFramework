@@ -161,12 +161,55 @@ public sealed class PersistentAreaZoneActionDef : SpellActionDef
     public bool breakWhenCasterDowned = true;
     public bool breakWhenCasterStunned = true;
     public bool breakWhenCasterMentalState = true;
+    public SpellMaintenanceDef maintenance;
     public SpellPawnAffinity pawnAffinity = SpellPawnAffinity.All;
     public bool includeCaster;
     public bool replaceExistingForCaster = true;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onPulseActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
     public List<SpellActionDef> actions = new();
+    public List<SpellActionDef> onEndActions = new();
 
-    public override IEnumerable<SpellActionDef> GetChildActions() => actions;
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onPulseActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in actions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onEndActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new PersistentAreaZoneActionWorker();
 }
@@ -217,6 +260,9 @@ public sealed class TerrainPatchActionDef : SpellActionDef
     public string replacementTerrainDef;
     public bool replaceWater;
     public string waterReplacementTerrainDef = "Ice";
+    public bool meltIce;
+    public string iceReplacementTerrainDef = "WaterShallow";
+    public bool removeSnow;
     public bool addSnow;
     public float snowDepth = 0.35f;
     public bool skipRoofedCells = true;
@@ -250,6 +296,10 @@ public sealed class KnockbackActionDef : SpellActionDef
     public bool requireStandableDestination = true;
     public bool requireWalkableDestination = true;
     public bool allowHitCasterCell;
+    public float impactDamageAmount;
+    public string impactDamageDef = "Blunt";
+    public float impactArmorPenetration;
+    public GuiltPolicy impactGuiltPolicy = GuiltPolicy.None;
 
     public override SpellActionWorker CreateWorker() => new KnockbackActionWorker();
 }
@@ -299,6 +349,8 @@ public sealed class TeleportActionDef : SpellActionDef
     public bool requireUnoccupiedDestination;
     public bool allowTeleportOntoCaster;
     public bool allowSameCell;
+    public bool preserveDrafted = true;
+    public int postTeleportStunTicks;
 
     public override SpellActionWorker CreateWorker() => new TeleportActionWorker();
 }
@@ -339,10 +391,24 @@ public sealed class SustainedStatModifierActionDef : SpellActionDef
     public bool breakWhenTargetDowned;
     public bool breakWhenTargetOutOfRange = true;
     public bool breakWhenLineOfSightLost = true;
+    public SpellMaintenanceDef maintenance;
+    public int pulseIntervalTicks = -1;
     public List<SpellStatModifierDef> modifiers = new();
+    public List<SpellActionDef> onPulseActions = new();
     public List<SpellActionDef> onBreakActions = new();
 
-    public override IEnumerable<SpellActionDef> GetChildActions() => onBreakActions;
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onPulseActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new SustainedStatModifierActionWorker();
 }
@@ -359,11 +425,14 @@ public sealed class ApplyForceFieldActionDef : SpellActionDef
     public float damageFactor = 0.5f;
     public bool absorbFullyWithMana;
     public float manaCostPerDamageAbsorbed = 1f;
+    public float sustainedManaCost;
+    public int sustainedManaCostIntervalTicks = 60;
     public float maxRange = -1f;
     public bool breakWhenCasterDowned = true;
     public bool breakWhenTargetDowned;
     public bool breakWhenTargetOutOfRange = true;
     public bool breakWhenLineOfSightLost = true;
+    public SpellMaintenanceDef maintenance;
     public string impactFleckDef = "BulletShieldAreaEffect";
     public string impactSoundDef = "EnergyShield_AbsorbDamage";
     public string ambientFleckDef = "BulletShieldAreaEffect";
@@ -373,9 +442,40 @@ public sealed class ApplyForceFieldActionDef : SpellActionDef
     public string sustainedOverlayTexturePath = "Things/Mote/ShieldBubble";
     public float sustainedOverlayScale = 1.2f;
     public string sustainedOverlayColorHex;
+    public int pulseIntervalTicks = -1;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onPulseActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
     public List<SpellActionDef> onBreakActions = new();
 
-    public override IEnumerable<SpellActionDef> GetChildActions() => onBreakActions;
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onPulseActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new ApplyForceFieldActionWorker();
 }

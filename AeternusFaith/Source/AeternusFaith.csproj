@@ -42,6 +42,10 @@
       <HintPath>../../MagicFramework/Assemblies/MagicFramework.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(RimWorldDir)\Mods\Harmony\v1.1\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

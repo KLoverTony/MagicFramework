@@ -91,6 +91,15 @@
         <breakWhenTargetDowned>false</breakWhenTargetDowned>
         <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
         <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+        <maintenance>
+          <profiles>
+            <li>CasterConscious</li>
+            <li>TargetValid</li>
+            <li>Tethered</li>
+            <li>LineOfSight</li>
+          </profiles>
+          <maxRange>16</maxRange>
+        </maintenance>
         <impactFleckDef>BulletShieldAreaEffect</impactFleckDef>
         <impactSoundDef>EnergyShield_AbsorbDamage</impactSoundDef>
         <ambientFleckDef></ambientFleckDef>

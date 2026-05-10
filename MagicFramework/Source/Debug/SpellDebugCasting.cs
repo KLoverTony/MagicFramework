@@ -48,6 +48,11 @@ public static class SpellDebugCasting
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetChainLightning(), "Debug: Cast Chain Lightning", "Starts target selection and casts the current debug Chain Lightning spell through Magic Framework.", "UI/Commands/Attack");
     }
 
+    public static Gizmo CreateArcSeekerGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetArcSeeker(), "Debug: Cast Arc Seeker", "Starts target selection and casts the current debug Arc Seeker spell through Magic Framework.", "UI/Commands/Attack");
+    }
+
     public static Gizmo CreateDelayedBlastRuneGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetDelayedBlastRune(), "Debug: Cast Delayed Blast Rune", "Starts target selection and casts the current debug Delayed Blast Rune spell through Magic Framework.", "UI/Commands/DesirePower");
@@ -106,6 +111,11 @@ public static class SpellDebugCasting
     public static Gizmo CreateHasteGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetHaste(), "Debug: Cast Haste", "Starts target selection and casts the current debug Haste spell through Magic Framework.", "UI/Commands/DesirePower");
+    }
+
+    public static Gizmo CreateBlessingOfVigorGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetBlessingOfVigor(), "Debug: Cast Blessing of Vigor", "Casts the current debug Blessing of Vigor spell through Magic Framework.", "UI/Commands/DesirePower");
     }
 
     public static Gizmo CreateMightGizmo(Pawn pawn)
@@ -250,16 +260,18 @@ public static class SpellDebugCasting
                 defaultLabel = cancelLabel,
                 defaultDesc = cancelDescription,
                 icon = ResolveSpellIcon(spellDef, fallbackIconPath),
-                action = () =>
-                {
-                    int cancelledCount = runtime.CancelMaintainedSpell(pawn, spellDef, false);
-                    MessageTypeDef messageType = cancelledCount > 0 ? MessageTypeDefOf.TaskCompletion : MessageTypeDefOf.RejectInput;
-                    Messages.Message(cancelledCount > 0 ? $"Cancelled {spellDef.LabelCap}." : $"{spellDef.LabelCap} is not active.", pawn, messageType, false);
-                }
+                action = () => ReleaseMaintainedSpell(pawn, spellDef, runtime)
             };
         }
 
         return CreateSpellGizmo(pawn, spellDef, castLabel, castDescription, fallbackIconPath);
+    }
+
+    private static void ReleaseMaintainedSpell(Pawn pawn, SpellDef spellDef, SpellRuntimeGameComponent runtime)
+    {
+        int cancelledCount = runtime?.CancelMaintainedSpell(pawn, spellDef, false) ?? 0;
+        MessageTypeDef messageType = cancelledCount > 0 ? MessageTypeDefOf.TaskCompletion : MessageTypeDefOf.RejectInput;
+        Messages.Message(cancelledCount > 0 ? $"Released {spellDef.LabelCap}." : $"{spellDef.LabelCap} is not active.", pawn, messageType, false);
     }
 
     private static void ApplyCooldownDisabledState(Command_Action command, Pawn pawn, SpellDef spellDef)
@@ -323,6 +335,12 @@ public static class SpellDebugCasting
 
     private static void BeginSpellTargeting(Pawn pawn, SpellDef spellDef)
     {
+        if (spellDef?.targeting?.useCasterAsTarget == true)
+        {
+            TryCastSpell(pawn, spellDef, new LocalTargetInfo(pawn));
+            return;
+        }
+
         Find.Targeter.BeginTargeting(
             BuildTargetingParameters(pawn, spellDef),
             target => TryCastSpell(pawn, spellDef, target),
@@ -407,7 +425,7 @@ public static class SpellDebugCasting
             spellDef = spellDef,
             power = SpellPowerUtility.ComputePower(spellDef, caster)
         };
-        float range = SpellPowerUtility.ResolveScalableFloat(rangeContext, targeting.range, targeting.scalableRange);
+        float range = SpellEnhancementUtility.ResolveScalableRadius(rangeContext, targeting.range, targeting.scalableRange);
         if (caster != null && range > 0f && caster.Position.DistanceTo(targetCell) > range)
         {
             return false;

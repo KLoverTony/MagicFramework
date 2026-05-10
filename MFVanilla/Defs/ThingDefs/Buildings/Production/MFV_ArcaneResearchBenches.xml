@@ -133,7 +133,7 @@
     <label>parchmentery bench</label>
     <description>A prepared workbench for shaving, pressing, and drying wood fibers into sheets of parchment.</description>
     <thingClass>Building_WorkTable</thingClass>
-    <size>(2,2)</size>
+    <size>(3,3)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Woody</li>
@@ -146,7 +146,7 @@
       <texPath>Things/Building/Production/ParchmenteryBench</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <shaderType>CutoutComplex</shaderType>
-      <drawSize>(2,2)</drawSize>
+      <drawSize>(3,3)</drawSize>
       <damageData>
         <cornerTL>Damage/Corner</cornerTL>
         <cornerTR>Damage/Corner</cornerTR>
@@ -306,13 +306,83 @@
     </statBases>
     <fillPercent>0.5</fillPercent>
     <useHitPoints>true</useHitPoints>
-    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <interactionCellOffset>(0,0,0)</interactionCellOffset>
     <hasInteractionCell>true</hasInteractionCell>
     <designationCategory>Production</designationCategory>
     <uiOrder>2603</uiOrder>
     <surfaceType>Item</surfaceType>
     <researchPrerequisites>
       <li>MFV_Alchemy</li>
+    </researchPrerequisites>
+    <inspectorTabs>
+      <li>ITab_Bills</li>
+    </inspectorTabs>
+    <building>
+      <spawnedConceptLearnOpportunity>BillsTab</spawnedConceptLearnOpportunity>
+      <paintable>true</paintable>
+      <workTableRoomRole>Workshop</workTableRoomRole>
+      <workTableNotInRoomRoleFactor>0.8</workTableNotInRoomRoleFactor>
+    </building>
+    <comps>
+      <li Class="CompProperties_AffectedByFacilities">
+        <linkableFacilities>
+          <li>ToolCabinet</li>
+        </linkableFacilities>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>PlaceWorker_ShowFacilitiesConnections</li>
+      <li>PlaceWorker_PreventInteractionSpotOverlap</li>
+    </placeWorkers>
+  </ThingDef>
+
+  <ThingDef ParentName="BenchBase">
+    <defName>MFV_LapidaryBench</defName>
+    <label>lapidary bench</label>
+    <description>A compact workbench with clamps, abrasives, and polishing tools for breaking and cutting rough gemstones.</description>
+    <thingClass>Building_WorkTable</thingClass>
+    <size>(2,2)</size>
+    <stuffCategories>
+      <li>Metallic</li>
+      <li>Stony</li>
+    </stuffCategories>
+    <costStuffCount>75</costStuffCount>
+    <costList>
+      <Steel>25</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <graphicData>
+      <texPath>Things/Building/Production/AlchemyTable</texPath>
+      <graphicClass>Graphic_Multi</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(2,2)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.20</staticSunShadowHeight>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>50</pathCost>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <WorkToBuild>2200</WorkToBuild>
+      <Flammability>0.6</Flammability>
+      <WorkTableWorkSpeedFactor>1.0</WorkTableWorkSpeedFactor>
+    </statBases>
+    <fillPercent>0.5</fillPercent>
+    <useHitPoints>true</useHitPoints>
+    <interactionCellOffset>(0,0,-1)</interactionCellOffset>
+    <hasInteractionCell>true</hasInteractionCell>
+    <designationCategory>Production</designationCategory>
+    <uiOrder>2604</uiOrder>
+    <surfaceType>Item</surfaceType>
+    <researchPrerequisites>
+      <li>MFV_Lapidary</li>
     </researchPrerequisites>
     <inspectorTabs>
       <li>ITab_Bills</li>

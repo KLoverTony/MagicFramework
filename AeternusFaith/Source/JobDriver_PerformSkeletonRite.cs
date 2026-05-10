@@ -60,9 +60,9 @@ namespace AeternusFaith
         private void PickUpCorpse()
         {
             Corpse corpse = Corpse;
-            if (corpse == null || corpse.Destroyed)
+            if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
-                Messages.Message("The skeleton rite could not find the selected corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("The skeleton rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
                 EndJobWith(JobCondition.Incompletable);
                 return;
             }
@@ -98,8 +98,11 @@ namespace AeternusFaith
         private void FinishRite()
         {
             Corpse corpse = Corpse ?? FindPlacedCorpseNearCircle();
-            if (corpse == null || corpse.Destroyed)
+            if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
+            {
+                Messages.Message("The skeleton rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
                 return;
+            }
 
             string corpseLabel = corpse.LabelShortCap;
             Pawn sourcePawn = corpse.InnerPawn;
@@ -312,7 +315,7 @@ namespace AeternusFaith
                     continue;
 
                 Corpse corpse = cell.GetFirstThing<Corpse>(Map);
-                if (corpse != null && !corpse.Destroyed)
+                if (RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
                     return corpse;
             }
 

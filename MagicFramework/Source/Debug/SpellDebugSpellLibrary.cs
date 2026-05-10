@@ -33,6 +33,11 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_ChainLightning", CreateFallbackChainLightning);
     }
 
+    public static SpellDef GetArcSeeker()
+    {
+        return GetSpellOrFallback("MF_ArcSeeker", CreateFallbackArcSeeker);
+    }
+
     public static SpellDef GetDelayedBlastRune()
     {
         return GetSpellOrFallback("MF_DelayedBlastRune", CreateFallbackDelayedBlastRune);
@@ -93,6 +98,11 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_Haste", CreateFallbackHaste);
     }
 
+    public static SpellDef GetBlessingOfVigor()
+    {
+        return GetSpellOrFallback("MF_BlessingOfVigor", CreateFallbackBlessingOfVigor);
+    }
+
     public static SpellDef GetMight()
     {
         return GetSpellOrFallback("MF_Might", CreateFallbackMight);
@@ -141,6 +151,24 @@ public static class SpellDebugSpellLibrary
             power = new SpellPowerDef
             {
                 casterLevelFactor = 1f,
+                damageScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = 0.05f,
+                    max = 1.75f
+                },
+                radiusScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = 0.015f,
+                    max = 1.35f
+                },
+                cooldownScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = -0.02f,
+                    min = 0.55f
+                },
                 tiers = new List<SpellPowerTierDef>
                 {
                     new() { minPower = 1f, tier = 1 },
@@ -152,19 +180,13 @@ public static class SpellDebugSpellLibrary
             {
                 shape = SpellTargetShape.Single,
                 primaryTargetType = SpellPrimaryTargetType.PawnOrThing,
-                pawnAffinity = SpellPawnAffinity.Foe,
+                pawnAffinity = SpellPawnAffinity.All,
                 includePawns = true,
                 includeBuildings = true,
-                includeItems = true,
+                includeItems = false,
                 allowSelfTarget = false,
                 requireLineOfSight = true,
-                range = 24f,
-                scalableRange = new ScalableFloatDef
-                {
-                    baseValue = 24f,
-                    perPower = 0.5f,
-                    max = 34f
-                }
+                range = 24f
             },
             actions = new List<SpellActionDef>
             {
@@ -197,12 +219,6 @@ public static class SpellDebugSpellLibrary
                                 {
                                     debugLabel = "Debug Firebolt damage",
                                     amount = 18f,
-                                    scalableAmount = new ScalableFloatDef
-                                    {
-                                        baseValue = 18f,
-                                        perPower = 1.5f,
-                                        max = 48f
-                                    },
                                     damageDef = "Flame"
                                 }
                             }
@@ -223,6 +239,34 @@ public static class SpellDebugSpellLibrary
             range = 28f,
             castTimeTicks = 60,
             gizmoIconPath = "UI/Gizmos/Spells/MF_Fireball",
+            power = new SpellPowerDef
+            {
+                casterLevelFactor = 1f,
+                damageScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = 0.04f,
+                    max = 1.6f
+                },
+                radiusScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = 0.02f,
+                    max = 1.35f
+                },
+                cooldownScalar = new SpellPowerScalarDef
+                {
+                    baseValue = 1f,
+                    perPower = -0.015f,
+                    min = 0.65f
+                },
+                tiers = new List<SpellPowerTierDef>
+                {
+                    new() { minPower = 3f, tier = 1 },
+                    new() { minPower = 6f, tier = 2 },
+                    new() { minPower = 10f, tier = 3 }
+                }
+            },
             targeting = new SpellTargetingDef
             {
                 shape = SpellTargetShape.Radius,
@@ -365,6 +409,91 @@ public static class SpellDebugSpellLibrary
                             chance = 0.30f,
                             stunTicks = 90,
                             fleckDef = "Mote_Stun"
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackArcSeeker()
+    {
+        return new SpellDef
+        {
+            defName = "MF_ArcSeeker_DebugFallback",
+            label = "debug arc seeker",
+            description = "Built-in fallback spell that releases lightning from the caster to shock the nearest hostile pawn nearby.",
+            range = 20f,
+            castTimeTicks = 35,
+            gizmoIconPath = "UI/Gizmos/Spells/MF_ArcSeeker",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Pawn,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                useCasterAsTarget = true,
+                requireLineOfSight = false,
+                range = 0f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Debug Arc Seeker sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new ApplyToTargetsActionDef
+                        {
+                            debugLabel = "Debug Arc Seeker nearest foe query",
+                            targetQuery = new NearestValidTargetQueryDef
+                            {
+                                debugLabel = "Debug nearest hostile near marked cell",
+                                maxRadius = 7f,
+                                includePawns = true,
+                                includeBuildings = false,
+                                includeItems = false,
+                                includeCaster = false,
+                                pawnAffinity = SpellPawnAffinity.Foe
+                            },
+                            actions = new List<SpellActionDef>
+                            {
+                                new ChainLightningActionDef
+                                {
+                                    debugLabel = "Debug Arc Seeker lightning strike",
+                                    jumpDelayTicks = 1,
+                                    jumpRadius = 0f,
+                                    maxHops = 0,
+                                    minBranches = 1,
+                                    maxBranches = 1,
+                                    allowRepeatTargets = false,
+                                    includeCaster = false,
+                                    pawnAffinity = SpellPawnAffinity.Foe,
+                                    impactFleckDef = "SparkFlash",
+                                    lineFleckDef = "ElectricalSpark",
+                                    stunFleckDef = "Mote_Stun",
+                                    onHitActions = new List<SpellActionDef>
+                                    {
+                                        new DamageActionDef
+                                        {
+                                            debugLabel = "Debug Arc Seeker shock damage",
+                                            amount = 14f,
+                                            damageDef = "Burn",
+                                            armorPenetration = 0.10f
+                                        },
+                                        new StunActionDef
+                                        {
+                                            debugLabel = "Debug Arc Seeker brief stun",
+                                            chance = 0.35f,
+                                            stunTicks = 60,
+                                            fleckDef = "Mote_Stun"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -1117,7 +1246,9 @@ public static class SpellDebugSpellLibrary
                             distance = 4,
                             requireStandableDestination = true,
                             requireWalkableDestination = true,
-                            allowHitCasterCell = false
+                            allowHitCasterCell = false,
+                            impactDamageAmount = 6f,
+                            impactDamageDef = "Blunt"
                         }
                     }
                 }
@@ -1233,7 +1364,9 @@ public static class SpellDebugSpellLibrary
                             destinationSource = TeleportDestinationSource.CurrentCell,
                             requireStandableDestination = true,
                             requireWalkableDestination = true,
-                            allowTeleportOntoCaster = true
+                            allowTeleportOntoCaster = true,
+                            preserveDrafted = true,
+                            postTeleportStunTicks = 30
                         },
                         new EffectActionDef
                         {
@@ -1318,6 +1451,99 @@ public static class SpellDebugSpellLibrary
                                 {
                                     statDef = "MoveSpeed",
                                     factor = 1.35f
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackBlessingOfVigor()
+    {
+        return new SpellDef
+        {
+            defName = "MF_BlessingOfVigor_DebugFallback",
+            label = "debug blessing of vigor",
+            description = "Built-in fallback blessing that invigorates nearby allies, excluding the caster.",
+            range = 0f,
+            castTimeTicks = 40,
+            gizmoIconPath = "UI/Gizmos/Spells/MF_BlessingOfVigor",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Pawn,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                useCasterAsTarget = true,
+                requireLineOfSight = false,
+                range = 0f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Debug Blessing of Vigor sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new EffectActionDef
+                        {
+                            debugLabel = "Debug Blessing of Vigor cast effect",
+                            effectDef = "PsycastAreaEffect",
+                            locationSource = SpellEffectLocationSource.Caster
+                        },
+                        new ApplyToTargetsActionDef
+                        {
+                            debugLabel = "Debug Blessing of Vigor ally radius query",
+                            targetQuery = new TargetsInRadiusQueryDef
+                            {
+                                debugLabel = "Debug all nearby allies except caster",
+                                radius = 6f,
+                                centerSource = TargetQueryCenterSource.Caster,
+                                includePawns = true,
+                                includeBuildings = false,
+                                includeItems = false,
+                                includeCaster = false,
+                                pawnAffinity = SpellPawnAffinity.Ally
+                            },
+                            actions = new List<SpellActionDef>
+                            {
+                                new EffectActionDef
+                                {
+                                    debugLabel = "Debug Blessing of Vigor target effect",
+                                    effectDef = "PsycastPsychicEffect",
+                                    locationSource = SpellEffectLocationSource.CurrentTarget,
+                                    attachToTarget = true
+                                },
+                                new ApplyStatModifierActionDef
+                                {
+                                    debugLabel = "Debug Blessing of Vigor buff",
+                                    targetSource = StatModifierTargetSource.CurrentTarget,
+                                    durationTicks = 900,
+                                    replaceExistingFromCasterSpell = true,
+                                    statusCue = new SpellStatusCueDef
+                                    {
+                                        hediffDef = "MF_BlessedVigor",
+                                        severity = 0.01f,
+                                        removeOnExpire = true
+                                    },
+                                    modifiers = new List<SpellStatModifierDef>
+                                    {
+                                        new()
+                                        {
+                                            statDef = "MoveSpeed",
+                                            factor = 1.12f
+                                        },
+                                        new()
+                                        {
+                                            statDef = "GeneralLaborSpeed",
+                                            factor = 1.10f
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -1529,6 +1755,8 @@ public static class SpellDebugSpellLibrary
                     damageFactor = 1f,
                     absorbFullyWithMana = true,
                     manaCostPerDamageAbsorbed = 1f,
+                    sustainedManaCost = 1f,
+                    sustainedManaCostIntervalTicks = 60,
                     maxRange = 16f,
                     breakWhenCasterDowned = true,
                     breakWhenTargetDowned = false,

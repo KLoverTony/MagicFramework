@@ -207,6 +207,17 @@ namespace AeternusFaith
             return HasHediff(pawn, "AF_SpectralForm");
         }
 
+        public static bool IsUndeadRace(Pawn pawn)
+        {
+            string defName = pawn?.def?.defName;
+            return defName == "AF_SkeletonRace" || defName == "AF_SpectreRace";
+        }
+
+        public static bool ShouldSuppressSocialInteraction(Pawn initiator, Pawn recipient)
+        {
+            return IsUndeadRace(initiator) || IsUndeadRace(recipient);
+        }
+
         public static void EnforceUndeadNeeds(Pawn pawn)
         {
             if (pawn?.needs == null)
@@ -228,8 +239,7 @@ namespace AeternusFaith
 
         public static void SuppressUndeadSocialInteractions(Pawn pawn)
         {
-            if (pawn?.interactions == null ||
-                (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
+            if (pawn?.interactions == null || !IsUndeadRace(pawn))
             {
                 return;
             }

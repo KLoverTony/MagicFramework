@@ -1,4 +1,5 @@
 using HarmonyLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using MagicFramework.Core;
@@ -56,6 +57,16 @@ public static class MFVanillaPatcher
         harmony.Patch(
             AccessTools.Method(typeof(ResearchManager), nameof(ResearchManager.ResearchPerformed)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchManager_ResearchPerformed_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(Mineable), "TrySpawnYield", new[] { typeof(Map), typeof(bool), typeof(Pawn) }),
+            prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Mineable_TrySpawnYield_Prefix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(GenRecipe_MakeRecipeProducts_Postfix))
         );
 
         _isPatched = true;
@@ -185,6 +196,22 @@ public static class MFVanillaPatcher
 
         Thing bench = researcher.CurJob.GetTarget(TargetIndex.A).Thing;
         ArcaneGiftStudyGameComponent.Instance?.NotifyResearchPerformed(researcher, bench);
+    }
+
+    private static bool Mineable_TrySpawnYield_Prefix(Mineable __instance, Map map, bool moteOnWaste, Pawn pawn)
+    {
+        if (!GemstoneUtility.IsGemstoneVein(__instance)) return true;
+
+        GemstoneUtility.SpawnMineYield(__instance, map, pawn);
+        return false;
+    }
+
+    private static void GenRecipe_MakeRecipeProducts_Postfix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, ref IEnumerable<Thing> __result)
+    {
+        if (GemstoneUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> products))
+        {
+            __result = products;
+        }
     }
 
     private static void RefreshOpenResearchWindows()

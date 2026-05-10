@@ -86,11 +86,22 @@
         <damageFactor>1</damageFactor>
         <absorbFullyWithMana>true</absorbFullyWithMana>
         <manaCostPerDamageAbsorbed>1</manaCostPerDamageAbsorbed>
+        <sustainedManaCost>1</sustainedManaCost>
+        <sustainedManaCostIntervalTicks>60</sustainedManaCostIntervalTicks>
         <maxRange>16</maxRange>
         <breakWhenCasterDowned>true</breakWhenCasterDowned>
         <breakWhenTargetDowned>false</breakWhenTargetDowned>
         <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
         <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+        <maintenance>
+          <profiles>
+            <li>CasterConscious</li>
+            <li>TargetValid</li>
+            <li>Tethered</li>
+            <li>LineOfSight</li>
+          </profiles>
+          <maxRange>16</maxRange>
+        </maintenance>
         <impactFleckDef>BulletShieldAreaEffect</impactFleckDef>
         <impactSoundDef>EnergyShield_AbsorbDamage</impactSoundDef>
         <ambientFleckDef></ambientFleckDef>
@@ -100,6 +111,15 @@
         <sustainedOverlayTexturePath></sustainedOverlayTexturePath>
         <sustainedOverlayScale>1.3</sustainedOverlayScale>
         <sustainedOverlayColorHex>#B87CFF78</sustainedOverlayColorHex>
+        <pulseIntervalTicks>120</pulseIntervalTicks>
+        <onPulseActions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Mana Shield maintained pulse</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+        </onPulseActions>
       </li>
     </actions>
   </MagicFramework.Definitions.SpellDef>

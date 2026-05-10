@@ -1,7 +1,7 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
-using Verse;
 
 namespace MagicFramework.Actions;
 
@@ -12,6 +12,6 @@ public abstract class SpellActionWorker
 {
     public virtual void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
     {
-        Log.Message($"[MagicFramework] Stub action worker {GetType().Name} executed.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Stub action worker {GetType().Name} executed.");
     }
 }

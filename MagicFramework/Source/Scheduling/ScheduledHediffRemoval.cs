@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MagicFramework.Core;
 using Verse;
 
 namespace MagicFramework.Scheduling;
@@ -164,7 +165,7 @@ public sealed class HediffRemovalMapComponent : MapComponent
             scheduledRemovals.RemoveAt(0);
             if (scheduledRemoval.TryExecute())
             {
-                Log.Message($"[MagicFramework] Removed scheduled hediff {scheduledRemoval.DebugLabel}.");
+                MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Removed scheduled hediff {scheduledRemoval.DebugLabel}.");
             }
         }
     }

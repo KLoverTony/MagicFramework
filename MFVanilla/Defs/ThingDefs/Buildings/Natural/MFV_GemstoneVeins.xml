@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="RockBase">
+    <defName>MFV_GemstoneVein</defName>
+    <label>gemstone vein</label>
+    <description>A small mixed seam of crystalline material. Mining it may produce rough gemstone chunks.</description>
+    <graphicData>
+      <texPath>Things/Building/Linked/RockFlecked_Atlas</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <color>(76,70,82)</color>
+      <colorTwo>(133,86,156)</colorTwo>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>1700</MaxHitPoints>
+    </statBases>
+    <building>
+      <isResourceRock>true</isResourceRock>
+      <mineableThing>MFV_RubyChunk</mineableThing>
+      <mineableYield>1</mineableYield>
+      <mineableScatterCommonality>0.12</mineableScatterCommonality>
+      <mineableScatterLumpSizeRange>1~5</mineableScatterLumpSizeRange>
+      <veinMineable>true</veinMineable>
+    </building>
+  </ThingDef>
+
+</Defs>

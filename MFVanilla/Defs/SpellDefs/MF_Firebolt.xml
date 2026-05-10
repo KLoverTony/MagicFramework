@@ -42,6 +42,21 @@
 
     <power>
       <casterLevelFactor>1</casterLevelFactor>
+      <damageScalar>
+        <baseValue>1</baseValue>
+        <perPower>0.05</perPower>
+        <max>1.75</max>
+      </damageScalar>
+      <radiusScalar>
+        <baseValue>1</baseValue>
+        <perPower>0.015</perPower>
+        <max>1.35</max>
+      </radiusScalar>
+      <cooldownScalar>
+        <baseValue>1</baseValue>
+        <perPower>-0.02</perPower>
+        <min>0.55</min>
+      </cooldownScalar>
       <tiers>
         <li>
           <minPower>1</minPower>
@@ -61,18 +76,13 @@
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>PawnOrThing</primaryTargetType>
-      <pawnAffinity>Foe</pawnAffinity>
+      <pawnAffinity>All</pawnAffinity>
       <includePawns>true</includePawns>
       <includeBuildings>true</includeBuildings>
-      <includeItems>true</includeItems>
+      <includeItems>false</includeItems>
       <allowSelfTarget>false</allowSelfTarget>
       <requireLineOfSight>true</requireLineOfSight>
       <range>24</range>
-      <scalableRange>
-        <baseValue>24</baseValue>
-        <perPower>0.5</perPower>
-        <max>34</max>
-      </scalableRange>
     </targeting>
 
     <requirements>
@@ -121,11 +131,6 @@
               <li Class="MagicFramework.Definitions.DamageActionDef">
                 <debugLabel>Firebolt damage</debugLabel>
                 <amount>18</amount>
-                <scalableAmount>
-                  <baseValue>18</baseValue>
-                  <perPower>1.5</perPower>
-                  <max>48</max>
-                </scalableAmount>
                 <damageDef>Flame</damageDef>
               </li>
             </onImpactActions>

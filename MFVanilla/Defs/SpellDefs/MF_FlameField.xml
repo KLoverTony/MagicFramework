@@ -91,10 +91,19 @@
             <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
             <durationTicks>720</durationTicks>
             <failsafeDurationTicks>900</failsafeDurationTicks>
+            <pulseAtCenter>true</pulseAtCenter>
             <pawnAffinity>All</pawnAffinity>
             <includeCaster>false</includeCaster>
             <replaceExistingForCaster>true</replaceExistingForCaster>
             <actions>
+              <li Class="MagicFramework.Definitions.TerrainPatchActionDef">
+                <debugLabel>Flame Field melt snow and ice</debugLabel>
+                <centerSource>CurrentCell</centerSource>
+                <radius>3.4</radius>
+                <meltIce>true</meltIce>
+                <removeSnow>true</removeSnow>
+                <skipRoofedCells>false</skipRoofedCells>
+              </li>
               <li Class="MagicFramework.Definitions.DamageActionDef">
                 <debugLabel>Flame Field damage</debugLabel>
                 <amount>5</amount>

@@ -40,6 +40,39 @@
       </requirements>
     </learning>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <damageScalar>
+        <baseValue>1</baseValue>
+        <perPower>0.04</perPower>
+        <max>1.6</max>
+      </damageScalar>
+      <radiusScalar>
+        <baseValue>1</baseValue>
+        <perPower>0.02</perPower>
+        <max>1.35</max>
+      </radiusScalar>
+      <cooldownScalar>
+        <baseValue>1</baseValue>
+        <perPower>-0.015</perPower>
+        <min>0.65</min>
+      </cooldownScalar>
+      <tiers>
+        <li>
+          <minPower>3</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>6</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>10</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
     <targeting>
       <shape>Radius</shape>
       <primaryTargetType>PawnOrCell</primaryTargetType>

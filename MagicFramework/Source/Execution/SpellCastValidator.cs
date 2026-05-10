@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using RimWorld;
 using Verse;
@@ -22,7 +23,7 @@ public sealed class SpellCastValidator
         {
             context.executionState.failed = true;
             context.executionState.failureReason = targetingReason;
-            Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {targetingReason}");
+            MagicLog.Message(MagicLogSubsystem.Targeting, $"[MagicFramework] Cast blocked for {context.spellDef.defName}: {targetingReason}");
             return false;
         }
 
@@ -33,7 +34,7 @@ public sealed class SpellCastValidator
 
         context.executionState.failed = true;
         context.executionState.failureReason = reason;
-        Log.Message($"[MagicFramework] Cast blocked for {context.spellDef.defName}: {reason}");
+        MagicLog.Message(MagicLogSubsystem.Requirements, $"[MagicFramework] Cast blocked for {context.spellDef.defName}: {reason}");
         return false;
     }
 
@@ -88,7 +89,7 @@ public sealed class SpellCastValidator
             return false;
         }
 
-        float range = SpellPowerUtility.ResolveScalableFloat(context, targeting.range, targeting.scalableRange);
+        float range = SpellEnhancementUtility.ResolveScalableRadius(context, targeting.range, targeting.scalableRange);
         if (context.caster != null && range > 0f && context.caster.Position.DistanceTo(targetCell) > range)
         {
             reason = $"Target was out of range {range}.";

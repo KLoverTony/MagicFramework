@@ -1,6 +1,6 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
-using Verse;
 
 namespace MagicFramework.Costs;
 
@@ -11,6 +11,6 @@ public abstract class SpellCostWorker
 {
     public virtual void ApplyCost(SpellContext context, SpellCostDef costDef)
     {
-        Log.Message($"[MagicFramework] Cost worker {GetType().Name} applied a stub cost.");
+        MagicLog.Message(MagicLogSubsystem.Costs, $"[MagicFramework] Cost worker {GetType().Name} applied a stub cost.");
     }
 }

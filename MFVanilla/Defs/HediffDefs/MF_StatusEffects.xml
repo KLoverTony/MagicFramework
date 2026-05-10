@@ -13,7 +13,17 @@
   <HediffDef>
     <defName>MF_Hasted</defName>
     <label>hasted</label>
-    <description>This pawn is moving with magically enhanced speed.</description>
+    <description>This pawn's movement speed is increased by 35%.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_BlessedVigor</defName>
+    <label>blessed with vigor</label>
+    <description>This pawn's movement speed is increased by 12%, and general labor speed is increased by 10%.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -23,7 +33,7 @@
   <HediffDef>
     <defName>MF_Mighty</defName>
     <label>mighty</label>
-    <description>This pawn is strengthened by maintained magic.</description>
+    <description>This pawn's melee damage is increased by 35%, and carrying capacity is increased by 25 kg.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -33,7 +43,7 @@
   <HediffDef>
     <defName>MF_Weakened</defName>
     <label>weakened</label>
-    <description>This pawn is suffering backlash from broken strengthening magic.</description>
+    <description>This pawn's melee damage is reduced by 25%, and carrying capacity is reduced by 15 kg.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -43,7 +53,7 @@
   <HediffDef>
     <defName>MF_ForceFielded</defName>
     <label>force fielded</label>
-    <description>This pawn is protected by a maintained magical force field.</description>
+    <description>This pawn is protected by a maintained force field that reduces incoming damage by 50% while the caster keeps focus.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -53,7 +63,7 @@
   <HediffDef>
     <defName>MF_ManaShielded</defName>
     <label>mana shielded</label>
-    <description>This pawn is protected by a shield that consumes mana to absorb incoming damage.</description>
+    <description>This pawn is protected by a shield that spends the caster's mana to fully absorb incoming damage, and costs upkeep while maintained.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>false</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -63,7 +73,7 @@
   <HediffDef>
     <defName>MF_Frozen</defName>
     <label>frozen</label>
-    <description>This pawn is slowed by lingering frost magic.</description>
+    <description>This pawn's movement speed is reduced by 45%.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>
@@ -73,7 +83,7 @@
   <HediffDef>
     <defName>MF_Waterbound</defName>
     <label>waterbound</label>
-    <description>This pawn is restrained by animated water.</description>
+    <description>This pawn's movement speed is reduced by 65% by animated water.</description>
     <hediffClass>HediffWithComps</hediffClass>
     <isBad>true</isBad>
     <scenarioCanAdd>false</scenarioCanAdd>

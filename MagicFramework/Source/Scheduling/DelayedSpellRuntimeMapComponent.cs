@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using Verse;
@@ -165,11 +166,11 @@ public sealed class DelayedSpellRuntimeMapComponent : MapComponent
 
         if (context.caster != null && context.caster.Destroyed)
         {
-            Log.Message($"[MagicFramework] Skipped delayed action {scheduledAction.DebugLabel} because the caster no longer exists.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Skipped delayed action {scheduledAction.DebugLabel} because the caster no longer exists.");
             return;
         }
 
-        Log.Message($"[MagicFramework] Executing delayed action {scheduledAction.DebugLabel}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Executing delayed action {scheduledAction.DebugLabel}.");
         actionRunner.RunAction(context, actionDef);
     }
 

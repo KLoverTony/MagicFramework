@@ -11,6 +11,12 @@ public sealed class SpellPowerDef
     public float casterLevelFactor = 1f;
     public string casterSkillDef;
     public float casterSkillFactor = 1f;
+    public SpellPowerScalarDef damageScalar;
+    public SpellPowerScalarDef healingScalar;
+    public SpellPowerScalarDef radiusScalar;
+    public SpellPowerScalarDef durationScalar;
+    public SpellPowerScalarDef manaCostScalar;
+    public SpellPowerScalarDef cooldownScalar;
     public int defaultTier;
     public List<SpellPowerTierDef> tiers = new();
 }
@@ -32,6 +38,17 @@ public sealed class ScalableFloatDef
     public float baseValue;
     public float perPower;
     public float min = float.MinValue;
+    public float max = float.MaxValue;
+}
+
+/// <summary>
+/// Multiplicative scalar that can grow or shrink with the current cast's spell power.
+/// </summary>
+public sealed class SpellPowerScalarDef
+{
+    public float baseValue = 1f;
+    public float perPower;
+    public float min = 0f;
     public float max = float.MaxValue;
 }
 

@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using RimWorld;
 using UnityEngine;
@@ -65,7 +66,7 @@ public static class MagicFXSpawner
 
         if (playedAny)
         {
-            Log.Message($"[MagicFramework] Played procedural FX for {context.spellDef?.defName ?? "<null spell>"}.");
+            MagicLog.Message(MagicLogSubsystem.Visuals, $"[MagicFramework] Played procedural FX for {context.spellDef?.defName ?? "<null spell>"}.");
         }
 
         return playedAny;

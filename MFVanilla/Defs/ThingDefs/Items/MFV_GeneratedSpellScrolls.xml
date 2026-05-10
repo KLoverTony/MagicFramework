@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_ArcSeeker</defName>
+    <label>spell scroll (arc seeker)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast arc seeker.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_ArcSeeker</spell>
+        <requiredResearch>
+          <li>MFV_Aeromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_BlessingOfVigor</defName>
+    <label>spell scroll (blessing of vigor)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast blessing of vigor.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_BlessingOfVigor</spell>
+        <requiredResearch>
+          <li>MFV_Enchantment</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_BlinkStep</defName>
     <label>spell scroll (blink step)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast blink step.</description>

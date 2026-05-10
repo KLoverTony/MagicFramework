@@ -32,11 +32,11 @@
         <capMods>
           <li>
             <capacity>Consciousness</capacity>
-            <setMax>0.25</setMax>
+            <setMax>0.5</setMax>
           </li>
           <li>
             <capacity>Manipulation</capacity>
-            <setMax>0.25</setMax>
+            <setMax>0.5</setMax>
           </li>
           <li>
             <capacity>Moving</capacity>
@@ -82,7 +82,7 @@
           </li>
           <li>
             <capacity>Moving</capacity>
-            <setMax>1</setMax>
+            <setMax>1.25</setMax>
           </li>
           <li>
             <capacity>Talking</capacity>

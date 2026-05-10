@@ -14,11 +14,15 @@ public sealed class ActiveSpellForceField : IExposable
     public float damageFactor = 0.5f;
     public bool absorbFullyWithMana;
     public float manaCostPerDamageAbsorbed = 1f;
+    public float sustainedManaCost;
+    public int sustainedManaCostIntervalTicks = 60;
+    public int nextSustainedManaCostTick;
     public float maxRange = -1f;
     public bool breakWhenCasterDowned = true;
     public bool breakWhenTargetDowned;
     public bool breakWhenTargetOutOfRange = true;
     public bool breakWhenLineOfSightLost = true;
+    public SpellMaintenanceDef maintenance;
     public HediffDef indicatorHediffDef;
     public float indicatorSeverity = 0.01f;
     public bool removeIndicatorOnExpire = true;
@@ -34,6 +38,8 @@ public sealed class ActiveSpellForceField : IExposable
     public string sustainedOverlayTexturePath = "Things/Mote/ShieldBubble";
     public float sustainedOverlayScale = 1.2f;
     public string sustainedOverlayColorHex;
+    public int pulseIntervalTicks = -1;
+    public int nextPulseTick;
     public List<int> sourceActionPath = new();
 
     public bool IsExpired(int currentTick)
@@ -50,11 +56,15 @@ public sealed class ActiveSpellForceField : IExposable
         Scribe_Values.Look(ref damageFactor, "damageFactor", 0.5f);
         Scribe_Values.Look(ref absorbFullyWithMana, "absorbFullyWithMana");
         Scribe_Values.Look(ref manaCostPerDamageAbsorbed, "manaCostPerDamageAbsorbed", 1f);
+        Scribe_Values.Look(ref sustainedManaCost, "sustainedManaCost");
+        Scribe_Values.Look(ref sustainedManaCostIntervalTicks, "sustainedManaCostIntervalTicks", 60);
+        Scribe_Values.Look(ref nextSustainedManaCostTick, "nextSustainedManaCostTick");
         Scribe_Values.Look(ref maxRange, "maxRange", -1f);
         Scribe_Values.Look(ref breakWhenCasterDowned, "breakWhenCasterDowned", true);
         Scribe_Values.Look(ref breakWhenTargetDowned, "breakWhenTargetDowned");
         Scribe_Values.Look(ref breakWhenTargetOutOfRange, "breakWhenTargetOutOfRange", true);
         Scribe_Values.Look(ref breakWhenLineOfSightLost, "breakWhenLineOfSightLost", true);
+        Scribe_Deep.Look(ref maintenance, "maintenance");
         Scribe_Defs.Look(ref indicatorHediffDef, "indicatorHediffDef");
         Scribe_Values.Look(ref indicatorSeverity, "indicatorSeverity", 0.01f);
         Scribe_Values.Look(ref removeIndicatorOnExpire, "removeIndicatorOnExpire", true);
@@ -70,6 +80,8 @@ public sealed class ActiveSpellForceField : IExposable
         Scribe_Values.Look(ref sustainedOverlayTexturePath, "sustainedOverlayTexturePath", "Things/Mote/ShieldBubble");
         Scribe_Values.Look(ref sustainedOverlayScale, "sustainedOverlayScale", 1.2f);
         Scribe_Values.Look(ref sustainedOverlayColorHex, "sustainedOverlayColorHex");
+        Scribe_Values.Look(ref pulseIntervalTicks, "pulseIntervalTicks", -1);
+        Scribe_Values.Look(ref nextPulseTick, "nextPulseTick");
         Scribe_Collections.Look(ref sourceActionPath, "sourceActionPath", LookMode.Value);
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit && sourceActionPath == null)

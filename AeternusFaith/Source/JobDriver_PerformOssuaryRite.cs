@@ -59,9 +59,9 @@ namespace AeternusFaith
         private void PickUpCorpse()
         {
             Corpse corpse = Corpse;
-            if (corpse == null || corpse.Destroyed)
+            if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
-                Messages.Message("The ossuary rite could not find the selected corpse.", Lectern ?? Ossuary, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("The ossuary rite requires a humanlike mortal corpse.", Lectern ?? Ossuary, MessageTypeDefOf.RejectInput, historical: false);
                 EndJobWith(JobCondition.Incompletable);
                 return;
             }
@@ -97,8 +97,11 @@ namespace AeternusFaith
         private void FinishRite()
         {
             Corpse corpse = Corpse ?? FindPlacedCorpseNearOssuary();
-            if (corpse == null || corpse.Destroyed)
+            if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
+            {
+                Messages.Message("The ossuary rite requires a humanlike mortal corpse.", Lectern ?? Ossuary, MessageTypeDefOf.RejectInput, historical: false);
                 return;
+            }
 
             Comp_OssuaryObituary ossuaryContents = (Ossuary as ThingWithComps)?.GetComp<Comp_OssuaryObituary>();
             if (ossuaryContents?.HasRemains == true)
@@ -189,7 +192,7 @@ namespace AeternusFaith
                     continue;
 
                 Corpse corpse = cell.GetFirstThing<Corpse>(Map);
-                if (corpse != null && !corpse.Destroyed)
+                if (RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
                     return corpse;
             }
 

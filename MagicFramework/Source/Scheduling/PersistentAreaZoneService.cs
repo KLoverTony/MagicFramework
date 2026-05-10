@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using Verse;
@@ -25,7 +26,8 @@ public sealed class PersistentAreaZoneService
             return;
         }
 
-        List<Thing> markerThings = SpawnMarkers(context, actionDef, markerDef);
+        float zoneRadius = SpellEnhancementUtility.ResolveRadius(context, actionDef.zoneRadius);
+        List<Thing> markerThings = SpawnMarkers(context, actionDef, markerDef, zoneRadius);
         if (markerThings.Count == 0)
         {
             Log.Warning($"[MagicFramework] Failed to create area zone because marker thing '{markerDef.defName}' could not be spawned.");
@@ -59,7 +61,7 @@ public sealed class PersistentAreaZoneService
             actionPath,
             actionDef.pawnAffinity,
             actionDef.includeCaster,
-            actionDef.zoneRadius,
+            zoneRadius,
             actionDef.pulseIntervalTicks,
             actionDef.ambientEffectDef,
             actionDef.ambientSoundDef,
@@ -71,6 +73,7 @@ public sealed class PersistentAreaZoneService
             actionDef.breakWhenCasterDowned,
             actionDef.breakWhenCasterStunned,
             actionDef.breakWhenCasterMentalState,
+            actionDef.maintenance,
             expireAtTick);
 
         PersistentAreaZoneMapComponent runtime = context.map.GetComponent<PersistentAreaZoneMapComponent>();
@@ -81,7 +84,7 @@ public sealed class PersistentAreaZoneService
             return;
         }
 
-        Log.Message($"[MagicFramework] Created area zone for {context.spellDef.defName} at {context.currentCell} with radius {actionDef.zoneRadius} and {markerThings.Count} marker(s).");
+        MagicLog.Message(MagicLogSubsystem.AreaZones, $"[MagicFramework] Created area zone for {context.spellDef.defName} at {context.currentCell} with radius {zoneRadius} and {markerThings.Count} marker(s).");
     }
 
     private static ThingDef ResolveMarkerThingDef(PersistentAreaZoneActionDef actionDef)
@@ -96,8 +99,8 @@ public sealed class PersistentAreaZoneService
 
     private static int ResolveExpireTick(SpellContext context, int currentTick, PersistentAreaZoneActionDef actionDef)
     {
-        int durationTicks = SpellPowerUtility.ResolveScalableInt(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
-        int failsafeDurationTicks = SpellPowerUtility.ResolveScalableInt(context, actionDef.failsafeDurationTicks, actionDef.scalableFailsafeDurationTicks);
+        int durationTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.durationTicks, actionDef.scalableDurationTicks);
+        int failsafeDurationTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.failsafeDurationTicks, actionDef.scalableFailsafeDurationTicks);
         int durationTick = durationTicks > 0 ? currentTick + durationTicks : -1;
         int failsafeTick = failsafeDurationTicks > 0 ? currentTick + failsafeDurationTicks : -1;
 
@@ -109,10 +112,10 @@ public sealed class PersistentAreaZoneService
         return durationTick >= 0 ? durationTick : failsafeTick;
     }
 
-    private static List<Thing> SpawnMarkers(SpellContext context, PersistentAreaZoneActionDef actionDef, ThingDef markerDef)
+    private static List<Thing> SpawnMarkers(SpellContext context, PersistentAreaZoneActionDef actionDef, ThingDef markerDef, float zoneRadius)
     {
         List<Thing> markerThings = new();
-        foreach (IntVec3 markerCell in BuildMarkerCells(context.currentCell, context.map, actionDef.zoneRadius))
+        foreach (IntVec3 markerCell in BuildMarkerCells(context.currentCell, context.map, zoneRadius))
         {
             Thing markerThing = ThingMaker.MakeThing(markerDef);
             if (markerThing == null)

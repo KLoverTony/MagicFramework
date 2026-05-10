@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using UnityEngine;
 using Verse;
 
@@ -35,6 +36,7 @@ public sealed class TargetsInRadiusQueryWorker : TargetQueryWorker
             return new List<LocalTargetInfo>();
         }
 
+        float radius = SpellEnhancementUtility.ResolveRadius(context, radiusDef.radius);
         return TargetQueryUtility.CollectTargets(
             context,
             radiusDef.includePawns,
@@ -42,7 +44,7 @@ public sealed class TargetsInRadiusQueryWorker : TargetQueryWorker
             radiusDef.includeItems,
             radiusDef.includeCaster,
             radiusDef.pawnAffinity,
-            thing => thing.Position.DistanceTo(center) <= radiusDef.radius);
+            thing => thing.Position.DistanceTo(center) <= radius);
     }
 }
 
@@ -136,6 +138,7 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
             return new List<LocalTargetInfo>();
         }
 
+        float radius = SpellEnhancementUtility.ResolveRadius(context, shapeDef.radius);
         return TargetQueryUtility.CollectTargets(
             context,
             shapeDef.includePawns,
@@ -143,7 +146,7 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
             shapeDef.includeItems,
             shapeDef.includeCaster,
             shapeDef.pawnAffinity,
-            thing => thing.Position.DistanceTo(center) <= shapeDef.radius);
+            thing => thing.Position.DistanceTo(center) <= radius);
     }
 
     private static IReadOnlyList<LocalTargetInfo> ResolveLine(SpellContext context, ShapeTargetsQueryDef shapeDef)
@@ -220,6 +223,7 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
         }
 
         float chainRadius = shapeDef.lineLength > 0f ? shapeDef.lineLength : shapeDef.radius;
+        chainRadius = SpellEnhancementUtility.ResolveRadius(context, chainRadius);
         if (chainRadius <= 0f)
         {
             chainRadius = 8f;
@@ -417,7 +421,8 @@ public sealed class DirectionalChainQueryWorker : TargetQueryWorker
             }
 
             float distance = thing.Position.DistanceTo(branch.currentThing.Position);
-            if (distance > chainDef.jumpRadius)
+            float jumpRadius = SpellEnhancementUtility.ResolveRadius(context, chainDef.jumpRadius);
+            if (distance > jumpRadius)
             {
                 continue;
             }

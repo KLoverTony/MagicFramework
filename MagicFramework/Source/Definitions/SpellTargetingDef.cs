@@ -12,6 +12,7 @@ public class SpellTargetingDef
     public bool includeBuildings = true;
     public bool includeItems = true;
     public bool allowSelfTarget = true;
+    public bool useCasterAsTarget;
     public bool requireLineOfSight;
     public bool requireStandableCell;
     public bool requireWalkableCell;

@@ -126,6 +126,13 @@
             <breakWhenCasterDowned>true</breakWhenCasterDowned>
             <breakWhenCasterStunned>true</breakWhenCasterStunned>
             <breakWhenCasterMentalState>true</breakWhenCasterMentalState>
+            <maintenance>
+              <profiles>
+                <li>CasterFocused</li>
+                <li>Anchored</li>
+              </profiles>
+              <useInitialTargetCell>true</useInitialTargetCell>
+            </maintenance>
             <pawnAffinity>Foe</pawnAffinity>
             <includeCaster>false</includeCaster>
             <replaceExistingForCaster>true</replaceExistingForCaster>

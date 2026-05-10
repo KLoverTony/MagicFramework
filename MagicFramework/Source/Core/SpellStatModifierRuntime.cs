@@ -25,6 +25,9 @@ public sealed class ActiveSpellStatModifier : IExposable
     public bool breakWhenTargetDowned;
     public bool breakWhenTargetOutOfRange = true;
     public bool breakWhenLineOfSightLost = true;
+    public SpellMaintenanceDef maintenance;
+    public int pulseIntervalTicks = -1;
+    public int nextPulseTick;
     public List<int> sourceActionPath = new();
     public List<ActiveSpellStatModifierEntry> modifiers = new();
 
@@ -55,6 +58,9 @@ public sealed class ActiveSpellStatModifier : IExposable
         Scribe_Values.Look(ref breakWhenTargetDowned, "breakWhenTargetDowned");
         Scribe_Values.Look(ref breakWhenTargetOutOfRange, "breakWhenTargetOutOfRange", true);
         Scribe_Values.Look(ref breakWhenLineOfSightLost, "breakWhenLineOfSightLost", true);
+        Scribe_Deep.Look(ref maintenance, "maintenance");
+        Scribe_Values.Look(ref pulseIntervalTicks, "pulseIntervalTicks", -1);
+        Scribe_Values.Look(ref nextPulseTick, "nextPulseTick");
         Scribe_Collections.Look(ref sourceActionPath, "sourceActionPath", LookMode.Value);
         Scribe_Collections.Look(ref modifiers, "modifiers", LookMode.Deep);
 

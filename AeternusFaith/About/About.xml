@@ -17,8 +17,14 @@
       <downloadUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=...</downloadUrl>
       <displayName>Magic Framework</displayName>
     </li>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <downloadUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077</downloadUrl>
+      <displayName>Harmony</displayName>
+    </li>
   </modDependencies>
   <loadAfter>
+    <li>brrainz.harmony</li>
     <li>ludeon.rimworld.ideology</li>
     <li>oracle.magicframework</li>
   </loadAfter>

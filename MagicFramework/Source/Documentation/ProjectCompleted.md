@@ -4,6 +4,124 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MF-015 targeting and self-affect policy.
+  Current state:
+  - `TargetingPolicy.md` documents first-party conventions for beneficial pawn spells, hostile pawn spells, cell placement spells, mixed pawn/cell spells, persistent hazards, beneficial auras, and terrain-only pulses
+  - the policy keeps XML explicit for now and defers inference from metadata tags until defaults are safer
+  - audited `MF_Firebolt`, `MF_Haste`, `MF_Heal`, `MF_Freeze`, `MF_FlameField`, `MF_WatersEmbrace`, and `MF_SummonDog`
+  - no behavior changes were needed from this audit
+
+- MF-005 lifecycle hook semantics and area-zone first pass.
+  Current state:
+  - `LifecycleHooks.md` defines create, pulse, trigger, expire, remove, break, and legacy end semantics
+  - persistent area zones support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`
+  - area-zone `onEndActions` remains supported as a legacy catch-all after expire, remove, or break terminal hooks
+  - area-zone replacement/cancel is categorized as remove, natural duration end as expire, and invalid/concentration loss/marker loss as break
+  - maintained force fields support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`
+  - force-field replacement/cancel is categorized as remove, natural duration end as expire, and invalid/range/line-of-sight/mana maintenance failures as break
+
+- MF-004 sustained spell release UX.
+  Current state:
+  - player-known spells appear as full individual pawn gizmos, matching the debug spell presentation
+  - known-spell gizmos and the known-spell menu toggle active maintained spells into `Release <spell>` commands
+  - debug maintained-spell gizmos use the same release helper
+  - clean release avoids break hooks while still ending the maintained state and cleaning status/visual runtime state
+  - force-field release now routes through remove lifecycle hooks rather than being treated as a maintenance break
+  - `SpellMaintenanceDef` supports composable interruption profiles with compatibility fallback when omitted
+  - sustained stat modifiers, maintained force fields, and persistent area zones use shared maintenance profiles when authored
+  - `MF_ForceField`, `MF_ManaShield`, `MF_Might`, and `MF_WatersEmbrace` now author explicit maintenance profiles
+  - sustained stat modifiers and maintained force fields support `pulseIntervalTicks` plus `onPulseActions`
+  - `MF_ManaShield` validates maintained force-field pulses with a harmless periodic visual pulse
+
+- MF-008 subsystem logging toggles.
+  Current state:
+  - `MagicFrameworkSettings` saves per-subsystem routine logging toggles through RimWorld `ModSettings`
+  - `MagicLog` routes routine diagnostics through named subsystems while keeping warnings/errors available through normal RimWorld logging
+  - settings UI exposes toggles for execution, costs, requirements, targeting, triggers, persistent effects, wall zones, area zones, stat modifiers, displacement, projectiles, force fields, enhancements, visuals, and summons
+  - the noisiest routine logs in execution, costs, scheduling, sustained effects, force fields, displacement, projectiles, visuals, summons, and action workers now honor the toggles
+  - debug snapshot buttons remain available in the Magic Framework settings window
+
+- MF-009 spell-level power scalars.
+  Current state:
+  - `SpellPowerDef` supports optional `SpellPowerScalarDef` entries for damage, healing, radius/range, duration, mana cost, and cooldown
+  - omitted scalar defs resolve to a neutral factor of 1.0
+  - scalar values use `baseValue + power * perPower` with min/max clamps
+  - central mechanics now honor spell-level scalars for damage, healing, radius/range, duration, mana costs, and cooldown costs
+  - `MF_Firebolt` now validates the model with base damage/range/cooldown values plus spell-level damage, radius, and cooldown scalars
+  - `MF_Fireball` now validates the same model across explosion damage, secondary damage, targeting radius, explosion radius, radius target queries, and cooldown
+
+- MF-006 Blessing of Vigor radius-query validation spell.
+  Current state:
+  - `MF_BlessingOfVigor` is a learnable MFVanilla warding spell that fires from the caster without a target prompt
+  - the spell uses `TargetsInRadiusQueryDef` centered on the caster with `pawnAffinity` set to `Ally`
+  - the query sets `includeCaster` to `false`, validating caster exclusion for ally-radius spells
+  - affected allies receive `MF_BlessedVigor`, movement speed, and general labor speed buffs
+  - debug casting includes a Blessing of Vigor gizmo and fallback spell definition
+  - generated MFVanilla spell scroll and recipe defs include Blessing of Vigor
+
+- MF-006 Arc Seeker target-query validation spell.
+  Current state:
+  - `MF_ArcSeeker` is a learnable MFVanilla aeromancy spell that fires from the caster without a target prompt
+  - `SpellTargetingDef.useCasterAsTarget` lets authored spells execute immediately with the caster as the initial target
+  - the spell uses `NearestValidTargetQueryDef` to select the nearest hostile pawn within 7 cells of the caster
+  - selected targets are struck through `ChainLightningActionDef` with zero hops, reusing chain lightning visuals
+  - selected targets receive burn-type shock damage and a brief stun chance
+  - debug casting includes an Arc Seeker gizmo and fallback spell definition
+  - generated MFVanilla spell scroll and recipe defs include Arc Seeker
+
+- MF-004 sustained force-field mana upkeep.
+  Current state:
+  - `ApplyForceFieldActionDef` supports optional `sustainedManaCost` and `sustainedManaCostIntervalTicks`
+  - maintained force fields spend upkeep mana on interval ticks and break with cleanup/actions when the caster cannot pay
+  - mana-backed force fields also break immediately when they cannot afford an incoming damage absorption/reduction cost, preventing lingering maintained visuals after the shield fails
+  - upkeep state is saved on active force fields through `nextSustainedManaCostTick`
+  - `MF_ManaShield` now costs 1 mana every 60 ticks while maintained, in addition to mana spent absorbing damage
+  - generated spell summaries mention sustained upkeep costs when configured
+
+- MF-001 teleport drafted-state continuity.
+  Current state:
+  - `TeleportActionDef` preserves drafted state by default after teleporting or swapping pawns
+  - teleport still clears current pathing and busy stance instead of restoring volatile job/path state
+  - `postTeleportStunTicks` lets authored teleports explain job interruption as disorientation
+  - `MF_BlinkStep` preserves drafted state and applies a brief 30-tick post-blink stun
+  - debug Blink Step fallback mirrors the authored behavior
+
+- MF-013 collision-aware knockback.
+  Current state:
+  - `KnockbackActionDef` traces push movement until the target reaches full distance or collides with a blocked cell
+  - collision-aware push lands the target on the last valid destination and can apply authored impact damage
+  - impact damage supports authored damage def, armor penetration, and guilt policy
+  - `MF_ForcePush` now deals light blunt impact damage when the shove ends against an obstacle
+  - generated spell summaries mention collision damage when configured
+
+- Dynamic spell effect summaries, first pass.
+  Current state:
+  - `SpellDescriptionUtility` generates cached plain-language summaries from loaded `SpellDef` action trees
+  - supported summaries include targeting, mana/cooldown costs, damage, healing, explosions, hediffs, stat modifiers, sustained effects, force fields, persistent zones, terrain patches, summons, spawned things, delays, repeats, projectiles, movement, teleport, chain, stun, and destroy actions
+  - known-spell gizmos append generated effect summaries below authored spell descriptions
+  - MFVanilla spell scroll inspect text shows the generated effect summaries for the spell the scroll teaches
+  Remaining gaps:
+  - no dedicated spell details window yet
+  - contextual enhancement modifiers are not displayed yet
+  - some complex conditions and target queries still fall back to broad common-language summaries
+
+- Enhancement scalar integration.
+  Current state:
+  - `SpellEnhancementUtility` now exposes shared resolver helpers for damage, radius, and duration factors
+  - `damageFactor` applies to direct `DamageActionDef`, `ExplosionActionDef`, and fallback chain-lightning damage
+  - `radiusFactor` applies to spell targeting range, target-query radii, explosions, persistent area zone radius, persistent wall pulse radius, terrain patch radius, stone-chunk movement radius, and chain jump radius
+  - `durationFactor` applies to repeat intervals, persistent effects, wall zones, area zones, summons, spawned things, timed stat modifiers, sustained stat modifiers, maintained force fields, and scheduled hediff removal durations
+  - mana and cooldown factors continue to use the existing enhancement resolution path
+  Validation notes:
+  - `MFV_SolarFlareEmpowersFireMagic` now affects fire damage/radius/duration where matching actions expose those values
+  - `MFV_RainEmpowersAquamancy` and `MFV_HillsEmpowerGeomancy` now affect matching aura/terrain/radius/duration behavior where authored values exist
+
+- Explicit Harmony dependency metadata.
+  Current state:
+  - MagicFramework `About/About.xml` declares `brrainz.harmony` in `modDependencies`
+  - MagicFramework also lists `brrainz.harmony` in `loadAfter` so RimWorld orders Harmony before the framework
+  - package ID was verified against the locally installed Harmony metadata
+
 - Dynamic MFVanilla spell scroll generation.
   Current state:
   - `SpellScrollDefGenerator` creates a `ThingDef` scroll for each learnable MFVanilla `SpellDef`

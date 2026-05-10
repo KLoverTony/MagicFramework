@@ -47,6 +47,34 @@ public static class SpellGizmoUtility
         };
     }
 
+    public static IEnumerable<Gizmo> CreateKnownSpellGizmos(Pawn pawn)
+    {
+        SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+        if (pawn == null || runtime?.HasArcaneGift(pawn) != true)
+        {
+            yield break;
+        }
+
+        List<SpellDef> knownSpells = new();
+        foreach (SpellDef spellDef in runtime.GetKnownSpells(pawn))
+        {
+            if (spellDef != null)
+            {
+                knownSpells.Add(spellDef);
+            }
+        }
+
+        knownSpells.Sort((left, right) => string.Compare(left.LabelCap, right.LabelCap, System.StringComparison.OrdinalIgnoreCase));
+        for (int i = 0; i < knownSpells.Count; i++)
+        {
+            Gizmo gizmo = CreateKnownSpellGizmo(pawn, knownSpells[i]);
+            if (gizmo != null)
+            {
+                yield return gizmo;
+            }
+        }
+    }
+
     public static Gizmo CreateKnownSpellGizmo(Pawn pawn, SpellDef spellDef)
     {
         if (pawn == null || spellDef == null)
@@ -59,22 +87,17 @@ public static class SpellGizmoUtility
         {
             return new Command_Action
             {
-                defaultLabel = $"Cancel {spellDef.LabelCap}",
-                defaultDesc = $"Cleanly ends the maintained {spellDef.LabelCap} spell.",
+                defaultLabel = $"Release {spellDef.LabelCap}",
+                defaultDesc = $"Safely ends the maintained {spellDef.LabelCap} spell without triggering break effects.",
                 icon = ResolveSpellIcon(spellDef),
-                action = () =>
-                {
-                    int cancelledCount = runtime.CancelMaintainedSpell(pawn, spellDef, false);
-                    MessageTypeDef messageType = cancelledCount > 0 ? MessageTypeDefOf.TaskCompletion : MessageTypeDefOf.RejectInput;
-                    Messages.Message(cancelledCount > 0 ? $"Cancelled {spellDef.LabelCap}." : $"{spellDef.LabelCap} is not active.", pawn, messageType, false);
-                }
+                action = () => ReleaseMaintainedSpell(pawn, spellDef, runtime)
             };
         }
 
         Command_Action command = new()
         {
             defaultLabel = spellDef.LabelCap,
-            defaultDesc = string.IsNullOrWhiteSpace(spellDef.description) ? $"Cast {spellDef.LabelCap}." : spellDef.description,
+            defaultDesc = SpellDescriptionUtility.GetGizmoDescription(spellDef),
             icon = ResolveSpellIcon(spellDef),
             action = () => BeginSpellTargeting(pawn, spellDef)
         };
@@ -86,18 +109,26 @@ public static class SpellGizmoUtility
     private static void OpenKnownSpellMenu(Pawn pawn, List<SpellDef> knownSpells)
     {
         List<FloatMenuOption> options = new();
+        List<SpellResearchGroup> groups = BuildResearchGroups(knownSpells);
+        for (int i = 0; i < groups.Count; i++)
+        {
+            SpellResearchGroup group = groups[i];
+            options.Add(new FloatMenuOption(group.Label, () => OpenSpellGroupMenu(pawn, group.Spells)));
+        }
+
+        Find.WindowStack.Add(new FloatMenu(options));
+    }
+
+    private static void OpenSpellGroupMenu(Pawn pawn, List<SpellDef> knownSpells)
+    {
+        List<FloatMenuOption> options = new();
         SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
         for (int i = 0; i < knownSpells.Count; i++)
         {
             SpellDef spellDef = knownSpells[i];
             if (runtime?.HasActiveMaintainedSpell(pawn, spellDef) == true)
             {
-                options.Add(new FloatMenuOption($"Cancel {spellDef.LabelCap}", () =>
-                {
-                    int cancelledCount = runtime.CancelMaintainedSpell(pawn, spellDef, false);
-                    MessageTypeDef messageType = cancelledCount > 0 ? MessageTypeDefOf.TaskCompletion : MessageTypeDefOf.RejectInput;
-                    Messages.Message(cancelledCount > 0 ? $"Cancelled {spellDef.LabelCap}." : $"{spellDef.LabelCap} is not active.", pawn, messageType, false);
-                }));
+                options.Add(new FloatMenuOption($"Release {spellDef.LabelCap}", () => ReleaseMaintainedSpell(pawn, spellDef, runtime)));
                 continue;
             }
 
@@ -111,6 +142,59 @@ public static class SpellGizmoUtility
         }
 
         Find.WindowStack.Add(new FloatMenu(options));
+    }
+
+    private static List<SpellResearchGroup> BuildResearchGroups(List<SpellDef> knownSpells)
+    {
+        Dictionary<string, SpellResearchGroup> groupsByKey = new();
+        for (int i = 0; i < knownSpells.Count; i++)
+        {
+            SpellDef spellDef = knownSpells[i];
+            string key = GetResearchGroupKey(spellDef, out string label);
+            if (!groupsByKey.TryGetValue(key, out SpellResearchGroup group))
+            {
+                group = new SpellResearchGroup(key, label);
+                groupsByKey[key] = group;
+            }
+
+            group.Spells.Add(spellDef);
+        }
+
+        List<SpellResearchGroup> groups = new(groupsByKey.Values);
+        groups.Sort((left, right) => string.Compare(left.Label, right.Label, System.StringComparison.OrdinalIgnoreCase));
+        for (int i = 0; i < groups.Count; i++)
+        {
+            groups[i].Spells.Sort((left, right) => string.Compare(left.LabelCap, right.LabelCap, System.StringComparison.OrdinalIgnoreCase));
+        }
+
+        return groups;
+    }
+
+    private static string GetResearchGroupKey(SpellDef spellDef, out string label)
+    {
+        List<ResearchProjectDef> researchPrerequisites = spellDef?.learning?.researchPrerequisites;
+        if (researchPrerequisites == null || researchPrerequisites.Count == 0)
+        {
+            label = "Ungated spells";
+            return "<ungated>";
+        }
+
+        ResearchProjectDef firstResearch = researchPrerequisites[0];
+        if (firstResearch == null)
+        {
+            label = "Ungated spells";
+            return "<ungated>";
+        }
+
+        label = firstResearch.LabelCap;
+        return firstResearch.defName;
+    }
+
+    private static void ReleaseMaintainedSpell(Pawn pawn, SpellDef spellDef, SpellRuntimeGameComponent runtime)
+    {
+        int cancelledCount = runtime?.CancelMaintainedSpell(pawn, spellDef, false) ?? 0;
+        MessageTypeDef messageType = cancelledCount > 0 ? MessageTypeDefOf.TaskCompletion : MessageTypeDefOf.RejectInput;
+        Messages.Message(cancelledCount > 0 ? $"Released {spellDef.LabelCap}." : $"{spellDef.LabelCap} is not active.", pawn, messageType, false);
     }
 
     private static void ApplyCooldownDisabledState(Command_Action command, Pawn pawn, SpellDef spellDef)
@@ -149,6 +233,12 @@ public static class SpellGizmoUtility
         if (SpellRuntimeGameComponent.Instance?.HasArcaneGift(pawn) != true)
         {
             Messages.Message($"{pawn.LabelShortCap} does not have the Arcane gift.", pawn, MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (spellDef?.targeting?.useCasterAsTarget == true)
+        {
+            TryCastSpell(pawn, spellDef, new LocalTargetInfo(pawn));
             return;
         }
 
@@ -264,7 +354,7 @@ public static class SpellGizmoUtility
             spellDef = spellDef,
             power = SpellPowerUtility.ComputePower(spellDef, caster)
         };
-        float range = SpellPowerUtility.ResolveScalableFloat(rangeContext, targeting.range, targeting.scalableRange);
+        float range = SpellEnhancementUtility.ResolveScalableRadius(rangeContext, targeting.range, targeting.scalableRange);
         if (caster != null && range > 0f && caster.Position.DistanceTo(targetCell) > range)
         {
             return false;
@@ -402,5 +492,18 @@ public static class SpellGizmoUtility
             && pawn.Spawned
             && pawn.Map != null
             && (pawn.IsColonistPlayerControlled || pawn.IsPrisonerOfColony || pawn.IsSlaveOfColony);
+    }
+
+    private sealed class SpellResearchGroup
+    {
+        public readonly string Key;
+        public readonly string Label;
+        public readonly List<SpellDef> Spells = new();
+
+        public SpellResearchGroup(string key, string label)
+        {
+            Key = key;
+            Label = label;
+        }
     }
 }

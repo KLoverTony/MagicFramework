@@ -7,7 +7,15 @@
     <li>1.6</li>
   </supportedVersions>
   <description>A modular, data-driven spell framework for RimWorld 1.6.</description>
+  <modDependencies>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <displayName>Harmony</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/2009463077</steamWorkshopUrl>
+    </li>
+  </modDependencies>
   <loadAfter>
     <li>lude.ludeCore</li>
+    <li>brrainz.harmony</li>
   </loadAfter>
 </ModMetaData>

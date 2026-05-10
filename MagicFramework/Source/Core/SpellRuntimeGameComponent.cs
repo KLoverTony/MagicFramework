@@ -239,6 +239,8 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         bool breakWhenTargetDowned,
         bool breakWhenTargetOutOfRange,
         bool breakWhenLineOfSightLost,
+        SpellMaintenanceDef maintenance,
+        int pulseIntervalTicks,
         IEnumerable<int> sourceActionPath,
         IEnumerable<SpellStatModifierDef> authoredModifiers)
     {
@@ -270,6 +272,9 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             breakWhenTargetDowned = breakWhenTargetDowned,
             breakWhenTargetOutOfRange = breakWhenTargetOutOfRange,
             breakWhenLineOfSightLost = breakWhenLineOfSightLost,
+            maintenance = maintenance,
+            pulseIntervalTicks = pulseIntervalTicks,
+            nextPulseTick = pulseIntervalTicks > 0 ? currentTick + pulseIntervalTicks : -1,
             sourceActionPath = sourceActionPath != null ? new List<int>(sourceActionPath) : new List<int>()
         };
 
@@ -309,7 +314,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         activeStatModifiers.Add(modifier);
         EnsureIndicatorApplied(modifier);
         string durationLabel = maxDurationTicks > 0 ? $"{maxDurationTicks} ticks" : "until broken";
-        Log.Message($"[MagicFramework] Applied {modifier.modifiers.Count} sustained stat modifier(s) to {target.LabelCap} for {durationLabel}.");
+        MagicLog.Message(MagicLogSubsystem.StatModifiers, $"[MagicFramework] Applied {modifier.modifiers.Count} sustained stat modifier(s) to {target.LabelCap} for {durationLabel}.");
     }
 
     public void ApplyForceField(
@@ -321,11 +326,15 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         float damageFactor,
         bool absorbFullyWithMana,
         float manaCostPerDamageAbsorbed,
+        float sustainedManaCost,
+        int sustainedManaCostIntervalTicks,
         float maxRange,
         bool breakWhenCasterDowned,
         bool breakWhenTargetDowned,
         bool breakWhenTargetOutOfRange,
         bool breakWhenLineOfSightLost,
+        SpellMaintenanceDef maintenance,
+        int pulseIntervalTicks,
         string impactFleckDef,
         string impactSoundDef,
         string ambientFleckDef,
@@ -355,11 +364,15 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             damageFactor = Mathf.Clamp01(damageFactor),
             absorbFullyWithMana = absorbFullyWithMana,
             manaCostPerDamageAbsorbed = manaCostPerDamageAbsorbed,
+            sustainedManaCost = Mathf.Max(0f, sustainedManaCost),
+            sustainedManaCostIntervalTicks = Mathf.Max(1, sustainedManaCostIntervalTicks),
             maxRange = maxRange,
             breakWhenCasterDowned = breakWhenCasterDowned,
             breakWhenTargetDowned = breakWhenTargetDowned,
             breakWhenTargetOutOfRange = breakWhenTargetOutOfRange,
             breakWhenLineOfSightLost = breakWhenLineOfSightLost,
+            maintenance = maintenance,
+            pulseIntervalTicks = pulseIntervalTicks,
             indicatorSeverity = statusCue?.severity ?? 0.01f,
             removeIndicatorOnExpire = statusCue?.removeOnExpire ?? true,
             statusCueLabel = ResolveStatusCueLabel(statusCue, spellDef),
@@ -374,6 +387,8 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             sustainedOverlayScale = sustainedOverlayScale,
             sustainedOverlayColorHex = sustainedOverlayColorHex,
             nextAmbientFleckTick = currentTick,
+            nextPulseTick = pulseIntervalTicks > 0 ? currentTick + pulseIntervalTicks : -1,
+            nextSustainedManaCostTick = currentTick + Mathf.Max(1, sustainedManaCostIntervalTicks),
             sourceActionPath = sourceActionPath != null ? new List<int>(sourceActionPath) : new List<int>()
         };
 
@@ -386,7 +401,8 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         activeForceFields.Add(forceField);
         EnsureForceFieldIndicatorApplied(forceField);
         SpawnForceFieldImpact(forceField, 1.6f);
-        Log.Message($"[MagicFramework] Applied force field to {target.LabelCap}.");
+        RunForceFieldLifecycleActions(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Create));
+        MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Applied force field to {target.LabelCap}.");
     }
 
     public void ApplyForceFieldDamageReduction(Thing thing, ref DamageInfo dinfo, ref bool absorbed)
@@ -419,9 +435,14 @@ public sealed class SpellRuntimeGameComponent : GameComponent
                     SpendMana(forceField.caster, manaCost);
                     absorbed = true;
                     SpawnForceFieldImpact(forceField, 1.2f);
-                    Log.Message($"[MagicFramework] Force field absorbed {incomingAmount:0.##} damage for {manaCost:0.##} mana.");
+                    MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Force field absorbed {incomingAmount:0.##} damage for {manaCost:0.##} mana.");
                     return;
                 }
+
+                activeForceFields.RemoveAt(i);
+                CleanupForceField(forceField);
+                RunForceFieldLifecycleActions(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Break, "insufficient mana to absorb damage"));
+                return;
             }
 
             float damageFactor = Mathf.Clamp01(forceField.damageFactor);
@@ -443,7 +464,10 @@ public sealed class SpellRuntimeGameComponent : GameComponent
                 float manaCost = preventedAmount * manaCostPerDamage;
                 if (!HasEnoughMana(forceField.caster, manaCost))
                 {
-                    continue;
+                    activeForceFields.RemoveAt(i);
+                    CleanupForceField(forceField);
+                    RunForceFieldLifecycleActions(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Break, "insufficient mana to reduce damage"));
+                    return;
                 }
 
                 SpendMana(forceField.caster, manaCost);
@@ -451,7 +475,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
 
             dinfo.SetAmount(reducedAmount);
             SpawnForceFieldImpact(forceField, 1f);
-            Log.Message($"[MagicFramework] Force field reduced incoming damage from {incomingAmount:0.##} to {reducedAmount:0.##}.");
+            MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Force field reduced incoming damage from {incomingAmount:0.##} to {reducedAmount:0.##}.");
             return;
         }
     }
@@ -609,7 +633,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             }
         }
 
-        List<ForceFieldBreakRecord> forceFieldBreakRecords = new();
+        List<ForceFieldLifecycleRecord> forceFieldLifecycleRecords = new();
         if (activeForceFields != null)
         {
             for (int i = activeForceFields.Count - 1; i >= 0; i--)
@@ -623,10 +647,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
                 activeForceFields.RemoveAt(i);
                 CleanupForceField(forceField);
                 removedCount++;
-                if (runBreakActions)
-                {
-                    forceFieldBreakRecords.Add(new ForceFieldBreakRecord(forceField, "manually cancelled"));
-                }
+                forceFieldLifecycleRecords.Add(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Remove, "manually cancelled"));
             }
         }
 
@@ -642,14 +663,14 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             RunSustainedBreakActions(statBreakRecords[i]);
         }
 
-        for (int i = 0; i < forceFieldBreakRecords.Count; i++)
+        for (int i = 0; i < forceFieldLifecycleRecords.Count; i++)
         {
-            RunForceFieldBreakActions(forceFieldBreakRecords[i]);
+            RunForceFieldLifecycleActions(forceFieldLifecycleRecords[i]);
         }
 
         if (removedCount > 0)
         {
-            Log.Message($"[MagicFramework] Cancelled {removedCount} maintained effect(s) for {spellDef.defName ?? "<unknown spell>"}.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Cancelled {removedCount} maintained effect(s) for {spellDef.defName ?? "<unknown spell>"}.");
         }
 
         return removedCount;
@@ -709,7 +730,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
 
         if (removedCount > 0)
         {
-            Log.Message($"[MagicFramework] Cleared {removedCount} active stat modifier effect(s) from {target.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.StatModifiers, $"[MagicFramework] Cleared {removedCount} active stat modifier effect(s) from {target.LabelCap}.");
         }
 
         for (int i = 0; i < breakRecords.Count; i++)
@@ -759,6 +780,9 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         int currentTick = Find.TickManager?.TicksGame ?? 0;
         CleanupExpiredStatModifiers(currentTick);
         CleanupExpiredForceFields(currentTick);
+        TickSustainedStatModifierPulses(currentTick);
+        TickForceFieldPulses(currentTick);
+        TickForceFieldSustainedManaCosts(currentTick);
         TickForceFieldAmbientVisuals(currentTick);
     }
 
@@ -902,6 +926,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
+        List<ForceFieldLifecycleRecord> removeRecords = new();
         for (int i = activeForceFields.Count - 1; i >= 0; i--)
         {
             ActiveSpellForceField forceField = activeForceFields[i];
@@ -915,7 +940,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             {
                 activeForceFields.RemoveAt(i);
                 CleanupForceField(forceField);
+                removeRecords.Add(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Remove, "replaced by recast"));
             }
+        }
+
+        for (int i = 0; i < removeRecords.Count; i++)
+        {
+            RunForceFieldLifecycleActions(removeRecords[i]);
         }
     }
 
@@ -926,19 +957,24 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
-        List<ForceFieldBreakRecord> breakRecords = new();
+        List<ForceFieldLifecycleRecord> lifecycleRecords = new();
         for (int i = activeForceFields.Count - 1; i >= 0; i--)
         {
             ActiveSpellForceField forceField = activeForceFields[i];
             bool remove = forceField == null
                 || forceField.target == null
-                || forceField.target.Destroyed
-                || forceField.IsExpired(currentTick);
+                || forceField.target.Destroyed;
+
+            if (!remove && forceField.IsExpired(currentTick))
+            {
+                remove = true;
+                lifecycleRecords.Add(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Expire, "duration expired"));
+            }
 
             if (!remove && TryGetForceFieldBreakReason(forceField, out string breakReason))
             {
                 remove = true;
-                breakRecords.Add(new ForceFieldBreakRecord(forceField, breakReason));
+                lifecycleRecords.Add(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Break, breakReason));
             }
 
             if (remove)
@@ -948,9 +984,9 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             }
         }
 
-        for (int i = 0; i < breakRecords.Count; i++)
+        for (int i = 0; i < lifecycleRecords.Count; i++)
         {
-            RunForceFieldBreakActions(breakRecords[i]);
+            RunForceFieldLifecycleActions(lifecycleRecords[i]);
         }
     }
 
@@ -960,6 +996,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (forceField == null)
         {
             return true;
+        }
+
+        if (forceField.maintenance?.profiles != null && forceField.maintenance.profiles.Count > 0)
+        {
+            Map map = forceField.target?.MapHeld ?? forceField.caster?.MapHeld;
+            IntVec3 anchorCell = forceField.target != null && !forceField.target.Destroyed ? forceField.target.Position : IntVec3.Invalid;
+            return SpellMaintenanceUtility.IsMaintenanceBroken(forceField.maintenance, forceField.caster, forceField.target, map, anchorCell, out reason);
         }
 
         if (forceField.caster == null || forceField.caster.Destroyed)
@@ -1024,6 +1067,53 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (existingIndicator != null)
         {
             pawn.health.RemoveHediff(existingIndicator);
+        }
+    }
+
+    private void TickForceFieldSustainedManaCosts(int currentTick)
+    {
+        if (activeForceFields == null || activeForceFields.Count == 0)
+        {
+            return;
+        }
+
+        List<ForceFieldLifecycleRecord> breakRecords = new();
+        for (int i = activeForceFields.Count - 1; i >= 0; i--)
+        {
+            ActiveSpellForceField forceField = activeForceFields[i];
+            if (forceField == null || forceField.sustainedManaCost <= 0f)
+            {
+                continue;
+            }
+
+            int intervalTicks = Mathf.Max(1, forceField.sustainedManaCostIntervalTicks);
+            if (forceField.nextSustainedManaCostTick <= 0)
+            {
+                forceField.nextSustainedManaCostTick = currentTick + intervalTicks;
+                continue;
+            }
+
+            if (currentTick < forceField.nextSustainedManaCostTick)
+            {
+                continue;
+            }
+
+            if (!HasEnoughMana(forceField.caster, forceField.sustainedManaCost))
+            {
+                activeForceFields.RemoveAt(i);
+                CleanupForceField(forceField);
+                breakRecords.Add(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Break, "insufficient mana for upkeep"));
+                continue;
+            }
+
+            SpendMana(forceField.caster, forceField.sustainedManaCost);
+            forceField.nextSustainedManaCostTick = currentTick + intervalTicks;
+            MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Sustained force field spent {forceField.sustainedManaCost:0.##} mana for upkeep.");
+        }
+
+        for (int i = 0; i < breakRecords.Count; i++)
+        {
+            RunForceFieldLifecycleActions(breakRecords[i]);
         }
     }
 
@@ -1265,6 +1355,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return false;
         }
 
+        if (modifier.maintenance?.profiles != null && modifier.maintenance.profiles.Count > 0)
+        {
+            Map map = modifier.target?.MapHeld ?? modifier.caster?.MapHeld;
+            IntVec3 anchorCell = modifier.target != null && !modifier.target.Destroyed ? modifier.target.Position : IntVec3.Invalid;
+            return SpellMaintenanceUtility.IsMaintenanceBroken(modifier.maintenance, modifier.caster, modifier.target, map, anchorCell, out reason);
+        }
+
         if (modifier.caster == null || modifier.caster.Destroyed)
         {
             reason = "caster invalid";
@@ -1464,6 +1561,90 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         return $"This pawn is affected by {spellLabel}.";
     }
 
+    private static void TickSustainedStatModifierPulses(int currentTick)
+    {
+        List<ActiveSpellStatModifier> modifiers = Instance?.activeStatModifiers;
+        if (modifiers == null || modifiers.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < modifiers.Count; i++)
+        {
+            ActiveSpellStatModifier modifier = modifiers[i];
+            if (modifier?.isSustained != true || modifier.pulseIntervalTicks <= 0)
+            {
+                continue;
+            }
+
+            if (modifier.nextPulseTick <= 0)
+            {
+                modifier.nextPulseTick = currentTick + Mathf.Max(1, modifier.pulseIntervalTicks);
+                continue;
+            }
+
+            if (currentTick < modifier.nextPulseTick)
+            {
+                continue;
+            }
+
+            modifier.nextPulseTick = currentTick + Mathf.Max(1, modifier.pulseIntervalTicks);
+            RunSustainedPulseActions(modifier);
+        }
+    }
+
+    private static void TickForceFieldPulses(int currentTick)
+    {
+        List<ActiveSpellForceField> forceFields = Instance?.activeForceFields;
+        if (forceFields == null || forceFields.Count == 0)
+        {
+            return;
+        }
+
+        for (int i = 0; i < forceFields.Count; i++)
+        {
+            ActiveSpellForceField forceField = forceFields[i];
+            if (forceField == null || forceField.pulseIntervalTicks <= 0)
+            {
+                continue;
+            }
+
+            if (forceField.nextPulseTick <= 0)
+            {
+                forceField.nextPulseTick = currentTick + Mathf.Max(1, forceField.pulseIntervalTicks);
+                continue;
+            }
+
+            if (currentTick < forceField.nextPulseTick)
+            {
+                continue;
+            }
+
+            forceField.nextPulseTick = currentTick + Mathf.Max(1, forceField.pulseIntervalTicks);
+            RunForceFieldLifecycleActions(new ForceFieldLifecycleRecord(forceField, ForceFieldLifecycleEvent.Pulse));
+        }
+    }
+
+    private static void RunSustainedPulseActions(ActiveSpellStatModifier modifier)
+    {
+        if (modifier?.spellDef == null
+            || modifier.sourceActionPath == null
+            || modifier.sourceActionPath.Count == 0
+            || SpellActionPathUtility.ResolveAction(modifier.spellDef, modifier.sourceActionPath) is not SustainedStatModifierActionDef sourceAction
+            || sourceAction.onPulseActions == null
+            || sourceAction.onPulseActions.Count == 0)
+        {
+            return;
+        }
+
+        if (!TryCreateMaintainedContext(modifier.caster, modifier.target, modifier.spellDef, out SpellContext context))
+        {
+            return;
+        }
+
+        new SpellActionRunner().RunActions(context, sourceAction.onPulseActions);
+    }
+
     private static void RunSustainedBreakActions(SustainedBreakRecord breakRecord)
     {
         ActiveSpellStatModifier modifier = breakRecord?.modifier;
@@ -1472,7 +1653,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
-        Log.Message($"[MagicFramework] Sustained effect {modifier.spellDef.defName ?? "<unknown spell>"} broke: {breakRecord.reason ?? "unknown reason"}.");
+        MagicLog.Message(MagicLogSubsystem.StatModifiers, $"[MagicFramework] Sustained effect {modifier.spellDef.defName ?? "<unknown spell>"} broke: {breakRecord.reason ?? "unknown reason"}.");
 
         if (modifier.sourceActionPath == null
             || modifier.sourceActionPath.Count == 0
@@ -1483,75 +1664,78 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
-        Map map = modifier.target?.MapHeld ?? modifier.caster?.MapHeld;
-        if (map == null)
+        if (!TryCreateMaintainedContext(modifier.caster, modifier.target, modifier.spellDef, out SpellContext context))
         {
             return;
-        }
-
-        LocalTargetInfo targetInfo = modifier.target != null && !modifier.target.Destroyed
-            ? new LocalTargetInfo(modifier.target)
-            : LocalTargetInfo.Invalid;
-        IntVec3 currentCell = targetInfo.IsValid
-            ? targetInfo.Cell
-            : modifier.caster?.Position ?? IntVec3.Invalid;
-
-        SpellContext context = new()
-        {
-            caster = modifier.caster,
-            map = map,
-            spellDef = modifier.spellDef,
-            initialTarget = targetInfo,
-            currentTarget = targetInfo,
-            currentCell = currentCell,
-            randomSeed = Find.TickManager?.TicksGame ?? 0
-        };
-        context.executionState.costsApplied = true;
-        if (targetInfo.IsValid)
-        {
-            context.currentTargets.Add(targetInfo);
         }
 
         new SpellActionRunner().RunActions(context, sourceAction.onBreakActions);
     }
 
-    private static void RunForceFieldBreakActions(ForceFieldBreakRecord breakRecord)
+    private static void RunForceFieldLifecycleActions(ForceFieldLifecycleRecord lifecycleRecord)
     {
-        ActiveSpellForceField forceField = breakRecord?.forceField;
+        ActiveSpellForceField forceField = lifecycleRecord?.forceField;
         if (forceField?.spellDef == null)
         {
             return;
         }
 
-        Log.Message($"[MagicFramework] Force field {forceField.spellDef.defName ?? "<unknown spell>"} broke: {breakRecord.reason ?? "unknown reason"}.");
+        if (lifecycleRecord.lifecycleEvent == ForceFieldLifecycleEvent.Break)
+        {
+            MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Force field {forceField.spellDef.defName ?? "<unknown spell>"} broke: {lifecycleRecord.reason ?? "unknown reason"}.");
+        }
 
         if (forceField.sourceActionPath == null
             || forceField.sourceActionPath.Count == 0
-            || SpellActionPathUtility.ResolveAction(forceField.spellDef, forceField.sourceActionPath) is not ApplyForceFieldActionDef sourceAction
-            || sourceAction.onBreakActions == null
-            || sourceAction.onBreakActions.Count == 0)
+            || SpellActionPathUtility.ResolveAction(forceField.spellDef, forceField.sourceActionPath) is not ApplyForceFieldActionDef sourceAction)
         {
             return;
         }
 
-        Map map = forceField.target?.MapHeld ?? forceField.caster?.MapHeld;
+        List<SpellActionDef> actions = lifecycleRecord.lifecycleEvent switch
+        {
+            ForceFieldLifecycleEvent.Create => sourceAction.onCreateActions,
+            ForceFieldLifecycleEvent.Pulse => sourceAction.onPulseActions,
+            ForceFieldLifecycleEvent.Expire => sourceAction.onExpireActions,
+            ForceFieldLifecycleEvent.Remove => sourceAction.onRemoveActions,
+            ForceFieldLifecycleEvent.Break => sourceAction.onBreakActions,
+            _ => null
+        };
+
+        if (actions == null || actions.Count == 0)
+        {
+            return;
+        }
+
+        if (!TryCreateMaintainedContext(forceField.caster, forceField.target, forceField.spellDef, out SpellContext context))
+        {
+            return;
+        }
+
+        new SpellActionRunner().RunActions(context, actions);
+    }
+
+    private static bool TryCreateMaintainedContext(Thing caster, Thing target, SpellDef spellDef, out SpellContext context)
+    {
+        context = null;
+        Map map = target?.MapHeld ?? caster?.MapHeld;
         if (map == null)
         {
-            return;
+            return false;
         }
 
-        LocalTargetInfo targetInfo = forceField.target != null && !forceField.target.Destroyed
-            ? new LocalTargetInfo(forceField.target)
+        LocalTargetInfo targetInfo = target != null && !target.Destroyed
+            ? new LocalTargetInfo(target)
             : LocalTargetInfo.Invalid;
         IntVec3 currentCell = targetInfo.IsValid
             ? targetInfo.Cell
-            : forceField.caster?.Position ?? IntVec3.Invalid;
+            : caster?.Position ?? IntVec3.Invalid;
 
-        SpellContext context = new()
+        context = new SpellContext
         {
-            caster = forceField.caster,
+            caster = caster,
             map = map,
-            spellDef = forceField.spellDef,
+            spellDef = spellDef,
             initialTarget = targetInfo,
             currentTarget = targetInfo,
             currentCell = currentCell,
@@ -1563,7 +1747,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             context.currentTargets.Add(targetInfo);
         }
 
-        new SpellActionRunner().RunActions(context, sourceAction.onBreakActions);
+        return true;
     }
 
     private sealed class SustainedBreakRecord
@@ -1578,16 +1762,27 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
     }
 
-    private sealed class ForceFieldBreakRecord
+    private sealed class ForceFieldLifecycleRecord
     {
         public readonly ActiveSpellForceField forceField;
+        public readonly ForceFieldLifecycleEvent lifecycleEvent;
         public readonly string reason;
 
-        public ForceFieldBreakRecord(ActiveSpellForceField forceField, string reason)
+        public ForceFieldLifecycleRecord(ActiveSpellForceField forceField, ForceFieldLifecycleEvent lifecycleEvent, string reason = null)
         {
             this.forceField = forceField;
+            this.lifecycleEvent = lifecycleEvent;
             this.reason = reason;
         }
+    }
+
+    private enum ForceFieldLifecycleEvent
+    {
+        Create,
+        Pulse,
+        Expire,
+        Remove,
+        Break
     }
 
     private sealed class CasterRuntimeState : IExposable

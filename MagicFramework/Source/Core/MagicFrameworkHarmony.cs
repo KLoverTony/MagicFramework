@@ -103,6 +103,7 @@ public static class MagicFrameworkPawnGizmoPatch
             yield return SpellDebugCasting.CreateFireboltGizmo(__instance);
             yield return SpellDebugCasting.CreateFireballGizmo(__instance);
             yield return SpellDebugCasting.CreateChainLightningGizmo(__instance);
+            yield return SpellDebugCasting.CreateArcSeekerGizmo(__instance);
             yield return SpellDebugCasting.CreateDelayedBlastRuneGizmo(__instance);
             yield return SpellDebugCasting.CreateRuneTrapGizmo(__instance);
             yield return SpellDebugCasting.CreateWallOfFireGizmo(__instance);
@@ -115,6 +116,7 @@ public static class MagicFrameworkPawnGizmoPatch
             yield return SpellDebugCasting.CreateForcePullGizmo(__instance);
             yield return SpellDebugCasting.CreateBlinkStepGizmo(__instance);
             yield return SpellDebugCasting.CreateHasteGizmo(__instance);
+            yield return SpellDebugCasting.CreateBlessingOfVigorGizmo(__instance);
             yield return SpellDebugCasting.CreateMightGizmo(__instance);
             yield return SpellDebugCasting.CreateForceFieldGizmo(__instance);
             yield return SpellDebugCasting.CreateManaShieldGizmo(__instance);
@@ -131,10 +133,9 @@ public static class MagicFrameworkPawnGizmoPatch
                 yield return new SpellManaGizmo(__instance);
             }
 
-            Gizmo knownSpellsGizmo = SpellGizmoUtility.CreateKnownSpellsGizmo(__instance);
-            if (knownSpellsGizmo != null)
+            foreach (Gizmo spellGizmo in SpellGizmoUtility.CreateKnownSpellGizmos(__instance))
             {
-                yield return knownSpellsGizmo;
+                yield return spellGizmo;
             }
         }
     }

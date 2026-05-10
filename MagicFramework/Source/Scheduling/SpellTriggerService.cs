@@ -1,4 +1,5 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using Verse;
 
@@ -44,6 +45,6 @@ public sealed class SpellTriggerService
             return;
         }
 
-        Log.Message($"[MagicFramework] Armed proximity trigger {trigger.DebugLabel} at {context.currentCell} with radius {actionDef.triggerRadius}.");
+        MagicLog.Message(MagicLogSubsystem.Triggers, $"[MagicFramework] Armed proximity trigger {trigger.DebugLabel} at {context.currentCell} with radius {actionDef.triggerRadius}.");
     }
 }

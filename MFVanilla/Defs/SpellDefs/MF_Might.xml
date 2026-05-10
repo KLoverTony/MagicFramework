@@ -98,6 +98,15 @@
             <breakWhenTargetDowned>false</breakWhenTargetDowned>
             <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
             <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+            <maintenance>
+              <profiles>
+                <li>CasterConscious</li>
+                <li>TargetValid</li>
+                <li>Tethered</li>
+                <li>LineOfSight</li>
+              </profiles>
+              <maxRange>12</maxRange>
+            </maintenance>
             <modifiers>
               <li>
                 <statDef>MeleeDamageFactor</statDef>

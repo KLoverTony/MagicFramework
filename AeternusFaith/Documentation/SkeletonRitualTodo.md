@@ -71,13 +71,13 @@ Current implemented slice:
 ## Ritual Rules
 
 - Keep no-ossuary-box requirement for this ritual.
-- Decide corpse eligibility:
-  - humanlike only,
-  - any corpse,
+- Implemented corpse eligibility: humanlike, non-undead corpses only.
+- Decide remaining corpse eligibility details:
   - fresh only,
   - dessicated allowed,
   - rotten allowed,
-  - colonist corpses allowed or forbidden.
+  - colonist corpses allowed or forbidden,
+  - whether ossuary rites should eventually accept beloved pets separately from skeleton-raising.
 - Decide whether corpse identity matters:
   - skeleton named after deceased,
   - blank minion,

@@ -135,6 +135,16 @@
                 </modifiers>
               </li>
             </actions>
+            <onEndActions>
+              <li Class="MagicFramework.Definitions.TerrainPatchActionDef">
+                <debugLabel>Freeze thaw cleanup</debugLabel>
+                <centerSource>CurrentCell</centerSource>
+                <radius>3.6</radius>
+                <meltIce>true</meltIce>
+                <removeSnow>true</removeSnow>
+                <skipRoofedCells>false</skipRoofedCells>
+              </li>
+            </onEndActions>
           </li>
         </actions>
       </li>

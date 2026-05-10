@@ -29,7 +29,7 @@ public sealed class LogMessageActionWorker : SpellActionWorker
     public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
     {
         LogMessageActionDef logDef = actionDef as LogMessageActionDef;
-        Log.Message($"[MagicFramework] {logDef?.message ?? "LogMessageActionWorker executed."}");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] {logDef?.message ?? "LogMessageActionWorker executed."}");
     }
 }
 
@@ -78,7 +78,7 @@ public sealed class EffectActionWorker : SpellActionWorker
             }
         }
 
-        Log.Message(
+        MagicLog.Message(MagicLogSubsystem.Visuals,
             $"[MagicFramework] Effect action requested. Effect={effectDef.effectDef ?? "<none>"}, Sound={effectDef.soundDef ?? "<none>"}, Location={locationSummary}, AttachToTarget={effectDef.attachToTarget}, Resolved={playedAnyEffect}.");
     }
 
@@ -209,7 +209,7 @@ public sealed class RepeatActionWorker : SpellActionWorker
             return;
         }
 
-        int intervalTicks = Mathf.Max(1, SpellPowerUtility.ResolveScalableInt(context, repeatDef.intervalTicks, repeatDef.scalableIntervalTicks));
+        int intervalTicks = Mathf.Max(1, SpellEnhancementUtility.ResolveScalableDurationTicks(context, repeatDef.intervalTicks, repeatDef.scalableIntervalTicks));
         int currentTick = Find.TickManager?.TicksGame ?? 0;
         int firstScheduledPulse = repeatDef.includeImmediate ? 1 : 0;
 
@@ -350,11 +350,14 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
 
         TerrainDef replacementTerrain = ResolveTerrain(terrainPatchActionDef.replacementTerrainDef);
         TerrainDef waterReplacementTerrain = ResolveTerrain(terrainPatchActionDef.waterReplacementTerrainDef);
+        TerrainDef iceReplacementTerrain = ResolveTerrain(terrainPatchActionDef.iceReplacementTerrainDef);
         HashSet<TerrainDef> replaceTerrainDefs = ResolveTerrainSet(terrainPatchActionDef.replaceTerrainDefs);
         int changedTerrain = 0;
         int snowedCells = 0;
+        int meltedCells = 0;
 
-        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, Mathf.Max(0.1f, terrainPatchActionDef.radius), true))
+        float radius = Mathf.Max(0.1f, SpellEnhancementUtility.ResolveRadius(context, terrainPatchActionDef.radius));
+        foreach (IntVec3 cell in GenRadial.RadialCellsAround(center, radius, true))
         {
             if (!cell.InBounds(context.map))
             {
@@ -385,12 +388,25 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
                 currentTerrain = waterReplacementTerrain;
                 isWater = false;
             }
+            else if (terrainPatchActionDef.meltIce && IsIceTerrain(currentTerrain) && iceReplacementTerrain != null)
+            {
+                context.map.terrainGrid.SetTerrain(cell, iceReplacementTerrain);
+                changedTerrain++;
+                currentTerrain = iceReplacementTerrain;
+                isWater = SpellTerrainUtility.IsWaterTerrain(currentTerrain);
+            }
             else if (replacementTerrain != null && replaceTerrainDefs.Contains(currentTerrain))
             {
                 context.map.terrainGrid.SetTerrain(cell, replacementTerrain);
                 changedTerrain++;
                 currentTerrain = replacementTerrain;
                 isWater = SpellTerrainUtility.IsWaterTerrain(currentTerrain);
+            }
+
+            if (terrainPatchActionDef.removeSnow && context.map.snowGrid.GetDepth(cell) > 0f)
+            {
+                context.map.snowGrid.SetDepth(cell, 0f);
+                meltedCells++;
             }
 
             if (terrainPatchActionDef.addSnow && !isWater)
@@ -404,7 +420,12 @@ public sealed class TerrainPatchActionWorker : SpellActionWorker
             }
         }
 
-        Log.Message($"[MagicFramework] Terrain patch at {center}: changedTerrain={changedTerrain}, snowedCells={snowedCells}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Terrain patch at {center}: changedTerrain={changedTerrain}, snowedCells={snowedCells}, meltedCells={meltedCells}.");
+    }
+
+    private static bool IsIceTerrain(TerrainDef terrainDef)
+    {
+        return terrainDef?.defName == "Ice";
     }
 
     private static TerrainDef ResolveTerrain(string terrainDefName)
@@ -452,7 +473,7 @@ public sealed class MoveStoneChunksActionWorker : SpellActionWorker
             return;
         }
 
-        float radius = Mathf.Max(0.1f, SpellPowerUtility.ResolveScalableFloat(context, moveDef.radius, moveDef.scalableRadius));
+        float radius = Mathf.Max(0.1f, SpellEnhancementUtility.ResolveScalableRadius(context, moveDef.radius, moveDef.scalableRadius));
         List<Thing> chunks = FindStoneChunks(context.map, center, radius);
         if (chunks.Count == 0)
         {
@@ -473,7 +494,7 @@ public sealed class MoveStoneChunksActionWorker : SpellActionWorker
 
         if (movedCount > 0)
         {
-            Log.Message($"[MagicFramework] Earth call moved {movedCount} stone chunk(s) toward {center}.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Earth call moved {movedCount} stone chunk(s) toward {center}.");
         }
     }
 
@@ -592,22 +613,28 @@ public sealed class KnockbackActionWorker : SpellActionWorker
             return;
         }
 
-        if (!TryResolveDestination(casterPawn, targetPawn, map, knockbackActionDef, out IntVec3 destination))
+        if (!TryResolveDestination(casterPawn, targetPawn, map, knockbackActionDef, out KnockbackResolution resolution))
         {
-            Log.Message($"[MagicFramework] KnockbackActionWorker could not find a valid destination for {targetPawn.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] KnockbackActionWorker could not find a valid destination for {targetPawn.LabelCap}.");
             return;
         }
 
         targetPawn.pather?.StopDead();
-        targetPawn.Position = destination;
+        targetPawn.Position = resolution.Destination;
         targetPawn.stances?.CancelBusyStanceHard();
         context.SetCurrentTarget(new LocalTargetInfo(targetPawn));
-        Log.Message($"[MagicFramework] Knocked back {targetPawn.LabelCap} to {destination}.");
+
+        if (resolution.Collided)
+        {
+            ApplyImpactDamage(context, targetPawn, knockbackActionDef, resolution.BlockedCell);
+        }
+
+        MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Knocked back {targetPawn.LabelCap} to {resolution.Destination}.");
     }
 
-    private static bool TryResolveDestination(Pawn casterPawn, Pawn targetPawn, Map map, KnockbackActionDef actionDef, out IntVec3 destination)
+    private static bool TryResolveDestination(Pawn casterPawn, Pawn targetPawn, Map map, KnockbackActionDef actionDef, out KnockbackResolution resolution)
     {
-        destination = IntVec3.Invalid;
+        resolution = new KnockbackResolution(IntVec3.Invalid, false, IntVec3.Invalid);
         IntVec3 start = targetPawn.Position;
         int dx = start.x - casterPawn.Position.x;
         int dz = start.z - casterPawn.Position.z;
@@ -622,33 +649,41 @@ public sealed class KnockbackActionWorker : SpellActionWorker
             dz == 0 ? 0 : dz > 0 ? 1 : -1);
 
         IntVec3 bestCell = start;
+        bool collided = false;
+        IntVec3 blockedCell = IntVec3.Invalid;
         for (int step = 1; step <= (actionDef.distance > 0 ? actionDef.distance : 1); step++)
         {
             IntVec3 candidate = start + (direction * step);
             if (!candidate.InBounds(map))
             {
+                collided = true;
+                blockedCell = candidate;
                 break;
             }
 
             if (!actionDef.allowHitCasterCell && candidate == casterPawn.Position)
             {
+                collided = true;
+                blockedCell = candidate;
                 break;
             }
 
             if (!IsValidDestination(candidate, map, actionDef))
             {
+                collided = true;
+                blockedCell = candidate;
                 break;
             }
 
             bestCell = candidate;
         }
 
-        if (bestCell == start)
+        if (bestCell == start && !collided)
         {
             return false;
         }
 
-        destination = bestCell;
+        resolution = new KnockbackResolution(bestCell, collided, blockedCell);
         return true;
     }
 
@@ -671,6 +706,51 @@ public sealed class KnockbackActionWorker : SpellActionWorker
 
         return true;
     }
+
+    private static void ApplyImpactDamage(SpellContext context, Pawn targetPawn, KnockbackActionDef actionDef, IntVec3 blockedCell)
+    {
+        if (actionDef.impactDamageAmount <= 0f || targetPawn == null || targetPawn.Destroyed)
+        {
+            return;
+        }
+
+        DamageDef damageDef = ResolveImpactDamageDef(actionDef.impactDamageDef);
+        DamageInfo damageInfo = new(
+            damageDef,
+            actionDef.impactDamageAmount,
+            actionDef.impactArmorPenetration,
+            instigator: context?.caster,
+            intendedTarget: targetPawn,
+            instigatorGuilty: actionDef.impactGuiltPolicy == GuiltPolicy.Damage);
+
+        targetPawn.TakeDamage(damageInfo);
+        MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Knockback impact applied {actionDef.impactDamageAmount} {damageDef.defName} damage to {targetPawn.LabelCap} after collision at {blockedCell}.");
+    }
+
+    private static DamageDef ResolveImpactDamageDef(string damageDefName)
+    {
+        if (string.IsNullOrWhiteSpace(damageDefName))
+        {
+            return DamageDefOf.Blunt;
+        }
+
+        DamageDef damageDef = DefDatabase<DamageDef>.GetNamedSilentFail(damageDefName);
+        return damageDef ?? DamageDefOf.Blunt;
+    }
+
+    private struct KnockbackResolution
+    {
+        public KnockbackResolution(IntVec3 destination, bool collided, IntVec3 blockedCell)
+        {
+            Destination = destination;
+            Collided = collided;
+            BlockedCell = blockedCell;
+        }
+
+        public IntVec3 Destination { get; }
+        public bool Collided { get; }
+        public IntVec3 BlockedCell { get; }
+    }
 }
 
 public sealed class PullActionWorker : SpellActionWorker
@@ -688,7 +768,7 @@ public sealed class PullActionWorker : SpellActionWorker
 
         if (!TryResolveDestination(casterPawn, targetPawn, map, pullActionDef, out IntVec3 destination))
         {
-            Log.Message($"[MagicFramework] PullActionWorker could not find a valid destination for {targetPawn.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] PullActionWorker could not find a valid destination for {targetPawn.LabelCap}.");
             return;
         }
 
@@ -696,7 +776,7 @@ public sealed class PullActionWorker : SpellActionWorker
         targetPawn.Position = destination;
         targetPawn.stances?.CancelBusyStanceHard();
         context.SetCurrentTarget(new LocalTargetInfo(targetPawn));
-        Log.Message($"[MagicFramework] Pulled {targetPawn.LabelCap} to {destination}.");
+        MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Pulled {targetPawn.LabelCap} to {destination}.");
     }
 
     private static bool TryResolveDestination(Pawn casterPawn, Pawn targetPawn, Map map, PullActionDef actionDef, out IntVec3 destination)
@@ -906,7 +986,7 @@ public sealed class TeleportActionWorker : SpellActionWorker
 
         if (!TryResolveDestination(context, subjectPawn, teleportActionDef, out IntVec3 destination))
         {
-            Log.Message($"[MagicFramework] TeleportActionWorker could not find a valid destination for {subjectPawn.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] TeleportActionWorker could not find a valid destination for {subjectPawn.LabelCap}.");
             return;
         }
 
@@ -916,7 +996,7 @@ public sealed class TeleportActionWorker : SpellActionWorker
             return;
         }
 
-        MovePawn(subjectPawn, destination, map);
+        MovePawn(subjectPawn, destination, map, teleportActionDef, context.caster as Pawn);
 
         if (teleportActionDef.subjectSource == TeleportSubjectSource.CurrentTarget)
         {
@@ -927,7 +1007,7 @@ public sealed class TeleportActionWorker : SpellActionWorker
             context.currentCell = destination;
         }
 
-        Log.Message($"[MagicFramework] Teleported {subjectPawn.LabelCap} to {destination}.");
+        MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Teleported {subjectPawn.LabelCap} to {destination}.");
     }
 
     private static Pawn ResolveSubjectPawn(SpellContext context, TeleportSubjectSource subjectSource)
@@ -994,13 +1074,13 @@ public sealed class TeleportActionWorker : SpellActionWorker
         if (!IsValidDestination(casterCell, map, subjectPawn, actionDef, ignoreOccupants: true)
             || !IsValidDestination(subjectCell, map, casterPawn, actionDef, ignoreOccupants: true))
         {
-            Log.Message("[MagicFramework] TeleportActionWorker could not swap because one of the destination cells was invalid.");
+            MagicLog.Message(MagicLogSubsystem.Displacement, "[MagicFramework] TeleportActionWorker could not swap because one of the destination cells was invalid.");
             return;
         }
 
-        SwapPawns(subjectPawn, casterPawn, subjectCell, casterCell, map);
+        SwapPawns(subjectPawn, casterPawn, subjectCell, casterCell, map, actionDef);
         context.SetCurrentTarget(new LocalTargetInfo(subjectPawn));
-        Log.Message($"[MagicFramework] Swapped {subjectPawn.LabelCap} with {casterPawn.LabelCap}.");
+        MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Swapped {subjectPawn.LabelCap} with {casterPawn.LabelCap}.");
     }
 
     private static IntVec3 ResolveAdjacentCell(IntVec3 center, Map map, Pawn subjectPawn, TeleportActionDef actionDef)
@@ -1105,8 +1185,9 @@ public sealed class TeleportActionWorker : SpellActionWorker
         return false;
     }
 
-    private static void MovePawn(Pawn pawn, IntVec3 destination, Map map)
+    private static void MovePawn(Pawn pawn, IntVec3 destination, Map map, TeleportActionDef actionDef, Pawn instigator)
     {
+        bool wasDrafted = IsDrafted(pawn);
         if (pawn.Spawned)
         {
             pawn.pather?.StopDead();
@@ -1121,12 +1202,16 @@ public sealed class TeleportActionWorker : SpellActionWorker
 
         pawn.pather?.StopDead();
         pawn.stances?.CancelBusyStanceHard();
+        RestoreDraftedState(pawn, wasDrafted, actionDef);
+        ApplyPostTeleportStun(pawn, actionDef, instigator);
     }
 
-    private static void SwapPawns(Pawn subjectPawn, Pawn casterPawn, IntVec3 subjectCell, IntVec3 casterCell, Map map)
+    private static void SwapPawns(Pawn subjectPawn, Pawn casterPawn, IntVec3 subjectCell, IntVec3 casterCell, Map map, TeleportActionDef actionDef)
     {
         bool subjectSpawned = subjectPawn.Spawned;
         bool casterSpawned = casterPawn.Spawned;
+        bool subjectWasDrafted = IsDrafted(subjectPawn);
+        bool casterWasDrafted = IsDrafted(casterPawn);
 
         subjectPawn.pather?.StopDead();
         subjectPawn.stances?.CancelBusyStanceHard();
@@ -1165,6 +1250,36 @@ public sealed class TeleportActionWorker : SpellActionWorker
         subjectPawn.stances?.CancelBusyStanceHard();
         casterPawn.pather?.StopDead();
         casterPawn.stances?.CancelBusyStanceHard();
+        RestoreDraftedState(subjectPawn, subjectWasDrafted, actionDef);
+        RestoreDraftedState(casterPawn, casterWasDrafted, actionDef);
+        ApplyPostTeleportStun(subjectPawn, actionDef, casterPawn);
+        ApplyPostTeleportStun(casterPawn, actionDef, casterPawn);
+    }
+
+    private static bool IsDrafted(Pawn pawn)
+    {
+        return pawn?.drafter?.Drafted == true;
+    }
+
+    private static void RestoreDraftedState(Pawn pawn, bool wasDrafted, TeleportActionDef actionDef)
+    {
+        if (!wasDrafted || actionDef?.preserveDrafted != true || pawn?.drafter == null)
+        {
+            return;
+        }
+
+        pawn.drafter.Drafted = true;
+    }
+
+    private static void ApplyPostTeleportStun(Pawn pawn, TeleportActionDef actionDef, Pawn instigator)
+    {
+        int stunTicks = actionDef?.postTeleportStunTicks ?? 0;
+        if (stunTicks <= 0 || pawn == null || pawn.Destroyed)
+        {
+            return;
+        }
+
+        pawn.stances?.stunner?.StunFor(stunTicks, instigator);
     }
 }
 
@@ -1197,7 +1312,7 @@ public sealed class ApplyStatModifierActionWorker : SpellActionWorker
             targetThing,
             context?.caster,
             context?.spellDef,
-            Mathf.Max(1, SpellPowerUtility.ResolveScalableInt(context, statModifierActionDef.durationTicks, statModifierActionDef.scalableDurationTicks)),
+            Mathf.Max(1, SpellEnhancementUtility.ResolveScalableDurationTicks(context, statModifierActionDef.durationTicks, statModifierActionDef.scalableDurationTicks)),
             statModifierActionDef.replaceExistingFromCasterSpell,
             SpellStatusCueUtility.ResolveStatusCue(context, statModifierActionDef.statusCue, statModifierActionDef.indicatorHediffDef, statModifierActionDef.indicatorSeverity, statModifierActionDef.removeIndicatorOnExpire),
             statModifierActionDef.modifiers);
@@ -1234,7 +1349,7 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             targetThing,
             context?.caster,
             context?.spellDef,
-            SpellActionScalingUtility.ResolveOptionalPositiveTicks(context, statModifierActionDef.maxDurationTicks, statModifierActionDef.scalableMaxDurationTicks),
+            SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, statModifierActionDef.maxDurationTicks, statModifierActionDef.scalableMaxDurationTicks),
             statModifierActionDef.replaceExistingFromCasterSpell,
             SpellStatusCueUtility.ResolveStatusCue(context, statModifierActionDef.statusCue, statModifierActionDef.indicatorHediffDef, statModifierActionDef.indicatorSeverity, statModifierActionDef.removeIndicatorOnExpire),
             statModifierActionDef.maxRange,
@@ -1242,6 +1357,8 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             statModifierActionDef.breakWhenTargetDowned,
             statModifierActionDef.breakWhenTargetOutOfRange,
             statModifierActionDef.breakWhenLineOfSightLost,
+            statModifierActionDef.maintenance,
+            statModifierActionDef.pulseIntervalTicks,
             sourceActionPath,
             statModifierActionDef.modifiers);
     }
@@ -1271,16 +1388,20 @@ public sealed class ApplyForceFieldActionWorker : SpellActionWorker
             targetThing,
             context?.caster,
             context?.spellDef,
-            SpellActionScalingUtility.ResolveOptionalPositiveTicks(context, forceFieldActionDef.maxDurationTicks, forceFieldActionDef.scalableMaxDurationTicks),
+            SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, forceFieldActionDef.maxDurationTicks, forceFieldActionDef.scalableMaxDurationTicks),
             SpellStatusCueUtility.ResolveStatusCue(context, forceFieldActionDef.statusCue, null, 0.01f, true),
             forceFieldActionDef.damageFactor,
             forceFieldActionDef.absorbFullyWithMana,
             forceFieldActionDef.manaCostPerDamageAbsorbed,
+            SpellEnhancementUtility.ResolveManaCost(context, forceFieldActionDef.sustainedManaCost),
+            forceFieldActionDef.sustainedManaCostIntervalTicks,
             forceFieldActionDef.maxRange,
             forceFieldActionDef.breakWhenCasterDowned,
             forceFieldActionDef.breakWhenTargetDowned,
             forceFieldActionDef.breakWhenTargetOutOfRange,
             forceFieldActionDef.breakWhenLineOfSightLost,
+            forceFieldActionDef.maintenance,
+            forceFieldActionDef.pulseIntervalTicks,
             forceFieldActionDef.impactFleckDef,
             forceFieldActionDef.impactSoundDef,
             forceFieldActionDef.ambientFleckDef,
@@ -1373,7 +1494,7 @@ public sealed class StunActionWorker : SpellActionWorker
             }
         }
 
-        Log.Message($"[MagicFramework] Stunned {targetPawn.LabelCap} for {stunActionDef.stunTicks} ticks.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Stunned {targetPawn.LabelCap} for {stunActionDef.stunTicks} ticks.");
     }
 }
 
@@ -1389,7 +1510,7 @@ public sealed class HealActionWorker : SpellActionWorker
             return;
         }
 
-        float amount = Mathf.Max(0f, SpellPowerUtility.ResolveScalableFloat(context, healActionDef.amount, healActionDef.scalableAmount));
+        float amount = Mathf.Max(0f, SpellEnhancementUtility.ResolveScalableHealingAmount(context, healActionDef.amount, healActionDef.scalableAmount));
         if (amount <= 0f)
         {
             return;
@@ -1401,7 +1522,7 @@ public sealed class HealActionWorker : SpellActionWorker
             targetPawn.health.Notify_HediffChanged(null);
         }
 
-        Log.Message($"[MagicFramework] Healed {healed:0.##}/{amount:0.##} injury severity on {targetPawn.LabelCap}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Healed {healed:0.##}/{amount:0.##} injury severity on {targetPawn.LabelCap}.");
     }
 
     private static float HealInjuriesEvenly(Pawn pawn, float amount)
@@ -1503,6 +1624,17 @@ internal static class SpellActionScalingUtility
 
         return resolvedTicks;
     }
+
+    public static int ResolveOptionalPositiveDurationTicks(SpellContext context, int fallbackTicks, ScalableFloatDef scalableTicks)
+    {
+        int resolvedTicks = SpellEnhancementUtility.ResolveScalableDurationTicks(context, fallbackTicks, scalableTicks);
+        if (resolvedTicks <= 0)
+        {
+            return -1;
+        }
+
+        return resolvedTicks;
+    }
 }
 
 public sealed class DamageActionWorker : SpellActionWorker
@@ -1529,7 +1661,7 @@ public sealed class DamageActionWorker : SpellActionWorker
             return;
         }
 
-        float damageAmount = SpellPowerUtility.ResolveScalableFloat(context, damageActionDef.amount, damageActionDef.scalableAmount);
+        float damageAmount = SpellEnhancementUtility.ResolveScalableDamageAmount(context, damageActionDef.amount, damageActionDef.scalableAmount);
         float armorPenetration = SpellPowerUtility.ResolveScalableFloat(context, damageActionDef.armorPenetration, damageActionDef.scalableArmorPenetration);
 
         BodyPartRecord hitPart = null;
@@ -1563,7 +1695,7 @@ public sealed class DamageActionWorker : SpellActionWorker
             TryAddCombatLogEntry(context, damageActionDef, pawnTarget, damageAmount, resolvedDamageDef);
         }
 
-        Log.Message(
+        MagicLog.Message(MagicLogSubsystem.Execution,
             $"[MagicFramework] Applied {damageAmount} {resolvedDamageDef.defName} damage to {targetThing.LabelCap} with {armorPenetration} armor penetration.");
     }
 
@@ -1646,7 +1778,7 @@ public sealed class DamageActionWorker : SpellActionWorker
         }
 
         targetThing.TakeDamage(extraDamageInfo);
-        Log.Message(
+        MagicLog.Message(MagicLogSubsystem.Execution,
             $"[MagicFramework] Applied extra {extraEntry.amount} {extraDamageDef.defName} damage to {targetThing.LabelCap}.");
     }
 
@@ -1665,7 +1797,7 @@ public sealed class DamageActionWorker : SpellActionWorker
             Find.BattleLog.Add(new BattleLogEntry_DamageTaken(targetPawn, rulePack, casterPawn));
         }
 
-        Log.Message($"[MagicFramework] CombatLog {rulePack.defName}: {casterPawn?.LabelCap ?? "Unknown caster"} damaged {targetPawn.LabelCap} for {damageAmount} {damageDef.defName}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] CombatLog {rulePack.defName}: {casterPawn?.LabelCap ?? "Unknown caster"} damaged {targetPawn.LabelCap} for {damageAmount} {damageDef.defName}.");
     }
 }
 
@@ -1699,7 +1831,7 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
             Hediff existingHediff = FindHediff(targetPawn, resolvedHediffDef, hediffActionDef.bodyPartDef);
             if (existingHediff != null)
             {
-                Log.Message($"[MagicFramework] Skipped hediff {resolvedHediffDef.defName} on {targetPawn.LabelCap} because target already has it.");
+                MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Skipped hediff {resolvedHediffDef.defName} on {targetPawn.LabelCap} because target already has it.");
                 return;
             }
         }
@@ -1765,14 +1897,14 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
 
         if (hediffActionDef.removeAfterDuration && hediff != null && context?.map != null)
         {
-            int duration = SpellPowerUtility.ResolveScalableInt(context, hediffActionDef.durationTicks, hediffActionDef.scalableDurationTicks);
+            int duration = SpellEnhancementUtility.ResolveScalableDurationTicks(context, hediffActionDef.durationTicks, hediffActionDef.scalableDurationTicks);
             if (duration > 0)
             {
                 ScheduleHediffRemoval(context, targetPawn, resolvedHediffDef, targetBodyPart, duration);
             }
         }
 
-        Log.Message($"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {resolvedSeverity} to {targetPawn.LabelCap} (mode: {hediffActionDef.addMode}, bodyPart: {hediffActionDef.bodyPartDef ?? "none"}).");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Applied hediff {resolvedHediffDef.defName} with severity {resolvedSeverity} to {targetPawn.LabelCap} (mode: {hediffActionDef.addMode}, bodyPart: {hediffActionDef.bodyPartDef ?? "none"}).");
     }
 
     private static HediffDef ResolveHediffDef(ApplyHediffActionDef hediffActionDef)
@@ -1893,7 +2025,7 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
                 pawn,
                 hediffDef,
                 bodyPart?.def?.defName));
-            Log.Message($"[MagicFramework] Scheduled hediff {hediffDef.defName} removal in {durationTicks} ticks for {pawn.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Scheduled hediff {hediffDef.defName} removal in {durationTicks} ticks for {pawn.LabelCap}.");
         }
     }
 }
@@ -1950,7 +2082,7 @@ public sealed class RemoveHediffActionWorker : SpellActionWorker
         if (hediff != null)
         {
             targetPawn.health.RemoveHediff(hediff);
-            Log.Message($"[MagicFramework] Removed hediff {hediffDef.defName} from {targetPawn.LabelCap}.");
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Removed hediff {hediffDef.defName} from {targetPawn.LabelCap}.");
         }
     }
 }
@@ -1973,7 +2105,7 @@ public sealed class DestroyThingActionWorker : SpellActionWorker
         }
 
         targetThing.Destroy(DestroyMode.Vanish);
-        Log.Message($"[MagicFramework] Destroyed {targetThing.LabelCap} via disintegration-style effect.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Destroyed {targetThing.LabelCap} via disintegration-style effect.");
     }
 }
 
@@ -1993,8 +2125,8 @@ public sealed class ExplosionActionWorker : SpellActionWorker
             return;
         }
 
-        float radius = SpellPowerUtility.ResolveScalableFloat(context, explosionActionDef.radius, explosionActionDef.scalableRadius);
-        float damageAmount = SpellPowerUtility.ResolveScalableFloat(context, explosionActionDef.damageAmount, explosionActionDef.scalableDamageAmount);
+        float radius = SpellEnhancementUtility.ResolveScalableRadius(context, explosionActionDef.radius, explosionActionDef.scalableRadius);
+        float damageAmount = SpellEnhancementUtility.ResolveScalableDamageAmount(context, explosionActionDef.damageAmount, explosionActionDef.scalableDamageAmount);
 
         // Resolve damage def
         DamageDef damageDef = ResolveDamageDef(explosionActionDef.damageDef);
@@ -2059,7 +2191,7 @@ public sealed class ExplosionActionWorker : SpellActionWorker
                         IntVec3 spawnCell = RandomCellInRadius(context.currentCell, context.map, radius);
                         thing.stackCount = Mathf.Max(1, spawnedThing.stackCount);
                         GenSpawn.Spawn(thing, spawnCell, context.map);
-                        Log.Message($"[MagicFramework] Spawned {thing.stackCount}x {spawnedThing.thingDef} at {spawnCell}.");
+                        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Spawned {thing.stackCount}x {spawnedThing.thingDef} at {spawnCell}.");
                     }
                 }
                 else
@@ -2084,7 +2216,7 @@ public sealed class ExplosionActionWorker : SpellActionWorker
                 {
                     IntVec3 filthCell = RandomCellInRadius(context.currentCell, context.map, radius);
                     GenSpawn.Spawn(filthDef, filthCell, context.map);
-                    Log.Message($"[MagicFramework] Spawned filth {spawnedFilth.filthDef} at {filthCell}.");
+                    MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Spawned filth {spawnedFilth.filthDef} at {filthCell}.");
                 }
                 else
                 {
@@ -2093,7 +2225,7 @@ public sealed class ExplosionActionWorker : SpellActionWorker
             }
         }
 
-        Log.Message(
+        MagicLog.Message(MagicLogSubsystem.Execution,
             $"[MagicFramework] Triggered explosion at {context.currentCell} with radius {radius}, damage {damageAmount}, damageDef {damageDef.defName}, fireChance {explosionActionDef.fireChance}, damageFalloff {explosionActionDef.damageFalloff}.");
     }
 
@@ -2192,7 +2324,7 @@ public sealed class LaunchProjectileActionWorker : SpellActionWorker
             projectileActionDef.hitFlags,
             projectileActionDef.preventFriendlyFire);
 
-        Log.Message(
+        MagicLog.Message(MagicLogSubsystem.Projectiles,
             $"[MagicFramework] Launched projectile {projectileLabel} from {launcher.LabelCap} to {DescribeTarget(target)}.");
 
         if (projectileActionDef.onImpactActions == null || projectileActionDef.onImpactActions.Count == 0)
@@ -2284,7 +2416,7 @@ public sealed class ApplyToTargetsActionWorker : SpellActionWorker
         ApplyToTargetsActionDef applyDef = actionDef as ApplyToTargetsActionDef;
         if (applyDef?.targetQuery == null)
         {
-            Log.Message("[MagicFramework] ApplyToTargetsActionWorker skipped because no target query was provided.");
+            MagicLog.Message(MagicLogSubsystem.Targeting, "[MagicFramework] ApplyToTargetsActionWorker skipped because no target query was provided.");
             return;
         }
 
@@ -2304,7 +2436,7 @@ public sealed class ApplyChainTargetsActionWorker : SpellActionWorker
         ApplyChainTargetsActionDef chainDef = actionDef as ApplyChainTargetsActionDef;
         if (chainDef?.chainQuery == null)
         {
-            Log.Message("[MagicFramework] ApplyChainTargetsActionWorker skipped because no chain query was provided.");
+            MagicLog.Message(MagicLogSubsystem.Targeting, "[MagicFramework] ApplyChainTargetsActionWorker skipped because no chain query was provided.");
             return;
         }
 

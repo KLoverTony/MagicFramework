@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_ArcSeeker</defName>
+    <label>scribe scroll (arc seeker)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast arc seeker.</description>
+    <jobString>Scribing scroll (arc seeker).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_ArcSeeker>1</MFV_SpellScroll_MF_ArcSeeker>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_BlessingOfVigor</defName>
+    <label>scribe scroll (blessing of vigor)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast blessing of vigor.</description>
+    <jobString>Scribing scroll (blessing of vigor).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_BlessingOfVigor>1</MFV_SpellScroll_MF_BlessingOfVigor>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_BlinkStep</defName>
     <label>scribe scroll (blink step)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast blink step.</description>

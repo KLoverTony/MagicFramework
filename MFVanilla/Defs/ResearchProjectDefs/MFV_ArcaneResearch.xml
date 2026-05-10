@@ -95,6 +95,7 @@
     <tab>MFV_Arcane</tab>
     <prerequisites>
       <li>MFV_RunicInscription</li>
+      <li>MFV_Lapidary</li>
     </prerequisites>
     <researchViewX>4</researchViewX>
     <researchViewY>1</researchViewY>
@@ -115,10 +116,10 @@
   </ResearchProjectDef>
 
   <ResearchProjectDef>
-    <defName>MFV_Vitalism</defName>
-    <label>vitalism</label>
-    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</description>
-    <baseCost>1100</baseCost>
+    <defName>MFV_Summoning</defName>
+    <label>summoning</label>
+    <description>Study the art of calling forth and commanding otherworldly entities.</description>
+    <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <prerequisites>
@@ -157,10 +158,10 @@
   </ResearchProjectDef>
 
   <ResearchProjectDef>
-    <defName>MFV_Summoning</defName>
-    <label>summoning</label>
-    <description>Study the art of calling forth and commanding otherworldly entities.</description>
-    <baseCost>1200</baseCost>
+    <defName>MFV_Vitalism</defName>
+    <label>vitalism</label>
+    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</description>
+    <baseCost>1100</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <prerequisites>
@@ -198,8 +199,8 @@
       <li>MFV_Necromancy</li>
     </hiddenPrerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>4</researchViewX>
-    <researchViewY>1</researchViewY>
+    <researchViewX>2</researchViewX>
+    <researchViewY>5</researchViewY>
   </ResearchProjectDef>
 
   <ResearchProjectDef>
@@ -259,6 +260,20 @@
   </ResearchProjectDef>
 
   <ResearchProjectDef>
+    <defName>MFV_Lapidary</defName>
+    <label>lapidary</label>
+    <description>Study the careful cutting and polishing of gemstones for trade, decoration, and magical craftsmanship.</description>
+    <baseCost>500</baseCost>
+    <techLevel>Neolithic</techLevel>
+    <tab>MFV_Arcane</tab>
+    <prerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>1.5</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
     <defName>MFV_Necromancy</defName>
     <label>necromancy</label>
     <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</description>
@@ -287,7 +302,7 @@
       <li>MFV_Summoning</li>
     </prerequisites>
     <researchViewX>6</researchViewX>
-    <researchViewY>5.5</researchViewY>
+    <researchViewY>4</researchViewY>
   </ResearchProjectDef>
 
   <ResearchProjectDef>
@@ -319,8 +334,8 @@
       <li>MFV_RunicInscription</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>10</researchViewX>
-    <researchViewY>1.5</researchViewY>
+    <researchViewX>9</researchViewX>
+    <researchViewY>1</researchViewY>
   </ResearchProjectDef>
 
   <ResearchProjectDef>
@@ -335,7 +350,7 @@
       <li>MFV_Necromancy</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>10</researchViewX>
+    <researchViewX>9</researchViewX>
     <researchViewY>3.5</researchViewY>
   </ResearchProjectDef>
 
@@ -351,8 +366,8 @@
       <li>MFV_LeylineSensitivity</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>10</researchViewX>
-    <researchViewY>2</researchViewY>
+    <researchViewX>9</researchViewX>
+    <researchViewY>1.5</researchViewY>
   </ResearchProjectDef>
 
   <ResearchProjectDef>
@@ -367,7 +382,7 @@
       <li>MFV_Soulcraft</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>14</researchViewX>
+    <researchViewX>11</researchViewX>
     <researchViewY>4.5</researchViewY>
   </ResearchProjectDef>
 
@@ -383,7 +398,7 @@
       <li>MFV_PlanarMagic</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>14</researchViewX>
+    <researchViewX>11</researchViewX>
     <researchViewY>2.5</researchViewY>
   </ResearchProjectDef>
 
@@ -400,7 +415,7 @@
       <li>MFV_GrandSorcery</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
-    <researchViewX>16</researchViewX>
+    <researchViewX>12</researchViewX>
     <researchViewY>5.5</researchViewY>
   </ResearchProjectDef>
 
