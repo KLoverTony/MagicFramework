@@ -37,8 +37,9 @@ public sealed class TargetsInRadiusQueryWorker : TargetQueryWorker
         }
 
         float radius = SpellEnhancementUtility.ResolveRadius(context, radiusDef.radius);
-        return TargetQueryUtility.CollectTargets(
+        return TargetQueryUtility.CollectOrderedTargets(
             context,
+            radiusDef,
             radiusDef.includePawns,
             radiusDef.includeBuildings,
             radiusDef.includeItems,
@@ -58,35 +59,15 @@ public sealed class NearestValidTargetQueryWorker : TargetQueryWorker
             return new List<LocalTargetInfo>();
         }
 
-        Thing nearestThing = null;
-        float nearestDistance = float.MaxValue;
-        foreach (Thing thing in context.map.listerThings?.AllThings ?? new List<Thing>())
-        {
-            if (!TargetQueryUtility.MatchesThingFilter(
-                    context,
-                    thing,
-                    nearestDef.includePawns,
-                    nearestDef.includeBuildings,
-                    nearestDef.includeItems,
-                    nearestDef.includeCaster,
-                    nearestDef.pawnAffinity))
-            {
-                continue;
-            }
-
-            float distance = thing.Position.DistanceTo(context.currentCell);
-            if (distance > nearestDef.maxRadius || distance >= nearestDistance)
-            {
-                continue;
-            }
-
-            nearestThing = thing;
-            nearestDistance = distance;
-        }
-
-        return nearestThing != null
-            ? new List<LocalTargetInfo> { new(nearestThing) }
-            : new List<LocalTargetInfo>();
+        return TargetQueryUtility.CollectOrderedTargets(
+            context,
+            nearestDef,
+            nearestDef.includePawns,
+            nearestDef.includeBuildings,
+            nearestDef.includeItems,
+            nearestDef.includeCaster,
+            nearestDef.pawnAffinity,
+            thing => thing.Position.DistanceTo(context.currentCell) <= nearestDef.maxRadius);
     }
 }
 
@@ -139,8 +120,9 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
         }
 
         float radius = SpellEnhancementUtility.ResolveRadius(context, shapeDef.radius);
-        return TargetQueryUtility.CollectTargets(
+        return TargetQueryUtility.CollectOrderedTargets(
             context,
+            shapeDef,
             shapeDef.includePawns,
             shapeDef.includeBuildings,
             shapeDef.includeItems,
@@ -168,8 +150,9 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
             lineEnd = new IntVec3(Mathf.RoundToInt(endVector.x - 0.5f), 0, Mathf.RoundToInt(endVector.y - 0.5f));
         }
 
-        return TargetQueryUtility.CollectTargets(
+        return TargetQueryUtility.CollectOrderedTargets(
             context,
+            shapeDef,
             shapeDef.includePawns,
             shapeDef.includeBuildings,
             shapeDef.includeItems,
@@ -198,8 +181,9 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
         Vector2 centerVector = TargetQueryUtility.ToVector2(center);
         float halfLength = Mathf.Max(0.5f, shapeDef.wallLength / 2f);
 
-        return TargetQueryUtility.CollectTargets(
+        return TargetQueryUtility.CollectOrderedTargets(
             context,
+            shapeDef,
             shapeDef.includePawns,
             shapeDef.includeBuildings,
             shapeDef.includeItems,

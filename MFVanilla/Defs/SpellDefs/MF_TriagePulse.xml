@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_TriagePulse</defName>
+    <label>triage pulse</label>
+    <description>Sends a quick pulse of restorative magic to the most wounded nearby ally.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_TriagePulse</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>30</castTimeTicks>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Life</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Healing</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Touch</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Vitalism</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Triage Pulse</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Triage Pulse cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Triage Pulse</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Triage Pulse cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Triage Pulse sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Triage Pulse cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Triage Pulse lowest-health ally query</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+              <debugLabel>Lowest-health nearby ally</debugLabel>
+              <radius>8</radius>
+              <centerSource>Caster</centerSource>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>true</includeCaster>
+              <pawnAffinity>Ally</pawnAffinity>
+              <ordering>LowestHealth</ordering>
+              <orderingCenterSource>Caster</orderingCenterSource>
+              <maxTargets>1</maxTargets>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Triage Pulse target effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.HealActionDef">
+                <debugLabel>Triage Pulse healing</debugLabel>
+                <amount>12</amount>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -17,14 +17,14 @@ Highest priority because later content depends on persistent spell state being p
 | --- | --- | --- | --- |
 | MF-008 Logging toggles | P1 | M | Complete first pass; routine diagnostics now have subsystem toggles. |
 | MF-005 Lifecycle hooks | P1 | M/L | Persistent spell state needs consistent semantics before more systems use it. |
-| MF-004 Sustained/channeling cleanup | P1 | L | Builds on lifecycle hooks and affects shields, auras, future beams, and toggles. |
+| MF-004 Sustained/channeling cleanup | P1 | L | Complete first pass; maintained UX, interruption profiles, pulses, and area-zone maintained detection are in place. |
 | MF-015 Persistent effect self/ally policy | P2 | S | Complete first pass; policy documented and first-party examples audited. |
 
 Implementation order:
 1. Add framework settings/logging foundation for subsystem log toggles. Complete.
 2. Define lifecycle hook semantics in documentation before code: create, pulse, trigger, expire, remove, and break. Complete.
 3. Backfill lifecycle hooks into one or two systems first, likely area zones and force fields. Area-zone and force-field first passes complete.
-4. Finish sustained spell UX: player-facing release/toggle, shared maintenance profile interruption rules, and authored maintained pulses are complete for the first sustained spell systems.
+4. Finish sustained spell UX: player-facing release/toggle, shared maintenance profile interruption rules, authored maintained pulses, and maintained-only area-zone release detection are complete for the first sustained spell systems.
 5. Document self/ally defaults and identify XML cleanup opportunities.
 
 Smoke tests:

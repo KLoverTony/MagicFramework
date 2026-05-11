@@ -133,7 +133,7 @@
     <label>parchmentery bench</label>
     <description>A prepared workbench for shaving, pressing, and drying wood fibers into sheets of parchment.</description>
     <thingClass>Building_WorkTable</thingClass>
-    <size>(3,3)</size>
+    <size>(3,2)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Woody</li>
@@ -146,7 +146,7 @@
       <texPath>Things/Building/Production/ParchmenteryBench</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <shaderType>CutoutComplex</shaderType>
-      <drawSize>(3,3)</drawSize>
+      <drawSize>(3,2)</drawSize>
       <damageData>
         <cornerTL>Damage/Corner</cornerTL>
         <cornerTR>Damage/Corner</cornerTR>
@@ -341,7 +341,7 @@
     <label>lapidary bench</label>
     <description>A compact workbench with clamps, abrasives, and polishing tools for breaking and cutting rough gemstones.</description>
     <thingClass>Building_WorkTable</thingClass>
-    <size>(2,2)</size>
+    <size>(3,2)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Stony</li>
@@ -352,10 +352,10 @@
       <ComponentIndustrial>1</ComponentIndustrial>
     </costList>
     <graphicData>
-      <texPath>Things/Building/Production/AlchemyTable</texPath>
+      <texPath>Things/Building/Production/LapidaryBench</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <shaderType>CutoutComplex</shaderType>
-      <drawSize>(2,2)</drawSize>
+      <drawSize>(3,2)</drawSize>
       <damageData>
         <cornerTL>Damage/Corner</cornerTL>
         <cornerTR>Damage/Corner</cornerTR>

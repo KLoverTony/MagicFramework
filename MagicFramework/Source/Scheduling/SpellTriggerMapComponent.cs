@@ -40,12 +40,14 @@ public sealed class SpellTriggerMapComponent : MapComponent
                 if (existingTrigger?.Caster == trigger.Caster
                     && existingTrigger.SpellDef == trigger.SpellDef)
                 {
+                    RunTriggerLifecycleActions(existingTrigger, TriggerLifecycleEvent.Remove);
                     armedTriggers.RemoveAt(i);
                 }
             }
         }
 
         armedTriggers.Add(trigger);
+        RunTriggerLifecycleActions(trigger, TriggerLifecycleEvent.Create);
         return true;
     }
 
@@ -62,12 +64,14 @@ public sealed class SpellTriggerMapComponent : MapComponent
             ArmedSpellTrigger trigger = armedTriggers[i];
             if (trigger == null || trigger.ArmedCell == IntVec3.Invalid)
             {
+                RunTriggerLifecycleActions(trigger, TriggerLifecycleEvent.Break);
                 armedTriggers.RemoveAt(i);
                 continue;
             }
 
             if (trigger.Caster != null && trigger.Caster.Destroyed)
             {
+                RunTriggerLifecycleActions(trigger, TriggerLifecycleEvent.Break);
                 persistentEffectService.RemovePersistentEffectsForCasterSpell(map, trigger.Caster, trigger.SpellDef);
                 armedTriggers.RemoveAt(i);
                 continue;
@@ -188,6 +192,43 @@ public sealed class SpellTriggerMapComponent : MapComponent
         }
 
         MagicLog.Message(MagicLogSubsystem.Triggers, $"[MagicFramework] Triggered armed spell {trigger.DebugLabel} at {trigger.ArmedCell} from {trigger.SpellDef?.defName ?? "<null>"}.");
+        RunTriggerLifecycleActions(trigger, TriggerLifecycleEvent.Trigger, actionDef, triggeringPawn);
         actionRunner.RunActions(context, actionDef.actions);
+    }
+
+    private void RunTriggerLifecycleActions(
+        ArmedSpellTrigger trigger,
+        TriggerLifecycleEvent lifecycleEvent,
+        ProximityTriggerActionDef resolvedActionDef = null,
+        Pawn triggeringPawn = null)
+    {
+        if (trigger == null ||
+            (resolvedActionDef == null && !trigger.TryResolveActionDef(out resolvedActionDef)) ||
+            !trigger.TryCreateExecutionContext(map, triggeringPawn, out SpellContext context))
+        {
+            return;
+        }
+
+        List<SpellActionDef> specificActions = lifecycleEvent switch
+        {
+            TriggerLifecycleEvent.Create => resolvedActionDef.onCreateActions,
+            TriggerLifecycleEvent.Trigger => resolvedActionDef.onTriggerActions,
+            TriggerLifecycleEvent.Remove => resolvedActionDef.onRemoveActions,
+            TriggerLifecycleEvent.Break => resolvedActionDef.onBreakActions,
+            _ => null
+        };
+
+        if (specificActions != null && specificActions.Count > 0)
+        {
+            actionRunner.RunActions(context, specificActions);
+        }
+    }
+
+    private enum TriggerLifecycleEvent
+    {
+        Create,
+        Trigger,
+        Remove,
+        Break
     }
 }

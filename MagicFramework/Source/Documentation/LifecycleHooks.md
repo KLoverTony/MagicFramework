@@ -38,6 +38,9 @@ Trigger:
 
 Implemented first:
 - Persistent area zones support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`, with `onEndActions` retained as a legacy catch-all.
+- Persistent wall zones support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Persistent effects support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Proximity triggers support `onCreateActions`, `onTriggerActions`, `onRemoveActions`, and `onBreakActions`; existing child `actions` remain the trigger body.
 - Maintained force fields support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
 - Sustained stat modifiers support `onPulseActions` and `onBreakActions`.
 - `SpellMaintenanceDef` supports composable maintenance profiles for interruption rules.
@@ -79,9 +82,6 @@ First-party validation examples:
 - `MF_ManaShield` validates maintained force-field pulses with a harmless periodic visual pulse.
 
 Pending backfill:
-- Persistent effects.
-- Wall zones.
-- Proximity triggers.
 - Summoned pawns.
 - Spawned things.
-- Sustained stat modifiers.
+- Sustained stat modifier create, expire, and remove hooks if those terminal distinctions become useful beyond existing pulse and break support.

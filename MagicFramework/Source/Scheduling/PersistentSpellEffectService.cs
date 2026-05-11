@@ -36,7 +36,22 @@ public sealed class PersistentSpellEffectService
 
         int currentTick = Find.TickManager?.TicksGame ?? 0;
         int expireAtTick = ResolveExpireTick(context, currentTick, actionDef);
-        PersistentSpellEffect persistentEffect = new(context.caster, context.spellDef, markerThing, context.currentCell, expireAtTick);
+        if (!SpellActionPathUtility.TryCreatePath(context.spellDef, actionDef, out var actionPath))
+        {
+            markerThing.Destroy();
+            Log.Warning($"[MagicFramework] Failed to create persistent effect because its action path in {context.spellDef.defName} could not be resolved.");
+            return;
+        }
+
+        PersistentSpellEffect persistentEffect = new(
+            context.caster,
+            context.spellDef,
+            markerThing,
+            context.currentCell,
+            context.randomSeed,
+            context.executionState?.variables,
+            actionPath,
+            expireAtTick);
 
         PersistentSpellEffectMapComponent runtime = context.map.GetComponent<PersistentSpellEffectMapComponent>();
         if (runtime == null || !runtime.Register(persistentEffect, actionDef.replaceExistingForCaster))

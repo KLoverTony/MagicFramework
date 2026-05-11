@@ -19,6 +19,12 @@ This file tracks implemented framework and content milestones moved out of the a
   - area-zone replacement/cancel is categorized as remove, natural duration end as expire, and invalid/concentration loss/marker loss as break
   - maintained force fields support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`
   - force-field replacement/cancel is categorized as remove, natural duration end as expire, and invalid/range/line-of-sight/mana maintenance failures as break
+  - persistent wall zones support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`
+  - wall-zone replacement/cancel is categorized as remove, natural duration end as expire, and invalid caster or marker loss as break
+  - persistent effects support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`
+  - persistent-effect replacement/cancel is categorized as remove, natural duration end as expire, and marker loss as break
+  - proximity triggers support `onCreateActions`, `onTriggerActions`, `onRemoveActions`, and `onBreakActions`
+  - trigger replacement is categorized as remove, invalid runtime state as break, and `onTriggerActions` runs before the existing trigger body actions
 
 - MF-004 sustained spell release UX.
   Current state:
@@ -32,6 +38,9 @@ This file tracks implemented framework and content milestones moved out of the a
   - `MF_ForceField`, `MF_ManaShield`, `MF_Might`, and `MF_WatersEmbrace` now author explicit maintenance profiles
   - sustained stat modifiers and maintained force fields support `pulseIntervalTicks` plus `onPulseActions`
   - `MF_ManaShield` validates maintained force-field pulses with a harmless periodic visual pulse
+  - area-zone release detection now only treats concentration or maintenance-profile area zones as maintained, so ordinary placed zones remain normal cast buttons while active
+  Completion note:
+  - future maintained wall zones, beams, or additional channeling spell families should be tracked as new work instead of reopening MF-004
 
 - MF-008 subsystem logging toggles.
   Current state:
@@ -45,7 +54,10 @@ This file tracks implemented framework and content milestones moved out of the a
   Current state:
   - `SpellPowerDef` supports optional `SpellPowerScalarDef` entries for damage, healing, radius/range, duration, mana cost, and cooldown
   - omitted scalar defs resolve to a neutral factor of 1.0
-  - scalar values use `baseValue + power * perPower` with min/max clamps
+  - scalar values default to `Linear` mode, using `baseValue + power * perPower` with min/max clamps
+  - `ScalableFloatDef` and `SpellPowerScalarDef` can opt into `Flat`, `Linear`, or `Tiered` numeric scaling
+  - `Tiered` numeric scaling uses `baseValue + tier * perTier`
+  - structural power changes are supported through `PowerTierConditionDef` and `SpellPowerConditionDef` conditionals
   - central mechanics now honor spell-level scalars for damage, healing, radius/range, duration, mana costs, and cooldown costs
   - `MF_Firebolt` now validates the model with base damage/range/cooldown values plus spell-level damage, radius, and cooldown scalars
   - `MF_Fireball` now validates the same model across explosion damage, secondary damage, targeting radius, explosion radius, radius target queries, and cooldown
@@ -58,6 +70,28 @@ This file tracks implemented framework and content milestones moved out of the a
   - affected allies receive `MF_BlessedVigor`, movement speed, and general labor speed buffs
   - debug casting includes a Blessing of Vigor gizmo and fallback spell definition
   - generated MFVanilla spell scroll and recipe defs include Blessing of Vigor
+
+- MF-007 Triage Pulse query-ordering validation spell.
+  Current state:
+  - `MF_TriagePulse` is a learnable MFVanilla vitalism spell that fires from the caster without a target prompt
+  - the spell uses `TargetsInRadiusQueryDef` centered on the caster with `ordering` set to `LowestHealth` and `maxTargets` set to `1`
+  - the selected ally receives a targeted healing pulse, validating ordered candidate selection and target limiting in normal authored XML
+  - generated MFVanilla spell scroll and recipe defs include Triage Pulse
+
+- MF-007 Threat Spike query-ordering validation spell.
+  Current state:
+  - `MF_ThreatSpike` is a learnable MFVanilla combat/control spell that fires from the caster without a target prompt
+  - the spell uses `TargetsInRadiusQueryDef` centered on the caster with `ordering` set to `HighestThreat` and `maxTargets` set to `1`
+  - the selected foe receives light damage and a brief stun chance, validating hostile ordered candidate selection and target limiting in normal authored XML
+  - generated MFVanilla spell scroll and recipe defs include Threat Spike
+
+- MF-006 shared target-query ordering and limits.
+  Current state:
+  - base `TargetQueryDef` supports optional `ordering`, `orderingCenterSource`, and `maxTargets`
+  - radius, nearest-valid, and shape queries use a shared collect/filter/order/limit pipeline
+  - supported ordering modes are `Nearest`, `Farthest`, `LowestHealth`, `HighestHealth`, `HighestThreat`, and `LowestThreat`
+  - query ordering uses stable tie-breakers so equal candidates resolve deterministically
+  - `NearestValidTargetQueryDef` defaults to nearest ordering from the current cell with one target, preserving existing behavior
 
 - MF-006 Arc Seeker target-query validation spell.
   Current state:

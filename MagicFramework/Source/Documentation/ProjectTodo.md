@@ -19,7 +19,6 @@ Priority key:
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
-| MF-004 | P1 | L | Sustained spells | Finish channeling / sustained spell primitives. |
 | MF-005 | P1 | M | Lifecycle | Formalize lifecycle hooks for persistent spell state. |
 | MF-006 | P1 | M | Targeting | Expand target filters and target-query expressiveness. |
 | MF-007 | P1 | M | Validation | Add focused validation spells for under-tested framework modes. |
@@ -44,25 +43,12 @@ Priority key:
 | MF-029 | P3 | M | Fire | Investigate real RimWorld fire integration for `Wall of Fire`. |
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
 | MF-031 | P3 | L | Docs | Write a full MagicFramework spell design guide. |
+| MF-032 | P3 | S | Compatibility | Gate any mechanisms that would not be supported in multiplayer mods | 
+| MF-033 | P3 | S | Content | Shroudhymn summoned spectre despawns |
+| MF-034 | P3 | S | Content | Add corresponding lecturns as placeable objects in ritual circle action gizmos |
+| MF-035 | P3 | S | Content | Ritual summons should only be performable by Bonewrights (ideology role) |
 
 ## P1 Framework Capabilities
-
-### MF-004 Channeling And Sustained Spells
-
-Goal: provide a consistent maintained-spell model for buffs, beams, shields, tethers, and support/drain effects.
-
-Current state:
-- Maintained stat buffs have a first-pass primitive and `onBreakActions`.
-- Maintained force fields support damage reduction, mana absorption, sustained mana upkeep, status cues, ambient feedback, and break hooks.
-- Concentration-based area zones exist for Water's Embrace.
-- Known-spell and debug gizmos toggle active maintained spells into player-facing release commands.
-- Clean release does not trigger break hooks; force fields now route clean release through remove lifecycle hooks.
-- `SpellMaintenanceDef` supports composable interruption profiles with legacy fallback behavior when no maintenance block is authored.
-- `MF_ForceField`, `MF_ManaShield`, `MF_Might`, and `MF_WatersEmbrace` now validate explicit maintenance profiles.
-- Sustained stat modifiers and force fields support authored `pulseIntervalTicks` plus `onPulseActions`; `MF_ManaShield` validates force-field pulses with a periodic visual.
-
-Remaining work:
-- Continue migrating future maintained spell types to shared maintenance profiles.
 
 ### MF-005 Lifecycle Hooks For Persistent State
 
@@ -72,7 +58,10 @@ Current state:
 - Some systems have purpose-built hooks such as sustained `onBreakActions` and area-zone `onEndActions`.
 - `LifecycleHooks.md` defines shared hook semantics for create, pulse, trigger, expire, remove, break, and legacy end behavior.
 - Persistent area zones support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`, while preserving `onEndActions` as a legacy terminal catch-all.
-- Maintained force fields support explicit `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Maintained force fields support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Persistent wall zones support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Persistent effects support explicit `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Proximity triggers support explicit `onCreateActions`, `onTriggerActions`, `onRemoveActions`, and `onBreakActions`, while preserving existing child `actions` as the trigger body.
 
 Target hooks:
 - `onCreate`
@@ -83,7 +72,7 @@ Target hooks:
 - `onBreak`
 
 Remaining work:
-- Backfill persistent effects, triggers, wall zones, summons, spawned things, and stat modifiers as appropriate.
+- Backfill summons, spawned things, and fuller stat modifier lifecycle hooks as appropriate.
 - Ensure hooks survive save/load where runtime state persists.
 
 ### MF-006 Target Queries
@@ -95,23 +84,26 @@ Useful queries and filters:
 - nearest valid ally
 - lowest-health target
 - highest-threat target
-- all pawns in radius with optional exclusions
+- all pawns in radius with optional exclusions and target limits
 - line-intersection or crossing checks
 - exclude already-hit or already-chained targets
 - deterministic ordering and target count limits
 
 Current state:
 - Reusable target query defs exist for current target, radius, nearest valid target, shape targets, and directional chains.
+- Common query defs support shared ordering modes (`Nearest`, `Farthest`, `LowestHealth`, `HighestHealth`, `HighestThreat`, and `LowestThreat`) plus `maxTargets`.
 - `MF_ArcSeeker` validates nearest valid foe selection from the caster's location.
 - `MF_BlessingOfVigor` validates all allied pawns in radius while excluding the caster.
 - Chain lightning still has purpose-built delayed, forward-biased chain targeting.
+
+Remaining work:
+- Decide whether visited/already-hit exclusions should become a general execution-state feature or remain chain-specific.
 
 ### MF-007 Validation Spell Suite
 
 Goal: keep feature coverage easy to test in-game without relying only on debug fallbacks.
 
 Needed coverage:
-- conditional branch spell
 - dedicated persistent zone spell
 - maintained/channel spell beyond `MF_Might`
 - teleport/displacement regression spells for swap, rescue, ally teleport, and enemy blink
@@ -120,6 +112,9 @@ Needed coverage:
 Already covered:
 - target-query validation: `MF_ArcSeeker`
 - ally-radius query with caster exclusion: `MF_BlessingOfVigor`
+- lowest-health query ordering and target limit: `MF_TriagePulse`
+- highest-threat query ordering and target limit: `MF_ThreatSpike`
+- conditional branch spell: `MF_Disintegrate`
 - sustained stat buff: `MF_Might`
 - maintained shields: `MF_ForceField`, `MF_ManaShield`
 - delayed branching chain: `MF_ChainLightning`
@@ -137,8 +132,10 @@ Current state:
 - `SpellDef.power` can define base power and caster-level/skill contributions.
 - Power tiers resolve from minimum thresholds.
 - Delayed and projectile impact actions preserve power value and tier.
-- `ScalableFloatDef` supports `baseValue + power * perPower` with clamps.
+- `ScalableFloatDef` supports authored `Flat`, `Linear`, and `Tiered` numeric modes with clamps.
 - `SpellPowerScalarDef` supports spell-level multiplicative scalars for damage, healing, radius/range, duration, mana cost, and cooldown.
+- `SpellPowerScalarDef` supports the same `Flat`, `Linear`, and `Tiered` numeric modes.
+- `PowerTierConditionDef` and `SpellPowerConditionDef` support structural spell changes through conditionals.
 - Scalable support exists for damage, healing, explosion radius/damage, targeting range, spawned thing count, durations, and several validation spells.
 
 Candidate additions:
@@ -149,7 +146,8 @@ Candidate additions:
 Open design questions:
 - What should count as caster level or spell power in non-debug progression?
 - Should power come from traits, equipment, mana invested, ritual quality, research, or a future magic skill?
-- Should scaling be linear, tiered, capped, randomized, or context-sensitive per spell family?
+- Should randomized numeric scaling be supported, and if so where should deterministic values be captured for delayed or persistent effects?
+- Which context-sensitive spell-family modifiers should remain enhancement rules versus authored spell-local conditionals?
 
 ### MF-010 Buff/Debuff Primitives
 
@@ -433,3 +431,17 @@ Target coverage:
 - procedural FX metadata and explicit visual/sound actions
 - common spell patterns: projectile, delayed rune, trap, wall, aura, displacement, buff, debuff, summon
 - validation and regression expectations
+
+### MF-031 Compatibility
+
+Goal: Gate any mechanisms that would not be supported in multiplayer mods
+
+Target coverage:
+ - using System.Random, UnityEngine.Random, or time-based randomness without Multiplayer-safe syncing.
+ - depending on real time, frame rate, local UI timing, thread timing, or machine-specific order.
+ - changing game state from UI code.
+ - running logic only on one client.
+ - using dictionaries or unordered collections where iteration order could affect gameplay results.
+ - async/network/API calls that affect gameplay state.
+ - Harmony patches that alter core ticking, job assignment, combat, map generation, or pawn behavior in nondeterministic ways.
+ - visual-only effects that accidentally touch gameplay state.

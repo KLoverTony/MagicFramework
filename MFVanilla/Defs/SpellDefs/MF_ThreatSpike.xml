@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_ThreatSpike</defName>
+    <label>threat spike</label>
+    <description>Launches a sharp arcane pulse at the most dangerous nearby foe.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_ThreatSpike</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>35</castTimeTicks>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Divination</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Spellcraft</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Threat Spike</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Threat Spike cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Threat Spike</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Threat Spike cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Threat Spike sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Threat Spike cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Threat Spike highest-threat foe query</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+              <debugLabel>Highest-threat nearby foe</debugLabel>
+              <radius>10</radius>
+              <centerSource>Caster</centerSource>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>false</includeCaster>
+              <pawnAffinity>Foe</pawnAffinity>
+              <ordering>HighestThreat</ordering>
+              <orderingCenterSource>Caster</orderingCenterSource>
+              <maxTargets>1</maxTargets>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Threat Spike target effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Threat Spike damage</debugLabel>
+                <amount>8</amount>
+                <damageDef>Burn</damageDef>
+                <armorPenetration>0.15</armorPenetration>
+              </li>
+              <li Class="MagicFramework.Definitions.StunActionDef">
+                <debugLabel>Threat Spike stagger</debugLabel>
+                <chance>0.20</chance>
+                <stunTicks>45</stunTicks>
+                <fleckDef>Mote_Stun</fleckDef>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

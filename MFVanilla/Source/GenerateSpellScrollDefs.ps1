@@ -12,6 +12,10 @@ function Get-ChildText {
         [string]$Name
     )
 
+    if ($null -eq $Element) {
+        return $null
+    }
+
     $node = $Element.SelectSingleNode($Name)
     if ($null -eq $node) {
         return $null

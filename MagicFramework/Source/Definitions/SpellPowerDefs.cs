@@ -35,8 +35,10 @@ public sealed class SpellPowerTierDef
 /// </summary>
 public sealed class ScalableFloatDef
 {
+    public SpellPowerScalingMode mode = SpellPowerScalingMode.Linear;
     public float baseValue;
     public float perPower;
+    public float perTier;
     public float min = float.MinValue;
     public float max = float.MaxValue;
 }
@@ -46,10 +48,19 @@ public sealed class ScalableFloatDef
 /// </summary>
 public sealed class SpellPowerScalarDef
 {
+    public SpellPowerScalingMode mode = SpellPowerScalingMode.Linear;
     public float baseValue = 1f;
     public float perPower;
+    public float perTier;
     public float min = 0f;
     public float max = float.MaxValue;
+}
+
+public enum SpellPowerScalingMode
+{
+    Flat,
+    Linear,
+    Tiered
 }
 
 /// <summary>

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Text;
+using MagicFramework.Context;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using Verse;
 
 namespace MagicFramework.Scheduling;
@@ -10,6 +12,7 @@ namespace MagicFramework.Scheduling;
 /// </summary>
 public sealed class PersistentSpellEffectMapComponent : MapComponent
 {
+    private readonly SpellActionRunner actionRunner = new();
     private List<PersistentSpellEffect> persistentEffects = new();
 
     public PersistentSpellEffectMapComponent(Map map)
@@ -31,6 +34,7 @@ public sealed class PersistentSpellEffectMapComponent : MapComponent
         }
 
         persistentEffects.Add(persistentEffect);
+        RunPersistentEffectLifecycleActions(persistentEffect, PersistentEffectLifecycleEvent.Create);
         return true;
     }
 
@@ -46,6 +50,7 @@ public sealed class PersistentSpellEffectMapComponent : MapComponent
             PersistentSpellEffect effect = persistentEffects[i];
             if (effect?.Caster == caster && effect.SpellDef == spellDef)
             {
+                RunPersistentEffectLifecycleActions(effect, PersistentEffectLifecycleEvent.Remove);
                 DestroyMarker(effect);
                 persistentEffects.RemoveAt(i);
             }
@@ -71,12 +76,14 @@ public sealed class PersistentSpellEffectMapComponent : MapComponent
 
             if (effect.MarkerThing == null || effect.MarkerThing.Destroyed)
             {
+                RunPersistentEffectLifecycleActions(effect, PersistentEffectLifecycleEvent.Break);
                 persistentEffects.RemoveAt(i);
                 continue;
             }
 
             if (effect.IsExpired(currentTick))
             {
+                RunPersistentEffectLifecycleActions(effect, PersistentEffectLifecycleEvent.Expire);
                 DestroyMarker(effect);
                 persistentEffects.RemoveAt(i);
             }
@@ -133,5 +140,37 @@ public sealed class PersistentSpellEffectMapComponent : MapComponent
         {
             effect.MarkerThing.Destroy();
         }
+    }
+
+    private void RunPersistentEffectLifecycleActions(PersistentSpellEffect effect, PersistentEffectLifecycleEvent lifecycleEvent)
+    {
+        if (effect == null ||
+            !effect.TryResolveActionDef(out PersistentEffectActionDef actionDef) ||
+            !effect.TryCreateExecutionContext(map, out SpellContext context))
+        {
+            return;
+        }
+
+        List<SpellActionDef> specificActions = lifecycleEvent switch
+        {
+            PersistentEffectLifecycleEvent.Create => actionDef.onCreateActions,
+            PersistentEffectLifecycleEvent.Expire => actionDef.onExpireActions,
+            PersistentEffectLifecycleEvent.Remove => actionDef.onRemoveActions,
+            PersistentEffectLifecycleEvent.Break => actionDef.onBreakActions,
+            _ => null
+        };
+
+        if (specificActions != null && specificActions.Count > 0)
+        {
+            actionRunner.RunActions(context, specificActions);
+        }
+    }
+
+    private enum PersistentEffectLifecycleEvent
+    {
+        Create,
+        Expire,
+        Remove,
+        Break
     }
 }

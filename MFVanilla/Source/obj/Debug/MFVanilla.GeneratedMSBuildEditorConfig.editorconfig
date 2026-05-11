@@ -1,6 +1,6 @@
 is_global = true
-build_property.RootNamespace = MagicFramework
-build_property.ProjectDir = D:\RimWorld\Mods\MagicFramework\Source\
+build_property.RootNamespace = MFVanilla
+build_property.ProjectDir = D:\RimWorld\Mods\MFVanilla\Source\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

@@ -62,7 +62,9 @@ public sealed class PersistentWallZone : IExposable
 
     public Thing Caster => caster;
     public SpellDef SpellDef => spellDef;
+    public IntVec3 AnchorCell => anchorCell;
     public IReadOnlyList<IntVec3> WallCells => wallCells;
+    public IReadOnlyList<Thing> MarkerThings => markerThings;
     public SpellPawnAffinity PawnAffinity => pawnAffinity;
     public bool IncludeCaster => includeCaster;
     public float PulseRadius => pulseRadius;
@@ -110,6 +112,30 @@ public sealed class PersistentWallZone : IExposable
             context.currentTargets.Add(new LocalTargetInfo(triggeringPawn));
         }
 
+        return true;
+    }
+
+    public bool TryCreateCenterExecutionContext(Map map, out SpellContext context)
+    {
+        context = null;
+        if (spellDef == null || map == null)
+        {
+            return false;
+        }
+
+        context = new SpellContext
+        {
+            caster = caster,
+            map = map,
+            spellDef = spellDef,
+            initialTarget = new LocalTargetInfo(anchorCell),
+            currentTarget = new LocalTargetInfo(anchorCell),
+            currentCell = anchorCell,
+            randomSeed = randomSeed
+        };
+        context.executionState.costsApplied = true;
+        context.executionState.variables = variables?.Clone() ?? new SpellVariableStore();
+        context.currentTargets.Add(new LocalTargetInfo(anchorCell));
         return true;
     }
 

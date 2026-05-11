@@ -83,6 +83,25 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
         return false;
     }
 
+    public bool HasMaintainedForCasterSpell(Thing caster, SpellDef spellDef)
+    {
+        if (caster == null || spellDef == null || areaZones == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < areaZones.Count; i++)
+        {
+            PersistentAreaZone areaZone = areaZones[i];
+            if (areaZone?.Caster == caster && areaZone.SpellDef == spellDef && areaZone.IsMaintained)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public override void MapComponentTick()
     {
         if (areaZones == null || areaZones.Count == 0)

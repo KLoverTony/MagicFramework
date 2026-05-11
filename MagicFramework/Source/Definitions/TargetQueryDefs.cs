@@ -8,6 +8,9 @@ namespace MagicFramework.Definitions;
 public abstract class TargetQueryDef
 {
     public string debugLabel;
+    public TargetQueryOrdering ordering = TargetQueryOrdering.None;
+    public TargetQueryCenterSource orderingCenterSource = TargetQueryCenterSource.CurrentCell;
+    public int maxTargets = -1;
 
     public abstract TargetQueryWorker CreateWorker();
 }
@@ -41,6 +44,13 @@ public sealed class TargetsInRadiusQueryDef : TargetQueryDef
 /// </summary>
 public sealed class NearestValidTargetQueryDef : TargetQueryDef
 {
+    public NearestValidTargetQueryDef()
+    {
+        ordering = TargetQueryOrdering.Nearest;
+        orderingCenterSource = TargetQueryCenterSource.CurrentCell;
+        maxTargets = 1;
+    }
+
     public float maxRadius;
     public bool includePawns = true;
     public bool includeBuildings = true;
@@ -99,4 +109,15 @@ public enum TargetQueryCenterSource
     CurrentTarget,
     InitialTarget,
     Caster
+}
+
+public enum TargetQueryOrdering
+{
+    None,
+    Nearest,
+    Farthest,
+    LowestHealth,
+    HighestHealth,
+    HighestThreat,
+    LowestThreat
 }

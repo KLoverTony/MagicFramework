@@ -35,18 +35,13 @@ public static class SpellPowerUtility
             return fallbackValue;
         }
 
-        float value = scalableFloat.baseValue + ((context?.power?.value ?? 0f) * scalableFloat.perPower);
-        if (value < scalableFloat.min)
-        {
-            return scalableFloat.min;
-        }
-
-        if (value > scalableFloat.max)
-        {
-            return scalableFloat.max;
-        }
-
-        return value;
+        float value = ResolveScaledValue(
+            context,
+            scalableFloat.mode,
+            scalableFloat.baseValue,
+            scalableFloat.perPower,
+            scalableFloat.perTier);
+        return Clamp(value, scalableFloat.min, scalableFloat.max);
     }
 
     public static int ResolveScalableInt(SpellContext context, int fallbackValue, ScalableFloatDef scalableFloat)
@@ -78,15 +73,40 @@ public static class SpellPowerUtility
             return 1f;
         }
 
-        float value = scalarDef.baseValue + ((context?.power?.value ?? 0f) * scalarDef.perPower);
-        if (value < scalarDef.min)
+        float value = ResolveScaledValue(
+            context,
+            scalarDef.mode,
+            scalarDef.baseValue,
+            scalarDef.perPower,
+            scalarDef.perTier);
+        return Clamp(value, scalarDef.min, scalarDef.max);
+    }
+
+    private static float ResolveScaledValue(
+        SpellContext context,
+        SpellPowerScalingMode mode,
+        float baseValue,
+        float perPower,
+        float perTier)
+    {
+        return mode switch
         {
-            return scalarDef.min;
+            SpellPowerScalingMode.Flat => baseValue,
+            SpellPowerScalingMode.Tiered => baseValue + ((context?.power?.tier ?? 0) * perTier),
+            _ => baseValue + ((context?.power?.value ?? 0f) * perPower)
+        };
+    }
+
+    private static float Clamp(float value, float min, float max)
+    {
+        if (value < min)
+        {
+            return min;
         }
 
-        if (value > scalarDef.max)
+        if (value > max)
         {
-            return scalarDef.max;
+            return max;
         }
 
         return value;

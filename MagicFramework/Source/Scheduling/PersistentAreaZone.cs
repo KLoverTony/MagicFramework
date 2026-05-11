@@ -113,6 +113,7 @@ public sealed class PersistentAreaZone : IExposable
     public int MaxVisualMarkersPerPulse => maxVisualMarkersPerPulse;
     public bool PulseAtCenter => pulseAtCenter;
     public bool RequiresConcentration => requiresConcentration;
+    public bool IsMaintained => requiresConcentration || maintenance?.profiles?.Count > 0;
     public int ExpireAtTick => expireAtTick;
 
     public string DebugLabel => TryResolveActionDef(out PersistentAreaZoneActionDef actionDef)

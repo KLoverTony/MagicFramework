@@ -60,6 +60,100 @@ internal static class TargetQueryUtility
         return targets;
     }
 
+    public static List<LocalTargetInfo> CollectOrderedTargets(
+        SpellContext context,
+        TargetQueryDef queryDef,
+        bool includePawns,
+        bool includeBuildings,
+        bool includeItems,
+        bool includeCaster,
+        SpellPawnAffinity pawnAffinity,
+        Func<Thing, bool> predicate)
+    {
+        List<Thing> candidates = CollectCandidateThings(
+            context,
+            includePawns,
+            includeBuildings,
+            includeItems,
+            includeCaster,
+            pawnAffinity,
+            predicate);
+
+        ApplyOrdering(context, queryDef, candidates);
+        int maxTargets = queryDef?.maxTargets ?? -1;
+        if (maxTargets > 0 && candidates.Count > maxTargets)
+        {
+            candidates.RemoveRange(maxTargets, candidates.Count - maxTargets);
+        }
+
+        List<LocalTargetInfo> targets = new();
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            targets.Add(new LocalTargetInfo(candidates[i]));
+        }
+
+        return targets;
+    }
+
+    public static List<Thing> CollectCandidateThings(
+        SpellContext context,
+        bool includePawns,
+        bool includeBuildings,
+        bool includeItems,
+        bool includeCaster,
+        SpellPawnAffinity pawnAffinity,
+        Func<Thing, bool> predicate)
+    {
+        List<Thing> candidates = new();
+        List<Thing> things = context?.map?.listerThings?.AllThings;
+        if (things == null)
+        {
+            return candidates;
+        }
+
+        foreach (Thing thing in things)
+        {
+            if (!MatchesThingFilter(context, thing, includePawns, includeBuildings, includeItems, includeCaster, pawnAffinity))
+            {
+                continue;
+            }
+
+            if (predicate != null && !predicate(thing))
+            {
+                continue;
+            }
+
+            candidates.Add(thing);
+        }
+
+        return candidates;
+    }
+
+    public static void ApplyOrdering(SpellContext context, TargetQueryDef queryDef, List<Thing> candidates)
+    {
+        if (candidates == null || candidates.Count <= 1 || queryDef == null || queryDef.ordering == TargetQueryOrdering.None)
+        {
+            return;
+        }
+
+        IntVec3 center = ResolvePoint(context, queryDef.orderingCenterSource);
+        candidates.Sort((left, right) =>
+        {
+            int result = queryDef.ordering switch
+            {
+                TargetQueryOrdering.Nearest => CompareDistance(left, right, center),
+                TargetQueryOrdering.Farthest => CompareDistance(right, left, center),
+                TargetQueryOrdering.LowestHealth => CompareHealth(left, right),
+                TargetQueryOrdering.HighestHealth => CompareHealth(right, left),
+                TargetQueryOrdering.HighestThreat => CompareThreat(right, left),
+                TargetQueryOrdering.LowestThreat => CompareThreat(left, right),
+                _ => 0
+            };
+
+            return result != 0 ? result : StableThingCompare(left, right);
+        });
+    }
+
     public static bool MatchesThingFilter(
         SpellContext context,
         Thing thing,
@@ -115,6 +209,80 @@ internal static class TargetQueryUtility
             SpellPawnAffinity.Foe => hostile,
             _ => true
         };
+    }
+
+    private static int CompareDistance(Thing left, Thing right, IntVec3 center)
+    {
+        if (!center.IsValid)
+        {
+            return 0;
+        }
+
+        return left.Position.DistanceTo(center).CompareTo(right.Position.DistanceTo(center));
+    }
+
+    private static int CompareHealth(Thing left, Thing right)
+    {
+        return GetHealthFraction(left).CompareTo(GetHealthFraction(right));
+    }
+
+    private static float GetHealthFraction(Thing thing)
+    {
+        if (thing == null || thing.MaxHitPoints <= 0)
+        {
+            return 1f;
+        }
+
+        if (thing is Pawn pawn)
+        {
+            return Mathf.Clamp01(pawn.health?.summaryHealth?.SummaryHealthPercent ?? 1f);
+        }
+
+        return Mathf.Clamp01((float)thing.HitPoints / thing.MaxHitPoints);
+    }
+
+    private static int CompareThreat(Thing left, Thing right)
+    {
+        return GetThreatScore(left).CompareTo(GetThreatScore(right));
+    }
+
+    private static float GetThreatScore(Thing thing)
+    {
+        if (thing is Pawn pawn)
+        {
+            float combatPower = pawn.kindDef?.combatPower ?? 0f;
+            float health = Mathf.Clamp01(pawn.health?.summaryHealth?.SummaryHealthPercent ?? 1f);
+            return combatPower * Mathf.Max(0.1f, health);
+        }
+
+        if (thing?.def?.category == ThingCategory.Building)
+        {
+            return thing.MarketValue * 0.01f;
+        }
+
+        return 0f;
+    }
+
+    private static int StableThingCompare(Thing left, Thing right)
+    {
+        if (left == right)
+        {
+            return 0;
+        }
+
+        int cellCompare = left.Position.x.CompareTo(right.Position.x);
+        if (cellCompare != 0)
+        {
+            return cellCompare;
+        }
+
+        cellCompare = left.Position.z.CompareTo(right.Position.z);
+        if (cellCompare != 0)
+        {
+            return cellCompare;
+        }
+
+        return string.Compare(left.ThingID, right.ThingID, StringComparison.Ordinal);
     }
 
     public static float DistanceToSegment(IntVec3 point, IntVec3 segmentStart, IntVec3 segmentEnd)

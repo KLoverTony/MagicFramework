@@ -48,27 +48,33 @@
         <actions>
           <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
             <debugLabel>Create Tornado persistent zone</debugLabel>
-            <durationTicks>600</durationTicks>
+            <markerThingDef>MF_FlameFieldMarker</markerThingDef>
             <zoneRadius>3</zoneRadius>
             <pulseIntervalTicks>60</pulseIntervalTicks>
+            <durationTicks>600</durationTicks>
+            <pulseAtCenter>false</pulseAtCenter>
+            <pawnAffinity>All</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
             <onPulseActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Play Tornado effect</debugLabel>
+                <effectDef>PsycastAreaEffect</effectDef>
+                <locationSource>CurrentCell</locationSource>
+                <attachToTarget>false</attachToTarget>
+              </li>
+            </onPulseActions>
+            <actions>
               <li Class="MagicFramework.Definitions.DamageActionDef">
                 <debugLabel>Apply Tornado damage</debugLabel>
                 <amount>10</amount>
-                <damageDef>Wind</damageDef>
+                <damageDef>Blunt</damageDef>
               </li>
               <li Class="MagicFramework.Definitions.KnockbackActionDef">
                 <debugLabel>Apply Tornado knockback</debugLabel>
                 <distance>1</distance>
               </li>
-              <li Class="MagicFramework.Definitions.EffectActionDef">
-                <debugLabel>Play Tornado effect</debugLabel>
-                <effectDef>MF_NewEffect</effectDef>
-                <soundDef>MF_WhooshSound</soundDef>
-                <locationSource>CurrentTarget</locationSource>
-                <attachToTarget>false</attachToTarget>
-              </li>
-            </onPulseActions>
+            </actions>
           </li>
         </actions>
       </li>

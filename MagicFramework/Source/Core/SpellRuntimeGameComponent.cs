@@ -548,7 +548,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         Map map = caster.MapHeld;
-        if (map?.GetComponent<PersistentAreaZoneMapComponent>()?.HasForCasterSpell(caster, spellDef) == true)
+        if (map?.GetComponent<PersistentAreaZoneMapComponent>()?.HasMaintainedForCasterSpell(caster, spellDef) == true)
         {
             return true;
         }

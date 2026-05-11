@@ -94,9 +94,39 @@ public sealed class ProximityTriggerActionDef : SpellActionDef
     public bool replaceExistingForCaster = true;
     public bool removePersistentEffectsForCasterSpell = true;
     public int checkIntervalTicks = 15;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onTriggerActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
     public List<SpellActionDef> actions = new();
 
-    public override IEnumerable<SpellActionDef> GetChildActions() => actions;
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onTriggerActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in actions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new ProximityTriggerActionWorker();
 }
@@ -112,6 +142,33 @@ public sealed class PersistentEffectActionDef : SpellActionDef
     public int failsafeDurationTicks = -1;
     public ScalableFloatDef scalableFailsafeDurationTicks;
     public bool replaceExistingForCaster = true;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
+
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new PersistentEffectActionWorker();
 }
@@ -132,9 +189,45 @@ public sealed class PersistentWallZoneActionDef : SpellActionDef
     public SpellPawnAffinity pawnAffinity = SpellPawnAffinity.All;
     public bool includeCaster;
     public bool replaceExistingForCaster = true;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onPulseActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
     public List<SpellActionDef> actions = new();
 
-    public override IEnumerable<SpellActionDef> GetChildActions() => actions;
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onPulseActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in actions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new PersistentWallZoneActionWorker();
 }

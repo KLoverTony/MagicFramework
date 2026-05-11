@@ -35,6 +35,7 @@ public sealed class PersistentWallZoneMapComponent : MapComponent
         }
 
         wallZones.Add(wallZone);
+        RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Create);
         return true;
     }
 
@@ -50,6 +51,7 @@ public sealed class PersistentWallZoneMapComponent : MapComponent
             PersistentWallZone wallZone = wallZones[i];
             if (wallZone?.Caster == caster && wallZone.SpellDef == spellDef)
             {
+                RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Remove);
                 wallZone.DestroyMarkers();
                 wallZones.RemoveAt(i);
             }
@@ -69,13 +71,22 @@ public sealed class PersistentWallZoneMapComponent : MapComponent
             PersistentWallZone wallZone = wallZones[i];
             if (wallZone == null || wallZone.Caster != null && wallZone.Caster.Destroyed)
             {
+                RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Break);
                 wallZone?.DestroyMarkers();
+                wallZones.RemoveAt(i);
+                continue;
+            }
+
+            if (!HasAnyActiveMarker(wallZone))
+            {
+                RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Break);
                 wallZones.RemoveAt(i);
                 continue;
             }
 
             if (wallZone.IsExpired(currentTick))
             {
+                RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Expire);
                 wallZone.DestroyMarkers();
                 wallZones.RemoveAt(i);
                 continue;
@@ -143,6 +154,8 @@ public sealed class PersistentWallZoneMapComponent : MapComponent
             return;
         }
 
+        RunWallZoneLifecycleActions(wallZone, WallZoneLifecycleEvent.Pulse, actionDef);
+
         List<Pawn> candidatePawns = new();
         List<Thing> allThings = map.listerThings?.AllThings;
         if (allThings != null)
@@ -190,5 +203,57 @@ public sealed class PersistentWallZoneMapComponent : MapComponent
                 actionRunner.RunActions(context, actionDef.actions);
             }
         }
+    }
+
+    private void RunWallZoneLifecycleActions(PersistentWallZone wallZone, WallZoneLifecycleEvent lifecycleEvent, PersistentWallZoneActionDef resolvedActionDef = null)
+    {
+        if (wallZone == null ||
+            (resolvedActionDef == null && !wallZone.TryResolveActionDef(out resolvedActionDef)) ||
+            !wallZone.TryCreateCenterExecutionContext(map, out SpellContext context))
+        {
+            return;
+        }
+
+        List<SpellActionDef> specificActions = lifecycleEvent switch
+        {
+            WallZoneLifecycleEvent.Create => resolvedActionDef.onCreateActions,
+            WallZoneLifecycleEvent.Pulse => resolvedActionDef.onPulseActions,
+            WallZoneLifecycleEvent.Expire => resolvedActionDef.onExpireActions,
+            WallZoneLifecycleEvent.Remove => resolvedActionDef.onRemoveActions,
+            WallZoneLifecycleEvent.Break => resolvedActionDef.onBreakActions,
+            _ => null
+        };
+
+        if (specificActions != null && specificActions.Count > 0)
+        {
+            actionRunner.RunActions(context, specificActions);
+        }
+    }
+
+    private static bool HasAnyActiveMarker(PersistentWallZone wallZone)
+    {
+        if (wallZone?.MarkerThings == null)
+        {
+            return false;
+        }
+
+        foreach (Thing markerThing in wallZone.MarkerThings)
+        {
+            if (markerThing != null && !markerThing.Destroyed)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private enum WallZoneLifecycleEvent
+    {
+        Create,
+        Pulse,
+        Expire,
+        Remove,
+        Break
     }
 }
