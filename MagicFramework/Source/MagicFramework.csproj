@@ -12,7 +12,7 @@
     <ModAssembliesDir Condition="'$(ModAssembliesDir)' == ''">..\Assemblies\</ModAssembliesDir>
     <RimWorldDir Condition="'$(RimWorldDir)' == ''">D:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldDir>
     <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(RimWorldDir)\Mods\MagicFramework</ModDeployDir>
-    <DeployToRimWorldMod Condition="'$(DeployToRimWorldMod)' == ''">true</DeployToRimWorldMod>
+    <DeployToRimWorldMod Condition="'$(DeployToRimWorldMod)' == ''">false</DeployToRimWorldMod>
   </PropertyGroup>
 
   <Target Name="CheckRimWorldInstall" BeforeTargets="ResolveReferences">

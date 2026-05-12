@@ -23,6 +23,7 @@
     <defName>AF_SpectreRace</defName>
     <label>spectre</label>
     <description>A disembodied spirit bound to the mortal world, made briefly visible through the Animara rite. It has no flesh, no hunger, and no will of its own — only an echo of the life it once carried.</description>
+    <generateAllowChance>0</generateAllowChance>
 
     <!-- Humanlike pawns do not use this top-level graphicData for their body.
          The torso/body texture is supplied through a BodyTypeDef below. -->
@@ -124,6 +125,8 @@
     <defName>AF_SpectreHead</defName>
     <label>spectral head</label>
     <graphicPath>Things/Undead/Spectre/SpectreHead</graphicPath>
+    <selectionWeight>0</selectionWeight>
+    <randomChosen>false</randomChosen>
     <gender>None</gender>
   </HeadTypeDef>
 

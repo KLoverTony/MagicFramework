@@ -1,5 +1,5 @@
-D:\RimWorld\Mods\AeternusFaith\Assemblies\AeternusFaith.dll
-D:\RimWorld\Mods\AeternusFaith\Assemblies\AeternusFaith.pdb
+D:\RimWorld\Mods\AeternusFaith\Source\bin\Release\AeternusFaith.dll
+D:\RimWorld\Mods\AeternusFaith\Source\bin\Release\AeternusFaith.pdb
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Release\AeternusFaith.csproj.AssemblyReference.cache
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Release\AeternusFaith.GeneratedMSBuildEditorConfig.editorconfig
 D:\RimWorld\Mods\AeternusFaith\Source\obj\Release\AeternusFaith.AssemblyInfoInputs.cache

@@ -1,0 +1,535 @@
+# Pawn Memory Object / Soul Snapshot Architecture
+
+This document proposes a shared **Pawn Memory / Soul Snapshot** system for the `MagicFramework` project. The system stores detached pawn identity records separately from live `Pawn` instances so downstream modules can support resurrection, spirits, hauntings, death rites, and other metaphysical systems without depending on the corpse or live pawn object remaining valid forever.
+
+The system should live in **MagicFramework** because it is foundational infrastructure for dependent modules such as `AeternusFaith`, `AFVanilla`, Chronomancy spells, spirit systems, and future necromancy/death magic features.
+
+---
+
+## Goals
+
+1. Preserve lightweight pawn identity and state data after death, despawn, corpse destruction, or map transition.
+2. Support Chronomancy resurrection from prior pawn imprints.
+3. Support Aeternus-style spirits, hauntings, corruption, rites, and peaceful release.
+4. Avoid storing full pawn clones unless absolutely necessary.
+5. Keep save bloat controlled through eligibility rules, retention policies, and cleanup states.
+6. Preserve last known map context so spirits and hauntings can occur on the correct map.
+
+---
+
+## Key Design Principle
+
+A `PawnMemoryRecord` is not the pawn's soul in a literal implementation sense. It is a **framework-level metaphysical record**: a stable identity imprint that systems may interpret differently.
+
+* Chronomancy reads it as a prior temporal state.
+* Aeternus reads it as a death echo / spirit anchor.
+* Necromancy may read it as an animating pattern.
+* Ritual systems may stabilize, release, bind, corrupt, or invalidate it.
+
+This keeps the feature flexible without forcing one theology or one mechanic onto every module.
+
+---
+
+##
+
+> **Relocation to MagicFramework**
+>
+> This system should be implemented in `MagicFramework`, not `AeternusFaith`, because it is shared infrastructure.
+
+> **World-Level Registry with Map Context**
+>
+> The canonical registry should be a `WorldComponent` so records survive map transitions, caravans, cryptosleep, multi-map colonies, and corpse cleanup. Each record should still preserve `lastKnownMapId`, `deathMapId`, and relevant cell/location data for hauntings and local effects.
+
+---
+
+## Open Questions
+
+> 1. **Eligibility Scope**
+>
+>    * MVP recommendation: humanlike pawns only.
+>    * Always include colonists.
+>    * Include prisoners/slaves/guests if present on player maps.
+>    * Hostile pawns can be included later or behind a setting to avoid save bloat.
+> 2. **Snapshot Fidelity**
+>
+>    * MVP: identity, appearance, traits, skills, passions, backstories, ideology reference, basic health/body snapshot, and map/death context.
+>    * Avoid equipment/inventory for MVP.
+>    * Apparel/gear can be added later for higher-fidelity spirits if needed.
+> 3. **Chronomancy Fresh Imprints**
+>
+>    * Should resurrection require a settled imprint at least 7 days old?
+>    * Recommended: prefer an imprint at least 7 days old, but allow fresh imprints with harsher instability penalties if the spell tier permits it.
+> 4. **Burial and Rites Compatibility**
+>
+>    * Aeternus rites should update the memory/death echo directly.
+>    * Vanilla-style burial/sarcophagus containment should count as a compatibility-safe minimum rite, even if it is not the ideal Aeternus rite.
+
+---
+
+## Proposed Changes
+
+## 1. Core Data Structure: `PawnMemoryRecord`
+
+Create a lightweight `IExposable` class to store persistent pawn imprint data.
+
+### &#x20;`Source/MagicFramework/PawnMemory/PawnMemoryRecord.cs`
+
+Recommended fields:
+
+### Identity
+
+* `string uniquePawnId`
+* `Name name`
+* `Gender gender`
+* `ThingDef raceDef`
+* `PawnKindDef pawnKindDef`
+* `FactionDef factionDef` or faction identifier where safe
+* `bool wasColonist`
+* `bool wasPrisoner`
+* `bool wasSlave`
+* `bool wasGuest`
+* `bool wasHostileToPlayer`
+
+### Map and Location Context
+
+* `int? lastKnownMapId`
+* `string lastKnownMapName`
+* `IntVec3? lastKnownCell`
+* `int? deathMapId`
+* `IntVec3? deathCell`
+* `int lastSeenTick`
+* `int createdTick`
+* `int lastUpdatedTick`
+* `int? deathTick`
+
+### Appearance
+
+* `BodyTypeDef bodyType`
+* `HeadTypeDef headType`
+* `HairDef hairDef`
+* `BeardDef beardDef`
+* `Color skinColor`
+* `Color hairColor`
+* Optional later: body addons, tattoos, alien race compatibility data if needed.
+
+### Background, Traits, and Skills
+
+Use serializable sub-records rather than live object references where possible.
+
+* childhood backstory def name
+* adulthood backstory def name
+* trait def names and degree data
+* skill records:
+
+  * `SkillDef`
+  * level
+  * XP
+  * passion
+
+### Ideology
+
+* `Ideo` reference, if safe to expose directly.
+* Fallback: store ideology ID/name where direct reference is unreliable.
+
+### Health / Body Snapshot
+
+For Chronomancy resurrection and certain spirit logic, the system should eventually record enough health data to recreate a viable prior state.
+
+MVP can begin with simple body state and expand carefully.
+
+Recommended staged approach:
+
+#### Stage 1 Health Snapshot
+
+* dead/alive at capture
+* major hediff def names
+* severity
+* body part identifier/path where applicable
+* missing body parts
+* chronic/scar hediffs
+
+#### Stage 2 Health Snapshot
+
+* immunity data where applicable
+* hediff comps that are safe to recreate
+* age-related conditions
+* death-causing hediff/damage info where available
+
+Avoid trying to deep-copy all `Hediff` internals at first. Health restoration is the riskiest part of this system.
+
+### Imprint Lifecycle State
+
+Add explicit state so Chronomancy, Aeternus, and cleanup logic can cooperate safely.
+
+```csharp
+public enum PawnMemoryState
+{
+    Active,
+    Dormant,
+    DeadPendingRites,
+    Released,
+    SpiritActive,
+    Bound,
+    Corrupted,
+    ResurrectionConsumed,
+    Invalidated
+}
+```
+
+Suggested fields:
+
+* `PawnMemoryState state`
+* `bool resurrectionAllowed`
+* `bool spiritActive`
+* `string activeSpiritThingId`
+* `bool properRitesPerformed`
+* `bool standardBurialObserved`
+* `bool rituallyReleased`
+* `bool corrupted`
+* `bool bodyDestroyed`
+* `bool corpseAnchorKnown`
+* `string invalidationReason`
+
+---
+
+## 2. Global Registry: `WorldComponent_PawnMemories`
+
+Create a world-level component as the canonical registry.
+
+### &#x20;`Source/MagicFramework/GameComponents/WorldComponent_PawnMemories.cs`
+
+Responsibilities:
+
+* Maintain records by pawn ID.
+* Create or update records when eligible pawns enter maps.
+* Periodically update records for eligible live pawns.
+* Record death context when `Pawn.Kill` fires.
+* Track imprint state for spirits, rites, corruption, and resurrection.
+* Provide safe lookup methods to dependent modules.
+* Perform conservative cleanup.
+
+Recommended storage:
+
+```csharp
+Dictionary<string, PawnMemoryRecord> memoriesByPawnId;
+```
+
+Recommended public methods:
+
+```csharp
+PawnMemoryRecord GetMemory(Pawn pawn);
+PawnMemoryRecord GetMemory(string uniquePawnId);
+PawnMemoryRecord GetOrCreateMemory(Pawn pawn);
+void UpdateMemory(Pawn pawn, PawnMemoryUpdateReason reason);
+void NotifyPawnKilled(Pawn pawn, DamageInfo? dinfo, Hediff exactCulprit = null);
+void NotifyProperRitesPerformed(Pawn pawn, RiteOutcome outcome);
+void NotifySpiritManifested(Pawn pawn, Thing spiritThing);
+void NotifySpiritDeparted(Pawn pawn, SpiritDepartureReason reason);
+void NotifyCorpseDestroyed(Pawn pawn, CorpseDispositionReason reason);
+bool TryGetResurrectionMemory(Pawn pawn, out PawnMemoryRecord record);
+```
+
+Recommended update reasons:
+
+```csharp
+public enum PawnMemoryUpdateReason
+{
+    EnteredMap,
+    DailyMaintenance,
+    BeforeDeath,
+    OnDeath,
+    ManualDebug,
+    Ritual,
+    Resurrection
+}
+```
+
+---
+
+## 3. Capture Triggers
+
+### &#x20;`Source/MagicFramework/Harmony/Pawn_Memories_Patches.cs`
+
+Use Harmony patches for immediate events and a world component tick for maintenance.
+
+### Pawn Enters Map
+
+Patch or observe `Pawn.SpawnSetup`.
+
+Behavior:
+
+* If pawn is eligible, create memory if missing.
+* Update `lastKnownMapId`, `lastKnownCell`, and `lastSeenTick`.
+* Mark state as `Active` unless currently dead/invalid.
+
+### Daily Maintenance
+
+In `WorldComponent_PawnMemories.WorldComponentTick`, run daily or on a staggered interval.
+
+Behavior:
+
+* Scan player maps for eligible humanlike pawns.
+* If no record exists, create one.
+* If latest record is more than 7 days old, update it.
+* Preserve death/spirit/release state where appropriate.
+* Skip pawns in suspended states such as cryptosleep if needed.
+
+### Pawn Death
+
+Patch `Pawn.Kill` with a postfix.
+
+Behavior:
+
+* Ensure a memory record exists.
+* Record death tick, death map, death cell, faction/status, and cause info.
+* Mark state as `DeadPendingRites` unless already released/invalidated by special logic.
+* Evaluate whether death was violent, dark-magical, ritual, natural, peaceful, etc.
+* Start or schedule Aeternus haunting countdown if the dependent module is loaded.
+
+Avoid heavy spawning/destruction directly inside the death postfix. Record state first; allow spirit spawning or ritual resolution on later ticks.
+
+---
+
+## 4. Imprint Selection for Chronomancy
+
+Chronomancy should ask the registry for an appropriate record rather than reading corpses directly.
+
+Recommended selection rule:
+
+1. Look up memory by pawn ID.
+2. Reject if missing, released, invalidated, or resurrection disallowed.
+3. Prefer the newest imprint at least 7 in-game days old if multi-imprint history exists.
+4. If only fresh imprint exists, allow use only if the spell supports unstable reversal.
+5. If active spirit exists, call `NotifySpiritDeparted` or a reintegration workflow before completing resurrection.
+
+MVP may store a single rolling memory record. If Chronomancy needs multiple historical records later, add a bounded list of snapshot entries inside each `PawnMemoryRecord`.
+
+---
+
+## 5. Spirit and Haunting Integration
+
+`AeternusFaith` should consume the MagicFramework registry rather than duplicating pawn memory storage.
+
+### Stage 2 Integration with `AeternusFaith`
+
+Aeternus can use memory records to:
+
+* create Death Echoes
+* trigger haunting countdowns
+* spawn spirits using name/appearance/traits/skills
+* track whether an imprint is actively manifested as a spirit
+* resolve spirits when resurrection occurs
+* prevent haunting after proper rites
+* corrupt unresolved or darkly manipulated death echoes
+
+Recommended flow:
+
+```text
+Pawn.Kill
+  -> MagicFramework records death memory
+  -> Aeternus evaluates death quality
+  -> Haunting countdown begins if unresolved
+  -> Burial/rites/cremation/destruction update memory state
+  -> Spirit manifests if conditions remain unresolved
+```
+
+### Spirit Active Flag
+
+Records need a way to mark active spiritual use.
+
+Fields:
+
+* `bool spiritActive`
+* `string activeSpiritThingId`
+* `PawnMemoryState state = SpiritActive`
+
+On successful resurrection:
+
+* active spirit should depart, dissolve, or reintegrate
+* memory state should change to `ResurrectionConsumed` or `Active`, depending on whether the pawn is alive again and whether future imprints continue
+* spirit thing should be safely despawned/destroyed through Aeternus logic
+
+---
+
+## 6. Rites, Burial, and Compatibility
+
+Aeternus rites should call explicit MagicFramework memory updates.
+
+Example outcomes:
+
+```csharp
+public enum RiteOutcome
+{
+    ProperRites,
+    ReleaseSpirit,
+    BindSpirit,
+    PurifyCorruption,
+    CorruptImprint,
+    PreserveForResurrection
+}
+```
+
+Recommended behavior:
+
+* Aeternus proper rite: mark `properRitesPerformed = true`; prevent basic haunting.
+* Release rite: mark `rituallyReleased = true`; block resurrection if desired by lore.
+* Binding rite: mark `state = Bound`; may permit guardian spirit behavior.
+* Purification rite: clear or reduce corruption.
+* Dark rite: mark corrupted and increase haunting/wraith risk.
+
+### Vanilla Burial Compatibility
+
+There is not a single universal vanilla `Pawn.Burial` event to satisfy all corpse concerns. Compatibility should be state-based.
+
+Recommended approach:
+
+* Patch grave/sarcophagus corpse insertion where available for immediate updates.
+* Also run periodic scans to detect corpses in graves/sarcophagi.
+* Mark `standardBurialObserved = true` when a corpse is stored in a grave-like container.
+* Treat standard burial as minimum respectful handling that prevents basic haunting, even if it is not the full Aeternus rite.
+
+Do not rely only on event hooks. Use scans as a safety net for modded graves, missed events, and edge cases.
+
+---
+
+## 7. Cleanup and Retention Policy
+
+Cleanup should be conservative. Do not delete records merely because the pawn is despawned or absent from the current map.
+
+### Keep Records If
+
+* pawn is alive and tracked
+* pawn is a colonist or important pawn
+* pawn is in caravan or world-pawn state
+* pawn is in cryptosleep or otherwise suspended
+* corpse exists on map
+* corpse is in grave/sarcophagus
+* spirit is active
+* record is bound, corrupted, or pending rites
+* record is needed by Chronomancy or Aeternus systems
+
+### Invalidate or Delete If
+
+* corpse was cremated and lore says cremation releases/severs the imprint
+* corpse was butchered/destroyed and no spiritual echo should remain
+* non-colonist record has exceeded retention window
+* hostile pawn left map alive and has no spirit/corpse/quest importance
+* record is explicitly released and retention window has passed
+
+Prefer marking records as `Released` or `Invalidated` before deletion so dependent systems can respond cleanly.
+
+---
+
+## 8. Debug Interface
+
+### &#x20;`Source/MagicFramework/Debug/Dialog_PawnMemoryViewer.cs`
+
+Create a debug UI to inspect and manage records.
+
+Features:
+
+* searchable list of all `PawnMemoryRecord` objects
+* filters by state: Active, DeadPendingRites, SpiritActive, Released, Corrupted, Invalidated
+* display identity, map context, death info, skills, traits, and health snapshot summary
+* buttons:
+
+  * update from pawn if live
+  * mark proper rites performed
+  * mark released
+  * mark corrupted
+  * spawn test spirit if Aeternus is loaded
+  * attempt test resurrection if Chronomancy is loaded
+  * delete/invalidate record
+
+This will be extremely useful because failures in this system may otherwise be invisible save-state problems.
+
+---
+
+## 9. Verification Plan
+
+### Manual Verification
+
+1. **Initial Recording**
+
+   * Spawn a new colonist.
+   * Verify a `PawnMemoryRecord` is created.
+   * Confirm name, pawn ID, map ID, appearance, traits, and skills are present.
+
+2. **Daily Update**
+
+   * Change hair or skill level.
+   * Advance one in-game day.
+   * Verify the memory updates correctly.
+
+3. **Death Recording**
+
+   * Kill the colonist.
+   * Verify death tick, death map, death cell, and death state are recorded.
+   * Verify state changes to `DeadPendingRites`.
+
+4. **Corpse Destruction Persistence**
+
+   * Destroy the corpse with dev mode.
+   * Verify the record is not accidentally removed unless cleanup policy says it should be invalidated.
+
+5. **Standard Burial Compatibility**
+
+   * Bury a corpse in a vanilla grave or sarcophagus.
+   * Verify `standardBurialObserved = true`.
+   * Verify haunting countdown is cancelled or suppressed if compatibility rules allow it.
+
+6. **Aeternus Rite**
+
+   * Perform a proper Aeternus rite.
+   * Verify `properRitesPerformed = true` and appropriate state transition occurs.
+
+7. **Spirit Manifestation**
+
+   * Trigger a haunting for an unresolved violent death.
+   * Verify the spectre uses name, body type, relevant appearance, and skills from `PawnMemoryRecord`.
+   * Verify `spiritActive = true` and spirit reference is stored.
+
+8. **Resurrection While Spirit Active**
+
+   * Resurrect a pawn whose imprint currently has an active spirit.
+   * Verify the spirit departs or reintegrates.
+   * Verify the resurrected pawn is restored and the memory state updates safely.
+
+9. **Cryptosleep / Suspended Pawns**
+
+   * Put pawn in cryptosleep or otherwise remove them from the map temporarily.
+   * Verify record is retained.
+   * Verify daily update does not corrupt or delete it.
+
+10. **Cleanup**
+
+* Create hostile/non-colonist memories.
+* Let them leave the map.
+* Verify cleanup eventually removes or invalidates records according to retention policy.
+
+---
+
+## Recommended MVP Scope
+
+For the first implementation pass:
+
+1. Add `PawnMemoryRecord` with identity, appearance, traits, skills, ideology, map context, death context, and lifecycle state.
+2. Add `WorldComponent_PawnMemories` registry.
+3. Patch `Pawn.SpawnSetup` and `Pawn.Kill`.
+4. Add daily maintenance scan.
+5. Add conservative cleanup, but avoid aggressive deletion.
+6. Add simple debug logging before building full UI.
+7. Integrate Aeternus haunting countdown after the base registry is stable.
+8. Add health restoration snapshots for Chronomancy in a later focused pass because health reconstruction is the highest-risk part.
+
+---
+
+## Notes for Codex
+
+* Avoid storing entire `Pawn` clones unless explicitly approved.
+* Prefer def references, IDs, and small serializable sub-records.
+* Be careful with direct `Pawn` references in saved data; use `IExposable` properly and prefer stable identifiers where needed.
+* Do not delete records only because a pawn is despawned.
+* Treat cryptosleep, caravans, map unloads, and world pawns as tracked/suspended, not gone.
+* Keep Aeternus-specific haunting behavior out of MagicFramework where possible. MagicFramework should expose neutral memory lifecycle methods; Aeternus should interpret them spiritually.
+* Health snapshot/restoration should be implemented incrementally and tested heavily.

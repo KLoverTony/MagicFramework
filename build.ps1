@@ -288,10 +288,32 @@ foreach ($proj in $Projects) {
     }
 
     Write-Host "[BUILD] Building $proj..." -ForegroundColor Cyan
-    dotnet build $projPath -c Release --nologo -v quiet
+    dotnet build $projPath -c Release --nologo -v quiet -p:DeployToRimWorldMod=false -p:DeployToModAssemblies=false
 
     if ($LASTEXITCODE -eq 0) {
         Write-Host "  [OK] $proj built successfully" -ForegroundColor Green
+
+        $projectDir = Split-Path -Parent $projPath
+        $builtDll = Get-ChildItem -Path (Join-Path $projectDir 'bin\Release') `
+            -Filter "$proj.dll" `
+            -Recurse `
+            -File |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+
+        if (-not $builtDll) {
+            Write-Host "  [ERROR] Could not find built DLL for $proj under bin\Release" -ForegroundColor Red
+            $failed += $proj
+            continue
+        }
+
+        $modAssembliesPath = Join-Path (Join-Path $ModsDir $proj) 'Assemblies'
+        New-Item -ItemType Directory -Path $modAssembliesPath -Force | Out-Null
+
+        $targetDll = Join-Path $modAssembliesPath "$proj.dll"
+        Copy-Item -Path $builtDll.FullName -Destination $targetDll -Force
+
+        Write-Host "  [OK] Copied fresh DLL to $targetDll" -ForegroundColor Green
     } else {
         Write-Host "  [ERROR] $proj build failed" -ForegroundColor Red
         $failed += $proj

@@ -4,7 +4,8 @@
     <TargetFramework>net472</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>../Assemblies</OutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <ModAssembliesDir Condition="'$(ModAssembliesDir)' == ''">..\Assemblies\</ModAssembliesDir>
     <LangVersion>latest</LangVersion>
     <RimWorldDir Condition="'$(RimWorldDir)' == ''">D:\Program Files (x86)\Steam\steamapps\common\RimWorld</RimWorldDir>
     <ModDeployDir Condition="'$(ModDeployDir)' == ''">$(RimWorldDir)\Mods\AeternusFaith</ModDeployDir>
@@ -53,6 +54,11 @@
     <DefContent Include="..\Defs\**\*.*" />
     <TextureContent Include="..\Textures\**\*.*" />
   </ItemGroup>
+
+  <Target Name="DeployToModAssemblies" AfterTargets="Build" Condition="'$(DeployToModAssemblies)' == 'true'">
+    <MakeDir Directories="$(ModAssembliesDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModAssembliesDir)" SkipUnchangedFiles="true" />
+  </Target>
 
   <Target Name="DeployToRimWorldModFolder" AfterTargets="Build" Condition="'$(DeployToRimWorldMod)' == 'true'">
     <PropertyGroup>
