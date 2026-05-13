@@ -2,6 +2,74 @@
 <Defs>
 
   <MemeDef>
+    <defName>AET_Structure_EternalPantheon</defName>
+    <label>eternal pantheon</label>
+    <description>The major gods of Aeternus are distinct divine powers woven into one eternal order. Each governs a sacred strand of creation, memory, nature, craft, knowledge, mercy, and renewal.</description>
+    <category>Structure</category>
+    <groupDef>Theist_Embodied</groupDef>
+    <iconPath>UI/Structures/Structure_EmbodiedTheist</iconPath>
+    <impact>0</impact>
+    <worshipRoomLabel>pantheon</worshipRoomLabel>
+    <deityCount>13</deityCount>
+    <allowSymbolsFromDeity>true</allowSymbolsFromDeity>
+    <symbolPackOverride>true</symbolPackOverride>
+    <generalRules>
+      <rulesStrings>
+        <li>memeCreed->tapestry</li>
+        <li>memeCreed->pantheon</li>
+        <li>memeCreed->covenant</li>
+        <li>memeHyphenPrefix->aetern</li>
+        <li>memeConcept->the eternal tapestry</li>
+        <li>memeConcept->divine balance</li>
+        <li>memeConcept->sacred concord</li>
+        <li>r_ideoName(p=9999)->The Eternal Tapestry</li>
+        <li>r_ideoAdjective(p=9999)->tapestral</li>
+        <li>r_memberName(p=9999)->tapestrant</li>
+        <li>r_memberNamePlural(p=9999)->tapestrants</li>
+        <li>memeLeaderNoun->theomarch</li>
+        <li>memeLeaderNoun->arbiter</li>
+        <li>memeLeaderAdjective->high</li>
+        <li>memeLeaderAdjective->aeternic</li>
+        <li>memeMoralist->voice</li>
+        <li>memeMoralist->oracle</li>
+      </rulesStrings>
+    </generalRules>
+    <descriptionMaker>
+      <patterns>
+        <li><def>TheistMyth</def></li>
+        <li><def>TheistFounder</def></li>
+      </patterns>
+      <constants>
+        <li><key>structure_theist</key><value>true</value></li>
+        <li><key>structure_theistEmbodied</key><value>true</value></li>
+      </constants>
+    </descriptionMaker>
+    <symbolPacks>
+      <li>
+        <ideoName>The Eternal Tapestry</ideoName>
+        <theme>balance</theme>
+        <adjective>tapestral</adjective>
+        <member>tapestrant</member>
+      </li>
+    </symbolPacks>
+    <fixedDeityNameTypes>
+      <li><name>Luminara</name><type>Goddess of Light, Order, Knowledge, and Illumination</type></li>
+      <li><name>Umbra</name><type>God of Death, Twilight, Grave, Entropy, and Rebirth</type></li>
+      <li><name>Aethra</name><type>Goddess of Nature, Arcana, Dreams, Stars, and Mysticism</type></li>
+      <li><name>Sylvanor</name><type>God of Nature, Arcana, Trickery, Magic, Wilds, and Seasons</type></li>
+      <li><name>Solariel</name><type>God of Light, Knowledge, Illumination, and Revelation</type></li>
+      <li><name>Lunaria</name><type>Goddess of Light, Knowledge, Illumination, and Revelation</type></li>
+      <li><name>Thrain</name><type>God of Forge, Strength, Protection, Earth, and Resilience</type></li>
+      <li><name>Dvalin</name><type>God of Forge, Knowledge, Runes, and Innovation</type></li>
+      <li><name>Terra</name><type>Goddess of Nature, Life, Tempest, Land, Sea, and Sky</type></li>
+      <li><name>Aether</name><type>God of Tempest, Knowledge, Sky, Fate, and Stars</type></li>
+      <li><name>Astraeus</name><type>God of Knowledge, Order, Light, Hope, and Destiny</type></li>
+      <li><name>Eudora</name><type>Goddess of Life, Peace, Empathy, Compassion, and Harmony</type></li>
+      <li><name>Aeonar</name><type>The Great Creator</type></li>
+    </fixedDeityNameTypes>
+  </MemeDef>
+
+  <MemeDef>
     <defName>AET_CosmicBalance</defName>
     <label>cosmic balance</label>
     <description>Life and death, light and shadow, wildness and order are all sacred. To enthrone one principle above the others is the first step toward ruin.</description>
@@ -22,6 +90,10 @@
         <li>memeConcept->balance</li>
         <li>memeConcept->equilibrium</li>
         <li>memeConcept->harmony</li>
+        <li>r_ideoName->The Eternal Tapestry</li>
+        <li>r_ideoAdjective->tapestral</li>
+        <li>r_memberName->tapestrant</li>
+        <li>r_memberNamePlural->tapestrants</li>
         <li>memeGod->Arbiter</li>
         <li>memeGod->Keeper</li>
         <li>memeLeaderNoun->theomarch</li>
@@ -34,18 +106,40 @@
     </generalRules>
     <symbolPacks>
       <li>
-        <ideoName>Covenant of the Eternal Balance</ideoName>
+        <ideoName>The Eternal Tapestry</ideoName>
         <theme>balance</theme>
-        <adjective>aeternic</adjective>
-        <member>covenanter</member>
-      </li>
-      <li>
-        <ideoName>Aeternic Concord</ideoName>
-        <theme>harmony</theme>
-        <adjective>aeternic</adjective>
-        <member>concordant</member>
+        <adjective>tapestral</adjective>
+        <member>tapestrant</member>
       </li>
     </symbolPacks>
+    <ritualsToMake>0</ritualsToMake>
+    <replaceRitualsWithTags>
+      <li>CelebratedDate</li>
+      <li>RitualBuildingConsumer</li>
+    </replaceRitualsWithTags>
+    <replacementPatterns>
+      <li>CelebrationPartyChat</li>
+      <li>CelebrationSkyLanterns</li>
+      <li>CelebrationPartyDanceDrum</li>
+    </replacementPatterns>
+    <requiredRituals>
+      <li>
+        <precept>AET_Ritual_WeavingOfDawn</precept>
+        <pattern>CelebrationPartyChat</pattern>
+      </li>
+      <li>
+        <precept>AET_Ritual_VigilOfNames</precept>
+        <pattern>CelebrationSkyLanterns</pattern>
+      </li>
+      <li>
+        <precept>AET_Ritual_HymnOfRenewal</precept>
+        <pattern>CelebrationPartyDanceDrum</pattern>
+      </li>
+      <li>
+        <precept>AET_Ritual_AnvilLitany</precept>
+        <pattern>CelebrationPartyChat</pattern>
+      </li>
+    </requiredRituals>
   </MemeDef>
 
   <MemeDef>
@@ -94,7 +188,7 @@
     <defName>AET_VerdantConcord</defName>
     <label>verdant concord</label>
     <description>The land is a living covenant. Wood, water, beast, soil, and settlement must flourish together, or all shall wither apart.</description>
-    <iconPath>UI/Memes/NaturePrimacy</iconPath>
+    <iconPath>UI/Memes/PrimacyNature</iconPath>
     <groupDef>Misc</groupDef>
     <impact>2</impact>
     <renderOrder>1002</renderOrder>
@@ -136,7 +230,7 @@
     <defName>AET_StoicCraft</defName>
     <label>stoic craft</label>
     <description>Stone remembers. Iron obeys. Labor is prayer when done with discipline, purpose, and honor.</description>
-    <iconPath>UI/Memes/HumanPrimacy</iconPath>
+    <iconPath>UI/Memes/PrimacyHuman</iconPath>
     <groupDef>Misc</groupDef>
     <impact>1</impact>
     <renderOrder>1003</renderOrder>

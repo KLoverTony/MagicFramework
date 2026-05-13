@@ -19,11 +19,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -55,11 +64,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -91,11 +109,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -127,11 +154,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -163,11 +199,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -199,11 +244,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -234,10 +288,19 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -269,11 +332,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -305,11 +377,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -341,11 +422,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -377,11 +467,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -413,11 +512,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -449,11 +557,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -485,11 +602,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -521,11 +647,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -557,11 +692,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -593,11 +737,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -629,11 +782,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -665,11 +827,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -701,11 +872,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -736,10 +916,19 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -771,11 +960,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -807,11 +1005,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -843,11 +1050,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -879,11 +1095,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -915,11 +1140,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -951,11 +1185,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
@@ -987,11 +1230,20 @@
         </filter>
         <count>1</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_Papyrus</li>
         <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>

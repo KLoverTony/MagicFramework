@@ -27,12 +27,9 @@ Priority key:
 | MF-012 | P2 | L | Chains | Generalize delayed branching chain support. |
 | MF-014 | P2 | M | Summons | Extend summon/spawn primitives beyond temporary trained creatures. |
 | MF-016 | P2 | S | UI | Add a player-facing spell details UI concept or first pass. |
-| MF-017 | P2 | M | Settings | Add RimWorld mod settings tabs for framework and first-party content options. |
-| MF-018 | P2 | M | MFVanilla | Build the arcane ink production chain for scrollmaking. |
 | MF-019 | P2 | M | AeternusFaith | Improve ritual dialogs with pawn avatars and clearer invalid-state feedback. |
 | MF-020 | P2 | M | AeternusFaith | Tie psychic sensitivity into haunting effects. |
 | MF-021 | P2 | L | AeternusFaith | Add pseudo-relationship memory for raised undead. |
-| MF-022 | P2 | M | AeternusFaith | Add torch sconces and arcane torch lighting content. |
 | MF-023 | P3 | L | AeternusFaith | Build custom wall atlas and auto-joining support. |
 | MF-024 | P3 | L | Content | Start magic tools and weapons framework/content. |
 | MF-025 | P3 | M | Events | Add celestial event enhancement rules and gameplay hooks. |
@@ -46,8 +43,6 @@ Priority key:
 | MF-033 | P3 | S | Content | Shroudhymn summoned spectres should despawn cleanly. |
 | MF-034 | P3 | S | Content | Add corresponding lecterns as placeable objects in ritual circle action gizmos. |
 | MF-035 | P3 | S | Content | Ritual summons should only be performable by Bonewrights (ideology role). |
-| MF-036 | P3 | S | Content | Roles for Custom Aeternus Faith should be fixed if possible. |
-| MF-037 | P3 | S | Content | Ritual circles should be research dependent and gain new research fields: Traditions of the Ossanith and Sacred Rituals of the Bonewrights. |
 
 
 ## P1 Framework Capabilities
@@ -209,6 +204,9 @@ Current state:
 - `SpellDescriptionUtility` generates cached baseline effect summaries from loaded `SpellDef` action trees.
 - Known-spell gizmo tooltips append generated plain-language effect summaries.
 - MFVanilla spell scroll inspect text shows generated effect summaries through the learn-spell comp.
+- Known-spell grouped menus expose a dedicated spell details window with classification, learning, casting, targeting, active enhancement rules, and generated effect summaries.
+- MagicFramework settings can enable colored generated spell text for selected costs, scaling, healing, cooldowns, and elemental/damage terms.
+- Authored spell descriptions can opt into generated detail insertion with `{MF:...}` tokens such as `{MF:SpellSummary}`, `{MF:Effects}`, `{MF:ManaCost}`, `{MF:Cooldown}`, `{MF:Range}`, `{MF:Radius}`, `{MF:CastTime}`, `{MF:PowerScaling}`, `{MF:Requirements}`, `{MF:Targeting}`, `{MF:Classification}`, and `{MF:ActiveModifiers}`.
 
 Possible first pass:
 - show element/domain/discipline/tags
@@ -218,67 +216,31 @@ Possible first pass:
 - show range, cast time, and target policy
 
 Remaining work:
-- add a dedicated spell details window or tab instead of relying only on tooltips/inspect strings
 - add richer summary providers for conditions, target queries, scaling values, and contextual enhancement modifiers
 - decide how generated summaries should react to language changes or mod settings
 
-### MF-017 Mod Settings Tabs
-
-Goal: add RimWorld mod settings tabs for MagicFramework and first-party content so players can tune behavior without XML edits.
-
-Initial tabs:
-- `Framework`: logging level, subsystem log toggles, debug gizmo visibility, and compatibility toggles.
-- `MFVanilla`: research behavior, scroll generation/content toggles, and balance multipliers where appropriate.
-- `AeternusFaith`: ritual UX/debug options, haunting tuning, and undead behavior toggles once those systems mature.
-
-Initial settings:
-- global log level: off, errors, warnings, info, verbose
-- per-subsystem logging: execution, costs, requirements, targeting, projectiles, persistent effects, area zones, wall zones, stat modifiers, force fields, enhancements
-- show/hide debug spell gizmos outside dev mode if desired
-- MFVanilla research policy: arcane research suppresses standard tech research, coexists with standard tech, or only gates magic content
-- optional first-party content balance multipliers, such as mana cost, cooldown, scroll learning availability, and enhancement strength
-
-Implementation notes:
-- Use RimWorld `ModSettings` with version-tolerant defaults.
-- Keep framework settings independent from first-party content settings where possible.
-- Settings that affect generated defs may need restart/reload notices.
-- Avoid settings that change save-critical semantics without clear warnings.
-
 ## P2 Content And Runtime Polish
-
-### MF-018 MFVanilla Arcane Ink Production Chain
-
-Goal: make scrollmaking depend on a produced ink resource, not only papyrus/parchment.
-
-Content flow:
-- Add growable exotic herb crop. Default label should probably be `exotic herbs`; `belladonna` can remain a darker flavor variant later.
-- Add harvested herb item.
-- Add `MFV_ArcaneInk`.
-- Add an ink-making station or reuse/split existing arcane research production bench content.
-- Add ink recipe and work giver.
-- Update `GenerateSpellScrollDefs.ps1` so scroll recipes require one writing material plus one arcane ink.
-
-Balancing placeholders:
-- `MFV_MakeArcaneInk`: 8-12 exotic herbs plus 3-5 silver -> 1 arcane ink.
-- Scroll recipe: 1 papyrus/parchment plus 1 arcane ink -> 1 scroll.
-- Ink station research: likely `MFV_Alchemy` or `MFV_RunicInscription`.
-- Crop research: likely `MFV_Papyrus` or `MFV_Alchemy`.
-
-Texture needs:
-- crop stages: `ExoticHerbs_Immature.png`, `ExoticHerbs_Growing.png`, `ExoticHerbs_Mature.png`
-- harvested herb item
-- arcane ink item
-- ink station, preferably north/south/east variants if `Graphic_Multi`
 
 ### MF-019 Ritual Dialog Improvements
 
 Goal: make AeternusFaith ritual setup clearer and more polished.
+
+Current state:
+- MagicFramework provides `Dialog_ParticipantSelection` as a reusable participant-selection shell.
+- The reusable dialog supports corpse selection plus pawn buckets for conductor, audience, and available pawns.
+- Bucket rows use pawn/corpse icons, disabled-row reasons, and a validation summary before accept.
+- AeternusFaith skeleton, ossuary, and spectre rite dialogs now use thin adapters over the shared participant dialog.
 
 Possible first pass:
 - Replace plain checkbox/radio lists with pawn rows that include portraits.
 - Show why a corpse or conductor is unavailable.
 - Surface reachability/reservation failure reasons where practical.
 - Keep the UI compact enough for small screens.
+
+Remaining work:
+- Replace the generic disabled reasons with more specific reachability, reservation, role, and corpse-state reasons where the ritual comps can expose them.
+- Consider dedicated slot labels and optional min/max participant counts if future rites need them.
+- Smoke test the skeleton, ossuary, and spectre ritual dialogs at small resolutions.
 
 ### MF-020 Psychic Sensitivity In Haunting Effects
 
@@ -309,20 +271,6 @@ Complexity notes:
 - Needs save/load.
 - Needs relationship-copy policy.
 - Needs UI/inspect or thought/status feedback.
-
-### MF-022 Torches And Arcane Lighting
-
-Goal: provide low-tech magical lighting content for fantasy colonies.
-
-Content ideas:
-- wall torch sconces
-- arcane torches
-- occult shrine/ritual lighting variants
-- research or material gates if needed
-
-Implementation notes:
-- This is content-light if textures exist.
-- It becomes larger if custom fuel, glow colors, refuel jobs, or magic-power mechanics are added.
 
 ## P3 Later And Exploratory
 

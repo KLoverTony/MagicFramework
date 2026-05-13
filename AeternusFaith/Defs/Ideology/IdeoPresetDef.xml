@@ -3,11 +3,12 @@
 
   <IdeoPresetDef>
     <defName>AET_CovenantOfEternalBalance</defName>
-    <label>Covenant of the Eternal Balance</label>
+    <label>The Eternal Tapestry</label>
     <description>A collective Aeternus pantheon ideology venerating Aeonar's creation through equilibrium among light, shadow, wilderness, craft, knowledge, death, and renewal.</description>
     <categoryDef>Strong</categoryDef>
     <iconPath>UI/HeroArt/RimWorldLogo</iconPath>
     <memes>
+      <li>AET_Structure_EternalPantheon</li>
       <li>AET_CosmicBalance</li>
       <li>AET_VerdantConcord</li>
       <li>AET_DeathStewardship</li>

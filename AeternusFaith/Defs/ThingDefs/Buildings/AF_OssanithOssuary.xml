@@ -24,6 +24,9 @@
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <designationCategory>Misc</designationCategory>
     <uiOrder>2060</uiOrder>
+    <researchPrerequisites>
+      <li>AF_OssanithTraditions</li>
+    </researchPrerequisites>
     <thingCategories>
       <li>BuildingsMisc</li>
     </thingCategories>
@@ -81,6 +84,9 @@
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <designationCategory>Misc</designationCategory>
     <uiOrder>2061</uiOrder>
+    <researchPrerequisites>
+      <li>AF_OssanithTraditions</li>
+    </researchPrerequisites>
     <thingCategories>
       <li>BuildingsMisc</li>
     </thingCategories>
@@ -146,6 +152,9 @@
 
     <designationCategory>Misc</designationCategory>
     <uiOrder>2061</uiOrder>
+    <researchPrerequisites>
+      <li>AF_OssanithTraditions</li>
+    </researchPrerequisites>
 
     <thingCategories>
       <li>BuildingsFurniture</li>

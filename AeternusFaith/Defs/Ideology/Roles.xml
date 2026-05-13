@@ -205,8 +205,6 @@
     <rulePack>
       <rulesStrings>
         <li>r_roleName->high theomarch</li>
-        <li>r_roleName->theomarch</li>
-        <li>r_roleName->arbiter of balance</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -216,8 +214,6 @@
     <rulePack>
       <rulesStrings>
         <li>r_roleName->voice of balance</li>
-        <li>r_roleName->covenant voice</li>
-        <li>r_roleName->oracle of balance</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -227,8 +223,6 @@
     <rulePack>
       <rulesStrings>
         <li>r_roleName->soulwarden</li>
-        <li>r_roleName->keeper of names</li>
-        <li>r_roleName->warden of the dead</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -238,8 +232,6 @@
     <rulePack>
       <rulesStrings>
         <li>r_roleName->verdant keeper</li>
-        <li>r_roleName->grovewarden</li>
-        <li>r_roleName->keeper of renewal</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>
@@ -249,8 +241,6 @@
     <rulePack>
       <rulesStrings>
         <li>r_roleName->forgewarden</li>
-        <li>r_roleName->ritual artisan</li>
-        <li>r_roleName->keeper of craft</li>
       </rulesStrings>
     </rulePack>
   </RulePackDef>

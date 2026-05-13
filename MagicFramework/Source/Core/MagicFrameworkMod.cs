@@ -27,6 +27,10 @@ public sealed class MagicFrameworkMod : Mod
     {
         Listing_Standard listing = new();
         listing.Begin(inRect);
+        listing.Label("Interface");
+        listing.GapLine();
+        listing.CheckboxLabeled("Use colored spell text", ref settings.useColoredSpellText, "Adds color tags to generated spell summaries where RimWorld rich text supports them.");
+        listing.GapLine();
         listing.Label("Caster level scaling");
         listing.GapLine();
         DrawPercentSlider(listing, "Damage per power", ref settings.damageScalingPerPower, 0f, 0.12f);

@@ -26,6 +26,7 @@ public sealed class MagicFrameworkSettings : ModSettings
     public bool logEnhancements;
     public bool logVisuals;
     public bool logSummons;
+    public bool useColoredSpellText = true;
     public float damageScalingPerPower = DefaultDamageScalingPerPower;
     public float healingScalingPerPower = DefaultHealingScalingPerPower;
     public float radiusScalingPerPower = DefaultRadiusScalingPerPower;
@@ -86,6 +87,7 @@ public sealed class MagicFrameworkSettings : ModSettings
         Scribe_Values.Look(ref logEnhancements, "logEnhancements");
         Scribe_Values.Look(ref logVisuals, "logVisuals");
         Scribe_Values.Look(ref logSummons, "logSummons");
+        Scribe_Values.Look(ref useColoredSpellText, "useColoredSpellText", true);
         Scribe_Values.Look(ref damageScalingPerPower, "damageScalingPerPower", DefaultDamageScalingPerPower);
         Scribe_Values.Look(ref healingScalingPerPower, "healingScalingPerPower", DefaultHealingScalingPerPower);
         Scribe_Values.Look(ref radiusScalingPerPower, "radiusScalingPerPower", DefaultRadiusScalingPerPower);

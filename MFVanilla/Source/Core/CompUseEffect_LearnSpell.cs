@@ -55,7 +55,9 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
     public override string CompInspectStringExtra()
     {
         string baseText = base.CompInspectStringExtra();
-        string details = SpellDescriptionUtility.GetDetails(Props.spell);
+        string details = SpellDescriptionUtility.HasDescriptionTokens(Props.spell)
+            ? SpellDescriptionUtility.GetResolvedDescription(Props.spell)
+            : SpellDescriptionUtility.GetDetails(Props.spell);
         if (string.IsNullOrWhiteSpace(details))
         {
             return baseText;

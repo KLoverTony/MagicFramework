@@ -375,3 +375,53 @@ This file tracks implemented framework and content milestones moved out of the a
   Next implementation:
   - defer manual release/capture, rescue/escape jobs, water-source scaling, and richer feedback/visuals for later reconsideration
 
+- MF-022 Torches and arcane lighting MVP.
+  Current state:
+  - `MFV_MagicTorchLamp` provides a freestanding arcane torch analogue with blue glow, fire overlay, modest heat, meditation flame focus support, and `MFV_Enchantment` research gating
+  - `MFV_MagicTorchWallLamp` provides the wall-mounted sconce analogue using wall-attachment placement, blue glow, fire overlay, modest heat, meditation flame focus support, and `MFV_Enchantment` research gating
+  - both use existing torch/wall-torch art as crude first-pass visuals and arcane focus material costs
+  Remaining polish:
+  - no bespoke AeternusFaith torch/sconce textures yet
+  - no occult shrine or ritual-room lighting variants yet
+  - no custom fuel, refuel work, glow color variants, or magic-power mechanics yet
+
+- MF-036 Fixed Custom Aeternus Faith role names.
+  Current state:
+  - Aeternus role namer rule packs now contain a single `r_roleName` option per role
+  - generated titles are fixed as high theomarch, voice of balance, soulwarden, verdant keeper, and forgewarden
+  Note:
+  - existing saved ideologies may keep already-generated role names until regenerated or edited
+
+- MF-037 Aeternus ritual-circle research gates.
+  Current state:
+  - the Aeternus Faith research tab includes `AF_FaithRituals`, `AF_OssanithTraditions`, and the cathedra follow-up projects
+  - Ossanith circle, ossuary bone box, and lectern require `AF_OssanithTraditions`
+  - Animara ritual center and lectern require `AF_AnimaraSoulbinding`
+  - Shroudhymn ritual center and lectern require `AF_ShroudhymnOaths`
+  - Animara and Shroudhymn edge/corner pieces are hidden from build menus and research unlock lists; they are placed through the center gizmo
+  Naming note:
+  - the implemented research def is `AF_OssanithTraditions`; the broader Bonewright cathedra are represented by separate follow-up research projects rather than a single `Sacred Rituals of the Bonewrights` project
+
+- MF-017 Mod settings MVP.
+  Current state:
+  - MagicFramework exposes a RimWorld settings category with colored generated spell text, caster-power scaling sliders, per-subsystem routine logging toggles, bulk logging enable/disable buttons, and debug snapshot buttons for delayed runtime, armed triggers, persistent effects, wall zones, and area zones
+  - `MagicFrameworkSettings` persists those options through RimWorld `ModSettings` with version-tolerant defaults and a runtime `Current` accessor
+  - MFVanilla exposes a separate RimWorld settings category for vanilla tech research suppression and warning behavior, with live patch notification when settings change
+  Remaining polish:
+  - settings are currently separate RimWorld mod categories rather than one literal multi-tab settings window
+  - AeternusFaith does not have its own settings category yet
+  - debug gizmo visibility, compatibility toggles, scroll/content toggles, and broader MFVanilla balance multipliers remain future polish
+
+- MF-018 MFVanilla arcane ink production chain MVP.
+  Current state:
+  - `Plant_MFV_ExoticHerbs` provides a growable exotic herb crop gated by `MFV_ArcaneTheory`
+  - `MFV_ExoticHerbs` provides the harvested herb item used by alchemical recipes
+  - `MFV_ArcaneInk` provides the scrollmaking ink resource with item art
+  - `MFV_AlchemyTable` provides the production bench for alchemical reagents and is gated by `MFV_Alchemy`
+  - `MFV_MakeArcaneInk` turns 10 exotic herbs into 1 arcane ink at the alchemy table
+  - `GenerateSpellScrollDefs.ps1` now writes scroll recipes that require 1 writing material plus 1 `MFV_ArcaneInk`
+  - generated spell scroll recipes were regenerated after the generator update
+  Remaining validation:
+  - smoke test the full in-game loop: research, grow/harvest exotic herbs, make arcane ink, and scribe a scroll
+  - tune balance after playtesting if herb yield, work amount, or ink cost feels too strict or too loose
+

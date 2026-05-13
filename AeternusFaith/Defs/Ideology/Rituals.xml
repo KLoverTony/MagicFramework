@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <!-- Custom Aeternus ritual defs were removed from the preset path until they can be rebuilt from RimWorld's Precept_Ritual pattern schema. -->
+  <PreceptDef ParentName="FestivalBase">
+    <defName>AET_Ritual_WeavingOfDawn</defName>
+    <label>weaving of dawn</label>
+    <description>A seasonal gathering where the faithful recite the first pattern of Aeonar and renew their place within the Eternal Tapestry.</description>
+    <ritualPatternBase>CelebrationPartyChat</ritualPatternBase>
+    <requiredMemes>
+      <li>AET_CosmicBalance</li>
+    </requiredMemes>
+    <allowDuplicates>false</allowDuplicates>
+  </PreceptDef>
+
+  <PreceptDef ParentName="FestivalBase">
+    <defName>AET_Ritual_VigilOfNames</defName>
+    <label>vigil of names</label>
+    <description>A remembrance rite where names of the dead are spoken aloud so memory remains bound to the living world.</description>
+    <ritualPatternBase>CelebrationSkyLanterns</ritualPatternBase>
+    <requiredMemes>
+      <li>AET_DeathStewardship</li>
+    </requiredMemes>
+    <allowDuplicates>false</allowDuplicates>
+  </PreceptDef>
+
+  <PreceptDef ParentName="FestivalBase">
+    <defName>AET_Ritual_HymnOfRenewal</defName>
+    <label>hymn of renewal</label>
+    <description>A communal rite of drums, movement, and shared breath honoring the green strand of the Tapestry.</description>
+    <ritualPatternBase>CelebrationPartyDanceDrum</ritualPatternBase>
+    <requiredMemes>
+      <li>AET_VerdantConcord</li>
+    </requiredMemes>
+    <allowDuplicates>false</allowDuplicates>
+  </PreceptDef>
+
+  <PreceptDef ParentName="FestivalBase">
+    <defName>AET_Ritual_AnvilLitany</defName>
+    <label>anvil litany</label>
+    <description>A rite of labor and praise where tools are blessed, oaths are spoken, and useful work is honored as prayer.</description>
+    <ritualPatternBase>CelebrationPartyChat</ritualPatternBase>
+    <requiredMemes>
+      <li>AET_StoicCraft</li>
+    </requiredMemes>
+    <allowDuplicates>false</allowDuplicates>
+  </PreceptDef>
 
 </Defs>

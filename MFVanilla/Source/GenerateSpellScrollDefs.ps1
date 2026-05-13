@@ -193,6 +193,14 @@ try {
         $recipeWriter.WriteEndElement()
         $recipeWriter.WriteElementString('count', '1')
         $recipeWriter.WriteEndElement()
+        $recipeWriter.WriteStartElement('li')
+        $recipeWriter.WriteStartElement('filter')
+        $recipeWriter.WriteStartElement('thingDefs')
+        $recipeWriter.WriteElementString('li', 'MFV_ArcaneInk')
+        $recipeWriter.WriteEndElement()
+        $recipeWriter.WriteEndElement()
+        $recipeWriter.WriteElementString('count', '1')
+        $recipeWriter.WriteEndElement()
         $recipeWriter.WriteEndElement()
 
         $recipeWriter.WriteStartElement('fixedIngredientFilter')
@@ -201,6 +209,7 @@ try {
             $recipeWriter.WriteElementString('li', 'MFV_Papyrus')
         }
         $recipeWriter.WriteElementString('li', 'MFV_Parchment')
+        $recipeWriter.WriteElementString('li', 'MFV_ArcaneInk')
         $recipeWriter.WriteEndElement()
         $recipeWriter.WriteEndElement()
 

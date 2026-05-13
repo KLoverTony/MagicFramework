@@ -12,7 +12,6 @@
     <selectable>true</selectable>
     <useHitPoints>true</useHitPoints>
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
-    <designationCategory>Misc</designationCategory>
     <blocksAltitudes>
       <li>FloorCoverings</li>
     </blocksAltitudes>
@@ -45,6 +44,10 @@
       <drawSize>(4,3)</drawSize>
     </graphicData>
     <size>(4,3)</size>
+    <designationCategory>Misc</designationCategory>
+    <researchPrerequisites>
+      <li>AF_ShroudhymnOaths</li>
+    </researchPrerequisites>
     <uiOrder>2070</uiOrder>
     <rotatable>false</rotatable>
     <statBases>
@@ -262,6 +265,9 @@
     <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
     <designationCategory>Misc</designationCategory>
     <uiOrder>2076</uiOrder>
+    <researchPrerequisites>
+      <li>AF_ShroudhymnOaths</li>
+    </researchPrerequisites>
     <thingCategories>
       <li>BuildingsFurniture</li>
     </thingCategories>

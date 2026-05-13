@@ -97,7 +97,7 @@ public static class SpellGizmoUtility
         Command_Action command = new()
         {
             defaultLabel = spellDef.LabelCap,
-            defaultDesc = SpellDescriptionUtility.GetGizmoDescription(spellDef),
+            defaultDesc = SpellDescriptionUtility.GetGizmoDescription(spellDef, pawn),
             icon = ResolveSpellIcon(spellDef),
             action = () => BeginSpellTargeting(pawn, spellDef)
         };
@@ -129,19 +129,27 @@ public static class SpellGizmoUtility
             if (runtime?.HasActiveMaintainedSpell(pawn, spellDef) == true)
             {
                 options.Add(new FloatMenuOption($"Release {spellDef.LabelCap}", () => ReleaseMaintainedSpell(pawn, spellDef, runtime)));
+                options.Add(new FloatMenuOption($"Details: {spellDef.LabelCap}", () => OpenSpellDetails(pawn, spellDef)));
                 continue;
             }
 
             if (!TryValidateCasterRequirements(pawn, spellDef, out string reason))
             {
                 options.Add(new FloatMenuOption($"{spellDef.LabelCap}: {reason}", null));
+                options.Add(new FloatMenuOption($"Details: {spellDef.LabelCap}", () => OpenSpellDetails(pawn, spellDef)));
                 continue;
             }
 
             options.Add(new FloatMenuOption(spellDef.LabelCap, () => BeginSpellTargeting(pawn, spellDef)));
+            options.Add(new FloatMenuOption($"Details: {spellDef.LabelCap}", () => OpenSpellDetails(pawn, spellDef)));
         }
 
         Find.WindowStack.Add(new FloatMenu(options));
+    }
+
+    private static void OpenSpellDetails(Pawn pawn, SpellDef spellDef)
+    {
+        Find.WindowStack.Add(new Dialog_SpellDetails(pawn, spellDef));
     }
 
     private static List<SpellResearchGroup> BuildResearchGroups(List<SpellDef> knownSpells)

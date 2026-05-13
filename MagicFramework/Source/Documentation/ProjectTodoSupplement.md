@@ -67,23 +67,17 @@ This milestone makes the framework understandable and configurable for players.
 | Task | Priority | Complexity | Reason |
 | --- | --- | --- | --- |
 | MF-016 Spell details UI | P2 | S/M | Builds on generated descriptions and scalars. |
-| MF-017 Mod settings tabs | P2 | M | Gives users control over logging, debug behavior, and balance. |
 | MF-027 Validation spell icons | P3 | S | Low-risk polish as new spells are added. |
 
 Implementation order:
 1. Add a first-pass spell details window or tab.
 2. Show metadata, costs, cooldowns, targeting policy, and generated effect summaries.
 3. Show active enhancement/scaling display where practical.
-4. Add settings tabs:
-   - Framework logging and debug visibility.
-   - MFVanilla balance multipliers.
-   - AeternusFaith settings later, when those systems mature.
-5. Add missing gizmo icons opportunistically.
+4. Add missing gizmo icons opportunistically.
 
 Smoke tests:
 - Open spell details for `MF_Firebolt`, `MF_Fireball`, `MF_ManaShield`, `MF_WatersEmbrace`, and `MF_BlessingOfVigor`.
 - Confirm costs/cooldowns match actual cast behavior.
-- Toggle debug gizmos/logging in settings and verify behavior after reload.
 - Confirm no UI overflow at small resolutions.
 
 ## Milestone 4: Content Systems With Strong Payoff
@@ -93,20 +87,16 @@ This milestone adds gameplay depth once framework rules are stable.
 | Task | Priority | Complexity | Reason |
 | --- | --- | --- | --- |
 | MF-010 Buff/debuff primitives | P2 | M | Reusable status defs are in place; remaining work is policy, scalars, and conversion cleanup. |
-| MF-018 Arcane ink chain | P2 | M | Strong MFVanilla progression improvement. |
 | MF-014 Summon/spawn expansion | P2 | M | Opens wards, constructs, hazards, and beacons. |
 | MF-011 Projectile support | P2 | M | Improves combat feel and correctness. |
 
 Implementation order:
 1. Finish the MF-010 follow-through: status categories, stacking/refresh policy, named scalars, and a small conversion pass for spells that benefit from premade statuses.
-2. Build the arcane ink production chain because it is mostly content plus generator updates.
-3. Expand summon/spawn support for temporary objects, hazards, wards, and constructs.
-4. Improve projectile impact context after inspecting what RimWorld exposes cleanly.
-5. Waters Embrace SpellDrowningHediff is owned by the spell and fades immediately after the spell fades which is not the desired effect. Consider  giving SpellDrowningHediff its own decay behavior, and changing Water’s Embrace so it applies/increases/refreshes the hediff without scheduling spell-owned removal in the same way. Then the spell ending stops adding pressure, but the pawn still has to recover from what already happened.
+2. Expand summon/spawn support for temporary objects, hazards, wards, and constructs.
+3. Improve projectile impact context after inspecting what RimWorld exposes cleanly.
+4. Waters Embrace SpellDrowningHediff is owned by the spell and fades immediately after the spell fades which is not the desired effect. Consider  giving SpellDrowningHediff its own decay behavior, and changing Water’s Embrace so it applies/increases/refreshes the hediff without scheduling spell-owned removal in the same way. Then the spell ending stops adding pressure, but the pawn still has to recover from what already happened.
 
 Smoke tests:
-- Generate scroll recipes and confirm every scroll requires one writing material plus one arcane ink.
-- Grow/harvest exotic herbs, produce ink, and craft a scroll.
 - Spawn a temporary object/ward and confirm expiry/save/load cleanup.
 - Test projectile spells against pawn hits, misses, walls, shielded pawns, and cover interception if exposed.
 
