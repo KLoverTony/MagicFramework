@@ -9,6 +9,68 @@
   - Fields like projectile def names, damage def names, and hediff def names are illustrative.
 -->
 <Defs>
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Haste</defName>
+    <label>hasted</label>
+    <description>Accelerates a pawn, increasing movement speed.</description>
+    <durationTicks>900</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Hasted</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>1.35</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Might</defName>
+    <label>mighty</label>
+    <description>Strengthens a pawn, improving melee damage and carrying capacity.</description>
+    <durationTicks>1800</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Mighty</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MeleeDamageFactor</statDef>
+        <factor>1.35</factor>
+      </li>
+      <li>
+        <statDef>CarryingCapacity</statDef>
+        <offset>25</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_MightBacklashWeakness</defName>
+    <label>weakened</label>
+    <description>Magical backlash weakens this pawn's strength for a short time.</description>
+    <durationTicks>300</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Weakened</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MeleeDamageFactor</statDef>
+        <factor>0.75</factor>
+      </li>
+      <li>
+        <statDef>CarryingCapacity</statDef>
+        <offset>-15</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
   <MagicFramework.Definitions.SpellDef>
     <defName>MF_Firebolt</defName>
     <label>firebolt</label>
@@ -203,21 +265,10 @@
     </targeting>
 
     <actions>
-      <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+      <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
         <debugLabel>Haste buff</debugLabel>
+        <statusEffectDef>MFV_Status_Haste</statusEffectDef>
         <targetSource>CurrentTarget</targetSource>
-        <durationTicks>900</durationTicks>
-        <statusCue>
-          <hediffDef>MF_Hasted</hediffDef>
-          <severity>0.01</severity>
-          <removeOnExpire>true</removeOnExpire>
-        </statusCue>
-        <modifiers>
-          <li>
-            <statDef>MoveSpeed</statDef>
-            <factor>1.35</factor>
-          </li>
-        </modifiers>
       </li>
     </actions>
   </MagicFramework.Definitions.SpellDef>
@@ -243,27 +294,13 @@
     <actions>
       <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
         <debugLabel>Might sustained buff</debugLabel>
+        <statusEffectDef>MFV_Status_Might</statusEffectDef>
         <targetSource>CurrentTarget</targetSource>
         <maxDurationTicks>1800</maxDurationTicks>
-        <statusCue>
-          <hediffDef>MF_Mighty</hediffDef>
-          <severity>0.01</severity>
-          <removeOnExpire>true</removeOnExpire>
-        </statusCue>
         <maxRange>12</maxRange>
         <breakWhenCasterDowned>true</breakWhenCasterDowned>
         <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
         <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
-        <modifiers>
-          <li>
-            <statDef>MeleeDamageFactor</statDef>
-            <factor>1.35</factor>
-          </li>
-          <li>
-            <statDef>CarryingCapacity</statDef>
-            <offset>25</offset>
-          </li>
-        </modifiers>
         <onBreakActions>
           <li Class="MagicFramework.Definitions.EffectActionDef">
             <debugLabel>Might break effect</debugLabel>
@@ -271,25 +308,10 @@
             <locationSource>CurrentTarget</locationSource>
             <attachToTarget>true</attachToTarget>
           </li>
-          <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+          <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
             <debugLabel>Might backlash weakness</debugLabel>
+            <statusEffectDef>MFV_Status_MightBacklashWeakness</statusEffectDef>
             <targetSource>CurrentTarget</targetSource>
-            <durationTicks>300</durationTicks>
-            <statusCue>
-              <hediffDef>MF_Weakened</hediffDef>
-              <severity>0.01</severity>
-              <removeOnExpire>true</removeOnExpire>
-            </statusCue>
-            <modifiers>
-              <li>
-                <statDef>MeleeDamageFactor</statDef>
-                <factor>0.75</factor>
-              </li>
-              <li>
-                <statDef>CarryingCapacity</statDef>
-                <offset>-15</offset>
-              </li>
-            </modifiers>
           </li>
         </onBreakActions>
       </li>

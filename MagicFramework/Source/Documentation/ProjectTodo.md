@@ -20,7 +20,6 @@ Priority key:
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
 | MF-005 | P1 | M | Lifecycle | Formalize lifecycle hooks for persistent spell state. |
-| MF-006 | P1 | M | Targeting | Expand target filters and target-query expressiveness. |
 | MF-007 | P1 | M | Validation | Add focused validation spells for under-tested framework modes. |
 | MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support. |
 | MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives beyond direct stat modifiers. |
@@ -39,14 +38,17 @@ Priority key:
 | MF-025 | P3 | M | Events | Add celestial event enhancement rules and gameplay hooks. |
 | MF-026 | P3 | M | Visuals | Continue persistent visual support. |
 | MF-027 | P3 | S | Content | Add future validation spell gizmo icons as spells are added. |
-| MF-028 | P3 | S | Design | Decide which common statuses deserve dedicated primitives. |
+| MF-028 | P3 | S | Design | Review which common statuses deserve dedicated primitives after reusable status adoption. |
 | MF-029 | P3 | M | Fire | Investigate real RimWorld fire integration for `Wall of Fire`. |
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
 | MF-031 | P3 | L | Docs | Write a full MagicFramework spell design guide. |
-| MF-032 | P3 | S | Compatibility | Gate any mechanisms that would not be supported in multiplayer mods | 
-| MF-033 | P3 | S | Content | Shroudhymn summoned spectre despawns |
-| MF-034 | P3 | S | Content | Add corresponding lecturns as placeable objects in ritual circle action gizmos |
-| MF-035 | P3 | S | Content | Ritual summons should only be performable by Bonewrights (ideology role) |
+| MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
+| MF-033 | P3 | S | Content | Shroudhymn summoned spectres should despawn cleanly. |
+| MF-034 | P3 | S | Content | Add corresponding lecterns as placeable objects in ritual circle action gizmos. |
+| MF-035 | P3 | S | Content | Ritual summons should only be performable by Bonewrights (ideology role). |
+| MF-036 | P3 | S | Content | Roles for Custom Aeternus Faith should be fixed if possible. |
+| MF-037 | P3 | S | Content | Ritual circles should be research dependent and gain new research fields: Traditions of the Ossanith and Sacred Rituals of the Bonewrights. |
+
 
 ## P1 Framework Capabilities
 
@@ -74,30 +76,6 @@ Target hooks:
 Remaining work:
 - Backfill summons, spawned things, and fuller stat modifier lifecycle hooks as appropriate.
 - Ensure hooks survive save/load where runtime state persists.
-
-### MF-006 Target Queries
-
-Goal: provide reusable query actions/conditions instead of one-off targeting logic.
-
-Useful queries and filters:
-- nearest valid foe
-- nearest valid ally
-- lowest-health target
-- highest-threat target
-- all pawns in radius with optional exclusions and target limits
-- line-intersection or crossing checks
-- exclude already-hit or already-chained targets
-- deterministic ordering and target count limits
-
-Current state:
-- Reusable target query defs exist for current target, radius, nearest valid target, shape targets, and directional chains.
-- Common query defs support shared ordering modes (`Nearest`, `Farthest`, `LowestHealth`, `HighestHealth`, `HighestThreat`, and `LowestThreat`) plus `maxTargets`.
-- `MF_ArcSeeker` validates nearest valid foe selection from the caster's location.
-- `MF_BlessingOfVigor` validates all allied pawns in radius while excluding the caster.
-- Chain lightning still has purpose-built delayed, forward-biased chain targeting.
-
-Remaining work:
-- Decide whether visited/already-hit exclusions should become a general execution-state feature or remain chain-specific.
 
 ### MF-007 Validation Spell Suite
 
@@ -135,10 +113,17 @@ Current state:
 - `ScalableFloatDef` supports authored `Flat`, `Linear`, and `Tiered` numeric modes with clamps.
 - `SpellPowerScalarDef` supports spell-level multiplicative scalars for damage, healing, radius/range, duration, mana cost, and cooldown.
 - `SpellPowerScalarDef` supports the same `Flat`, `Linear`, and `Tiered` numeric modes.
+- `SpellPowerDef.scaledAttributes` supports lightweight authored scaling lists for damage, healing, radius/range, duration, mana cost, and cooldown.
+- Magic Framework mod settings expose global per-power scaling factors for lightweight scaled attributes.
+- Explicit `SpellPowerScalarDef` entries remain available for spell-specific tuning and take precedence over lightweight global scaling.
 - `PowerTierConditionDef` and `SpellPowerConditionDef` support structural spell changes through conditionals.
 - Scalable support exists for damage, healing, explosion radius/damage, targeting range, spawned thing count, durations, and several validation spells.
+- `MF_Firebolt` now validates lightweight damage/cooldown scaling.
+- `MF_Fireball` now validates lightweight damage/radius scaling.
 
 Candidate additions:
+- audit MFVanilla spells and add lightweight `scaledAttributes` where level progression should be visible
+- add player-facing display of the active global scaling factors where useful
 - scalable target count for chains, bursts, and multi-target spells
 - tiered projectile/effect selection
 - scalable field/wall shapes where authored shape variants become useful
@@ -146,6 +131,7 @@ Candidate additions:
 Open design questions:
 - What should count as caster level or spell power in non-debug progression?
 - Should power come from traits, equipment, mana invested, ritual quality, research, or a future magic skill?
+- Should lightweight scaled attributes support per-spell dampening/amplification without requiring full explicit scalar blocks?
 - Should randomized numeric scaling be supported, and if so where should deterministic values be captured for delayed or persistent effects?
 - Which context-sensitive spell-family modifiers should remain enhancement rules versus authored spell-local conditionals?
 
@@ -156,9 +142,17 @@ Goal: support common status design without overloading raw hediff application.
 Current state:
 - Stat modifier buffs can display authored or generic `statusCue` hediff indicators.
 - Clear actions can remove framework stat/status effects.
+- `TimedStatusEffectActionDef` can apply a visible timed status wrapper, run `onApplyActions`, schedule `onExpireActions`, replace prior caster/spell instances, and clean up its status cue.
+- `SpellStatusEffectDef` plus `ApplyStatusEffectActionDef` supports reusable premade status bundles with default duration, status cue, stat modifiers, and immediate `onApplyActions`.
+- Sustained stat modifiers can reference `SpellStatusEffectDef` payloads while preserving maintenance and break behavior.
+- `MF_Haste`, `MF_Might`, Might backlash, `MF_BlessingOfVigor`, `MF_Freeze`, and `MF_WatersEmbrace` now use reusable premade status defs in MFVanilla where the effect is a simple timed stat/status bundle.
 
 Candidates:
-- generic timed status effect wrappers
+- decide whether reusable statuses need their own category/tag model (`Buff`, `Debuff`, `Control`, `Elemental`, `Mental`, etc.)
+- stacking and refresh policies for reusable statuses
+- named parameters/scalars for reusable status defs
+- reusable status expiry actions once scheduled actions can target def-owned action trees
+- broader conversion pass for existing authored stat/status spells where reuse makes XML clearer
 - capacity modifiers
 - accuracy, dodge, armor, casting-speed modifiers
 - root/immobilize, silence, charm, stun, ignite as dedicated primitives if authoring proves repetitive
@@ -381,9 +375,9 @@ Goal: add custom gizmo icons for future validation spells as they are added.
 Current wired icons include:
 - `MF_ArcSeeker`, `MF_BlessingOfVigor`, `MF_BlinkStep`, `MF_ChainLightning`, `MF_CreateFood`, `MF_DelayedBlastRune`, `MF_Disintegrate`, `MF_Fireball`, `MF_Firebolt`, `MF_FlameField`, `MF_ForceField`, `MF_ForcePull`, `MF_ForcePush`, `MF_Haste`, `MF_Heal`, `MF_ManaShield`, `MF_Might`, `MF_Regeneration`, `MF_RuneTrap`, `MF_SummonDog`, and `MF_WallOfFire`.
 
-### MF-028 Dedicated Common Status Primitives
+### MF-028 Dedicated Common Status Primitive Review
 
-Goal: decide which common effects deserve first-class action defs instead of generic hediff applications.
+Goal: review which common effects still deserve first-class action defs after the reusable status-def layer matures.
 
 Candidates:
 - ignite
@@ -393,7 +387,8 @@ Candidates:
 - root / immobilize
 
 Decision rule:
-- Add a primitive when authoring repeats, cleanup is subtle, or RimWorld behavior needs a wrapper.
+- Prefer `SpellStatusEffectDef` for reusable stat/status bundles.
+- Add a dedicated primitive when authoring repeats, cleanup is subtle, or RimWorld behavior needs a wrapper.
 
 ### MF-029 Real Fire Integration For Wall Of Fire
 
@@ -432,7 +427,7 @@ Target coverage:
 - common spell patterns: projectile, delayed rune, trap, wall, aura, displacement, buff, debuff, summon
 - validation and regression expectations
 
-### MF-031 Compatibility
+### MF-032 Compatibility
 
 Goal: Gate any mechanisms that would not be supported in multiplayer mods
 

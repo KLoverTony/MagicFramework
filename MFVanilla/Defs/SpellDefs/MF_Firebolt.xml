@@ -42,21 +42,10 @@
 
     <power>
       <casterLevelFactor>1</casterLevelFactor>
-      <damageScalar>
-        <baseValue>1</baseValue>
-        <perPower>0.05</perPower>
-        <max>1.75</max>
-      </damageScalar>
-      <radiusScalar>
-        <baseValue>1</baseValue>
-        <perPower>0.015</perPower>
-        <max>1.35</max>
-      </radiusScalar>
-      <cooldownScalar>
-        <baseValue>1</baseValue>
-        <perPower>-0.02</perPower>
-        <min>0.55</min>
-      </cooldownScalar>
+      <scaledAttributes>
+        <li>Damage</li>
+        <li>Cooldown</li>
+      </scaledAttributes>
       <tiers>
         <li>
           <minPower>1</minPower>

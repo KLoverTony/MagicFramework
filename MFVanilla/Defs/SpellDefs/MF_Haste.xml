@@ -103,27 +103,11 @@
             <locationSource>CurrentTarget</locationSource>
             <attachToTarget>true</attachToTarget>
           </li>
-          <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+          <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
             <debugLabel>Haste buff</debugLabel>
+            <statusEffectDef>MFV_Status_Haste</statusEffectDef>
             <targetSource>CurrentTarget</targetSource>
-            <durationTicks>900</durationTicks>
-            <scalableDurationTicks>
-              <baseValue>900</baseValue>
-              <perPower>30</perPower>
-              <max>1500</max>
-            </scalableDurationTicks>
             <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
-            <statusCue>
-              <hediffDef>MF_Hasted</hediffDef>
-              <severity>0.01</severity>
-              <removeOnExpire>true</removeOnExpire>
-            </statusCue>
-            <modifiers>
-              <li>
-                <statDef>MoveSpeed</statDef>
-                <factor>1.35</factor>
-              </li>
-            </modifiers>
           </li>
         </actions>
       </li>

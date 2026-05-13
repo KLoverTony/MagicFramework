@@ -92,15 +92,15 @@ This milestone adds gameplay depth once framework rules are stable.
 
 | Task | Priority | Complexity | Reason |
 | --- | --- | --- | --- |
+| MF-010 Buff/debuff primitives | P2 | M | Reusable status defs are in place; remaining work is policy, scalars, and conversion cleanup. |
 | MF-018 Arcane ink chain | P2 | M | Strong MFVanilla progression improvement. |
 | MF-014 Summon/spawn expansion | P2 | M | Opens wards, constructs, hazards, and beacons. |
-| MF-010 Buff/debuff primitives | P2 | M | Reduces repeated raw hediff/stat authoring. |
 | MF-011 Projectile support | P2 | M | Improves combat feel and correctness. |
 
 Implementation order:
-1. Build the arcane ink production chain because it is mostly content plus generator updates.
-2. Expand summon/spawn support for temporary objects, hazards, wards, and constructs.
-3. Add buff/debuff primitives only where repeated authoring proves painful.
+1. Finish the MF-010 follow-through: status categories, stacking/refresh policy, named scalars, and a small conversion pass for spells that benefit from premade statuses.
+2. Build the arcane ink production chain because it is mostly content plus generator updates.
+3. Expand summon/spawn support for temporary objects, hazards, wards, and constructs.
 4. Improve projectile impact context after inspecting what RimWorld exposes cleanly.
 5. Waters Embrace SpellDrowningHediff is owned by the spell and fades immediately after the spell fades which is not the desired effect. Consider  giving SpellDrowningHediff its own decay behavior, and changing Water’s Embrace so it applies/increases/refreshes the hediff without scheduling spell-owned removal in the same way. Then the spell ending stops adding pressure, but the pawn still has to recover from what already happened.
 
@@ -153,15 +153,15 @@ These should wait until the framework surface is steadier.
 
 | Task | Priority | Complexity | Reason |
 | --- | --- | --- | --- |
-| MF-028 Dedicated common status decision | P3 | S | Should inform future equipment/content work. |
+| MF-028 Dedicated common status review | P3 | S | Revisit after reusable status defs prove which effects still need dedicated primitives. |
 | MF-024 Magic tools/weapons | P3 | L | May depend on common status and spell-container decisions. |
 | MF-031 Spell design guide | P3 | L | Should document a stable authoring surface. |
 
 Recommended order:
-1. Decide which statuses deserve dedicated primitives.
+1. Review which statuses still deserve dedicated primitives.
 2. Explore magic tools and weapons.
 3. Write the full spell design guide after lifecycle, targeting, scaling, settings, and UI have settled.
 
 ## Recommended Next Step
 
-Move next into `MF-005` lifecycle semantics. Logging first gives cleaner diagnostics for every remaining feature, and lifecycle hooks are the foundation for sustained spells, summons, zones, chains, visuals, and world objects.
+Finish the small MF-010 follow-through while the status system is fresh: document the reusable status authoring pattern, add simple category/stacking policy, and convert any obvious first-party stat/status spells where premade defs make the XML clearer.

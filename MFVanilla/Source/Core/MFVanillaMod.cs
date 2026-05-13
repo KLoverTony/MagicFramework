@@ -62,47 +62,61 @@ public sealed class MFVanillaMod : Mod
 
     public override void DoSettingsWindowContents(Rect inRect)
     {
-        float y = inRect.y;
-        float width = inRect.width - 200f;
+        Listing_Standard listing = new();
+        listing.Begin(inRect);
 
-        // Title
-        Widgets.Label(new Rect(inRect.x, y, width, 30f), "Magic Framework Vanilla Settings");
-        y += 40f;
+        listing.Label("MFV_SettingsTitle".Translate());
+        listing.GapLine();
 
         bool disableTechResearch = Settings.DisableTechResearch;
-        Widgets.CheckboxLabeled(new Rect(inRect.x, y, width, 30f), "Suppress Vanilla Tech Research", ref disableTechResearch);
+        listing.CheckboxLabeled(
+            "MFV_SuppressVanillaTechResearch".Translate(),
+            ref disableTechResearch,
+            "MFV_SuppressVanillaTechResearchTooltip".Translate());
+
         if (disableTechResearch != Settings.DisableTechResearch)
         {
             Settings.DisableTechResearch = disableTechResearch;
             MFVanillaPatcher.NotifySettingsChanged();
+            WriteSettings();
         }
-        y += 30f;
 
-        Widgets.Label(new Rect(inRect.x + 20f, y, width - 20f, 24f), "Hides Electricity, Microelectronics, Multi-Analyzer, and vanilla research that depends on them.");
-        y += 34f;
+        listing.Label("MFV_SuppressVanillaTechResearchDescription".Translate());
+        listing.Gap();
 
-        if (Widgets.ButtonText(new Rect(inRect.x + 20f, y, 180f, 30f), "Restore Vanilla Tech"))
+        if (listing.ButtonText("MFV_RestoreVanillaTech".Translate()))
         {
             Settings.DisableTechResearch = false;
             MFVanillaPatcher.NotifySettingsChanged();
             WriteSettings();
         }
-        y += 42f;
 
-        Widgets.CheckboxLabeled(new Rect(inRect.x, y, width, 30f), "Show Tech Disabled Warning", ref Settings.ShowTechDisabledWarning);
-        y += 30f;
+        listing.GapLine();
 
-        Widgets.Label(new Rect(inRect.x + 20f, y, width - 20f, 24f), "Show a warning message when tech is disabled on game start.");
-        y += 40f;
+        bool showWarning = Settings.ShowTechDisabledWarning;
+        listing.CheckboxLabeled(
+            "MFV_ShowTechDisabledWarning".Translate(),
+            ref showWarning,
+            "MFV_ShowTechDisabledWarningTooltip".Translate());
 
-        // Reset button
-        if (Widgets.ButtonText(new Rect(inRect.x, y, 200f, 30f), "Reset to Defaults"))
+        if (showWarning != Settings.ShowTechDisabledWarning)
+        {
+            Settings.ShowTechDisabledWarning = showWarning;
+            WriteSettings();
+        }
+
+        listing.Label("MFV_ShowTechDisabledWarningDescription".Translate());
+        listing.Gap();
+
+        if (listing.ButtonText("MFV_ResetSettingsToDefaults".Translate()))
         {
             Settings.DisableTechResearch = true;
             Settings.ShowTechDisabledWarning = true;
             MFVanillaPatcher.NotifySettingsChanged();
             WriteSettings();
         }
+
+        listing.End();
     }
 
     public override void WriteSettings()

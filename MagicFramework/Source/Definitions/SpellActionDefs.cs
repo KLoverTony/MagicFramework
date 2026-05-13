@@ -472,6 +472,7 @@ public sealed class ApplyStatModifierActionDef : SpellActionDef
 public sealed class SustainedStatModifierActionDef : SpellActionDef
 {
     public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
+    public string statusEffectDef;
     public int maxDurationTicks = -1;
     public ScalableFloatDef scalableMaxDurationTicks;
     public SpellStatusCueDef statusCue;
@@ -504,6 +505,49 @@ public sealed class SustainedStatModifierActionDef : SpellActionDef
     }
 
     public override SpellActionWorker CreateWorker() => new SustainedStatModifierActionWorker();
+}
+
+/// <summary>
+/// Applies a visible timed status wrapper and optional child actions for apply/expire behavior.
+/// </summary>
+public sealed class TimedStatusEffectActionDef : SpellActionDef
+{
+    public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
+    public int durationTicks = 300;
+    public ScalableFloatDef scalableDurationTicks;
+    public SpellStatusCueDef statusCue;
+    public bool replaceExistingFromCasterSpell = true;
+    public List<SpellActionDef> onApplyActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onApplyActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+    }
+
+    public override SpellActionWorker CreateWorker() => new TimedStatusEffectActionWorker();
+}
+
+/// <summary>
+/// Applies a reusable status effect definition to an authored subject.
+/// </summary>
+public sealed class ApplyStatusEffectActionDef : SpellActionDef
+{
+    public string statusEffectDef;
+    public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
+    public int durationTicks = -1;
+    public ScalableFloatDef scalableDurationTicks;
+    public bool replaceExistingFromCasterSpell = true;
+
+    public override SpellActionWorker CreateWorker() => new ApplyStatusEffectActionWorker();
 }
 
 /// <summary>

@@ -27,6 +27,15 @@ public sealed class MagicFrameworkMod : Mod
     {
         Listing_Standard listing = new();
         listing.Begin(inRect);
+        listing.Label("Caster level scaling");
+        listing.GapLine();
+        DrawPercentSlider(listing, "Damage per power", ref settings.damageScalingPerPower, 0f, 0.12f);
+        DrawPercentSlider(listing, "Healing per power", ref settings.healingScalingPerPower, 0f, 0.12f);
+        DrawPercentSlider(listing, "Radius/range per power", ref settings.radiusScalingPerPower, 0f, 0.08f);
+        DrawPercentSlider(listing, "Duration per power", ref settings.durationScalingPerPower, 0f, 0.12f);
+        DrawPercentSlider(listing, "Mana cost reduction per power", ref settings.manaCostReductionPerPower, 0f, 0.08f);
+        DrawPercentSlider(listing, "Cooldown reduction per power", ref settings.cooldownReductionPerPower, 0f, 0.08f);
+        listing.GapLine();
         listing.Label("Diagnostic logging");
         listing.GapLine();
         listing.CheckboxLabeled("Execution", ref settings.logExecution, "Logs action execution and general spell runtime flow.");
@@ -115,5 +124,12 @@ public sealed class MagicFrameworkMod : Mod
         settings.logEnhancements = enabled;
         settings.logVisuals = enabled;
         settings.logSummons = enabled;
+    }
+
+    private static void DrawPercentSlider(Listing_Standard listing, string label, ref float value, float min, float max)
+    {
+        value = Mathf.Clamp(value, min, max);
+        listing.Label($"{label}: {value.ToStringPercent("F0")}");
+        value = listing.Slider(value, min, max);
     }
 }

@@ -4,6 +4,14 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MF-006 target-query expressiveness.
+  Current state:
+  - reusable target query defs cover current target, radius, nearest valid target, shape targets, and directional chains
+  - shared query handling supports deterministic ordering by nearest, farthest, lowest health, highest health, highest threat, and lowest threat
+  - query defs support target limits through `maxTargets`
+  - authored validation spells cover nearest hostile selection, allied radius selection with caster exclusion, lowest-health ordering, highest-threat ordering, and target limiting
+  - future already-hit/visited target policy is covered by MF-012 branching-chain work rather than keeping MF-006 open
+
 - MF-015 targeting and self-affect policy.
   Current state:
   - `TargetingPolicy.md` documents first-party conventions for beneficial pawn spells, hostile pawn spells, cell placement spells, mixed pawn/cell spells, persistent hazards, beneficial auras, and terrain-only pulses

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_SettingsCategory>MF Vanilla</MFV_SettingsCategory>
+  <MFV_SettingsTitle>Magic Framework Vanilla Settings</MFV_SettingsTitle>
+
+  <MFV_SuppressVanillaTechResearch>Suppress vanilla tech research</MFV_SuppressVanillaTechResearch>
+  <MFV_SuppressVanillaTechResearchTooltip>Hide vanilla technology research and prevent colonies from starting it.</MFV_SuppressVanillaTechResearchTooltip>
+  <MFV_SuppressVanillaTechResearchDescription>When enabled, Electricity, Microelectronics, Multi-Analyzer, and vanilla research that depends on them are hidden from the vanilla research tree.</MFV_SuppressVanillaTechResearchDescription>
+  <MFV_RestoreVanillaTech>Restore vanilla tech</MFV_RestoreVanillaTech>
+
+  <MFV_ShowTechDisabledWarning>Show tech disabled warning</MFV_ShowTechDisabledWarning>
+  <MFV_ShowTechDisabledWarningTooltip>Show a reminder when a game starts with vanilla tech research suppressed.</MFV_ShowTechDisabledWarningTooltip>
+  <MFV_ShowTechDisabledWarningDescription>Shows a reminder when tech research suppression is active.</MFV_ShowTechDisabledWarningDescription>
+
+  <MFV_ResetSettingsToDefaults>Reset to defaults</MFV_ResetSettingsToDefaults>
+</LanguageData>

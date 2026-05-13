@@ -85,14 +85,10 @@
           </li>
           <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
             <debugLabel>Might sustained buff</debugLabel>
+            <statusEffectDef>MFV_Status_Might</statusEffectDef>
             <targetSource>CurrentTarget</targetSource>
             <maxDurationTicks>1800</maxDurationTicks>
             <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
-            <statusCue>
-              <hediffDef>MF_Mighty</hediffDef>
-              <severity>0.01</severity>
-              <removeOnExpire>true</removeOnExpire>
-            </statusCue>
             <maxRange>12</maxRange>
             <breakWhenCasterDowned>true</breakWhenCasterDowned>
             <breakWhenTargetDowned>false</breakWhenTargetDowned>
@@ -107,16 +103,6 @@
               </profiles>
               <maxRange>12</maxRange>
             </maintenance>
-            <modifiers>
-              <li>
-                <statDef>MeleeDamageFactor</statDef>
-                <factor>1.35</factor>
-              </li>
-              <li>
-                <statDef>CarryingCapacity</statDef>
-                <offset>25</offset>
-              </li>
-            </modifiers>
             <onBreakActions>
               <li Class="MagicFramework.Definitions.EffectActionDef">
                 <debugLabel>Might break effect</debugLabel>
@@ -124,26 +110,11 @@
                 <locationSource>CurrentTarget</locationSource>
                 <attachToTarget>true</attachToTarget>
               </li>
-              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+              <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
                 <debugLabel>Might backlash weakness</debugLabel>
+                <statusEffectDef>MFV_Status_MightBacklashWeakness</statusEffectDef>
                 <targetSource>CurrentTarget</targetSource>
-                <durationTicks>300</durationTicks>
                 <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
-                <statusCue>
-                  <hediffDef>MF_Weakened</hediffDef>
-                  <severity>0.01</severity>
-                  <removeOnExpire>true</removeOnExpire>
-                </statusCue>
-                <modifiers>
-                  <li>
-                    <statDef>MeleeDamageFactor</statDef>
-                    <factor>0.75</factor>
-                  </li>
-                  <li>
-                    <statDef>CarryingCapacity</statDef>
-                    <offset>-15</offset>
-                  </li>
-                </modifiers>
               </li>
             </onBreakActions>
           </li>

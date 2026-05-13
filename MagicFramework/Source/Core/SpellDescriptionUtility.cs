@@ -53,6 +53,7 @@ public static class SpellDescriptionUtility
     {
         List<string> lines = new();
         AddTargetingLine(lines, spellDef);
+        AddScalingLine(lines, spellDef);
         AddCostLines(lines, spellDef);
         AddActionLines(lines, spellDef.actions, 0);
 
@@ -131,6 +132,40 @@ public static class SpellDescriptionUtility
         }
     }
 
+    private static void AddScalingLine(List<string> lines, SpellDef spellDef)
+    {
+        List<SpellScaledAttribute> scaledAttributes = spellDef?.power?.scaledAttributes;
+        if (scaledAttributes == null || scaledAttributes.Count == 0)
+        {
+            return;
+        }
+
+        List<string> parts = new();
+        for (int i = 0; i < scaledAttributes.Count; i++)
+        {
+            string label = scaledAttributes[i] switch
+            {
+                SpellScaledAttribute.Damage => "damage",
+                SpellScaledAttribute.Healing => "healing",
+                SpellScaledAttribute.Radius => "radius/range",
+                SpellScaledAttribute.Duration => "duration",
+                SpellScaledAttribute.ManaCost => "mana cost",
+                SpellScaledAttribute.Cooldown => "cooldown",
+                _ => null
+            };
+
+            if (!string.IsNullOrWhiteSpace(label) && !parts.Contains(label))
+            {
+                parts.Add(label);
+            }
+        }
+
+        if (parts.Count > 0)
+        {
+            lines.Add("Scales " + JoinList(parts) + " with spell power.");
+        }
+    }
+
     private static void AddActionLines(List<string> lines, IEnumerable<SpellActionDef> actions, int depth)
     {
         if (actions == null || depth > 4)
@@ -169,7 +204,17 @@ public static class SpellDescriptionUtility
                 lines.Add("Applies " + DescribeStatModifiers(statModifier.modifiers) + " for " + FormatTicks(statModifier.durationTicks) + ".");
                 break;
             case SustainedStatModifierActionDef sustained:
-                lines.Add("Maintains " + DescribeStatModifiers(sustained.modifiers) + DescribeOptionalMaxDuration(sustained.maxDurationTicks) + ".");
+                string sustainedEffect = !string.IsNullOrWhiteSpace(sustained.statusEffectDef)
+                    ? ResolveDefLabel<SpellStatusEffectDef>(sustained.statusEffectDef, "a reusable status effect")
+                    : DescribeStatModifiers(sustained.modifiers);
+                lines.Add("Maintains " + sustainedEffect + DescribeOptionalMaxDuration(sustained.maxDurationTicks) + ".");
+                break;
+            case TimedStatusEffectActionDef status:
+                lines.Add("Applies a timed status effect for " + FormatTicks(status.durationTicks) + ".");
+                AddActionLines(lines, status.onApplyActions, depth + 1);
+                break;
+            case ApplyStatusEffectActionDef reusableStatus:
+                lines.Add("Applies " + ResolveDefLabel<SpellStatusEffectDef>(reusableStatus.statusEffectDef, "a reusable status effect") + DescribeOptionalDuration(reusableStatus.durationTicks) + ".");
                 break;
             case ApplyForceFieldActionDef forceField:
                 string upkeepText = forceField.sustainedManaCost > 0f ? " Costs " + FormatNumber(forceField.sustainedManaCost) + " mana every " + FormatTicks(forceField.sustainedManaCostIntervalTicks) + " while maintained." : string.Empty;
@@ -372,6 +417,26 @@ public static class SpellDescriptionUtility
     {
         int percent = Mathf.RoundToInt((factor - 1f) * 100f);
         return percent >= 0 ? "+" + percent + "%" : percent + "%";
+    }
+
+    private static string JoinList(List<string> parts)
+    {
+        if (parts == null || parts.Count == 0)
+        {
+            return string.Empty;
+        }
+
+        if (parts.Count == 1)
+        {
+            return parts[0];
+        }
+
+        if (parts.Count == 2)
+        {
+            return parts[0] + " and " + parts[1];
+        }
+
+        return string.Join(", ", parts.GetRange(0, parts.Count - 1)) + ", and " + parts[parts.Count - 1];
     }
 
     private static string Capitalize(string value)

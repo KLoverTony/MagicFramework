@@ -1338,10 +1338,23 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             return;
         }
 
-        if (statModifierActionDef.modifiers == null || statModifierActionDef.modifiers.Count == 0)
+        SpellStatusEffectDef statusEffectDef = ResolveStatusEffectDef(statModifierActionDef.statusEffectDef, "SustainedStatModifierActionWorker");
+        List<SpellStatModifierDef> modifiers = statModifierActionDef.modifiers;
+        if ((modifiers == null || modifiers.Count == 0) && statusEffectDef?.statModifiers != null)
+        {
+            modifiers = statusEffectDef.statModifiers;
+        }
+
+        if (modifiers == null || modifiers.Count == 0)
         {
             Log.Warning("[MagicFramework] SustainedStatModifierActionWorker skipped because no modifiers were authored.");
             return;
+        }
+
+        int maxDurationTicks = SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, statModifierActionDef.maxDurationTicks, statModifierActionDef.scalableMaxDurationTicks);
+        if (maxDurationTicks <= 0 && statusEffectDef != null)
+        {
+            maxDurationTicks = SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, statusEffectDef.durationTicks, statusEffectDef.scalableDurationTicks);
         }
 
         SpellActionPathUtility.TryCreatePath(context?.spellDef, statModifierActionDef, out List<int> sourceActionPath);
@@ -1349,9 +1362,9 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             targetThing,
             context?.caster,
             context?.spellDef,
-            SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, statModifierActionDef.maxDurationTicks, statModifierActionDef.scalableMaxDurationTicks),
+            maxDurationTicks,
             statModifierActionDef.replaceExistingFromCasterSpell,
-            SpellStatusCueUtility.ResolveStatusCue(context, statModifierActionDef.statusCue, statModifierActionDef.indicatorHediffDef, statModifierActionDef.indicatorSeverity, statModifierActionDef.removeIndicatorOnExpire),
+            SpellStatusCueUtility.ResolveStatusCue(context, statModifierActionDef.statusCue ?? statusEffectDef?.statusCue, statModifierActionDef.indicatorHediffDef, statModifierActionDef.indicatorSeverity, statModifierActionDef.removeIndicatorOnExpire),
             statModifierActionDef.maxRange,
             statModifierActionDef.breakWhenCasterDowned,
             statModifierActionDef.breakWhenTargetDowned,
@@ -1360,7 +1373,312 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             statModifierActionDef.maintenance,
             statModifierActionDef.pulseIntervalTicks,
             sourceActionPath,
-            statModifierActionDef.modifiers);
+            modifiers);
+
+        if (statusEffectDef?.onApplyActions != null && statusEffectDef.onApplyActions.Count > 0)
+        {
+            runner.RunActions(context, statusEffectDef.onApplyActions);
+        }
+    }
+
+    private static SpellStatusEffectDef ResolveStatusEffectDef(string statusEffectDefName, string workerName)
+    {
+        if (string.IsNullOrWhiteSpace(statusEffectDefName))
+        {
+            return null;
+        }
+
+        SpellStatusEffectDef statusEffectDef = DefDatabase<SpellStatusEffectDef>.GetNamedSilentFail(statusEffectDefName);
+        if (statusEffectDef == null)
+        {
+            Log.Warning($"[MagicFramework] {workerName} could not resolve status effect def '{statusEffectDefName}'.");
+        }
+
+        return statusEffectDef;
+    }
+}
+
+public sealed class TimedStatusEffectActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        TimedStatusEffectActionDef statusActionDef = actionDef as TimedStatusEffectActionDef;
+        if (statusActionDef == null)
+        {
+            return;
+        }
+
+        Thing targetThing = statusActionDef.targetSource == StatModifierTargetSource.Caster
+            ? context?.caster
+            : context?.currentTarget.Thing;
+        Pawn targetPawn = targetThing as Pawn;
+        if (targetPawn == null || targetPawn.Destroyed || targetPawn.health == null)
+        {
+            Log.Warning("[MagicFramework] TimedStatusEffectActionWorker skipped because the target was not a valid pawn.");
+            return;
+        }
+
+        int durationTicks = Mathf.Max(1, SpellEnhancementUtility.ResolveScalableDurationTicks(context, statusActionDef.durationTicks, statusActionDef.scalableDurationTicks));
+        SpellStatusCueDef statusCue = SpellStatusCueUtility.ResolveStatusCue(context, statusActionDef.statusCue, null, 0.01f, true);
+
+        if (statusActionDef.replaceExistingFromCasterSpell)
+        {
+            new SpellScheduler().RemoveExistingForCasterSpellGroup(context, statusActionDef);
+            RemoveStatusCue(targetPawn, statusCue);
+        }
+
+        ApplyStatusCue(targetPawn, context?.spellDef, statusCue);
+        runner.RunActions(context, statusActionDef.onApplyActions);
+        ScheduleExpireActions(context, statusActionDef, durationTicks);
+
+        if (statusCue?.removeOnExpire == true)
+        {
+            ScheduleStatusCueRemoval(context, targetPawn, statusCue, durationTicks);
+        }
+
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Applied timed status to {targetPawn.LabelCap} for {durationTicks} ticks.");
+    }
+
+    private static void ScheduleExpireActions(SpellContext context, TimedStatusEffectActionDef statusActionDef, int durationTicks)
+    {
+        if (context?.map == null || statusActionDef?.onExpireActions == null || statusActionDef.onExpireActions.Count == 0)
+        {
+            return;
+        }
+
+        SpellScheduler scheduler = new();
+        int executeAtTick = (Find.TickManager?.TicksGame ?? 0) + durationTicks;
+        foreach (SpellActionDef expireAction in statusActionDef.onExpireActions)
+        {
+            scheduler.Schedule(context, executeAtTick, expireAction, statusActionDef);
+        }
+    }
+
+    private static void ApplyStatusCue(Pawn pawn, SpellDef spellDef, SpellStatusCueDef statusCue)
+    {
+        HediffDef hediffDef = ResolveStatusCueHediffDef(statusCue);
+        if (pawn?.health == null || hediffDef == null || statusCue == null)
+        {
+            return;
+        }
+
+        Hediff existing = FindStatusCue(pawn, hediffDef);
+        Hediff cue = existing ?? pawn.health.AddHediff(hediffDef);
+        if (cue == null)
+        {
+            return;
+        }
+
+        cue.Severity = Mathf.Max(0.0001f, statusCue.severity);
+        if (cue is SpellStatusCueHediff statusCueHediff)
+        {
+            string spellLabel = spellDef?.LabelCap ?? spellDef?.defName ?? "spell";
+            statusCueHediff.statusLabel = string.IsNullOrWhiteSpace(statusCue.label) ? $"Affected by {spellLabel}" : statusCue.label;
+            statusCueHediff.statusDescription = string.IsNullOrWhiteSpace(statusCue.description) ? $"This pawn is affected by {spellLabel}." : statusCue.description;
+        }
+    }
+
+    private static void ScheduleStatusCueRemoval(SpellContext context, Pawn pawn, SpellStatusCueDef statusCue, int durationTicks)
+    {
+        HediffDef hediffDef = ResolveStatusCueHediffDef(statusCue);
+        if (context?.map == null || pawn == null || hediffDef == null)
+        {
+            return;
+        }
+
+        HediffRemovalMapComponent removalRuntime = context.map.GetComponent<HediffRemovalMapComponent>();
+        removalRuntime?.Enqueue(new ScheduledHediffRemoval(
+            (Find.TickManager?.TicksGame ?? 0) + durationTicks,
+            pawn,
+            hediffDef,
+            null));
+    }
+
+    private static void RemoveStatusCue(Pawn pawn, SpellStatusCueDef statusCue)
+    {
+        HediffDef hediffDef = ResolveStatusCueHediffDef(statusCue);
+        Hediff cue = FindStatusCue(pawn, hediffDef);
+        if (cue != null)
+        {
+            pawn.health.RemoveHediff(cue);
+        }
+    }
+
+    private static Hediff FindStatusCue(Pawn pawn, HediffDef hediffDef)
+    {
+        if (pawn?.health?.hediffSet?.hediffs == null || hediffDef == null)
+        {
+            return null;
+        }
+
+        foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+        {
+            if (hediff.def == hediffDef)
+            {
+                return hediff;
+            }
+        }
+
+        return null;
+    }
+
+    private static HediffDef ResolveStatusCueHediffDef(SpellStatusCueDef statusCue)
+    {
+        string hediffDefName = string.IsNullOrWhiteSpace(statusCue?.hediffDef)
+            ? "MF_GenericSpellStatusCue"
+            : statusCue.hediffDef;
+        return DefDatabase<HediffDef>.GetNamedSilentFail(hediffDefName);
+    }
+}
+
+public sealed class ApplyStatusEffectActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        ApplyStatusEffectActionDef applyStatusDef = actionDef as ApplyStatusEffectActionDef;
+        if (applyStatusDef == null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(applyStatusDef.statusEffectDef))
+        {
+            Log.Warning("[MagicFramework] ApplyStatusEffectActionWorker skipped because no statusEffectDef was authored.");
+            return;
+        }
+
+        SpellStatusEffectDef statusEffectDef = DefDatabase<SpellStatusEffectDef>.GetNamedSilentFail(applyStatusDef.statusEffectDef);
+        if (statusEffectDef == null)
+        {
+            Log.Warning($"[MagicFramework] ApplyStatusEffectActionWorker skipped because status effect def '{applyStatusDef.statusEffectDef}' could not be resolved.");
+            return;
+        }
+
+        Thing targetThing = applyStatusDef.targetSource == StatModifierTargetSource.Caster
+            ? context?.caster
+            : context?.currentTarget.Thing;
+        Pawn targetPawn = targetThing as Pawn;
+        if (targetPawn == null || targetPawn.Destroyed || targetPawn.health == null)
+        {
+            Log.Warning("[MagicFramework] ApplyStatusEffectActionWorker skipped because the target was not a valid pawn.");
+            return;
+        }
+
+        int durationTicks = ResolveDurationTicks(context, applyStatusDef, statusEffectDef);
+        SpellStatusCueDef statusCue = SpellStatusCueUtility.ResolveStatusCue(context, statusEffectDef.statusCue, null, 0.01f, true);
+
+        if (statusEffectDef.statModifiers != null && statusEffectDef.statModifiers.Count > 0)
+        {
+            SpellRuntimeGameComponent.Instance?.ApplyStatModifiers(
+                targetThing,
+                context?.caster,
+                context?.spellDef,
+                durationTicks,
+                applyStatusDef.replaceExistingFromCasterSpell,
+                statusCue,
+                statusEffectDef.statModifiers);
+        }
+        else
+        {
+            ApplyStatusCue(targetPawn, context?.spellDef, statusCue);
+            ScheduleStatusCueRemoval(context, targetPawn, statusCue, durationTicks);
+        }
+
+        RunWithTargetSource(context, runner, applyStatusDef.targetSource, statusEffectDef.onApplyActions);
+
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Applied status effect {statusEffectDef.defName} to {targetPawn.LabelCap} for {durationTicks} ticks.");
+    }
+
+    private static int ResolveDurationTicks(SpellContext context, ApplyStatusEffectActionDef actionDef, SpellStatusEffectDef statusEffectDef)
+    {
+        if (actionDef?.scalableDurationTicks != null || (actionDef?.durationTicks ?? -1) > 0)
+        {
+            return Mathf.Max(1, SpellEnhancementUtility.ResolveScalableDurationTicks(context, actionDef.durationTicks, actionDef.scalableDurationTicks));
+        }
+
+        return Mathf.Max(1, SpellEnhancementUtility.ResolveScalableDurationTicks(context, statusEffectDef.durationTicks, statusEffectDef.scalableDurationTicks));
+    }
+
+    private static void RunWithTargetSource(SpellContext context, SpellActionRunner runner, StatModifierTargetSource targetSource, List<SpellActionDef> actions)
+    {
+        if (context == null || runner == null || actions == null || actions.Count == 0 || targetSource != StatModifierTargetSource.Caster)
+        {
+            runner?.RunActions(context, actions);
+            return;
+        }
+
+        LocalTargetInfo previousTarget = context.currentTarget;
+        IntVec3 previousCell = context.currentCell;
+        context.SetCurrentTarget(new LocalTargetInfo(context.caster));
+        runner.RunActions(context, actions);
+        context.SetCurrentTarget(previousTarget);
+        context.currentCell = previousCell;
+    }
+
+    private static void ApplyStatusCue(Pawn pawn, SpellDef spellDef, SpellStatusCueDef statusCue)
+    {
+        HediffDef hediffDef = ResolveStatusCueHediffDef(statusCue);
+        if (pawn?.health == null || hediffDef == null || statusCue == null)
+        {
+            return;
+        }
+
+        Hediff existing = FindStatusCue(pawn, hediffDef);
+        Hediff cue = existing ?? pawn.health.AddHediff(hediffDef);
+        if (cue == null)
+        {
+            return;
+        }
+
+        cue.Severity = Mathf.Max(0.0001f, statusCue.severity);
+        if (cue is SpellStatusCueHediff statusCueHediff)
+        {
+            string spellLabel = spellDef?.LabelCap ?? spellDef?.defName ?? "spell";
+            statusCueHediff.statusLabel = string.IsNullOrWhiteSpace(statusCue.label) ? $"Affected by {spellLabel}" : statusCue.label;
+            statusCueHediff.statusDescription = string.IsNullOrWhiteSpace(statusCue.description) ? $"This pawn is affected by {spellLabel}." : statusCue.description;
+        }
+    }
+
+    private static void ScheduleStatusCueRemoval(SpellContext context, Pawn pawn, SpellStatusCueDef statusCue, int durationTicks)
+    {
+        HediffDef hediffDef = ResolveStatusCueHediffDef(statusCue);
+        if (context?.map == null || pawn == null || hediffDef == null || statusCue?.removeOnExpire != true)
+        {
+            return;
+        }
+
+        HediffRemovalMapComponent removalRuntime = context.map.GetComponent<HediffRemovalMapComponent>();
+        removalRuntime?.Enqueue(new ScheduledHediffRemoval(
+            (Find.TickManager?.TicksGame ?? 0) + durationTicks,
+            pawn,
+            hediffDef,
+            null));
+    }
+
+    private static Hediff FindStatusCue(Pawn pawn, HediffDef hediffDef)
+    {
+        if (pawn?.health?.hediffSet?.hediffs == null || hediffDef == null)
+        {
+            return null;
+        }
+
+        foreach (Hediff hediff in pawn.health.hediffSet.hediffs)
+        {
+            if (hediff.def == hediffDef)
+            {
+                return hediff;
+            }
+        }
+
+        return null;
+    }
+
+    private static HediffDef ResolveStatusCueHediffDef(SpellStatusCueDef statusCue)
+    {
+        string hediffDefName = string.IsNullOrWhiteSpace(statusCue?.hediffDef)
+            ? "MF_GenericSpellStatusCue"
+            : statusCue.hediffDef;
+        return DefDatabase<HediffDef>.GetNamedSilentFail(hediffDefName);
     }
 }
 

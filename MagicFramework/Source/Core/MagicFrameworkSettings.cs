@@ -4,6 +4,13 @@ namespace MagicFramework.Core;
 
 public sealed class MagicFrameworkSettings : ModSettings
 {
+    public const float DefaultDamageScalingPerPower = 0.05f;
+    public const float DefaultHealingScalingPerPower = 0.05f;
+    public const float DefaultRadiusScalingPerPower = 0.02f;
+    public const float DefaultDurationScalingPerPower = 0.04f;
+    public const float DefaultManaCostReductionPerPower = 0.01f;
+    public const float DefaultCooldownReductionPerPower = 0.01f;
+
     public bool logExecution;
     public bool logCosts;
     public bool logRequirements;
@@ -19,6 +26,12 @@ public sealed class MagicFrameworkSettings : ModSettings
     public bool logEnhancements;
     public bool logVisuals;
     public bool logSummons;
+    public float damageScalingPerPower = DefaultDamageScalingPerPower;
+    public float healingScalingPerPower = DefaultHealingScalingPerPower;
+    public float radiusScalingPerPower = DefaultRadiusScalingPerPower;
+    public float durationScalingPerPower = DefaultDurationScalingPerPower;
+    public float manaCostReductionPerPower = DefaultManaCostReductionPerPower;
+    public float cooldownReductionPerPower = DefaultCooldownReductionPerPower;
 
     public static MagicFrameworkSettings Current { get; private set; } = new();
 
@@ -73,5 +86,11 @@ public sealed class MagicFrameworkSettings : ModSettings
         Scribe_Values.Look(ref logEnhancements, "logEnhancements");
         Scribe_Values.Look(ref logVisuals, "logVisuals");
         Scribe_Values.Look(ref logSummons, "logSummons");
+        Scribe_Values.Look(ref damageScalingPerPower, "damageScalingPerPower", DefaultDamageScalingPerPower);
+        Scribe_Values.Look(ref healingScalingPerPower, "healingScalingPerPower", DefaultHealingScalingPerPower);
+        Scribe_Values.Look(ref radiusScalingPerPower, "radiusScalingPerPower", DefaultRadiusScalingPerPower);
+        Scribe_Values.Look(ref durationScalingPerPower, "durationScalingPerPower", DefaultDurationScalingPerPower);
+        Scribe_Values.Look(ref manaCostReductionPerPower, "manaCostReductionPerPower", DefaultManaCostReductionPerPower);
+        Scribe_Values.Look(ref cooldownReductionPerPower, "cooldownReductionPerPower", DefaultCooldownReductionPerPower);
     }
 }

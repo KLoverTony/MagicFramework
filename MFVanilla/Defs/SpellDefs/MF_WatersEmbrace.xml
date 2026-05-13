@@ -137,21 +137,10 @@
             <includeCaster>false</includeCaster>
             <replaceExistingForCaster>true</replaceExistingForCaster>
             <actions>
-              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+              <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
                 <debugLabel>Water's Embrace restraining slow</debugLabel>
-                <durationTicks>90</durationTicks>
+                <statusEffectDef>MFV_Status_WaterboundSlow</statusEffectDef>
                 <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
-                <statusCue>
-                  <hediffDef>MF_Waterbound</hediffDef>
-                  <severity>0.01</severity>
-                  <removeOnExpire>true</removeOnExpire>
-                </statusCue>
-                <modifiers>
-                  <li>
-                    <statDef>MoveSpeed</statDef>
-                    <factor>0.35</factor>
-                  </li>
-                </modifiers>
               </li>
               <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
                 <debugLabel>Water's Embrace held under pressure</debugLabel>

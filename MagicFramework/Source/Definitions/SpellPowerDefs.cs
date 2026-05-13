@@ -11,6 +11,7 @@ public sealed class SpellPowerDef
     public float casterLevelFactor = 1f;
     public string casterSkillDef;
     public float casterSkillFactor = 1f;
+    public List<SpellScaledAttribute> scaledAttributes = new();
     public SpellPowerScalarDef damageScalar;
     public SpellPowerScalarDef healingScalar;
     public SpellPowerScalarDef radiusScalar;
@@ -61,6 +62,16 @@ public enum SpellPowerScalingMode
     Flat,
     Linear,
     Tiered
+}
+
+public enum SpellScaledAttribute
+{
+    Damage,
+    Healing,
+    Radius,
+    Duration,
+    ManaCost,
+    Cooldown
 }
 
 /// <summary>

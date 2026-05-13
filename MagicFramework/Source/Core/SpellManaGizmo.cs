@@ -33,6 +33,7 @@ public sealed class SpellManaGizmo : Gizmo
         SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
         float currentMana = Mathf.Max(0f, runtime?.GetCurrentMana(pawn) ?? 0f);
         float maxMana = Mathf.Max(1f, runtime?.GetMaxMana(pawn) ?? 1f);
+        int casterLevel = runtime?.GetCasterLevel(pawn) ?? 0;
         float fillPercent = Mathf.Clamp01(currentMana / maxMana);
 
         Text.Font = GameFont.Small;
@@ -53,10 +54,10 @@ public sealed class SpellManaGizmo : Gizmo
         Widgets.DrawBox(barRect);
 
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(new Rect(rect.x + 8f, rect.y + 53f, rect.width - 16f, 18f), fillPercent.ToStringPercent("F0"));
+        Widgets.Label(new Rect(rect.x + 8f, rect.y + 53f, rect.width - 16f, 18f), $"Lv. {casterLevel} - {fillPercent.ToStringPercent("F0")}");
         Text.Anchor = TextAnchor.UpperLeft;
 
-        TooltipHandler.TipRegion(rect, $"{pawn?.LabelShortCap ?? "Pawn"} mana: {currentMana:0.#} / {maxMana:0.#}");
+        TooltipHandler.TipRegion(rect, $"{pawn?.LabelShortCap ?? "Pawn"} caster level: {casterLevel}\nMana: {currentMana:0.#} / {maxMana:0.#}");
         return new GizmoResult(GizmoState.Clear);
     }
 }

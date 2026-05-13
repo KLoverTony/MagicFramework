@@ -15,7 +15,7 @@
       <MaxHitPoints>80</MaxHitPoints>
       <Mass>0.05</Mass>
       <Flammability>0</Flammability>
-      <DeteriorationRate>1</DeteriorationRate>
+      <DeteriorationRate>0</DeteriorationRate>
     </statBases>
     <tradeability>Sellable</tradeability>
   </ThingDef>

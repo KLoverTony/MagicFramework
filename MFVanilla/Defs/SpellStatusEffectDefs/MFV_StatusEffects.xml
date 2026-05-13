@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Haste</defName>
+    <label>hasted</label>
+    <description>Accelerates a pawn, increasing movement speed.</description>
+    <durationTicks>900</durationTicks>
+    <scalableDurationTicks>
+      <baseValue>900</baseValue>
+      <perPower>30</perPower>
+      <max>1500</max>
+    </scalableDurationTicks>
+    <statusCue>
+      <hediffDef>MF_Hasted</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>1.35</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Might</defName>
+    <label>mighty</label>
+    <description>Strengthens a pawn, improving melee damage and carrying capacity.</description>
+    <durationTicks>1800</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Mighty</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MeleeDamageFactor</statDef>
+        <factor>1.35</factor>
+      </li>
+      <li>
+        <statDef>CarryingCapacity</statDef>
+        <offset>25</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_MightBacklashWeakness</defName>
+    <label>weakened</label>
+    <description>Magical backlash weakens this pawn's strength for a short time.</description>
+    <durationTicks>300</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Weakened</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MeleeDamageFactor</statDef>
+        <factor>0.75</factor>
+      </li>
+      <li>
+        <statDef>CarryingCapacity</statDef>
+        <offset>-15</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_BlessedVigor</defName>
+    <label>blessed vigor</label>
+    <description>Bolsters a pawn with renewed speed and labor vigor.</description>
+    <durationTicks>900</durationTicks>
+    <statusCue>
+      <hediffDef>MF_BlessedVigor</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>1.12</factor>
+      </li>
+      <li>
+        <statDef>GeneralLaborSpeed</statDef>
+        <factor>1.10</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_FrozenSlow</defName>
+    <label>frozen</label>
+    <description>Magical cold slows this pawn's movement.</description>
+    <durationTicks>90</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Frozen</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>0.55</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_WaterboundSlow</defName>
+    <label>waterbound</label>
+    <description>Clinging water restrains this pawn's movement.</description>
+    <durationTicks>90</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Waterbound</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>0.35</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+</Defs>

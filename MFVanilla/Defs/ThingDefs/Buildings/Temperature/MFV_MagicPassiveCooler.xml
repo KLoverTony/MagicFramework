@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_MagicPassiveCoolerBase" ParentName="BuildingBase" Abstract="True">
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/Building/Misc/PassiveCooler</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawRotated>false</drawRotated>
+      <allowFlip>false</allowFlip>
+      <addTopAltitudeBias>true</addTopAltitudeBias>
+      <shadowData>
+        <volume>(0.9,0.3,0.9)</volume>
+      </shadowData>
+      <damageData>
+        <rect>(0.2,0,0.6,0.1)</rect>
+      </damageData>
+    </graphicData>
+    <rotatable>false</rotatable>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <constructEffect>ConstructDirt</constructEffect>
+    <tickerType>Normal</tickerType>
+    <drawerType>RealtimeOnly</drawerType>
+    <fillPercent>0.40</fillPercent>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>250</WorkToBuild>
+      <Flammability>0.5</Flammability>
+    </statBases>
+    <selectable>true</selectable>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <soundImpactDefault>BulletImpact_Ground</soundImpactDefault>
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <resourcesFractionWhenDeconstructed>0</resourcesFractionWhenDeconstructed>
+    <placeWorkers>
+      <li>PlaceWorker_CoolerSimple</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <designationCategory>Temperature</designationCategory>
+    <designationHotKey>Misc4</designationHotKey>
+    <researchPrerequisites>
+      <li>MFV_Enchantment</li>
+    </researchPrerequisites>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
+    <defName>MFV_MagicPassiveCooler</defName>
+    <label>magic passive cooler</label>
+    <description>An enchanted cooler built around an arcane focus. It cools indoor spaces without electricity or refueling, though it is not efficient enough to refrigerate food.</description>
+    <costList>
+      <WoodLog>50</WoodLog>
+      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+    </costList>
+    <uiOrder>2404</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>-11</heatPerSecond>
+        <heatPushMinTemperature>17</heatPushMinTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>4</glowRadius>
+        <glowColor>(120,190,255,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
+    <defName>MFV_FineMagicPassiveCooler</defName>
+    <label>fine magic passive cooler</label>
+    <description>An enchanted cooler built around a fine arcane focus. It cools indoor spaces without electricity or refueling, and can draw the air colder than a standard passive cooler.</description>
+    <costList>
+      <WoodLog>50</WoodLog>
+      <MFV_FineArcaneFocus>1</MFV_FineArcaneFocus>
+    </costList>
+    <uiOrder>2405</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>-13</heatPerSecond>
+        <heatPushMinTemperature>7</heatPushMinTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>4</glowRadius>
+        <glowColor>(100,180,255,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
+    <defName>MFV_ExquisiteMagicPassiveCooler</defName>
+    <label>exquisite magic passive cooler</label>
+    <description>An enchanted cooler built around an exquisite arcane focus. It cools indoor spaces without electricity or refueling, and can keep a room below freezing in favorable conditions.</description>
+    <costList>
+      <WoodLog>50</WoodLog>
+      <MFV_ExquisiteArcaneFocus>1</MFV_ExquisiteArcaneFocus>
+    </costList>
+    <uiOrder>2406</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>-15</heatPerSecond>
+        <heatPushMinTemperature>-3</heatPushMinTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>4</glowRadius>
+        <glowColor>(85,170,255,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

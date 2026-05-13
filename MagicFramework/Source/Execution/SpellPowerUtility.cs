@@ -54,32 +54,54 @@ public static class SpellPowerUtility
         return Mathf.RoundToInt(ResolveScalableFloat(context, fallbackValue, scalableFloat));
     }
 
-    public static float ResolveDamageScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.damageScalar);
+    public static float ResolveDamageScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.Damage, context?.spellDef?.power?.damageScalar);
 
-    public static float ResolveHealingScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.healingScalar);
+    public static float ResolveHealingScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.Healing, context?.spellDef?.power?.healingScalar);
 
-    public static float ResolveRadiusScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.radiusScalar);
+    public static float ResolveRadiusScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.Radius, context?.spellDef?.power?.radiusScalar);
 
-    public static float ResolveDurationScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.durationScalar);
+    public static float ResolveDurationScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.Duration, context?.spellDef?.power?.durationScalar);
 
-    public static float ResolveManaCostScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.manaCostScalar);
+    public static float ResolveManaCostScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.ManaCost, context?.spellDef?.power?.manaCostScalar);
 
-    public static float ResolveCooldownScalar(SpellContext context) => ResolveScalar(context, context?.spellDef?.power?.cooldownScalar);
+    public static float ResolveCooldownScalar(SpellContext context) => ResolveScalar(context, SpellScaledAttribute.Cooldown, context?.spellDef?.power?.cooldownScalar);
 
-    private static float ResolveScalar(SpellContext context, SpellPowerScalarDef scalarDef)
+    private static float ResolveScalar(SpellContext context, SpellScaledAttribute attribute, SpellPowerScalarDef scalarDef)
     {
-        if (scalarDef == null)
+        if (scalarDef != null)
+        {
+            float value = ResolveScaledValue(
+                context,
+                scalarDef.mode,
+                scalarDef.baseValue,
+                scalarDef.perPower,
+                scalarDef.perTier);
+            return Clamp(value, scalarDef.min, scalarDef.max);
+        }
+
+        return ResolveGlobalScalar(context, attribute);
+    }
+
+    private static float ResolveGlobalScalar(SpellContext context, SpellScaledAttribute attribute)
+    {
+        SpellPowerDef powerDef = context?.spellDef?.power;
+        if (powerDef?.scaledAttributes == null || !powerDef.scaledAttributes.Contains(attribute))
         {
             return 1f;
         }
 
-        float value = ResolveScaledValue(
-            context,
-            scalarDef.mode,
-            scalarDef.baseValue,
-            scalarDef.perPower,
-            scalarDef.perTier);
-        return Clamp(value, scalarDef.min, scalarDef.max);
+        float power = Mathf.Max(0f, context?.power?.value ?? 0f);
+        MagicFrameworkSettings settings = MagicFrameworkSettings.Current;
+        return attribute switch
+        {
+            SpellScaledAttribute.Damage => 1f + (power * Mathf.Max(0f, settings?.damageScalingPerPower ?? MagicFrameworkSettings.DefaultDamageScalingPerPower)),
+            SpellScaledAttribute.Healing => 1f + (power * Mathf.Max(0f, settings?.healingScalingPerPower ?? MagicFrameworkSettings.DefaultHealingScalingPerPower)),
+            SpellScaledAttribute.Radius => 1f + (power * Mathf.Max(0f, settings?.radiusScalingPerPower ?? MagicFrameworkSettings.DefaultRadiusScalingPerPower)),
+            SpellScaledAttribute.Duration => 1f + (power * Mathf.Max(0f, settings?.durationScalingPerPower ?? MagicFrameworkSettings.DefaultDurationScalingPerPower)),
+            SpellScaledAttribute.ManaCost => Mathf.Max(0.1f, 1f - (power * Mathf.Max(0f, settings?.manaCostReductionPerPower ?? MagicFrameworkSettings.DefaultManaCostReductionPerPower))),
+            SpellScaledAttribute.Cooldown => Mathf.Max(0.1f, 1f - (power * Mathf.Max(0f, settings?.cooldownReductionPerPower ?? MagicFrameworkSettings.DefaultCooldownReductionPerPower))),
+            _ => 1f
+        };
     }
 
     private static float ResolveScaledValue(

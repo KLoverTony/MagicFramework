@@ -103,26 +103,11 @@
                 <locationSource>CurrentTarget</locationSource>
                 <attachToTarget>true</attachToTarget>
               </li>
-              <li Class="MagicFramework.Definitions.ApplyStatModifierActionDef">
+              <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
                 <debugLabel>Blessing of Vigor buff</debugLabel>
+                <statusEffectDef>MFV_Status_BlessedVigor</statusEffectDef>
                 <targetSource>CurrentTarget</targetSource>
-                <durationTicks>900</durationTicks>
                 <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
-                <statusCue>
-                  <hediffDef>MF_BlessedVigor</hediffDef>
-                  <severity>0.01</severity>
-                  <removeOnExpire>true</removeOnExpire>
-                </statusCue>
-                <modifiers>
-                  <li>
-                    <statDef>MoveSpeed</statDef>
-                    <factor>1.12</factor>
-                  </li>
-                  <li>
-                    <statDef>GeneralLaborSpeed</statDef>
-                    <factor>1.10</factor>
-                  </li>
-                </modifiers>
               </li>
             </actions>
           </li>

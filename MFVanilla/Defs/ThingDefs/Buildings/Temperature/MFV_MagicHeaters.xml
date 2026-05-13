@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_MagicHeaterBase" ParentName="BuildingBase" Abstract="True">
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/Building/Misc/TempControl/Heater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shadowData>
+        <volume>(0.5,0.3,0.7)</volume>
+        <offset>(0,0,-0.15)</offset>
+      </shadowData>
+      <damageData>
+        <rect>(0.234375,0,0.515625,0.984375)</rect>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>30</pathCost>
+    <blockWind>true</blockWind>
+    <rotatable>false</rotatable>
+    <fillPercent>0.4</fillPercent>
+    <thingCategories>
+      <li>BuildingsTemperature</li>
+    </thingCategories>
+    <statBases>
+      <WorkToBuild>1000</WorkToBuild>
+      <MaxHitPoints>100</MaxHitPoints>
+      <Mass>6</Mass>
+      <Flammability>0.5</Flammability>
+    </statBases>
+    <tickerType>Normal</tickerType>
+    <building>
+      <destroySound>BuildingDestroyed_Metal_Small</destroySound>
+    </building>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <placeWorkers>
+      <li>PlaceWorker_Heater</li>
+    </placeWorkers>
+    <drawPlaceWorkersWhileSelected>true</drawPlaceWorkersWhileSelected>
+    <designationCategory>Temperature</designationCategory>
+    <designationHotKey>Misc2</designationHotKey>
+    <researchPrerequisites>
+      <li>MFV_Enchantment</li>
+    </researchPrerequisites>
+    <constructionSkillPrerequisite>5</constructionSkillPrerequisite>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicHeaterBase">
+    <defName>MFV_MagicHeater</defName>
+    <label>magic heater</label>
+    <description>An enchanted heater built around an arcane focus. It warms indoor spaces without electricity and stops pushing heat once the room is comfortable.</description>
+    <graphicData>
+      <texPath>Things/Building/Temperature/MagicHeater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1</drawSize>
+    </graphicData>
+    <costList>
+      <Steel>50</Steel>
+      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+    </costList>
+    <uiOrder>2401</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>21</heatPerSecond>
+        <heatPushMaxTemperature>21</heatPushMaxTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>3</glowRadius>
+        <glowColor>(255,170,110,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicHeaterBase">
+    <defName>MFV_FineMagicHeater</defName>
+    <label>fine magic heater</label>
+    <description>An enchanted heater built around a fine arcane focus. It warms indoor spaces faster than a standard magic heater, while still stopping once the room is comfortable.</description>
+    <graphicData>
+      <texPath>Things/Building/Temperature/FineMagicHeater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1</drawSize>
+    </graphicData>
+    <costList>
+      <Steel>50</Steel>
+      <MFV_FineArcaneFocus>1</MFV_FineArcaneFocus>
+    </costList>
+    <uiOrder>2402</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>32</heatPerSecond>
+        <heatPushMaxTemperature>21</heatPushMaxTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>3</glowRadius>
+        <glowColor>(255,155,95,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_MagicHeaterBase">
+    <defName>MFV_ExquisiteMagicHeater</defName>
+    <label>exquisite magic heater</label>
+    <description>An enchanted heater built around an exquisite arcane focus. It strongly warms indoor spaces, while still stopping once the room is comfortable.</description>
+    <graphicData>
+      <texPath>Things/Building/Temperature/ExquisiteMagicHeater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1</drawSize>
+    </graphicData>
+    <costList>
+      <Steel>50</Steel>
+      <MFV_ExquisiteArcaneFocus>1</MFV_ExquisiteArcaneFocus>
+    </costList>
+    <uiOrder>2403</uiOrder>
+    <comps>
+      <li Class="CompProperties_HeatPusher">
+        <compClass>CompHeatPusher</compClass>
+        <heatPerSecond>45</heatPerSecond>
+        <heatPushMaxTemperature>21</heatPushMaxTemperature>
+      </li>
+      <li Class="CompProperties_Glower">
+        <glowRadius>3</glowRadius>
+        <glowColor>(255,140,85,0)</glowColor>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>
