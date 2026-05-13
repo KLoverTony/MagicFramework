@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Resurrection</defName>
+    <label>resurrection</label>
+    <description>Returns a dead humanlike pawn to life if the body remains viable and the spirit has not moved on. The spell does not restore ruined limbs or old wounds beyond what is needed to live, and it temporarily binds the caster and resurrected pawn in shared essence.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Resurrection</gizmoIconPath>
+    <range>8</range>
+    <castTimeTicks>360</castTimeTicks>
+
+    <meta>
+      <tier>4</tier>
+      <elements>
+        <li>MF_Element_Life</li>
+        <li>MF_Element_Spirit</li>
+        <li>MF_Element_Death</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Soulcraft</li>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Healing</li>
+        <li>MF_Discipline_Ritual</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_CorpseRequired</li>
+        <li>MF_Tag_RitualSpell</li>
+        <li>MF_Tag_Debuff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Soulcraft</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>8</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Thing</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>true</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireResurrectableCorpse>true</requireResurrectableCorpse>
+      <range>8</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Resurrection</debugLabel>
+        <amount>90</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Resurrection cooldown ready</debugLabel>
+        <cooldownTicks>240000</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Resurrection</debugLabel>
+        <amount>90</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Resurrection cooldown</debugLabel>
+        <cooldownTicks>240000</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Resurrection sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Resurrection opening soul flare</debugLabel>
+            <effectDef>Skip_EntryNoDelay</effectDef>
+            <soundDef>Resurrect_Cast</soundDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ResurrectPawnActionDef">
+            <debugLabel>Restore life to corpse</debugLabel>
+            <removeResurrectionSickness>true</removeResurrectionSickness>
+            <preserveNonVitalDamage>true</preserveNonVitalDamage>
+            <updatePawnMemory>true</updatePawnMemory>
+            <despawnActiveSpirit>true</despawnActiveSpirit>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Resurrection resolve burst</debugLabel>
+            <effectDef>Skip_ExitNoDelay</effectDef>
+            <soundDef>Resurrect_Resolve</soundDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Resurrection psychic shockwave</debugLabel>
+            <effectDef>PsychicApplyNeuroquake</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Resurrection bright life flash</debugLabel>
+            <effectDef>BrightFlashLong</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+            <debugLabel>Apply shared essence to resurrected pawn</debugLabel>
+            <targetSource>CurrentTarget</targetSource>
+            <hediffDef>MF_SharedEssence</hediffDef>
+            <severity>1</severity>
+            <addMode>Replace</addMode>
+            <removeAfterDuration>true</removeAfterDuration>
+            <durationTicks>120000</durationTicks>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+            <debugLabel>Apply shared essence to caster</debugLabel>
+            <targetSource>Caster</targetSource>
+            <hediffDef>MF_SharedEssence</hediffDef>
+            <severity>1</severity>
+            <addMode>Replace</addMode>
+            <removeAfterDuration>true</removeAfterDuration>
+            <durationTicks>120000</durationTicks>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

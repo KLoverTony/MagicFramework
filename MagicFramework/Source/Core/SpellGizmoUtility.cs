@@ -253,16 +253,19 @@ public static class SpellGizmoUtility
 
     private static void TryCastSpell(Pawn pawn, SpellDef spellDef, LocalTargetInfo target)
     {
-        if (Executor.TryExecute(spellDef, pawn, target, out SpellContext context))
+        SpellCastWarmupUtility.StartOrExecute(pawn, spellDef, target, Executor, (completed, context) =>
         {
-            Messages.Message($"Cast {spellDef.LabelCap}.", target.ToTargetInfo(pawn.Map), MessageTypeDefOf.TaskCompletion, false);
-            return;
-        }
+            if (completed)
+            {
+                Messages.Message($"Cast {spellDef.LabelCap}.", target.ToTargetInfo(pawn.Map), MessageTypeDefOf.TaskCompletion, false);
+                return;
+            }
 
-        string reason = context?.executionState?.failed == true
-            ? context.executionState.failureReason ?? "Spell validation or execution failed. Check the log for details."
-            : "Spell cast did not complete.";
-        Messages.Message(reason, target.ToTargetInfo(pawn.Map), MessageTypeDefOf.RejectInput, false);
+            string reason = context?.executionState?.failed == true
+                ? context.executionState.failureReason ?? "Spell validation or execution failed. Check the log for details."
+                : "Spell cast did not complete.";
+            Messages.Message(reason, target.ToTargetInfo(pawn.Map), MessageTypeDefOf.RejectInput, false);
+        });
     }
 
     private static bool TryValidateCasterRequirements(Pawn pawn, SpellDef spellDef, out string reason)

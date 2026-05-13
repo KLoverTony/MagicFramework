@@ -5,6 +5,7 @@ using MagicFramework.Conditions;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
+using MagicFramework.PawnMemory;
 using MagicFramework.Scheduling;
 using MagicFramework.Targeting;
 using MagicFramework.Visuals;
@@ -1834,22 +1835,23 @@ public sealed class HealActionWorker : SpellActionWorker
             return;
         }
 
-        float healed = HealInjuriesEvenly(targetPawn, amount);
-        if (healed > 0f)
+        float healed = HealInjuriesEvenly(targetPawn, amount, permanentOnly: false);
+        float permanentHealed = HealPermanentDamage(context, targetPawn, healActionDef);
+        if (healed > 0f || permanentHealed > 0f)
         {
             targetPawn.health.Notify_HediffChanged(null);
         }
 
-        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Healed {healed:0.##}/{amount:0.##} injury severity on {targetPawn.LabelCap}.");
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Healed {healed:0.##}/{amount:0.##} injury severity and {permanentHealed:0.##} permanent damage on {targetPawn.LabelCap}.");
     }
 
-    private static float HealInjuriesEvenly(Pawn pawn, float amount)
+    private static float HealInjuriesEvenly(Pawn pawn, float amount, bool permanentOnly)
     {
         List<Hediff_Injury> injuries = new();
         List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
         for (int i = 0; i < hediffs.Count; i++)
         {
-            if (hediffs[i] is Hediff_Injury injury && injury.Severity > 0f)
+            if (hediffs[i] is Hediff_Injury injury && injury.Severity > 0f && (!permanentOnly || injury.IsPermanent()))
             {
                 injuries.Add(injury);
             }
@@ -1891,6 +1893,164 @@ public sealed class HealActionWorker : SpellActionWorker
         }
 
         return totalHealed;
+    }
+
+    private static float HealPermanentDamage(SpellContext context, Pawn pawn, HealActionDef healActionDef)
+    {
+        if (healActionDef == null || (context?.power?.tier ?? 0) < healActionDef.minPermanentHealingTier)
+        {
+            return 0f;
+        }
+
+        float amount = Mathf.Max(0f, SpellEnhancementUtility.ResolveScalableHealingAmount(context, healActionDef.permanentHealingAmount, healActionDef.scalablePermanentHealingAmount));
+        if (amount <= 0f)
+        {
+            return 0f;
+        }
+
+        float remaining = amount;
+        float healed = 0f;
+        if (healActionDef.regenerateMissingParts && remaining > 0f)
+        {
+            float partHealed = RegenerateMissingParts(pawn, healActionDef, remaining, Mathf.Max(0, healActionDef.maxMissingPartsPerPulse));
+            remaining -= partHealed;
+            healed += partHealed;
+        }
+
+        if (healActionDef.healPermanentInjuries && remaining > 0f)
+        {
+            healed += HealInjuriesEvenly(pawn, remaining, permanentOnly: true);
+        }
+
+        return healed;
+    }
+
+    private static float RegenerateMissingParts(Pawn pawn, HealActionDef healActionDef, float budget, int maxParts)
+    {
+        if (maxParts <= 0)
+        {
+            return 0f;
+        }
+
+        List<Hediff_MissingPart> missingParts = new();
+        List<Hediff> hediffs = pawn.health.hediffSet.hediffs;
+        for (int i = 0; i < hediffs.Count; i++)
+        {
+            if (hediffs[i] is Hediff_MissingPart missingPart && missingPart.Part != null && !IsVitalPart(pawn, missingPart.Part))
+            {
+                missingParts.Add(missingPart);
+            }
+        }
+
+        missingParts.Sort((left, right) => MissingPartCost(left).CompareTo(MissingPartCost(right)));
+
+        float spent = 0f;
+        int restored = 0;
+        for (int i = 0; i < missingParts.Count && restored < maxParts; i++)
+        {
+            Hediff_MissingPart missingPart = missingParts[i];
+            float cost = MissingPartCost(missingPart);
+            if (cost > budget - spent)
+            {
+                continue;
+            }
+
+            pawn.health.RemoveHediff(missingPart);
+            DamageRestoredPart(pawn, missingPart.Part, cost, healActionDef);
+            spent += cost;
+            restored++;
+        }
+
+        return spent;
+    }
+
+    private static void DamageRestoredPart(Pawn pawn, BodyPartRecord part, float restorationCost, HealActionDef healActionDef)
+    {
+        if (pawn?.health == null || part == null || healActionDef?.restoredMissingPartsAreDamaged != true)
+        {
+            return;
+        }
+
+        float severity = restorationCost * Mathf.Max(0f, healActionDef.restoredMissingPartDamageFraction);
+        if (severity <= 0f)
+        {
+            return;
+        }
+
+        HediffDef injuryDef = ResolveRestoredPartInjuryDef(healActionDef.restoredMissingPartInjuryDef);
+        if (injuryDef == null)
+        {
+            return;
+        }
+
+        Hediff_Injury injury = HediffMaker.MakeHediff(injuryDef, pawn, part) as Hediff_Injury;
+        if (injury == null)
+        {
+            return;
+        }
+
+        injury.Severity = severity;
+        pawn.health.AddHediff(injury, part);
+    }
+
+    private static HediffDef ResolveRestoredPartInjuryDef(string injuryDefName)
+    {
+        if (string.IsNullOrWhiteSpace(injuryDefName))
+        {
+            return HediffDefOf.Cut;
+        }
+
+        return DefDatabase<HediffDef>.GetNamedSilentFail(injuryDefName) ?? HediffDefOf.Cut;
+    }
+
+    private static float MissingPartCost(Hediff_MissingPart missingPart)
+    {
+        return Mathf.Max(1f, (missingPart?.Part?.coverageAbs ?? 0f) * 100f);
+    }
+
+    private static bool IsVitalPart(Pawn pawn, BodyPartRecord part)
+    {
+        BodyPartRecord core = pawn.RaceProps?.body?.corePart;
+        return part == core || BodyPartMatches(part, "Head") || BodyPartMatches(part, "Brain");
+    }
+
+    private static bool BodyPartMatches(BodyPartRecord part, string defName)
+    {
+        return part?.def?.defName == defName;
+    }
+}
+
+public sealed class ResurrectPawnActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        ResurrectPawnActionDef resurrectDef = actionDef as ResurrectPawnActionDef;
+        if (resurrectDef == null)
+        {
+            return;
+        }
+
+        if (!SpellResurrectionUtility.TryResurrect(
+            context?.currentTarget ?? LocalTargetInfo.Invalid,
+            resurrectDef.removeResurrectionSickness,
+            resurrectDef.preserveNonVitalDamage,
+            resurrectDef.updatePawnMemory,
+            resurrectDef.despawnActiveSpirit,
+            out Pawn resurrectedPawn,
+            out string reason))
+        {
+            context.executionState.failed = true;
+            context.executionState.failureReason = reason;
+            Log.Warning($"[MagicFramework] ResurrectPawnActionWorker failed: {reason}");
+            if (context?.currentTarget.IsValid == true)
+            {
+                Messages.Message(reason, context.currentTarget.ToTargetInfo(context.map), MessageTypeDefOf.RejectInput, false);
+            }
+            return;
+        }
+
+        context.SetCurrentTarget(new LocalTargetInfo(resurrectedPawn));
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Resurrected {resurrectedPawn.LabelCap} via {context?.spellDef?.defName ?? "<unknown spell>"}.");
     }
 }
 
@@ -2129,7 +2289,10 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
             return;
         }
 
-        Pawn targetPawn = context?.currentTarget.Thing as Pawn;
+        Thing targetThing = hediffActionDef.targetSource == StatModifierTargetSource.Caster
+            ? context?.caster
+            : context?.currentTarget.Thing;
+        Pawn targetPawn = targetThing as Pawn;
         if (targetPawn == null || targetPawn.Destroyed || targetPawn.health == null)
         {
             Log.Warning("[MagicFramework] ApplyHediffActionWorker skipped because the current target was not a valid pawn.");

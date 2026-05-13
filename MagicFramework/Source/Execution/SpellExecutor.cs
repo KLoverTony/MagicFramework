@@ -45,7 +45,7 @@ public sealed class SpellExecutor
         return context;
     }
 
-    public bool TryExecute(SpellDef spellDef, Thing caster, LocalTargetInfo initialTarget, out SpellContext context)
+    public bool TryExecute(SpellDef spellDef, Thing caster, LocalTargetInfo initialTarget, out SpellContext context, bool playCastStartFx = true)
     {
         context = BuildContext(spellDef, caster, initialTarget);
 
@@ -55,7 +55,11 @@ public sealed class SpellExecutor
         }
 
         costProcessor.ApplyCosts(context);
-        MagicFXSpawner.Play(context, MagicFXEvent.CastStart, SpellEffectLocationSource.Caster);
+        if (playCastStartFx)
+        {
+            MagicFXSpawner.Play(context, MagicFXEvent.CastStart, SpellEffectLocationSource.Caster);
+        }
+
         actionRunner.RunRootActions(context);
         scheduler.FlushDebugSchedule(context);
         return !context.executionState.failed && !context.executionState.cancelled;

@@ -128,6 +128,11 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_Regeneration", CreateFallbackRegeneration);
     }
 
+    public static SpellDef GetResurrection()
+    {
+        return GetSpellOrFallback("MF_Resurrection", CreateFallbackResurrection);
+    }
+
     public static SpellDef GetSummonDog()
     {
         return GetSpellOrFallback("MF_SummonDog", CreateFallbackSummonDog);
@@ -1784,7 +1789,7 @@ public static class SpellDebugSpellLibrary
             label = "debug heal",
             description = "Built-in fallback heal spell used when authored XML defs are not loaded yet.",
             range = 16f,
-            castTimeTicks = 25,
+            castTimeTicks = 360,
             gizmoIconPath = "UI/Gizmos/Spells/MF_Heal",
             power = new SpellPowerDef
             {
@@ -1886,9 +1891,83 @@ public static class SpellDebugSpellLibrary
                                 new HealActionDef
                                 {
                                     debugLabel = "Debug Regeneration pulse heal",
-                                    amount = 4f
+                                    amount = 4f,
+                                    permanentHealingAmount = 12f,
+                                    minPermanentHealingTier = 3,
+                                    healPermanentInjuries = true,
+                                    regenerateMissingParts = true,
+                                    maxMissingPartsPerPulse = 1,
+                                    restoredMissingPartsAreDamaged = true,
+                                    restoredMissingPartDamageFraction = 0.5f,
+                                    restoredMissingPartInjuryDef = "Cut"
                                 }
                             }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackResurrection()
+    {
+        return new SpellDef
+        {
+            defName = "MF_Resurrection_DebugFallback",
+            label = "debug resurrection",
+            description = "Built-in debug spell for testing corpse resurrection.",
+            gizmoIconPath = "UI/Gizmos/Spells/MF_Resurrection",
+            range = 8f,
+            castTimeTicks = 25,
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Thing,
+                includePawns = false,
+                includeBuildings = false,
+                includeItems = true,
+                allowSelfTarget = false,
+                requireLineOfSight = true,
+                requireResurrectableCorpse = true,
+                range = 8f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new SequenceActionDef
+                {
+                    debugLabel = "Debug resurrection sequence",
+                    actions = new List<SpellActionDef>
+                    {
+                        new EffectActionDef
+                        {
+                            debugLabel = "Debug resurrection opening pulse",
+                            effectDef = "Skip_EntryNoDelay",
+                            soundDef = "Resurrect_Cast",
+                            locationSource = SpellEffectLocationSource.CurrentTarget,
+                            attachToTarget = true
+                        },
+                        new ResurrectPawnActionDef
+                        {
+                            debugLabel = "Debug resurrect corpse",
+                            removeResurrectionSickness = true,
+                            preserveNonVitalDamage = true,
+                            updatePawnMemory = true,
+                            despawnActiveSpirit = true
+                        },
+                        new EffectActionDef
+                        {
+                            debugLabel = "Debug resurrection resolve pulse",
+                            effectDef = "Skip_ExitNoDelay",
+                            soundDef = "Resurrect_Resolve",
+                            locationSource = SpellEffectLocationSource.CurrentTarget,
+                            attachToTarget = true
+                        },
+                        new EffectActionDef
+                        {
+                            debugLabel = "Debug resurrection psychic shockwave",
+                            effectDef = "PsychicApplyNeuroquake",
+                            locationSource = SpellEffectLocationSource.CurrentTarget,
+                            attachToTarget = true
                         }
                     }
                 }

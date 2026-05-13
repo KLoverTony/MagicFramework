@@ -40,6 +40,13 @@
       </requirements>
     </learning>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Damage</li>
+      </scaledAttributes>
+    </power>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>

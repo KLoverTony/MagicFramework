@@ -1,6 +1,7 @@
 using MagicFramework.Context;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
 
@@ -67,6 +68,12 @@ public sealed class SpellCastValidator
         if (!MatchesCategoryFilters(targeting, targetThing, hasThing, isPawn))
         {
             reason = "Target did not match the configured target category filters.";
+            return false;
+        }
+
+        if (targeting.requireResurrectableCorpse
+            && !SpellResurrectionUtility.TryValidateCorpseForResurrection(target, out _, out reason))
+        {
             return false;
         }
 

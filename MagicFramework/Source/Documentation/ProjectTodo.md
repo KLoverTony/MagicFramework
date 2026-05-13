@@ -120,10 +120,16 @@ Current state:
 - Scalable support exists for damage, healing, explosion radius/damage, targeting range, spawned thing count, durations, and several validation spells.
 - `MF_Firebolt` now validates lightweight damage/cooldown scaling.
 - `MF_Fireball` now validates lightweight damage/radius scaling.
+- MFVanilla healing, lightning, rune, trap, and fire-field spells now use lightweight `scaledAttributes` where caster level should affect damage, healing, radius, or duration.
+- `MF_Regeneration` now has a reusable visible regeneration status cue while retaining its repeated healing pulses.
 
 Candidate additions:
-- audit MFVanilla spells and add lightweight `scaledAttributes` where level progression should be visible
+- finish auditing remaining MFVanilla spells that need new scalar targets rather than the current damage/healing/radius/duration/cost/cooldown list
 - add player-facing display of the active global scaling factors where useful
+- scalable repeat count or pulse count for regeneration, auras, and repeated effects
+- scalable displacement distance for push/pull spells
+- scalable summon duration, summon count, or tiered summon selection
+- shield-specific scaling for sustained mana upkeep, absorption efficiency, and force-field strength
 - scalable target count for chains, bursts, and multi-target spells
 - tiered projectile/effect selection
 - scalable field/wall shapes where authored shape variants become useful

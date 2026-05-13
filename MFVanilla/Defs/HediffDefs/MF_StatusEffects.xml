@@ -71,6 +71,36 @@
   </HediffDef>
 
   <HediffDef>
+    <defName>MF_Regenerating</defName>
+    <label>regenerating</label>
+    <description>This pawn's wounds are being gradually restored by vital magic.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_SharedEssence</defName>
+    <label>shared essence</label>
+    <description>This pawn's life force has been temporarily entwined with another through resurrection magic, leaving consciousness dimmed while the bond settles.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>1</initialSeverity>
+    <stages>
+      <li>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <setMax>0.5</setMax>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
+  <HediffDef>
     <defName>MF_Frozen</defName>
     <label>frozen</label>
     <description>This pawn's movement speed is reduced by 45%.</description>

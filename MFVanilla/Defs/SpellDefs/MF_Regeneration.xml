@@ -38,6 +38,28 @@
       </requirements>
     </learning>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Healing</li>
+        <li>Duration</li>
+      </scaledAttributes>
+      <tiers>
+        <li>
+          <minPower>1</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>8</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>15</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Pawn</primaryTargetType>
@@ -82,6 +104,10 @@
             <locationSource>CurrentTarget</locationSource>
             <attachToTarget>true</attachToTarget>
           </li>
+          <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
+            <debugLabel>Apply regenerating status cue</debugLabel>
+            <statusEffectDef>MFV_Status_Regenerating</statusEffectDef>
+          </li>
           <li Class="MagicFramework.Definitions.RepeatActionDef">
             <debugLabel>Regeneration healing pulses</debugLabel>
             <intervalTicks>120</intervalTicks>
@@ -97,6 +123,14 @@
               <li Class="MagicFramework.Definitions.HealActionDef">
                 <debugLabel>Regeneration pulse heal</debugLabel>
                 <amount>4</amount>
+                <permanentHealingAmount>12</permanentHealingAmount>
+                <minPermanentHealingTier>3</minPermanentHealingTier>
+                <healPermanentInjuries>true</healPermanentInjuries>
+                <regenerateMissingParts>true</regenerateMissingParts>
+                <maxMissingPartsPerPulse>1</maxMissingPartsPerPulse>
+                <restoredMissingPartsAreDamaged>true</restoredMissingPartsAreDamaged>
+                <restoredMissingPartDamageFraction>0.5</restoredMissingPartDamageFraction>
+                <restoredMissingPartInjuryDef>Cut</restoredMissingPartInjuryDef>
               </li>
             </actions>
           </li>

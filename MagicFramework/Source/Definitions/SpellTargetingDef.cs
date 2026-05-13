@@ -17,6 +17,7 @@ public class SpellTargetingDef
     public bool requireStandableCell;
     public bool requireWalkableCell;
     public bool requireWaterCell;
+    public bool requireResurrectableCorpse;
     public float range;
     public ScalableFloatDef scalableRange;
     public float radius;

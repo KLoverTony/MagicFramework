@@ -680,8 +680,30 @@ public sealed class HealActionDef : SpellActionDef
 {
     public float amount;
     public ScalableFloatDef scalableAmount;
+    public float permanentHealingAmount;
+    public ScalableFloatDef scalablePermanentHealingAmount;
+    public int minPermanentHealingTier = int.MaxValue;
+    public bool healPermanentInjuries;
+    public bool regenerateMissingParts;
+    public int maxMissingPartsPerPulse = 1;
+    public bool restoredMissingPartsAreDamaged;
+    public float restoredMissingPartDamageFraction = 0.5f;
+    public string restoredMissingPartInjuryDef = "Cut";
 
     public override SpellActionWorker CreateWorker() => new HealActionWorker();
+}
+
+/// <summary>
+/// Resurrects the pawn inside the current corpse target without providing a full-body restoration.
+/// </summary>
+public sealed class ResurrectPawnActionDef : SpellActionDef
+{
+    public bool removeResurrectionSickness = true;
+    public bool preserveNonVitalDamage = true;
+    public bool updatePawnMemory = true;
+    public bool despawnActiveSpirit = true;
+
+    public override SpellActionWorker CreateWorker() => new ResurrectPawnActionWorker();
 }
 
 /// <summary>
@@ -738,6 +760,7 @@ public sealed class DestroyThingActionDef : SpellActionDef
 /// </summary>
 public sealed class ApplyHediffActionDef : SpellActionDef
 {
+    public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
     public string hediffDef;
     public float severity;
     public ScalableFloatDef scalableSeverity;

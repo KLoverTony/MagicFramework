@@ -90,6 +90,23 @@
   </MagicFramework.Definitions.SpellStatusEffectDef>
 
   <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Regenerating</defName>
+    <label>regenerating</label>
+    <description>Vital magic is knitting this pawn's wounds closed over time.</description>
+    <durationTicks>720</durationTicks>
+    <scalableDurationTicks>
+      <baseValue>720</baseValue>
+      <perPower>30</perPower>
+      <max>1320</max>
+    </scalableDurationTicks>
+    <statusCue>
+      <hediffDef>MF_Regenerating</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_FrozenSlow</defName>
     <label>frozen</label>
     <description>Magical cold slows this pawn's movement.</description>

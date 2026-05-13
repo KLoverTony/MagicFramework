@@ -42,6 +42,14 @@
       </requirements>
     </learning>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Damage</li>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
     <targeting>
       <shape>Wall</shape>
       <primaryTargetType>Cell</primaryTargetType>

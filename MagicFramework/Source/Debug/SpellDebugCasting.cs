@@ -143,6 +143,11 @@ public static class SpellDebugCasting
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetRegeneration(), "Debug: Cast Regeneration", "Starts target selection and casts the current debug Regeneration spell through Magic Framework.", "UI/Commands/Tend");
     }
 
+    public static Gizmo CreateResurrectionGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetResurrection(), "Debug: Cast Resurrection", "Starts target selection and casts the current debug Resurrection spell through Magic Framework.", "UI/Gizmos/Spells/MF_Resurrection");
+    }
+
     public static Gizmo CreateSummonDogGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetSummonDog(), "Debug: Cast Summon Dog", "Starts target selection and casts the current debug Summon Dog spell through Magic Framework.", "UI/Commands/DesirePower");
@@ -320,17 +325,20 @@ public static class SpellDebugCasting
             return;
         }
 
-        if (Executor.TryExecute(spellDef, pawn, target, out SpellContext context))
+        SpellCastWarmupUtility.StartOrExecute(pawn, spellDef, target, Executor, (completed, context) =>
         {
-            string sourceLabel = spellDef.defName != null && spellDef.defName.EndsWith("_DebugFallback") ? "fallback" : "authored";
-            Messages.Message($"Magic Framework cast {spellDef.label ?? spellDef.defName} using {sourceLabel} debug content.", target.ToTargetInfo(pawn.Map), MessageTypeDefOf.TaskCompletion, false);
-            return;
-        }
+            if (completed)
+            {
+                string sourceLabel = spellDef.defName != null && spellDef.defName.EndsWith("_DebugFallback") ? "fallback" : "authored";
+                Messages.Message($"Magic Framework cast {spellDef.label ?? spellDef.defName} using {sourceLabel} debug content.", target.ToTargetInfo(pawn.Map), MessageTypeDefOf.TaskCompletion, false);
+                return;
+            }
 
-        string reason = context?.executionState?.failed == true
-            ? "Spell validation or execution failed. Check the log for details."
-            : "Spell cast did not complete.";
-        Messages.Message(reason, target.ToTargetInfo(pawn.Map), MessageTypeDefOf.RejectInput, false);
+            string reason = context?.executionState?.failed == true
+                ? context.executionState.failureReason ?? "Spell validation or execution failed. Check the log for details."
+                : "Spell cast did not complete.";
+            Messages.Message(reason, target.ToTargetInfo(pawn.Map), MessageTypeDefOf.RejectInput, false);
+        });
     }
 
     private static void BeginSpellTargeting(Pawn pawn, SpellDef spellDef)

@@ -122,6 +122,7 @@ public static class MagicFrameworkPawnGizmoPatch
             yield return SpellDebugCasting.CreateManaShieldGizmo(__instance);
             yield return SpellDebugCasting.CreateHealGizmo(__instance);
             yield return SpellDebugCasting.CreateRegenerationGizmo(__instance);
+            yield return SpellDebugCasting.CreateResurrectionGizmo(__instance);
             yield return SpellDebugCasting.CreateSummonDogGizmo(__instance);
             yield return SpellDebugCasting.CreateCreateFoodGizmo(__instance);
         }

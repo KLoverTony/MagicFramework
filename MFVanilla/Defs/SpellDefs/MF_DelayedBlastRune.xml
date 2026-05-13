@@ -45,6 +45,14 @@
       </requirements>
     </learning>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Damage</li>
+        <li>Radius</li>
+      </scaledAttributes>
+    </power>
+
     <targeting>
       <shape>Single</shape>
       <primaryTargetType>Cell</primaryTargetType>
