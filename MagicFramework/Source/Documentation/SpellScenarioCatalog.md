@@ -301,7 +301,7 @@ Notes:
 Current implementation note:
 
 - `MF_ChainLightning` now validates a purpose-built delayed branching chain primitive.
-- It supports forward-biased hops, random branch count, repeated target hits, authored per-hit actions, and queued visual arcs from the previous node.
+- It supports forward-biased hops, deterministic branch count, authored per-hit actions, visited-target policy, and queued visual arcs from the previous node.
 
 Remaining framework pressure:
 

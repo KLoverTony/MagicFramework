@@ -707,6 +707,7 @@ public sealed class ChainLightningActionDef : SpellActionDef
     public int minBranches = 1;
     public int maxBranches = 2;
     public float minForwardScore = -0.15f;
+    public ChainVisitedTargetPolicy visitedTargetPolicy = ChainVisitedTargetPolicy.AllowRepeats;
     public bool allowRepeatTargets = true;
     public bool includeCaster;
     public SpellPawnAffinity pawnAffinity = SpellPawnAffinity.Foe;
@@ -719,6 +720,12 @@ public sealed class ChainLightningActionDef : SpellActionDef
     public override IEnumerable<SpellActionDef> GetChildActions() => onHitActions;
 
     public override SpellActionWorker CreateWorker() => new ChainLightningActionWorker();
+}
+
+public enum ChainVisitedTargetPolicy
+{
+    AllowRepeats,
+    ExcludeGlobal
 }
 
 /// <summary>

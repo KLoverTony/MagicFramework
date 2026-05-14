@@ -539,7 +539,7 @@ public static class SpellDescriptionUtility
                 AddActionLines(lines, chainTargets.actions, depth + 1);
                 break;
             case ChainLightningActionDef chain:
-                lines.Add("Chains lightning through nearby targets for up to " + chain.maxHops + " hop(s).");
+                lines.Add(DescribeChainLightning(chain));
                 break;
             case StunActionDef stun:
                 lines.Add("Has a " + FormatPercent(stun.chance) + " chance to stun for " + FormatTicks(stun.stunTicks) + ".");
@@ -650,6 +650,17 @@ public static class SpellDescriptionUtility
 
         string categoryText = categories.Count == 0 ? string.Empty : " (" + string.Join(", ", categories) + ")";
         return label + categoryText + DescribeStatusRefreshPolicy(statusEffectDef.refreshPolicy);
+    }
+
+    private static string DescribeChainLightning(ChainLightningActionDef chain)
+    {
+        string branchText = chain.maxBranches > 1
+            ? ", branching " + Mathf.Max(1, chain.minBranches) + "-" + Mathf.Max(Mathf.Max(1, chain.minBranches), chain.maxBranches) + " way(s)"
+            : string.Empty;
+        string repeatText = chain.allowRepeatTargets && chain.visitedTargetPolicy == ChainVisitedTargetPolicy.AllowRepeats
+            ? ", may revisit targets"
+            : ", avoids previously hit targets";
+        return "Chains lightning through nearby targets for up to " + chain.maxHops + " hop(s), within " + FormatNumber(chain.jumpRadius) + " cells" + branchText + repeatText + ".";
     }
 
     private static string DescribeProjectileLaunch(LaunchProjectileActionDef projectile)

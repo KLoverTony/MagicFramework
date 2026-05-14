@@ -107,6 +107,7 @@
                 <maxHops>0</maxHops>
                 <minBranches>1</minBranches>
                 <maxBranches>1</maxBranches>
+                <visitedTargetPolicy>ExcludeGlobal</visitedTargetPolicy>
                 <allowRepeatTargets>false</allowRepeatTargets>
                 <includeCaster>false</includeCaster>
                 <pawnAffinity>Foe</pawnAffinity>

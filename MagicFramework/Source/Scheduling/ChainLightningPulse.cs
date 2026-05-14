@@ -16,6 +16,7 @@ public sealed class ChainLightningPulse : IExposable
     private int hopIndex;
     private int randomSeed;
     private List<int> actionPath = new();
+    private List<int> visitedThingIds = new();
 
     public ChainLightningPulse()
     {
@@ -31,6 +32,7 @@ public sealed class ChainLightningPulse : IExposable
         int executeAtTick,
         int hopIndex,
         int randomSeed,
+        IEnumerable<int> visitedThingIds,
         IEnumerable<int> actionPath)
     {
         this.caster = caster;
@@ -42,6 +44,7 @@ public sealed class ChainLightningPulse : IExposable
         this.executeAtTick = executeAtTick;
         this.hopIndex = hopIndex;
         this.randomSeed = randomSeed;
+        this.visitedThingIds = visitedThingIds != null ? new List<int>(visitedThingIds) : new List<int>();
         this.actionPath = actionPath != null ? new List<int>(actionPath) : new List<int>();
     }
 
@@ -63,6 +66,8 @@ public sealed class ChainLightningPulse : IExposable
 
     public int RandomSeed => randomSeed;
 
+    public IReadOnlyList<int> VisitedThingIds => visitedThingIds;
+
     public IReadOnlyList<int> ActionPath => actionPath;
 
     public void ExposeData()
@@ -76,11 +81,13 @@ public sealed class ChainLightningPulse : IExposable
         Scribe_Values.Look(ref executeAtTick, "executeAtTick");
         Scribe_Values.Look(ref hopIndex, "hopIndex");
         Scribe_Values.Look(ref randomSeed, "randomSeed");
+        Scribe_Collections.Look(ref visitedThingIds, "visitedThingIds", LookMode.Value);
         Scribe_Collections.Look(ref actionPath, "actionPath", LookMode.Value);
 
-        if (Scribe.mode == LoadSaveMode.PostLoadInit && actionPath == null)
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
         {
-            actionPath = new List<int>();
+            actionPath ??= new List<int>();
+            visitedThingIds ??= new List<int>();
         }
     }
 }

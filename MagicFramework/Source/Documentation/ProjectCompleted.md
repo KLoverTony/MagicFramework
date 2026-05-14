@@ -283,10 +283,11 @@ This file tracks implemented framework and content milestones moved out of the a
   - each pulse can run authored `onHitActions`, and queues 1-2 later jumps by default
   - target selection is radius-limited and forward-biased from the previous arc direction
   - queued pulses persist source and target cells so arcs continue from the previous node even if references change
-  - repeated hits on the same target are allowed across the chain
+  - visited target policy can either allow repeated hits or globally exclude previously hit targets across queued branches
+  - branch count, candidate shuffling, and fallback stun rolls use deterministic spell random state
   - vanilla electrical spark flecks provide a jagged trail, impact flash, and stun cue
   Validation spell:
-  - `MF_ChainLightning`, using authored damage and random stun hit actions
+  - `MF_ChainLightning`, using authored damage and deterministic stun hit actions while globally excluding previously hit targets
 
 - Custom spell gizmo icon support.
   Current state:

@@ -36,6 +36,8 @@ public sealed class ChainLightningService
         }
 
         int currentTick = Find.TickManager?.TicksGame ?? 0;
+        List<int> visitedThingIds = new();
+        AddVisitedThingId(visitedThingIds, initialTarget);
         runtime.Enqueue(new ChainLightningPulse(
             context.caster,
             context.spellDef,
@@ -46,6 +48,7 @@ public sealed class ChainLightningService
             currentTick,
             0,
             context.randomSeed,
+            visitedThingIds,
             actionPath));
     }
 
@@ -72,7 +75,8 @@ public sealed class ChainLightningService
             return;
         }
 
-        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, pulse.SpellDef, sourceCell, pulse.TargetThing, actionDef, pulse);
+        List<int> visitedThingIds = CreateVisitedThingIds(pulse, pulse.TargetThing);
+        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, pulse.SpellDef, sourceCell, pulse.TargetThing, actionDef, pulse, visitedThingIds);
         if (nextTargets.Count == 0)
         {
             return;
@@ -83,6 +87,8 @@ public sealed class ChainLightningService
         int executeAtTick = currentTick + (actionDef.jumpDelayTicks > 0 ? actionDef.jumpDelayTicks : 1);
         for (int i = 0; i < nextTargets.Count; i++)
         {
+            List<int> nextVisitedThingIds = new(visitedThingIds);
+            AddVisitedThingId(nextVisitedThingIds, nextTargets[i]);
             runtime?.Enqueue(new ChainLightningPulse(
                 pulse.Caster,
                 pulse.SpellDef,
@@ -93,6 +99,7 @@ public sealed class ChainLightningService
                 executeAtTick,
                 pulse.HopIndex + 1,
                 pulse.RandomSeed,
+                nextVisitedThingIds,
                 pulse.ActionPath));
         }
     }
@@ -150,7 +157,7 @@ public sealed class ChainLightningService
         }
     }
 
-    private static List<Thing> FindNextTargets(Map map, Thing caster, SpellDef spellDef, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef, ChainLightningPulse pulse)
+    private static List<Thing> FindNextTargets(Map map, Thing caster, SpellDef spellDef, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef, ChainLightningPulse pulse, List<int> visitedThingIds)
     {
         List<Thing> candidates = new();
         Vector2 forward = ResolveForward(caster, sourceCell, currentThing);
@@ -159,6 +166,11 @@ public sealed class ChainLightningService
         foreach (Thing thing in map.listerThings?.AllThings ?? new List<Thing>())
         {
             if (thing == null || thing.Destroyed || thing == currentThing)
+            {
+                continue;
+            }
+
+            if (ShouldExcludeVisitedTarget(actionDef, thing, visitedThingIds))
             {
                 continue;
             }
@@ -224,10 +236,6 @@ public sealed class ChainLightningService
         int maxBranches = Mathf.Max(minBranches, actionDef.maxBranches);
         int desiredCount = SpellDeterministicRandom.RangeInclusive(minBranches, maxBranches, SpellDeterministicRandom.Append(chainSalt, "desiredCount"));
         int takeCount = Mathf.Min(desiredCount, candidates.Count);
-        if (!actionDef.allowRepeatTargets)
-        {
-            takeCount = Mathf.Min(takeCount, candidates.Count);
-        }
 
         List<Thing> results = new();
         for (int i = 0; i < takeCount; i++)
@@ -236,6 +244,47 @@ public sealed class ChainLightningService
         }
 
         return results;
+    }
+
+    private static ChainVisitedTargetPolicy ResolveVisitedPolicy(ChainLightningActionDef actionDef)
+    {
+        if (actionDef == null)
+        {
+            return ChainVisitedTargetPolicy.AllowRepeats;
+        }
+
+        return actionDef.allowRepeatTargets ? actionDef.visitedTargetPolicy : ChainVisitedTargetPolicy.ExcludeGlobal;
+    }
+
+    private static bool ShouldExcludeVisitedTarget(ChainLightningActionDef actionDef, Thing thing, List<int> visitedThingIds)
+    {
+        if (ResolveVisitedPolicy(actionDef) == ChainVisitedTargetPolicy.AllowRepeats || thing == null || visitedThingIds == null)
+        {
+            return false;
+        }
+
+        return visitedThingIds.Contains(SpellDeterministicRandom.StableThingId(thing));
+    }
+
+    private static List<int> CreateVisitedThingIds(ChainLightningPulse pulse, Thing currentThing)
+    {
+        List<int> visitedThingIds = pulse?.VisitedThingIds != null ? new List<int>(pulse.VisitedThingIds) : new List<int>();
+        AddVisitedThingId(visitedThingIds, currentThing);
+        return visitedThingIds;
+    }
+
+    private static void AddVisitedThingId(List<int> visitedThingIds, Thing thing)
+    {
+        if (visitedThingIds == null || thing == null)
+        {
+            return;
+        }
+
+        int id = SpellDeterministicRandom.StableThingId(thing);
+        if (id != 0 && !visitedThingIds.Contains(id))
+        {
+            visitedThingIds.Add(id);
+        }
     }
 
     private static SpellContext BuildEnhancementContext(Map map, Thing caster, SpellDef spellDef, int randomSeed = 0)
