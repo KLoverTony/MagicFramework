@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Transposition</defName>
+    <label>transposition</label>
+    <description>Swaps the caster's position with a nearby pawn, preserving combat readiness while briefly disorienting both pawns.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Transposition</gizmoIconPath>
+    <range>16</range>
+    <castTimeTicks>30</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Movement</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Hostile</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Transformation</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>16</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Transposition</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Transposition cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Transposition</debugLabel>
+        <amount>16</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Transposition cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Transposition sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Transposition caster departure</debugLabel>
+            <effectDef>Skip_EntryNoDelay</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Transposition target departure</debugLabel>
+            <effectDef>Skip_EntryNoDelay</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.TeleportActionDef">
+            <debugLabel>Transposition swap</debugLabel>
+            <subjectSource>CurrentTarget</subjectSource>
+            <swapWithCaster>true</swapWithCaster>
+            <preserveDrafted>true</preserveDrafted>
+            <postTeleportStunTicks>30</postTeleportStunTicks>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Transposition caster arrival</debugLabel>
+            <effectDef>Skip_ExitNoDelay</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Transposition target arrival</debugLabel>
+            <effectDef>Skip_ExitNoDelay</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -4,6 +4,34 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MF-005 lifecycle hook backfill.
+  Current state:
+  - `LifecycleHooks.md` defines shared create, pulse, trigger, expire, remove, break, and legacy end semantics.
+  - Persistent area zones, wall zones, maintained force fields, persistent effects, and proximity triggers expose their explicit lifecycle hooks.
+  - Summoned pawns now support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+  - Spawned things now support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+  - Summon and spawned-thing runtime records persist source action paths so lifecycle hooks still resolve after save/load.
+  - Sustained stat modifiers retain their established `onPulseActions` and `onBreakActions`; create/expire/remove distinctions remain a future extension only if authoring needs them.
+
+- MF-007 validation spell suite.
+  Current state:
+  - target-query validation: `MF_ArcSeeker`
+  - ally-radius query with caster exclusion: `MF_BlessingOfVigor`
+  - lowest-health query ordering and target limit: `MF_TriagePulse`
+  - highest-threat query ordering and target limit: `MF_ThreatSpike`
+  - conditional branch spell: `MF_Disintegrate`
+  - sustained stat buff: `MF_Might`
+  - maintained shields: `MF_ForceField`, `MF_ManaShield`
+  - delayed branching chain: `MF_ChainLightning`
+  - direct heal / heal-over-time: `MF_Heal`, `MF_Regeneration`
+  - basic teleport: `MF_BlinkStep`
+  - rescue teleport for downed allies: `MF_RescueRecall`
+  - caster/target swap teleport: `MF_Transposition`
+  - maintained enemy repulsion teleport with sustained and per-target mana costs: `MF_RepulsionWard`
+  - terrain patch and thaw/melt behavior: `MF_Freeze`, `MF_FlameField`
+  Completion note:
+  - lifecycle-hook validation is tracked under MF-005 because it depends on the remaining hook surfaces being generalized.
+
 - MF-006 target-query expressiveness.
   Current state:
   - reusable target query defs cover current target, radius, nearest valid target, shape targets, and directional chains

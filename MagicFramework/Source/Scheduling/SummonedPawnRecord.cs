@@ -1,4 +1,5 @@
 using MagicFramework.Definitions;
+using System.Collections.Generic;
 using Verse;
 
 namespace MagicFramework.Scheduling;
@@ -12,17 +13,19 @@ public sealed class SummonedPawnRecord : IExposable
     private SpellDef spellDef;
     private Pawn summonedPawn;
     private int expireAtTick = -1;
+    private List<int> actionPath = new();
 
     public SummonedPawnRecord()
     {
     }
 
-    public SummonedPawnRecord(Thing caster, SpellDef spellDef, Pawn summonedPawn, int expireAtTick)
+    public SummonedPawnRecord(Thing caster, SpellDef spellDef, Pawn summonedPawn, int expireAtTick, IEnumerable<int> actionPath)
     {
         this.caster = caster;
         this.spellDef = spellDef;
         this.summonedPawn = summonedPawn;
         this.expireAtTick = expireAtTick;
+        this.actionPath = actionPath != null ? new List<int>(actionPath) : new List<int>();
     }
 
     public Thing Caster => caster;
@@ -32,6 +35,8 @@ public sealed class SummonedPawnRecord : IExposable
     public Pawn SummonedPawn => summonedPawn;
 
     public int ExpireAtTick => expireAtTick;
+
+    public IReadOnlyList<int> ActionPath => actionPath;
 
     public bool IsExpired(int currentTick)
     {
@@ -44,5 +49,11 @@ public sealed class SummonedPawnRecord : IExposable
         Scribe_Defs.Look(ref spellDef, "spellDef");
         Scribe_References.Look(ref summonedPawn, "summonedPawn");
         Scribe_Values.Look(ref expireAtTick, "expireAtTick", -1);
+        Scribe_Collections.Look(ref actionPath, "actionPath", LookMode.Value);
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit && actionPath == null)
+        {
+            actionPath = new List<int>();
+        }
     }
 }

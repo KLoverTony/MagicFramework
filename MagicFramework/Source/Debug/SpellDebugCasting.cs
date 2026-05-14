@@ -93,6 +93,11 @@ public static class SpellDebugCasting
         return CreateMaintainedSpellGizmo(pawn, SpellDebugSpellLibrary.GetWatersEmbrace(), "Debug: Cast Water's Embrace", "Debug: Cancel Water's Embrace", "Starts target selection and casts the current debug Water's Embrace spell through Magic Framework.", "Cleanly ends the active Water's Embrace aura.", "UI/Commands/DesirePower");
     }
 
+    public static Gizmo CreateRepulsionWardGizmo(Pawn pawn)
+    {
+        return CreateMaintainedSpellGizmo(pawn, SpellDebugSpellLibrary.GetRepulsionWard(), "Debug: Cast Repulsion Ward", "Debug: Cancel Repulsion Ward", "Casts the current debug Repulsion Ward spell through Magic Framework.", "Cleanly ends the active Repulsion Ward aura.", "UI/Commands/DesirePower");
+    }
+
     public static Gizmo CreateForcePushGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetForcePush(), "Debug: Cast Force Push", "Starts target selection and casts the current debug Force Push spell through Magic Framework.", "UI/Commands/Attack");
@@ -106,6 +111,16 @@ public static class SpellDebugCasting
     public static Gizmo CreateBlinkStepGizmo(Pawn pawn)
     {
         return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetBlinkStep(), "Debug: Cast Blink Step", "Starts target selection and casts the current debug Blink Step spell through Magic Framework.", "UI/Commands/DesirePower");
+    }
+
+    public static Gizmo CreateRescueRecallGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetRescueRecall(), "Debug: Cast Rescue Recall", "Casts the current debug Rescue Recall spell through Magic Framework.", "UI/Gizmos/Spells/MF_Rescue_Recall");
+    }
+
+    public static Gizmo CreateTranspositionGizmo(Pawn pawn)
+    {
+        return CreateSpellGizmo(pawn, SpellDebugSpellLibrary.GetTransposition(), "Debug: Cast Transposition", "Starts target selection and casts the current debug Transposition spell through Magic Framework.", "UI/Gizmos/Spells/MF_Transposition");
     }
 
     public static Gizmo CreateHasteGizmo(Pawn pawn)

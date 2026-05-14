@@ -899,6 +899,96 @@
     <displayPriority>800</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_RepulsionWard</defName>
+    <label>scribe scroll (repulsion ward)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast repulsion ward.</description>
+    <jobString>Scribing scroll (repulsion ward).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_RepulsionWard>1</MFV_SpellScroll_MF_RepulsionWard>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_RescueRecall</defName>
+    <label>scribe scroll (rescue recall)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast rescue recall.</description>
+    <jobString>Scribing scroll (rescue recall).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_RescueRecall>1</MFV_SpellScroll_MF_RescueRecall>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Resurrection</defName>
     <label>scribe scroll (resurrection)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast resurrection.</description>
@@ -1120,6 +1210,51 @@
       <li>MFV_ScribingTable</li>
     </recipeUsers>
     <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Transposition</defName>
+    <label>scribe scroll (transposition)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast transposition.</description>
+    <jobString>Scribing scroll (transposition).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Transposition>1</MFV_SpellScroll_MF_Transposition>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
   </RecipeDef>
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_TriagePulse</defName>

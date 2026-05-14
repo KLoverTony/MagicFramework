@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MagicFramework SpellDef Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-content">
+            <div class="title-area">
+                <h1>✨ SpellForge</h1>
+                <p>Design MagicFramework Spells Intuitive & Fast</p>
+            </div>
+            <button id="settingsBtn" class="icon-btn" title="AI Settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <section class="form-panel glass-panel">
+            <!-- AI Assistant Box -->
+            <div class="ai-assistant-box">
+                <div class="ai-header">
+                    <h3>✨ AI Spell Assistant</h3>
+                </div>
+                <div class="form-group" style="margin-bottom: 0.5rem;">
+                    <textarea id="aiPrompt" rows="2" placeholder="Describe a spell (e.g., 'A fireball that explodes in a 4 cell radius and costs 30 mana')..."></textarea>
+                </div>
+                <div class="ai-actions">
+                    <button type="button" id="aiGenerateBtn" class="btn btn-primary" style="width: 100%;">
+                        Generate Spell
+                    </button>
+                </div>
+                <div id="aiLoading" class="ai-loading" style="display: none;">
+                    <div class="spinner"></div> Generating spell details...
+                </div>
+            </div>
+
+            <hr style="margin: 1.5rem 0;">
+
+            <div class="wizard-header">
+                <div class="step active" data-step="1">1. Basics</div>
+                <div class="step" data-step="2">2. Targeting</div>
+                <div class="step" data-step="3">3. Costs</div>
+                <div class="step" data-step="4">4. Effects</div>
+            </div>
+
+            <form id="spell-form">
+                <!-- STEP 1: BASICS -->
+                <div class="wizard-step active" id="step-1">
+                    <h2>Basic Information</h2>
+                    <p class="step-desc">Define the identity and lore of your spell.</p>
+                    <div class="form-group">
+                        <label for="defName" style="color: var(--text-muted); font-size: 0.9em;">DefName (Internal ID) - Auto-generated</label>
+                        <input type="text" id="defName" placeholder="e.g. MF_Firebolt" value="MF_NewSpell" readonly style="background-color: rgba(255, 255, 255, 0.05); color: var(--text-muted); cursor: not-allowed;">
+                    </div>
+                    <div class="form-group">
+                        <label for="label">Label (In-game name)</label>
+                        <input type="text" id="label" placeholder="e.g. firebolt" value="new spell" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="3" placeholder="A basic offensive spell...">A magical new spell.</textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="range">Base Range</label>
+                            <input type="number" id="range" value="24" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="castTimeTicks">Cast Time (Ticks)</label>
+                            <input type="number" id="castTimeTicks" value="30">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gizmoIconPath" style="color: var(--text-muted); font-size: 0.9em;">Gizmo Icon Path - Auto-generated</label>
+                        <input type="text" id="gizmoIconPath" value="UI/Gizmos/Spells/MF_NewSpell" readonly style="background-color: rgba(255, 255, 255, 0.05); color: var(--text-muted); cursor: not-allowed;">
+                    </div>
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-primary next-btn">Next Step ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 2: TARGETING -->
+                <div class="wizard-step" id="step-2">
+                    <h2>Targeting Rules</h2>
+                    <p class="step-desc">How does the caster select their target?</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="targetShape">Shape</label>
+                            <select id="targetShape">
+                                <option value="Single">Single</option>
+                                <option value="Radius">Radius</option>
+                                <option value="Line">Line</option>
+                                <option value="Wall">Wall</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="primaryTargetType">Primary Target Type</label>
+                            <select id="primaryTargetType">
+                                <option value="Pawn">Pawn</option>
+                                <option value="Cell">Cell</option>
+                                <option value="Thing">Thing</option>
+                                <option value="PawnOrThing">PawnOrThing</option>
+                                <option value="PawnOrCell">PawnOrCell</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pawnAffinity">Pawn Affinity</label>
+                            <select id="pawnAffinity">
+                                <option value="All">All</option>
+                                <option value="Ally">Ally</option>
+                                <option value="Foe">Foe</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="radiusGroup" style="display: none;">
+                            <label for="targetRadius">Radius</label>
+                            <input type="number" id="targetRadius" value="3.9" step="0.1">
+                        </div>
+                    </div>
+
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="includePawns" checked> Include Pawns</label>
+                        <label><input type="checkbox" id="includeBuildings" checked> Include Buildings</label>
+                        <label><input type="checkbox" id="includeItems"> Include Items</label>
+                        <label><input type="checkbox" id="allowSelfTarget"> Allow Self Target</label>
+                        <label><input type="checkbox" id="requireLineOfSight" checked> Require Line of Sight</label>
+                    </div>
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary prev-btn">⬅ Previous</button>
+                        <button type="button" class="btn btn-primary next-btn">Next Step ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 3: COSTS -->
+                <div class="wizard-step" id="step-3">
+                    <h2>Requirements & Costs</h2>
+                    <p class="step-desc">What does it take to cast this spell?</p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="manaCost">Mana Cost</label>
+                            <input type="number" id="manaCost" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="cooldownTicks">Cooldown (Ticks)</label>
+                            <input type="number" id="cooldownTicks" value="120">
+                        </div>
+                    </div>
+                    <div class="wizard-actions">
+                        <button type="button" class="btn btn-secondary prev-btn">⬅ Previous</button>
+                        <button type="button" class="btn btn-primary next-btn">Next Step ➔</button>
+                    </div>
+                </div>
+
+                <!-- STEP 4: ACTIONS -->
+                <div class="wizard-step" id="step-4">
+                    <h2>Spell Execution Sequence</h2>
+                    <p class="step-desc">Add the effects and damage that occur when the spell is cast.</p>
+                    <div id="actions-container">
+                        <!-- Actions will be dynamically added here -->
+                    </div>
+                    <div class="action-buttons">
+                        <button type="button" class="btn btn-secondary" onclick="addAction('EffectActionDef')">+ Effect</button>
+                        <button type="button" class="btn btn-secondary" onclick="addAction('LaunchProjectileActionDef')">+ Projectile</button>
+                        <button type="button" class="btn btn-secondary" onclick="addAction('DamageActionDef')">+ Damage</button>
+                        <button type="button" class="btn btn-secondary" onclick="addAction('KnockbackActionDef')">+ Knockback</button>
+                        <button type="button" class="btn btn-secondary" onclick="addAction('HealActionDef')">+ Heal</button>
+                        <button type="button" class="btn btn-secondary" onclick="addAction('PersistentAreaZoneActionDef')">+ Persistent Area</button>
+                    </div>
+                    <div class="wizard-actions" style="margin-top: 2rem;">
+                        <button type="button" class="btn btn-secondary prev-btn">⬅ Previous</button>
+                        <button type="button" class="btn btn-primary" id="finalizeBtn">Finish</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <!-- HUMAN READABLE SUMMARY PANEL -->
+        <section class="preview-panel glass-panel">
+            <div class="preview-header">
+                <h2>Spellbook Entry</h2>
+                <div class="actions">
+                    <button id="viewXmlBtn" class="btn btn-secondary">View XML</button>
+                    <button id="copyXmlBtn" class="btn btn-primary">Copy XML</button>
+                </div>
+            </div>
+            
+            <div id="humanSummary" class="human-summary">
+                <!-- Generated human readable content goes here -->
+            </div>
+            
+            <!-- Hidden raw XML for viewing/copying -->
+            <pre id="xmlContainer" style="display: none;"><code id="xmlPreview"></code></pre>
+        </section>
+    </main>
+
+    <!-- SETTINGS MODAL -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h2>AI Settings</h2>
+                <button id="closeSettingsBtn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; font-size: 0.9rem; color: var(--text-muted);">Configure your LLM provider to enable AI spell generation. Keys are saved locally in your browser.</p>
+                <div class="form-group">
+                    <label for="aiProvider">Provider</label>
+                    <select id="aiProvider">
+                        <option value="gemini">Google Gemini</option>
+                        <option value="openai">OpenAI (ChatGPT)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="aiApiKey">API Key</label>
+                    <input type="password" id="aiApiKey" placeholder="Enter API Key...">
+                </div>
+            </div>
+            <div class="modal-footer" style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <button id="saveSettingsBtn" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

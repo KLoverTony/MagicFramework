@@ -112,9 +112,12 @@ public static class MagicFrameworkPawnGizmoPatch
             yield return SpellDebugCasting.CreateFreezeGizmo(__instance);
             yield return SpellDebugCasting.CreateEarthCallGizmo(__instance);
             yield return SpellDebugCasting.CreateWatersEmbraceGizmo(__instance);
+            yield return SpellDebugCasting.CreateRepulsionWardGizmo(__instance);
             yield return SpellDebugCasting.CreateForcePushGizmo(__instance);
             yield return SpellDebugCasting.CreateForcePullGizmo(__instance);
             yield return SpellDebugCasting.CreateBlinkStepGizmo(__instance);
+            yield return SpellDebugCasting.CreateRescueRecallGizmo(__instance);
+            yield return SpellDebugCasting.CreateTranspositionGizmo(__instance);
             yield return SpellDebugCasting.CreateHasteGizmo(__instance);
             yield return SpellDebugCasting.CreateBlessingOfVigorGizmo(__instance);
             yield return SpellDebugCasting.CreateMightGizmo(__instance);

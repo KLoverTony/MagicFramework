@@ -78,6 +78,11 @@ public static class SpellDebugSpellLibrary
         return GetSpellOrFallback("MF_WatersEmbrace", CreateFallbackWatersEmbrace);
     }
 
+    public static SpellDef GetRepulsionWard()
+    {
+        return GetSpellOrFallback("MF_RepulsionWard", CreateFallbackRepulsionWard);
+    }
+
     public static SpellDef GetForcePush()
     {
         return GetSpellOrFallback("MF_ForcePush", CreateFallbackForcePush);
@@ -91,6 +96,16 @@ public static class SpellDebugSpellLibrary
     public static SpellDef GetBlinkStep()
     {
         return GetSpellOrFallback("MF_BlinkStep", CreateFallbackBlinkStep);
+    }
+
+    public static SpellDef GetRescueRecall()
+    {
+        return GetSpellOrFallback("MF_RescueRecall", CreateFallbackRescueRecall);
+    }
+
+    public static SpellDef GetTransposition()
+    {
+        return GetSpellOrFallback("MF_Transposition", CreateFallbackTransposition);
     }
 
     public static SpellDef GetHaste()
@@ -1381,6 +1396,184 @@ public static class SpellDebugSpellLibrary
                             attachToTarget = true
                         }
                     }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackRepulsionWard()
+    {
+        return new SpellDef
+        {
+            defName = "MF_RepulsionWard_DebugFallback",
+            label = "debug repulsion ward",
+            description = "Built-in fallback maintained ward that teleports nearby enemies away.",
+            range = 0f,
+            castTimeTicks = 45,
+            gizmoIconPath = "UI/Gizmos/Spells/MF_BlinkStep",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Pawn,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                useCasterAsTarget = true,
+                requireLineOfSight = false,
+                range = 0f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new PersistentAreaZoneActionDef
+                {
+                    debugLabel = "Debug Repulsion Ward maintained aura",
+                    markerThingDef = "MF_RepulsionWardMarker",
+                    zoneRadius = 5f,
+                    pulseIntervalTicks = 60,
+                    visualPulseIntervalTicks = 60,
+                    emitVisualFromMarkers = false,
+                    maxVisualMarkersPerPulse = 1,
+                    durationTicks = 900,
+                    failsafeDurationTicks = 1800,
+                    requiresConcentration = true,
+                    breakWhenCasterDowned = true,
+                    breakWhenCasterStunned = true,
+                    breakWhenCasterMentalState = true,
+                    maintenance = new SpellMaintenanceDef
+                    {
+                        profiles = new List<SpellMaintenanceProfile> { SpellMaintenanceProfile.CasterFocused, SpellMaintenanceProfile.Anchored },
+                        useInitialTargetCell = true
+                    },
+                    sustainedManaCost = 1f,
+                    sustainedManaCostIntervalTicks = 60,
+                    manaCostPerAffectedPawn = 3f,
+                    pawnAffinity = SpellPawnAffinity.Foe,
+                    includeCaster = false,
+                    replaceExistingForCaster = true,
+                    actions = new List<SpellActionDef>
+                    {
+                        new TeleportActionDef
+                        {
+                            debugLabel = "Debug Repulsion Ward blink enemy away",
+                            subjectSource = TeleportSubjectSource.CurrentTarget,
+                            destinationSource = TeleportDestinationSource.RandomCellNearInitialTarget,
+                            randomRadius = 10,
+                            randomMinRadius = 7,
+                            randomCellSearchAttempts = 60,
+                            requireStandableDestination = true,
+                            requireWalkableDestination = true,
+                            requireUnoccupiedDestination = true,
+                            preserveDrafted = true,
+                            postTeleportStunTicks = 45
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackRescueRecall()
+    {
+        return new SpellDef
+        {
+            defName = "MF_RescueRecall_DebugFallback",
+            label = "debug rescue recall",
+            description = "Built-in fallback rescue teleport spell used when authored XML defs are not loaded yet.",
+            range = 0f,
+            castTimeTicks = 50,
+            gizmoIconPath = "UI/Gizmos/Spells/MF_Rescue_Recall",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Pawn,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = true,
+                useCasterAsTarget = true,
+                requireLineOfSight = false,
+                range = 0f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new ApplyToTargetsActionDef
+                {
+                    debugLabel = "Debug Rescue Recall downed ally query",
+                    targetQuery = new TargetsInRadiusQueryDef
+                    {
+                        debugLabel = "Debug downed allies near caster",
+                        radius = 18f,
+                        centerSource = TargetQueryCenterSource.Caster,
+                        ordering = TargetQueryOrdering.LowestHealth,
+                        orderingCenterSource = TargetQueryCenterSource.Caster,
+                        maxTargets = 3,
+                        includePawns = true,
+                        includeBuildings = false,
+                        includeItems = false,
+                        includeCaster = false,
+                        pawnAffinity = SpellPawnAffinity.Ally
+                    },
+                    actions = new List<SpellActionDef>
+                    {
+                        new ConditionalActionDef
+                        {
+                            debugLabel = "Debug Rescue Recall downed filter",
+                            conditionLabel = "If the ally is downed",
+                            condition = new TargetDownedConditionDef(),
+                            thenActions = new List<SpellActionDef>
+                            {
+                                new TeleportActionDef
+                                {
+                                    debugLabel = "Debug Rescue Recall teleport ally",
+                                    subjectSource = TeleportSubjectSource.CurrentTarget,
+                                    destinationSource = TeleportDestinationSource.CasterAdjacentCell,
+                                    requireStandableDestination = true,
+                                    requireWalkableDestination = true,
+                                    requireUnoccupiedDestination = true,
+                                    preserveDrafted = true
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    private static SpellDef CreateFallbackTransposition()
+    {
+        return new SpellDef
+        {
+            defName = "MF_Transposition_DebugFallback",
+            label = "debug transposition",
+            description = "Built-in fallback swap spell used when authored XML defs are not loaded yet.",
+            range = 16f,
+            castTimeTicks = 30,
+            gizmoIconPath = "UI/Gizmos/Spells/MF_Transposition",
+            targeting = new SpellTargetingDef
+            {
+                shape = SpellTargetShape.Single,
+                primaryTargetType = SpellPrimaryTargetType.Pawn,
+                pawnAffinity = SpellPawnAffinity.All,
+                includePawns = true,
+                includeBuildings = false,
+                includeItems = false,
+                allowSelfTarget = false,
+                requireLineOfSight = true,
+                range = 16f
+            },
+            actions = new List<SpellActionDef>
+            {
+                new TeleportActionDef
+                {
+                    debugLabel = "Debug Transposition swap",
+                    subjectSource = TeleportSubjectSource.CurrentTarget,
+                    swapWithCaster = true,
+                    preserveDrafted = true,
+                    postTeleportStunTicks = 30
                 }
             }
         };

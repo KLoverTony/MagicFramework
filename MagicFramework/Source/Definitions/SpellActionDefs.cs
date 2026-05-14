@@ -255,6 +255,9 @@ public sealed class PersistentAreaZoneActionDef : SpellActionDef
     public bool breakWhenCasterStunned = true;
     public bool breakWhenCasterMentalState = true;
     public SpellMaintenanceDef maintenance;
+    public float sustainedManaCost;
+    public int sustainedManaCostIntervalTicks = 60;
+    public float manaCostPerAffectedPawn;
     public SpellPawnAffinity pawnAffinity = SpellPawnAffinity.All;
     public bool includeCaster;
     public bool replaceExistingForCaster = true;
@@ -321,6 +324,33 @@ public sealed class SummonPawnActionDef : SpellActionDef
     public bool followMasterWhileDrafted = true;
     public bool followMasterWhileFieldwork = true;
     public List<string> trainableDefs = new();
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
+
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new SummonPawnActionWorker();
 }
@@ -338,6 +368,33 @@ public sealed class SpawnThingActionDef : SpellActionDef
     public ScalableFloatDef scalableDurationTicks;
     public bool forbidden;
     public bool replaceExistingForCasterSpell = true;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
+
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
 
     public override SpellActionWorker CreateWorker() => new SpawnThingActionWorker();
 }

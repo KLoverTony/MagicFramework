@@ -38,19 +38,21 @@ public sealed class SpawnedThingService
         }
 
         int durationTicks = ResolveDurationTicks(context, actionDef);
+        SpellActionPathUtility.TryCreatePath(context.spellDef, actionDef, out var actionPath);
+        SpawnedThingRecord record = new(
+            context.caster,
+            context.spellDef,
+            placedThing,
+            durationTicks > 0 ? (Find.TickManager?.TicksGame ?? 0) + durationTicks : -1,
+            actionPath);
         if (durationTicks > 0)
         {
             SpawnedThingMapComponent component = context.map.GetComponent<SpawnedThingMapComponent>();
-            component?.Register(
-                new SpawnedThingRecord(
-                    context.caster,
-                    context.spellDef,
-                    placedThing,
-                    (Find.TickManager?.TicksGame ?? 0) + durationTicks),
-                actionDef.replaceExistingForCasterSpell);
+            component?.Register(record, actionDef.replaceExistingForCasterSpell);
         }
 
         context.SetCurrentTarget(new LocalTargetInfo(placedThing));
+        context.map.GetComponent<SpawnedThingMapComponent>()?.RunLifecycleActions(record, SpawnedThingLifecycleEvent.Create);
         MagicLog.Message(MagicLogSubsystem.Summons, $"[MagicFramework] Spawned {placedThing.LabelCap} at {placedThing.Position}.");
     }
 

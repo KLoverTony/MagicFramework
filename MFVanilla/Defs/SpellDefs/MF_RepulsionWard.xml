@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_RepulsionWard</defName>
+    <label>repulsion ward</label>
+    <description>Maintains a compact arcane ward that periodically blinks nearby enemies away from its anchor point.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_BlinkStep</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>45</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+        <li>MF_Domain_Warding</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Control</li>
+        <li>MF_Discipline_Warding</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Transformation</li>
+        <li>MFV_Enchantment</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>4</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Repulsion Ward</debugLabel>
+        <amount>22</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Repulsion Ward cooldown ready</debugLabel>
+        <cooldownTicks>480</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Repulsion Ward</debugLabel>
+        <amount>22</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Repulsion Ward cooldown</debugLabel>
+        <cooldownTicks>480</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Repulsion Ward sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Repulsion Ward opening pulse</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>Caster</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Repulsion Ward maintained aura</debugLabel>
+            <markerThingDef>MF_RepulsionWardMarker</markerThingDef>
+            <zoneRadius>5</zoneRadius>
+            <pulseIntervalTicks>60</pulseIntervalTicks>
+            <visualPulseIntervalTicks>60</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>900</durationTicks>
+            <failsafeDurationTicks>1800</failsafeDurationTicks>
+            <requiresConcentration>true</requiresConcentration>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenCasterStunned>true</breakWhenCasterStunned>
+            <breakWhenCasterMentalState>true</breakWhenCasterMentalState>
+            <maintenance>
+              <profiles>
+                <li>CasterFocused</li>
+                <li>Anchored</li>
+              </profiles>
+              <useInitialTargetCell>true</useInitialTargetCell>
+            </maintenance>
+            <sustainedManaCost>1</sustainedManaCost>
+            <sustainedManaCostIntervalTicks>60</sustainedManaCostIntervalTicks>
+            <manaCostPerAffectedPawn>3</manaCostPerAffectedPawn>
+            <pawnAffinity>Foe</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <actions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Repulsion Ward enemy departure</debugLabel>
+                <effectDef>Skip_EntryNoDelay</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.TeleportActionDef">
+                <debugLabel>Repulsion Ward blink enemy away</debugLabel>
+                <subjectSource>CurrentTarget</subjectSource>
+                <destinationSource>RandomCellNearInitialTarget</destinationSource>
+                <randomRadius>10</randomRadius>
+                <randomMinRadius>7</randomMinRadius>
+                <randomCellSearchAttempts>60</randomCellSearchAttempts>
+                <requireStandableDestination>true</requireStandableDestination>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <requireUnoccupiedDestination>true</requireUnoccupiedDestination>
+                <preserveDrafted>true</preserveDrafted>
+                <postTeleportStunTicks>45</postTeleportStunTicks>
+              </li>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Repulsion Ward enemy arrival</debugLabel>
+                <effectDef>Skip_ExitNoDelay</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

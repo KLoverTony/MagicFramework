@@ -1,9 +1,19 @@
 using System.Collections.Generic;
 using System.Text;
+using MagicFramework.Context;
 using MagicFramework.Definitions;
+using MagicFramework.Execution;
 using Verse;
 
 namespace MagicFramework.Scheduling;
+
+public enum SummonedPawnLifecycleEvent
+{
+    Create,
+    Expire,
+    Remove,
+    Break
+}
 
 /// <summary>
 /// Owns temporary summoned pawns for a single map and removes them on expiry or replacement.
@@ -46,6 +56,7 @@ public sealed class SummonedPawnMapComponent : MapComponent
             SummonedPawnRecord record = summonedPawns[i];
             if (record?.Caster == caster && record.SpellDef == spellDef)
             {
+                RunLifecycleActions(record, SummonedPawnLifecycleEvent.Remove);
                 DespawnSummon(record);
                 summonedPawns.RemoveAt(i);
             }
@@ -71,12 +82,14 @@ public sealed class SummonedPawnMapComponent : MapComponent
 
             if (record.SummonedPawn == null || record.SummonedPawn.Destroyed)
             {
+                RunLifecycleActions(record, SummonedPawnLifecycleEvent.Break);
                 summonedPawns.RemoveAt(i);
                 continue;
             }
 
             if (record.IsExpired(currentTick))
             {
+                RunLifecycleActions(record, SummonedPawnLifecycleEvent.Expire);
                 DespawnSummon(record);
                 summonedPawns.RemoveAt(i);
             }
@@ -123,6 +136,67 @@ public sealed class SummonedPawnMapComponent : MapComponent
         }
 
         return builder.ToString();
+    }
+
+    public void RunLifecycleActions(SummonedPawnRecord record, SummonedPawnLifecycleEvent lifecycleEvent)
+    {
+        if (record?.SpellDef == null
+            || record.ActionPath == null
+            || record.ActionPath.Count == 0
+            || SpellActionPathUtility.ResolveAction(record.SpellDef, record.ActionPath) is not SummonPawnActionDef actionDef)
+        {
+            return;
+        }
+
+        List<SpellActionDef> actions = lifecycleEvent switch
+        {
+            SummonedPawnLifecycleEvent.Create => actionDef.onCreateActions,
+            SummonedPawnLifecycleEvent.Expire => actionDef.onExpireActions,
+            SummonedPawnLifecycleEvent.Remove => actionDef.onRemoveActions,
+            SummonedPawnLifecycleEvent.Break => actionDef.onBreakActions,
+            _ => null
+        };
+
+        if (actions == null || actions.Count == 0 || !TryCreateContext(record, out SpellContext context))
+        {
+            return;
+        }
+
+        new SpellActionRunner().RunActions(context, actions);
+    }
+
+    private bool TryCreateContext(SummonedPawnRecord record, out SpellContext context)
+    {
+        context = null;
+        Pawn summonedPawn = record?.SummonedPawn;
+        Thing caster = record?.Caster;
+        Map contextMap = summonedPawn?.MapHeld ?? caster?.MapHeld ?? map;
+        if (contextMap == null)
+        {
+            return false;
+        }
+
+        LocalTargetInfo targetInfo = summonedPawn != null && !summonedPawn.Destroyed
+            ? new LocalTargetInfo(summonedPawn)
+            : LocalTargetInfo.Invalid;
+        IntVec3 currentCell = targetInfo.IsValid ? targetInfo.Cell : caster?.Position ?? IntVec3.Invalid;
+        context = new SpellContext
+        {
+            caster = caster,
+            map = contextMap,
+            spellDef = record.SpellDef,
+            initialTarget = targetInfo,
+            currentTarget = targetInfo,
+            currentCell = currentCell,
+            randomSeed = Find.TickManager?.TicksGame ?? 0
+        };
+        context.executionState.costsApplied = true;
+        if (targetInfo.IsValid)
+        {
+            context.currentTargets.Add(targetInfo);
+        }
+
+        return true;
     }
 
     private static void DespawnSummon(SummonedPawnRecord record)

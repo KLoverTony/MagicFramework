@@ -4,6 +4,10 @@
     <defName>MFV_Status_Haste</defName>
     <label>hasted</label>
     <description>Accelerates a pawn, increasing movement speed.</description>
+    <categories>
+      <li>buff</li>
+      <li>movement</li>
+    </categories>
     <durationTicks>900</durationTicks>
     <scalableDurationTicks>
       <baseValue>900</baseValue>
@@ -27,6 +31,10 @@
     <defName>MFV_Status_Might</defName>
     <label>mighty</label>
     <description>Strengthens a pawn, improving melee damage and carrying capacity.</description>
+    <categories>
+      <li>buff</li>
+      <li>physical</li>
+    </categories>
     <durationTicks>1800</durationTicks>
     <statusCue>
       <hediffDef>MF_Mighty</hediffDef>
@@ -49,6 +57,10 @@
     <defName>MFV_Status_MightBacklashWeakness</defName>
     <label>weakened</label>
     <description>Magical backlash weakens this pawn's strength for a short time.</description>
+    <categories>
+      <li>debuff</li>
+      <li>physical</li>
+    </categories>
     <durationTicks>300</durationTicks>
     <statusCue>
       <hediffDef>MF_Weakened</hediffDef>
@@ -71,6 +83,11 @@
     <defName>MFV_Status_BlessedVigor</defName>
     <label>blessed vigor</label>
     <description>Bolsters a pawn with renewed speed and labor vigor.</description>
+    <categories>
+      <li>buff</li>
+      <li>movement</li>
+      <li>labor</li>
+    </categories>
     <durationTicks>900</durationTicks>
     <statusCue>
       <hediffDef>MF_BlessedVigor</hediffDef>
@@ -93,6 +110,10 @@
     <defName>MFV_Status_Regenerating</defName>
     <label>regenerating</label>
     <description>Vital magic is knitting this pawn's wounds closed over time.</description>
+    <categories>
+      <li>buff</li>
+      <li>healing</li>
+    </categories>
     <durationTicks>720</durationTicks>
     <scalableDurationTicks>
       <baseValue>720</baseValue>
@@ -110,6 +131,11 @@
     <defName>MFV_Status_FrozenSlow</defName>
     <label>frozen</label>
     <description>Magical cold slows this pawn's movement.</description>
+    <categories>
+      <li>debuff</li>
+      <li>control</li>
+      <li>cold</li>
+    </categories>
     <durationTicks>90</durationTicks>
     <statusCue>
       <hediffDef>MF_Frozen</hediffDef>
@@ -128,6 +154,11 @@
     <defName>MFV_Status_WaterboundSlow</defName>
     <label>waterbound</label>
     <description>Clinging water restrains this pawn's movement.</description>
+    <categories>
+      <li>debuff</li>
+      <li>control</li>
+      <li>water</li>
+    </categories>
     <durationTicks>90</durationTicks>
     <statusCue>
       <hediffDef>MF_Waterbound</hediffDef>

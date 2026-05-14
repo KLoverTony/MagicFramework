@@ -145,12 +145,37 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
                 continue;
             }
 
+            if (areaZone.SustainedManaCost > 0f && areaZone.NextSustainedManaCostTick <= currentTick)
+            {
+                SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+                if (runtime == null || !runtime.HasEnoughMana(areaZone.Caster, areaZone.SustainedManaCost))
+                {
+                    MagicLog.Message(MagicLogSubsystem.AreaZones, $"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} ended because the caster could not pay sustained mana upkeep.");
+                    RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Break);
+                    areaZone.DestroyMarkers();
+                    areaZones.RemoveAt(i);
+                    continue;
+                }
+
+                runtime.SpendMana(areaZone.Caster, areaZone.SustainedManaCost);
+                areaZone.ScheduleNextSustainedManaCost();
+                MagicLog.Message(MagicLogSubsystem.AreaZones, $"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} spent {areaZone.SustainedManaCost:0.##} mana for upkeep.");
+            }
+
             if (areaZone.NextPulseTick > currentTick)
             {
             }
             else
             {
-                PulseAreaZone(areaZone);
+                if (!PulseAreaZone(areaZone, out string pulseBreakReason))
+                {
+                    MagicLog.Message(MagicLogSubsystem.AreaZones, $"[MagicFramework] Area zone {areaZone.SpellDef?.defName ?? "<unknown spell>"} ended during pulse: {pulseBreakReason ?? "unknown reason"}.");
+                    RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Break);
+                    areaZone.DestroyMarkers();
+                    areaZones.RemoveAt(i);
+                    continue;
+                }
+
                 areaZone.ScheduleNextPulse();
             }
 
@@ -212,12 +237,14 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
         return builder.ToString();
     }
 
-    private void PulseAreaZone(PersistentAreaZone areaZone)
+    private bool PulseAreaZone(PersistentAreaZone areaZone, out string breakReason)
     {
+        breakReason = null;
         if (!areaZone.TryResolveActionDef(out PersistentAreaZoneActionDef actionDef))
         {
             Log.Warning("[MagicFramework] Dropped area zone because its authored node could not be resolved.");
-            return;
+            breakReason = "authored area zone node could not be resolved";
+            return false;
         }
 
         RunAreaZoneLifecycleActions(areaZone, AreaZoneLifecycleEvent.Pulse, actionDef);
@@ -262,8 +289,22 @@ public sealed class PersistentAreaZoneMapComponent : MapComponent
                 continue;
             }
 
+            if (areaZone.ManaCostPerAffectedPawn > 0f)
+            {
+                SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+                if (runtime == null || !runtime.HasEnoughMana(areaZone.Caster, areaZone.ManaCostPerAffectedPawn))
+                {
+                    breakReason = "insufficient mana for affected pawn";
+                    return false;
+                }
+
+                runtime.SpendMana(areaZone.Caster, areaZone.ManaCostPerAffectedPawn);
+            }
+
             actionRunner.RunActions(context, actionDef.actions);
         }
+
+        return true;
     }
 
     private void RunAreaZoneLifecycleActions(PersistentAreaZone areaZone, AreaZoneLifecycleEvent lifecycleEvent, PersistentAreaZoneActionDef resolvedActionDef = null)

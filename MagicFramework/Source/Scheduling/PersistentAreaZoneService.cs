@@ -74,6 +74,9 @@ public sealed class PersistentAreaZoneService
             actionDef.breakWhenCasterStunned,
             actionDef.breakWhenCasterMentalState,
             actionDef.maintenance,
+            SpellEnhancementUtility.ResolveManaCost(context, actionDef.sustainedManaCost),
+            actionDef.sustainedManaCostIntervalTicks,
+            SpellEnhancementUtility.ResolveManaCost(context, actionDef.manaCostPerAffectedPawn),
             expireAtTick);
 
         PersistentAreaZoneMapComponent runtime = context.map.GetComponent<PersistentAreaZoneMapComponent>();

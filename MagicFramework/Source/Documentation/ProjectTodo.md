@@ -19,8 +19,6 @@ Priority key:
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
-| MF-005 | P1 | M | Lifecycle | Formalize lifecycle hooks for persistent spell state. |
-| MF-007 | P1 | M | Validation | Add focused validation spells for under-tested framework modes. |
 | MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support. |
 | MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives beyond direct stat modifiers. |
 | MF-011 | P2 | M | Projectiles | Improve projectile impact context and launch authoring. |
@@ -46,54 +44,6 @@ Priority key:
 
 
 ## P1 Framework Capabilities
-
-### MF-005 Lifecycle Hooks For Persistent State
-
-Goal: make markers, traps, walls, zones, summons, spawned things, and maintained effects predictable.
-
-Current state:
-- Some systems have purpose-built hooks such as sustained `onBreakActions` and area-zone `onEndActions`.
-- `LifecycleHooks.md` defines shared hook semantics for create, pulse, trigger, expire, remove, break, and legacy end behavior.
-- Persistent area zones support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`, while preserving `onEndActions` as a legacy terminal catch-all.
-- Maintained force fields support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
-- Persistent wall zones support explicit `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
-- Persistent effects support explicit `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
-- Proximity triggers support explicit `onCreateActions`, `onTriggerActions`, `onRemoveActions`, and `onBreakActions`, while preserving existing child `actions` as the trigger body.
-
-Target hooks:
-- `onCreate`
-- `onPulse`
-- `onTrigger`
-- `onExpire`
-- `onRemove`
-- `onBreak`
-
-Remaining work:
-- Backfill summons, spawned things, and fuller stat modifier lifecycle hooks as appropriate.
-- Ensure hooks survive save/load where runtime state persists.
-
-### MF-007 Validation Spell Suite
-
-Goal: keep feature coverage easy to test in-game without relying only on debug fallbacks.
-
-Needed coverage:
-- dedicated persistent zone spell
-- maintained/channel spell beyond `MF_Might`
-- teleport/displacement regression spells for swap, rescue, ally teleport, and enemy blink
-- lifecycle hook validation spell once hooks are generalized
-
-Already covered:
-- target-query validation: `MF_ArcSeeker`
-- ally-radius query with caster exclusion: `MF_BlessingOfVigor`
-- lowest-health query ordering and target limit: `MF_TriagePulse`
-- highest-threat query ordering and target limit: `MF_ThreatSpike`
-- conditional branch spell: `MF_Disintegrate`
-- sustained stat buff: `MF_Might`
-- maintained shields: `MF_ForceField`, `MF_ManaShield`
-- delayed branching chain: `MF_ChainLightning`
-- direct heal / heal-over-time: `MF_Heal`, `MF_Regeneration`
-- basic teleport: `MF_BlinkStep`
-- terrain patch and thaw/melt behavior: `MF_Freeze`, `MF_FlameField`
 
 ## P2 Framework Polish
 
@@ -145,11 +95,13 @@ Current state:
 - Clear actions can remove framework stat/status effects.
 - `TimedStatusEffectActionDef` can apply a visible timed status wrapper, run `onApplyActions`, schedule `onExpireActions`, replace prior caster/spell instances, and clean up its status cue.
 - `SpellStatusEffectDef` plus `ApplyStatusEffectActionDef` supports reusable premade status bundles with default duration, status cue, stat modifiers, and immediate `onApplyActions`.
+- `SpellStatusEffectDef.categories` supports lightweight reusable status metadata such as `buff`, `debuff`, `control`, `healing`, `movement`, and elemental/family tags.
 - Sustained stat modifiers can reference `SpellStatusEffectDef` payloads while preserving maintenance and break behavior.
+- Generated spell summaries include reusable status categories when authored.
 - `MF_Haste`, `MF_Might`, Might backlash, `MF_BlessingOfVigor`, `MF_Freeze`, and `MF_WatersEmbrace` now use reusable premade status defs in MFVanilla where the effect is a simple timed stat/status bundle.
+- MFVanilla reusable status defs now classify their buff/debuff/control/healing/movement families with `categories`.
 
 Candidates:
-- decide whether reusable statuses need their own category/tag model (`Buff`, `Debuff`, `Control`, `Elemental`, `Mental`, etc.)
 - stacking and refresh policies for reusable statuses
 - named parameters/scalars for reusable status defs
 - reusable status expiry actions once scheduled actions can target def-owned action trees

@@ -13,6 +13,10 @@
     <defName>MFV_Status_Haste</defName>
     <label>hasted</label>
     <description>Accelerates a pawn, increasing movement speed.</description>
+    <categories>
+      <li>buff</li>
+      <li>movement</li>
+    </categories>
     <durationTicks>900</durationTicks>
     <statusCue>
       <hediffDef>MF_Hasted</hediffDef>
@@ -31,6 +35,10 @@
     <defName>MFV_Status_Might</defName>
     <label>mighty</label>
     <description>Strengthens a pawn, improving melee damage and carrying capacity.</description>
+    <categories>
+      <li>buff</li>
+      <li>physical</li>
+    </categories>
     <durationTicks>1800</durationTicks>
     <statusCue>
       <hediffDef>MF_Mighty</hediffDef>
@@ -53,6 +61,10 @@
     <defName>MFV_Status_MightBacklashWeakness</defName>
     <label>weakened</label>
     <description>Magical backlash weakens this pawn's strength for a short time.</description>
+    <categories>
+      <li>debuff</li>
+      <li>physical</li>
+    </categories>
     <durationTicks>300</durationTicks>
     <statusCue>
       <hediffDef>MF_Weakened</hediffDef>

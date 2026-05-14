@@ -43,6 +43,8 @@ Implemented first:
 - Proximity triggers support `onCreateActions`, `onTriggerActions`, `onRemoveActions`, and `onBreakActions`; existing child `actions` remain the trigger body.
 - Maintained force fields support `onCreateActions`, `onPulseActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
 - Sustained stat modifiers support `onPulseActions` and `onBreakActions`.
+- Summoned pawns support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
+- Spawned things support `onCreateActions`, `onExpireActions`, `onRemoveActions`, and `onBreakActions`.
 - `SpellMaintenanceDef` supports composable maintenance profiles for interruption rules.
 - Missing maintenance defs use system-specific legacy behavior so existing spells do not change meaning.
 
@@ -81,7 +83,5 @@ First-party validation examples:
 - `MF_WatersEmbrace` uses `CasterFocused` and `Anchored`.
 - `MF_ManaShield` validates maintained force-field pulses with a harmless periodic visual pulse.
 
-Pending backfill:
-- Summoned pawns.
-- Spawned things.
+Possible future additions:
 - Sustained stat modifier create, expire, and remove hooks if those terminal distinctions become useful beyond existing pulse and break support.

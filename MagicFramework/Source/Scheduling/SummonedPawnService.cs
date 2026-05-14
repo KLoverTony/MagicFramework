@@ -58,16 +58,18 @@ public sealed class SummonedPawnService
         AssignMaster(summonedPawn, context.caster as Pawn, summonPawnActionDef);
 
         int durationTicks = ResolveDurationTicks(context, summonPawnActionDef);
+        SpellActionPathUtility.TryCreatePath(context.spellDef, summonPawnActionDef, out var actionPath);
+        SummonedPawnRecord record = new(
+            context.caster,
+            context.spellDef,
+            summonedPawn,
+            (Find.TickManager?.TicksGame ?? 0) + durationTicks,
+            actionPath);
         SummonedPawnMapComponent component = context.map.GetComponent<SummonedPawnMapComponent>();
-        component?.Register(
-            new SummonedPawnRecord(
-                context.caster,
-                context.spellDef,
-                summonedPawn,
-                (Find.TickManager?.TicksGame ?? 0) + durationTicks),
-            summonPawnActionDef.replaceExistingForCaster);
+        component?.Register(record, summonPawnActionDef.replaceExistingForCaster);
 
         context.SetCurrentTarget(new LocalTargetInfo(summonedPawn));
+        component?.RunLifecycleActions(record, SummonedPawnLifecycleEvent.Create);
         MagicLog.Message(MagicLogSubsystem.Summons, $"[MagicFramework] Summoned {summonedPawn.LabelCap} at {spawnCell} for {durationTicks} ticks.");
     }
 

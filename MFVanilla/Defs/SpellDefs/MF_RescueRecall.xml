@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_RescueRecall</defName>
+    <label>rescue recall</label>
+    <description>Searches nearby allies for the most badly hurt downed pawns and teleports them to safe ground beside the caster.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Rescue_Recall</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>50</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Transformation</li>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Movement</li>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Transformation</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Rescue Recall</debugLabel>
+        <amount>20</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Rescue Recall cooldown ready</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Rescue Recall</debugLabel>
+        <amount>20</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Rescue Recall cooldown</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Rescue Recall sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Rescue Recall cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Rescue Recall injured ally query</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+              <debugLabel>Downed allies near caster</debugLabel>
+              <radius>18</radius>
+              <centerSource>Caster</centerSource>
+              <ordering>LowestHealth</ordering>
+              <orderingCenterSource>Caster</orderingCenterSource>
+              <maxTargets>3</maxTargets>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>false</includeCaster>
+              <pawnAffinity>Ally</pawnAffinity>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.ConditionalActionDef">
+                <debugLabel>Rescue Recall downed filter</debugLabel>
+                <conditionLabel>If the ally is downed</conditionLabel>
+                <condition Class="MagicFramework.Definitions.TargetDownedConditionDef">
+                  <targetSource>CurrentTarget</targetSource>
+                </condition>
+                <thenActions>
+                  <li Class="MagicFramework.Definitions.EffectActionDef">
+                    <debugLabel>Rescue Recall departure</debugLabel>
+                    <effectDef>Skip_EntryNoDelay</effectDef>
+                    <locationSource>CurrentTarget</locationSource>
+                    <attachToTarget>true</attachToTarget>
+                  </li>
+                  <li Class="MagicFramework.Definitions.TeleportActionDef">
+                    <debugLabel>Rescue Recall teleport ally</debugLabel>
+                    <subjectSource>CurrentTarget</subjectSource>
+                    <destinationSource>CasterAdjacentCell</destinationSource>
+                    <requireStandableDestination>true</requireStandableDestination>
+                    <requireWalkableDestination>true</requireWalkableDestination>
+                    <requireUnoccupiedDestination>true</requireUnoccupiedDestination>
+                    <preserveDrafted>true</preserveDrafted>
+                  </li>
+                  <li Class="MagicFramework.Definitions.EffectActionDef">
+                    <debugLabel>Rescue Recall arrival</debugLabel>
+                    <effectDef>Skip_ExitNoDelay</effectDef>
+                    <locationSource>CurrentTarget</locationSource>
+                    <attachToTarget>true</attachToTarget>
+                  </li>
+                </thenActions>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

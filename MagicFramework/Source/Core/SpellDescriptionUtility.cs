@@ -464,7 +464,7 @@ public static class SpellDescriptionUtility
                 break;
             case SustainedStatModifierActionDef sustained:
                 string sustainedEffect = !string.IsNullOrWhiteSpace(sustained.statusEffectDef)
-                    ? ResolveDefLabel<SpellStatusEffectDef>(sustained.statusEffectDef, "a reusable status effect")
+                    ? DescribeStatusEffect(sustained.statusEffectDef)
                     : DescribeStatModifiers(sustained.modifiers);
                 lines.Add("Maintains " + sustainedEffect + DescribeOptionalMaxDuration(sustained.maxDurationTicks) + ".");
                 break;
@@ -473,16 +473,18 @@ public static class SpellDescriptionUtility
                 AddActionLines(lines, status.onApplyActions, depth + 1);
                 break;
             case ApplyStatusEffectActionDef reusableStatus:
-                lines.Add("Applies " + ResolveDefLabel<SpellStatusEffectDef>(reusableStatus.statusEffectDef, "a reusable status effect") + DescribeOptionalDuration(reusableStatus.durationTicks) + ".");
+                lines.Add("Applies " + DescribeStatusEffect(reusableStatus.statusEffectDef) + DescribeOptionalDuration(reusableStatus.durationTicks) + ".");
                 break;
             case ApplyForceFieldActionDef forceField:
                 string upkeepText = forceField.sustainedManaCost > 0f ? " Costs " + FormatNumber(forceField.sustainedManaCost) + " " + Colorize("mana", "#62b8ff") + " every " + FormatTicks(forceField.sustainedManaCostIntervalTicks) + " while maintained." : string.Empty;
                 lines.Add("Maintains a protective force field" + DescribeOptionalMaxDuration(forceField.maxDurationTicks) + "." + upkeepText);
                 break;
             case PersistentAreaZoneActionDef area:
-                lines.Add("Creates a lingering " + FormatNumber(area.zoneRadius) + "-cell area for " + FormatTicks(area.durationTicks) + ".");
-                AddActionLines(lines, area.actions, depth + 1);
-                break;
+                    string areaUpkeepText = area.sustainedManaCost > 0f ? " Costs " + FormatNumber(area.sustainedManaCost) + " " + Colorize("mana", "#62b8ff") + " every " + FormatTicks(area.sustainedManaCostIntervalTicks) + " while maintained." : string.Empty;
+                    string areaTargetCostText = area.manaCostPerAffectedPawn > 0f ? " Costs " + FormatNumber(area.manaCostPerAffectedPawn) + " " + Colorize("mana", "#62b8ff") + " per affected pawn." : string.Empty;
+                    lines.Add("Creates a lingering " + FormatNumber(area.zoneRadius) + "-cell area for " + FormatTicks(area.durationTicks) + "." + areaUpkeepText + areaTargetCostText);
+                    AddActionLines(lines, area.actions, depth + 1);
+                    break;
             case PersistentWallZoneActionDef wall:
                 lines.Add("Creates a " + wall.wallLength + "-cell wall effect for " + FormatTicks(wall.durationTicks) + ".");
                 AddActionLines(lines, wall.actions, depth + 1);
@@ -597,6 +599,38 @@ public static class SpellDescriptionUtility
         }
 
         return parts.Count == 0 ? "stat changes" : string.Join(", ", parts);
+    }
+
+    private static string DescribeStatusEffect(string defName)
+    {
+        if (string.IsNullOrWhiteSpace(defName))
+        {
+            return "a reusable status effect";
+        }
+
+        SpellStatusEffectDef statusEffectDef = DefDatabase<SpellStatusEffectDef>.GetNamedSilentFail(defName);
+        if (statusEffectDef == null)
+        {
+            return "a reusable status effect";
+        }
+
+        string label = string.IsNullOrWhiteSpace(statusEffectDef.label) ? "a reusable status effect" : statusEffectDef.label;
+        if (statusEffectDef.categories == null || statusEffectDef.categories.Count == 0)
+        {
+            return label;
+        }
+
+        List<string> categories = new();
+        for (int i = 0; i < statusEffectDef.categories.Count; i++)
+        {
+            string category = statusEffectDef.categories[i];
+            if (!string.IsNullOrWhiteSpace(category) && !categories.Contains(category))
+            {
+                categories.Add(category);
+            }
+        }
+
+        return categories.Count == 0 ? label : label + " (" + string.Join(", ", categories) + ")";
     }
 
     private static string DescribeTerrainPatch(TerrainPatchActionDef terrain)

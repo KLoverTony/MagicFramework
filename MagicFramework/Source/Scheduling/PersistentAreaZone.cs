@@ -36,6 +36,10 @@ public sealed class PersistentAreaZone : IExposable
     private bool breakWhenCasterStunned = true;
     private bool breakWhenCasterMentalState = true;
     private SpellMaintenanceDef maintenance;
+    private float sustainedManaCost;
+    private int sustainedManaCostIntervalTicks = 60;
+    private int nextSustainedManaCostTick;
+    private float manaCostPerAffectedPawn;
     private int nextVisualTick;
     private int expireAtTick = -1;
 
@@ -67,6 +71,9 @@ public sealed class PersistentAreaZone : IExposable
         bool breakWhenCasterStunned,
         bool breakWhenCasterMentalState,
         SpellMaintenanceDef maintenance,
+        float sustainedManaCost,
+        int sustainedManaCostIntervalTicks,
+        float manaCostPerAffectedPawn,
         int expireAtTick)
     {
         this.caster = caster;
@@ -93,8 +100,12 @@ public sealed class PersistentAreaZone : IExposable
         this.breakWhenCasterStunned = breakWhenCasterStunned;
         this.breakWhenCasterMentalState = breakWhenCasterMentalState;
         this.maintenance = maintenance;
+        this.sustainedManaCost = sustainedManaCost > 0f ? sustainedManaCost : 0f;
+        this.sustainedManaCostIntervalTicks = sustainedManaCostIntervalTicks > 0 ? sustainedManaCostIntervalTicks : 60;
+        this.manaCostPerAffectedPawn = manaCostPerAffectedPawn > 0f ? manaCostPerAffectedPawn : 0f;
         nextPulseTick = Find.TickManager?.TicksGame ?? 0;
         nextVisualTick = Find.TickManager?.TicksGame ?? 0;
+        nextSustainedManaCostTick = (Find.TickManager?.TicksGame ?? 0) + this.sustainedManaCostIntervalTicks;
         this.expireAtTick = expireAtTick;
     }
 
@@ -113,7 +124,11 @@ public sealed class PersistentAreaZone : IExposable
     public int MaxVisualMarkersPerPulse => maxVisualMarkersPerPulse;
     public bool PulseAtCenter => pulseAtCenter;
     public bool RequiresConcentration => requiresConcentration;
-    public bool IsMaintained => requiresConcentration || maintenance?.profiles?.Count > 0;
+    public bool IsMaintained => requiresConcentration || maintenance?.profiles?.Count > 0 || sustainedManaCost > 0f;
+    public float SustainedManaCost => sustainedManaCost;
+    public int SustainedManaCostIntervalTicks => sustainedManaCostIntervalTicks;
+    public int NextSustainedManaCostTick => nextSustainedManaCostTick;
+    public float ManaCostPerAffectedPawn => manaCostPerAffectedPawn;
     public int ExpireAtTick => expireAtTick;
 
     public string DebugLabel => TryResolveActionDef(out PersistentAreaZoneActionDef actionDef)
@@ -251,6 +266,12 @@ public sealed class PersistentAreaZone : IExposable
         nextPulseTick = currentTick + (pulseIntervalTicks > 0 ? pulseIntervalTicks : 60);
     }
 
+    public void ScheduleNextSustainedManaCost()
+    {
+        int currentTick = Find.TickManager?.TicksGame ?? 0;
+        nextSustainedManaCostTick = currentTick + (sustainedManaCostIntervalTicks > 0 ? sustainedManaCostIntervalTicks : 60);
+    }
+
     public void ScheduleNextVisualPulse()
     {
         int currentTick = Find.TickManager?.TicksGame ?? 0;
@@ -300,6 +321,10 @@ public sealed class PersistentAreaZone : IExposable
         Scribe_Values.Look(ref breakWhenCasterStunned, "breakWhenCasterStunned", true);
         Scribe_Values.Look(ref breakWhenCasterMentalState, "breakWhenCasterMentalState", true);
         Scribe_Deep.Look(ref maintenance, "maintenance");
+        Scribe_Values.Look(ref sustainedManaCost, "sustainedManaCost");
+        Scribe_Values.Look(ref sustainedManaCostIntervalTicks, "sustainedManaCostIntervalTicks", 60);
+        Scribe_Values.Look(ref nextSustainedManaCostTick, "nextSustainedManaCostTick");
+        Scribe_Values.Look(ref manaCostPerAffectedPawn, "manaCostPerAffectedPawn");
         Scribe_Values.Look(ref nextVisualTick, "nextVisualTick");
         Scribe_Values.Look(ref expireAtTick, "expireAtTick", -1);
 
