@@ -21,6 +21,18 @@ The builder should not become a separate source of truth. It should present this
 - Keep first-party validation spells close to the guide so examples stay executable in game.
 - Treat save/load cleanup, deterministic gameplay decisions, and player-facing descriptions as part of spell design rather than afterthoughts.
 
+## Documentation Roadmap
+
+MF-031 should become both a tutorial path and a reference manual. The guide will grow in layers:
+
+1. Starter tutorials: direct healing, projectile impact, reusable timed status, raw/progressive hediff, persistent aura, maintained spell, delayed trigger, displacement, chain, and summon/spawn.
+2. Authoring references: `SpellDef` anatomy, action catalog, targeting/query catalog, lifecycle hooks, scaling, generated presentation, and validation checklist.
+3. Reusable resources: `SpellStatusEffectDef`, status cue hediffs, ordinary hediffs, metadata defs, MagicFX profiles, marker things, projectiles, gizmo icons, research gates, and generated scroll hooks.
+4. Built-in resource discovery: how to find usable `HediffDef`, `ThingDef`, `EffecterDef`, `FleckDef`, `SoundDef`, `DamageDef`, `PawnKindDef`, `ResearchProjectDef`, and texture path names in local RimWorld, MagicFramework, and MFVanilla defs.
+5. Browser presentation: tutorial pages and SpellForge cards should link into this canonical Markdown guide rather than becoming a separate source of truth.
+
+The immediate next documentation pass should expand the first two tutorials, then add a reusable status tutorial because reusable hediff/status authoring is one of the first places XML authors need clear judgment.
+
 ## Your First Spells
 
 A MagicFramework spell is a RimWorld `Def` with a `MagicFramework.Definitions.SpellDef` root. Most spells follow the same broad order:
@@ -40,6 +52,31 @@ Start with one direct spell and one delayed-impact spell. They teach the two mos
 ### First Direct Spell: Minor Heal
 
 This is a minimal targeted healing spell. It is intentionally smaller than `MF_Heal`, but it uses the same core pattern.
+
+What you are building:
+
+- A `SpellDef` that appears as a castable spell once a pawn learns it.
+- A single allied pawn targeter that allows the caster to heal themselves.
+- A mana requirement/cost pair and cooldown requirement/cost pair.
+- A short action sequence: play a visible effect, then run `HealActionDef`.
+
+Where it goes:
+
+```text
+YourMod/
+  About/
+    About.xml
+  Defs/
+    SpellDefs/
+      Example_MinorHeal.xml
+  Textures/
+    UI/
+      Gizmos/
+        Spells/
+          Example_MinorHeal.png
+```
+
+Your mod's `About.xml` should depend on `oracle.magicframework`. If you use MFVanilla metadata defs such as `MF_Element_Life`, `MF_Domain_Vitalism`, or MFVanilla research projects, also depend on `oracle.mfvanilla`. If you want your content mod to stand on MagicFramework alone, define your own metadata defs or omit the optional metadata lists until you add them.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -125,12 +162,85 @@ This is a minimal targeted healing spell. It is intentionally smaller than `MF_H
 
 What this does:
 
+- `defName` is the stable ID. Do not rename it casually after release; saves and generated references may depend on it.
+- `meta` classifies the spell for display, filtering, and rules. It does not apply the heal by itself.
+- `learning` says the spell can be learned and requires the Arcane gift before acquisition.
 - `targeting` opens a single allied pawn targeter and allows self-casting.
 - `requirements` block the cast unless the caster has enough mana and the spell is off cooldown.
 - `costs` spend the mana and start the cooldown after validation succeeds.
 - `actions` play a visual effect on the selected pawn, then heal injuries by distributing the healing amount across current wounds.
 
 For a production spell, add research prerequisites, caster level requirements, scaling, generated description tokens, and a real icon texture. `MF_Heal` in `MFVanilla/Defs/SpellDefs/MF_Heal.xml` is the first-party version of this pattern.
+
+#### Add learning gates
+
+Most published spells should not be freely learnable by every pawn. Add research and caster-level requirements under `learning`:
+
+```xml
+<learning>
+  <canBeLearned>true</canBeLearned>
+  <researchPrerequisites>
+    <li>MFV_Vitalism</li>
+  </researchPrerequisites>
+  <requirements>
+    <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+    <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+      <minimumLevel>1</minimumLevel>
+    </li>
+  </requirements>
+</learning>
+```
+
+Learning requirements decide whether a pawn can acquire the spell. Cast requirements decide whether a pawn can use it right now. It is normal for both to exist: a pawn may know Minor Heal but still fail to cast because they are out of mana or the spell is on cooldown.
+
+#### Add generated description text
+
+Authored descriptions can include generated detail tokens. This keeps the flavor text short while letting MagicFramework describe the current mechanics:
+
+```xml
+<description>Restores a small amount of health to an allied pawn.
+
+{MF:SpellSummary}</description>
+```
+
+Useful starter tokens:
+
+| Token | Use |
+| --- | --- |
+| `{MF:SpellSummary}` | Compact combined summary for spell details. |
+| `{MF:Effects}` | Generated action/effect summary. |
+| `{MF:ManaCost}` | Resolved mana cost text. |
+| `{MF:Cooldown}` | Cooldown text. |
+| `{MF:Range}` | Targeting range text. |
+| `{MF:Requirements}` | Cast and learning requirement text. |
+| `{MF:PowerScaling}` | Power/scaling summary when authored. |
+
+Use generated text for mechanics, not lore. Keep the first sentence readable on its own because it appears in places where the full generated detail may not be the main focus.
+
+#### Add caster-level healing scaling
+
+The simplest version of scaling is to compute spell power from caster level, then opt a supported attribute into lightweight global scaling:
+
+```xml
+<power>
+  <casterLevelFactor>1</casterLevelFactor>
+  <scaledAttributes>
+    <li>Healing</li>
+  </scaledAttributes>
+</power>
+```
+
+This lets the framework apply the current Magic Framework settings multiplier for healing scaling. Use lightweight `scaledAttributes` when you want normal framework-wide growth. Use explicit scalar defs later when a spell needs unusual tuning.
+
+#### Minor Heal variants
+
+| Variant | Change |
+| --- | --- |
+| Self-only heal | Set `targeting.useCasterAsTarget` to `true`, keep `primaryTargetType` as `Pawn`, and remove the need for a target prompt. |
+| Ally-only non-self heal | Keep `pawnAffinity` as `Ally`, set `allowSelfTarget` to `false`. |
+| Longer-range heal | Increase both top-level `range` and `targeting.range`. |
+| Emergency cheap heal | Lower mana and cooldown values together in both requirement and cost blocks. |
+| Heal-over-time | Use a `RepeatActionDef` around `HealActionDef`, or use a reusable regeneration-style `SpellStatusEffectDef` if the effect should also show a status cue. |
 
 What to change first:
 
@@ -151,6 +261,23 @@ Common mistakes:
 ### First Projectile Spell: Ember Bolt
 
 Projectile spells introduce one extra idea: the spell action tree can launch a projectile now and run `onImpactActions` later. Impact actions use the projectile impact context, so `CurrentTarget` resolves to the hit thing when one was captured, and the current cell resolves to the landing or last known projectile cell when there is no hit thing.
+
+What you are building:
+
+- A hostile single-target spell that requires line of sight.
+- A cast effect at the caster.
+- A real RimWorld projectile launched from the caster toward the selected target.
+- Impact actions that play a visual/sound cue and apply flame damage.
+
+Projectile flow:
+
+1. The spell validates targeting, mana, cooldown, and other requirements.
+2. The spell pays its costs.
+3. `EffectActionDef` plays the cast visual at the caster.
+4. `LaunchProjectileActionDef` resolves `projectileDef`, launch origin, and target source.
+5. RimWorld launches the projectile.
+6. MagicFramework stores the pending impact and waits for impact, destruction, explosion landing, or timeout.
+7. `onImpactActions` run with projectile impact context.
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -258,6 +385,106 @@ What this does:
 - `DamageActionDef` applies flame damage to the impact target when one exists.
 
 `MF_Firebolt` in `MFVanilla/Defs/SpellDefs/MF_Firebolt.xml` is the first-party version of this pattern. It adds research, caster level requirements, debug labels, spell power scaling, and production tuning.
+
+#### Understand projectile context
+
+`LaunchProjectileActionDef` has a few fields that decide where the projectile starts, what it aims at, and what happens if vanilla projectile resolution is delayed or unavailable:
+
+| Field | Meaning |
+| --- | --- |
+| `projectileDef` | A `ThingDef` whose `thingClass` is a RimWorld `Projectile`. Vanilla projectiles such as `Bullet_Revolver` work. |
+| `launchOrigin` | Where the projectile starts: `Caster`, `CurrentTarget`, or `CurrentCell`. |
+| `targetSource` | What the projectile aims at: `CurrentTarget`, `CurrentCell`, or `Caster`. |
+| `hitFlags` | Vanilla projectile hit flags. Defaults to `All`. |
+| `preventFriendlyFire` | Passes friendly-fire prevention into vanilla projectile launch. |
+| `impactTimeoutPaddingTicks` | Extra wait time before MagicFramework treats a missing impact callback as timed out. |
+| `onImpactActions` | Child actions that run after impact, shield block, destruction, or timeout. |
+
+If `projectileDef` cannot be resolved or is not a projectile, MagicFramework logs a warning and executes `onImpactActions` immediately. That fallback keeps the spell from silently doing nothing, but it is a sign that the XML should be fixed.
+
+Impact actions should use `CurrentTarget` when they need the hit thing, and `CurrentCell` when they need the impact location. Firebolt-style single-target damage usually uses `CurrentTarget`; Fireball-style explosions usually use `CurrentCell`.
+
+#### Finding projectile, effect, and sound names
+
+Projectile spells commonly reference several external defs:
+
+| XML field | Def type | Where to look |
+| --- | --- | --- |
+| `projectileDef` | `ThingDef` with projectile data | RimWorld `Data/Core/Defs/ThingDefs*`, weapon/projectile XML, or existing MFVanilla spell XML. |
+| `effectDef` | `EffecterDef` | RimWorld effecter defs, existing spell XML, or MagicFramework/MFVanilla examples. |
+| `soundDef` | `SoundDef` | RimWorld sound defs and existing spell XML. |
+| `damageDef` | `DamageDef` | RimWorld damage defs; common examples include `Flame` and `Blunt`. |
+| `hediffDef` | `HediffDef` | RimWorld hediff defs, MFVanilla hediff defs, or your own content mod. |
+
+Good first search targets in this workspace:
+
+```powershell
+rg -n "<defName>Bullet_|<defName>.*Projectile" "D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Data"
+rg -n "<EffecterDef>|<FleckDef>|<SoundDef>|<DamageDef>|<HediffDef>" "D:\Program Files (x86)\Steam\steamapps\common\RimWorld\Data"
+rg -n "projectileDef|effectDef|soundDef|damageDef|hediffDef" "D:\RimWorld\Mods\MFVanilla\Defs"
+```
+
+Do not guess names blindly. If a def name is wrong, RimWorld or MagicFramework will usually log a warning during XML load or action execution.
+
+#### Add a secondary burn
+
+For a simple single-target burn rider, add an `ApplyHediffActionDef` under `onImpactActions` after the damage:
+
+```xml
+<li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+  <debugLabel>Apply ember burn</debugLabel>
+  <hediffDef>Burn</hediffDef>
+  <severity>0.10</severity>
+</li>
+```
+
+Use raw hediffs when you want to interact directly with RimWorld health state. Use reusable `SpellStatusEffectDef` when the effect is a designed magical status with categories, refresh policy, default duration, stat modifiers, and a visible status cue.
+
+#### Turn it into a small explosion
+
+To make the projectile affect an impact cell instead of only the hit target, add an `ExplosionActionDef` under `onImpactActions` and use `CurrentCell` for visuals:
+
+```xml
+<li Class="MagicFramework.Definitions.EffectActionDef">
+  <effectDef>GiantExplosion</effectDef>
+  <soundDef>Explosion_Flame</soundDef>
+  <locationSource>CurrentCell</locationSource>
+  <attachToTarget>false</attachToTarget>
+</li>
+<li Class="MagicFramework.Definitions.ExplosionActionDef">
+  <radius>1.9</radius>
+  <damageAmount>8</damageAmount>
+  <damageDef>Flame</damageDef>
+</li>
+```
+
+If you want secondary effects on pawns in the radius, use `ApplyToTargetsActionDef` with a radius query, as `MF_Fireball` does.
+
+#### Add projectile scaling
+
+The simplest Firebolt-style scaling is:
+
+```xml
+<power>
+  <casterLevelFactor>1</casterLevelFactor>
+  <scaledAttributes>
+    <li>Damage</li>
+    <li>Cooldown</li>
+  </scaledAttributes>
+</power>
+```
+
+Use `Damage` when direct or impact damage should grow with caster power. Use `Cooldown` when stronger casters should recover faster according to Magic Framework settings. For area projectile spells, add `Radius` if explosion or query radii should scale too.
+
+#### Targeting and friendly-fire cautions
+
+Projectile spells can look simple while still having tactical side effects:
+
+- `pawnAffinity` controls target selection, not every possible projectile collision or explosion side effect.
+- `preventFriendlyFire` helps vanilla projectile launch avoid friendly fire where vanilla supports it, but it does not make your `onImpactActions` safe by itself.
+- Explosions, radius queries, chains, and secondary hediffs need their own affinity/query decisions.
+- If a spell can target buildings, decide whether that is intentional and whether `DamageActionDef` should use guilt/combat-log settings.
+- If you set `primaryTargetType` to `PawnOrThing`, be explicit about `includeBuildings` and `includeItems`.
 
 What to change first:
 

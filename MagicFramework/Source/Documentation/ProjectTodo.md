@@ -319,6 +319,8 @@ Target coverage:
 - persistent state replacement/lifecycle policy
 - scaling and spell power authoring
 - procedural FX metadata and explicit visual/sound actions
+- reusable resources: status effect defs, status cue hediffs, ordinary hediffs, spell metadata defs, magic FX profiles, projectiles, marker things, and generated scroll/research hooks
+- built-in resource discovery: where authors can find usable `HediffDef`, `ThingDef`, `EffecterDef`, `FleckDef`, `SoundDef`, `DamageDef`, `ResearchProjectDef`, and texture path names
 - common spell patterns: projectile, delayed rune, trap, wall, aura, displacement, buff, debuff, summon
 - validation and regression expectations
 
@@ -328,7 +330,29 @@ Documentation pass order:
 3. Document action tree execution context, target/cell sources, queries, conditions, and deterministic random expectations.
 4. Document persistent lifecycle hooks for zones, walls, force fields, persistent effects, triggers, summons, and spawned things.
 5. Document scaling, power tiers, enhancement rules, generated descriptions, details UI, and settings.
-6. Add pattern recipes for first-party MFVanilla examples and a final validation checklist.
+6. Document reusable authoring resources: `SpellStatusEffectDef`, status cues, hediffs, metadata defs, FX profiles, marker defs, projectile defs, and scroll/research integration points.
+7. Document how to discover built-in RimWorld and MagicFramework resource names, including where to search in local defs/source and how to validate missing names in logs.
+8. Add pattern recipes for first-party MFVanilla examples and a final validation checklist.
+
+MF-031 documentation backlog:
+- Tutorial 1, direct spell: expand `Minor Heal` into a full page covering file placement, load order/dependencies, allied targeting, requirement/cost pairing, Arcane gift, research gates, generated description tokens, healing scaling, and variants such as self-only, ally-only, and heal-over-time.
+- Tutorial 2, projectile spell: expand `Ember Bolt` into a full page covering cast sequence, projectile launch, impact context, hit thing versus landing cell, secondary hediffs, explosions, projectile `ThingDef` authoring, scaling, and friendly-fire/targeting cautions.
+- Tutorial 3, reusable timed status: add a Haste-style tutorial covering `SpellStatusEffectDef`, `ApplyStatusEffectActionDef`, `statusCue`, categories, refresh policies, stat modifiers, default duration, visible hediff indicators, and when to use reusable statuses instead of raw `ApplyHediffActionDef`.
+- Tutorial 4, raw hediff/progressive status: add a Held Under / Burn-style tutorial covering `ApplyHediffActionDef`, severity, duration removal, body-part and add/remove policies where supported, preserving higher severity, max severity, and cleanup expectations.
+- Tutorial 5, persistent aura: add a Flame Field / Water's Embrace-style tutorial covering marker things, pulse actions, target queries, concentration, create/pulse/expire/remove/break hooks, save/load, and overlap/replacement policy.
+- Tutorial 6, maintained spell: add a Mana Shield / Might-style tutorial covering maintained state, manual release, break rules, sustained mana/upkeep, status cues, force-field impacts, and player-facing cancel behavior.
+- Tutorial 7, delayed or triggered spell: add a Rune Trap / Delayed Blast Rune-style tutorial covering delayed actions, proximity triggers, persistent trigger state, trigger cleanup, and deterministic execution after save/load.
+- Tutorial 8, movement spell: add Blink Step / Force Push / Force Pull coverage for teleport, displacement distance, collision handling, post-teleport stun, cell validation, and self/ally/foe safety.
+- Tutorial 9, chain spell: add Chain Lightning coverage for delayed branch pulses, visited target policy, deterministic random helpers, target selection, stun/damage payloads, and save/load.
+- Tutorial 10, summon/spawn spell: add Summon Dog coverage for temporary pawn lifecycle, owner/faction policy, trainables, expiry hooks, and future spawned thing/ward authoring.
+- Reference, action catalog: produce a table of version 1 action defs with purpose, key fields, child action lists, common examples, lifecycle/save-load notes, and first-party spell references.
+- Reference, targeting/query catalog: document target shapes, primary target types, pawn affinity, caster-as-target, cell restrictions, water/resurrectable requirements, query defs, ordering, max targets, and stable tie-breaking.
+- Reference, reusable resources: catalog first-party MFVanilla `SpellStatusEffectDef` entries, status cue hediffs, notable hediffs, spell metadata defs, MagicFramework FX profiles, marker things, and validation spell icons.
+- Reference, built-in name discovery: explain how authors can find RimWorld/vanilla defs locally by searching `Defs`, the RimWorld install `Data` folders, and source/XML examples; include common categories such as `EffecterDef`, `FleckDef`, `SoundDef`, `DamageDef`, `ThingDef`, `HediffDef`, `ResearchProjectDef`, `PawnKindDef`, and texture paths.
+- Reference, generated presentation: document generated description tokens, spell details UI fields, colored generated text settings, scroll inspect text, and how to keep authored descriptions readable.
+- Reference, scaling and enhancement: document `SpellPowerDef`, `ScalableFloatDef`, lightweight `scaledAttributes`, explicit scalar defs, power tiers, structural conditionals, enhancement rules, and settings multipliers.
+- Reference, validation checklist: provide copyable smoke-test checklists for XML load, cast success/failure, targeting edges, cost/cooldown, generated descriptions, save/load, cleanup, replacement, cancel, caster down/death, target invalidation, and multiplayer-sensitive deterministic behavior.
+- Web presentation: keep the Markdown guide as the canonical source, add browser tutorial pages/cards as sections mature, and keep SpellForge links anchored to the tutorial pages through `sync-docs.ps1`.
 
 ### MF-032 Compatibility
 

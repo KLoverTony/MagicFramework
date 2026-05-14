@@ -427,7 +427,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateFieldVisibility(state);
         patternHint.textContent = state.pattern.hint;
         humanSummary.innerHTML = buildSummary(state);
-        xmlPreview.textContent = buildXml(state);
+        xmlPreview.innerHTML = highlightXml(buildXml(state));
     }
 
     function updateFieldVisibility(state) {
@@ -830,6 +830,43 @@ ${indent}</li>`;
 
     function escapeHtml(value) {
         return xml(value);
+    }
+
+    function highlightXml(source) {
+        const escaped = xml(source);
+        const defPattern = /^(MF_|MFV_|Example_|Bullet_|Mote_|Psycast|Explosion_|Flame$|Burn$|Blunt$|Husky$|Spark|YellowSpark|ElectricalSpark|GiantExplosion|EnergyShield_)/;
+
+        function span(className, text) {
+            return className ? `<span class="${className}">${text}</span>` : text;
+        }
+
+        function classifyText(text) {
+            if (/^(true|false)$/i.test(text)) return 'xml-boolean';
+            if (/^-?\d+(\.\d+)?$/.test(text)) return 'xml-number';
+            if (defPattern.test(text)) return 'xml-def';
+            return '';
+        }
+
+        return escaped
+            .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="xml-comment">$1</span>')
+            .replace(/(&lt;\/?)([\w.:-]+)((?:\s+[\w.:-]+=&quot;[^&]*&quot;)*\s*)(\/?&gt;)/g,
+                (_match, open, tag, attrs, close) => {
+                    const highlightedAttrs = attrs.replace(/([\w.:-]+)=&quot;([^&]*)&quot;/g,
+                        (_attrMatch, name, value) => {
+                            const valueClass = value.startsWith('MagicFramework.') ? 'xml-mf-class' : classifyText(value) || 'xml-string';
+                            return `${span('xml-attribute', name)}<span class="xml-punctuation">=</span>&quot;${span(valueClass, value)}&quot;`;
+                        });
+
+                    return `${span('xml-punctuation', open)}${span('xml-tag', tag)}${highlightedAttrs}${span('xml-punctuation', close)}`;
+                })
+            .replace(/(&gt;)([^<&]+)(&lt;)/g, (_match, before, text, after) => {
+                const trimmed = text.trim();
+                if (!trimmed) return `${before}${text}${after}`;
+
+                const leading = text.match(/^\s*/)[0];
+                const trailing = text.match(/\s*$/)[0];
+                return `${before}${leading}${span(classifyText(trimmed), trimmed)}${trailing}${after}`;
+            });
     }
 
     init();

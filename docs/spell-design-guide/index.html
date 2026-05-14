@@ -76,6 +76,45 @@
       color: var(--muted);
     }
 
+    .code-shell {
+      margin: 18px 0;
+    }
+
+    .code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border: 1px solid #303840;
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      background: #1e222d;
+    }
+
+    .code-focus-label {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .code-toggle {
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid #4b5567;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .code-toggle:hover {
+      border-color: var(--gold);
+    }
+
     .guide-code {
       overflow: auto;
       padding: 18px;
@@ -86,6 +125,32 @@
       font-size: 0.92rem;
       line-height: 1.5;
     }
+
+    .code-toolbar + .guide-code {
+      margin-top: 0;
+      border-radius: 0 0 8px 8px;
+    }
+
+    .xml-line {
+      display: block;
+      min-height: 1.5em;
+      white-space: pre;
+    }
+
+    .xml-line.is-folded {
+      color: #9399b2;
+      font-style: italic;
+    }
+
+    .guide-code .xml-punctuation { color: #7f849c; }
+    .guide-code .xml-tag { color: #89b4fa; }
+    .guide-code .xml-attribute { color: #f9e2af; }
+    .guide-code .xml-string { color: #a6e3a1; }
+    .guide-code .xml-mf-class { color: #cba6f7; font-weight: 700; }
+    .guide-code .xml-def { color: #94e2d5; }
+    .guide-code .xml-number,
+    .guide-code .xml-boolean { color: #fab387; }
+    .guide-code .xml-comment { color: #9399b2; font-style: italic; }
 
     .field-table {
       width: 100%;
@@ -150,8 +215,8 @@
         <h1>MagicFramework Spell Design Guide</h1>
         <p>
           MagicFramework spells are RimWorld XML defs built from targeting rules, costs,
-          requirements, and composable action trees. Start with one of the small examples,
-          then move into the reference sections when you need more control.
+          requirements, reusable resources, and composable action trees. Start with one of
+          the small examples, then move into the reference sections when you need more control.
         </p>
         <div class="guide-card-grid">
           <a class="resource-card" href="#first-direct-spell-minor-heal">
@@ -184,43 +249,90 @@
           A direct spell validates a target, pays costs, and runs actions immediately against
           that target. This example heals an allied pawn and allows self-casting.
         </p>
-        <pre class="guide-code"><code>&lt;MagicFramework.Definitions.SpellDef&gt;
+        <div class="guide-card-grid">
+          <div class="guide-card">
+            <span>File Placement</span>
+            <h3>Where It Goes</h3>
+            <p>Place the spell XML under `YourMod/Defs/SpellDefs/Example_MinorHeal.xml`. Put the icon under `YourMod/Textures/UI/Gizmos/Spells/Example_MinorHeal.png`.</p>
+          </div>
+          <div class="guide-card">
+            <span>Dependencies</span>
+            <h3>What It Requires</h3>
+            <p>Depend on `oracle.magicframework`. If you reuse MFVanilla metadata or research defs, also depend on `oracle.mfvanilla`.</p>
+          </div>
+        </div>
+        <pre class="guide-code" data-focus-tags="targeting,requirements,costs,actions" data-focus-label="Focused: targeting, costs, and actions"><code>&lt;MagicFramework.Definitions.SpellDef&gt;
   &lt;defName&gt;Example_MinorHeal&lt;/defName&gt;
   &lt;label&gt;minor heal&lt;/label&gt;
   &lt;description&gt;Restores a small amount of health to an allied pawn.&lt;/description&gt;
   &lt;range&gt;12&lt;/range&gt;
   &lt;castTimeTicks&gt;25&lt;/castTimeTicks&gt;
 
+  &lt;meta&gt;
+    &lt;tier&gt;1&lt;/tier&gt;
+    &lt;elements&gt;
+      &lt;li&gt;MF_Element_Life&lt;/li&gt;
+    &lt;/elements&gt;
+    &lt;domains&gt;
+      &lt;li&gt;MF_Domain_Vitalism&lt;/li&gt;
+    &lt;/domains&gt;
+    &lt;disciplines&gt;
+      &lt;li&gt;MF_Discipline_Healing&lt;/li&gt;
+    &lt;/disciplines&gt;
+    &lt;tags&gt;
+      &lt;li&gt;MF_Tag_Beneficial&lt;/li&gt;
+    &lt;/tags&gt;
+  &lt;/meta&gt;
+
+  &lt;learning&gt;
+    &lt;canBeLearned&gt;true&lt;/canBeLearned&gt;
+    &lt;requirements&gt;
+      &lt;li Class=&quot;MagicFramework.Definitions.ArcaneGiftRequirementDef&quot; /&gt;
+    &lt;/requirements&gt;
+  &lt;/learning&gt;
+
   &lt;targeting&gt;
     &lt;shape&gt;Single&lt;/shape&gt;
     &lt;primaryTargetType&gt;Pawn&lt;/primaryTargetType&gt;
     &lt;pawnAffinity&gt;Ally&lt;/pawnAffinity&gt;
+    &lt;includePawns&gt;true&lt;/includePawns&gt;
+    &lt;includeBuildings&gt;false&lt;/includeBuildings&gt;
+    &lt;includeItems&gt;false&lt;/includeItems&gt;
     &lt;allowSelfTarget&gt;true&lt;/allowSelfTarget&gt;
     &lt;requireLineOfSight&gt;true&lt;/requireLineOfSight&gt;
     &lt;range&gt;12&lt;/range&gt;
   &lt;/targeting&gt;
 
   &lt;requirements&gt;
-    &lt;li Class="MagicFramework.Definitions.ManaRequirementDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.ManaRequirementDef&quot;&gt;
       &lt;amount&gt;6&lt;/amount&gt;
     &lt;/li&gt;
-    &lt;li Class="MagicFramework.Definitions.CooldownRequirementDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.CooldownRequirementDef&quot;&gt;
       &lt;cooldownTicks&gt;120&lt;/cooldownTicks&gt;
     &lt;/li&gt;
   &lt;/requirements&gt;
 
   &lt;costs&gt;
-    &lt;li Class="MagicFramework.Definitions.ManaCostDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.ManaCostDef&quot;&gt;
       &lt;amount&gt;6&lt;/amount&gt;
     &lt;/li&gt;
-    &lt;li Class="MagicFramework.Definitions.CooldownCostDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.CooldownCostDef&quot;&gt;
       &lt;cooldownTicks&gt;120&lt;/cooldownTicks&gt;
     &lt;/li&gt;
   &lt;/costs&gt;
 
   &lt;actions&gt;
-    &lt;li Class="MagicFramework.Definitions.HealActionDef"&gt;
-      &lt;amount&gt;10&lt;/amount&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.SequenceActionDef&quot;&gt;
+      &lt;actions&gt;
+        &lt;li Class=&quot;MagicFramework.Definitions.EffectActionDef&quot;&gt;
+          &lt;effectDef&gt;PsycastPsychicEffect&lt;/effectDef&gt;
+          &lt;locationSource&gt;CurrentTarget&lt;/locationSource&gt;
+          &lt;attachToTarget&gt;true&lt;/attachToTarget&gt;
+        &lt;/li&gt;
+        &lt;li Class=&quot;MagicFramework.Definitions.HealActionDef&quot;&gt;
+          &lt;amount&gt;10&lt;/amount&gt;
+        &lt;/li&gt;
+      &lt;/actions&gt;
     &lt;/li&gt;
   &lt;/actions&gt;
 &lt;/MagicFramework.Definitions.SpellDef&gt;</code></pre>
@@ -228,6 +340,18 @@
           Change `HealActionDef.amount` for strength, `targeting.range` for reach,
           and the mana/cooldown requirement and cost pairs for balance.
         </p>
+        <table class="field-table">
+          <thead>
+            <tr><th>Next Step</th><th>What To Add</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Research gate</td><td>Add `learning.researchPrerequisites`, such as `MFV_Vitalism` when depending on MFVanilla.</td></tr>
+            <tr><td>Caster gate</td><td>Add `ArcaneGiftRequirementDef` and optional `CasterLevelRequirementDef` under `learning.requirements`.</td></tr>
+            <tr><td>Generated details</td><td>Add `{MF:SpellSummary}` or `{MF:Effects}` to the description so mechanics stay current.</td></tr>
+            <tr><td>Healing scaling</td><td>Add `power.casterLevelFactor` and `scaledAttributes` with `Healing`.</td></tr>
+            <tr><td>Self-only variant</td><td>Use `targeting.useCasterAsTarget` to cast without opening a target prompt.</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section id="first-projectile-spell-ember-bolt">
@@ -237,18 +361,30 @@
           Projectile spells launch an authored projectile now and run `onImpactActions` later.
           Put hit-dependent effects under `onImpactActions`, not beside the projectile action.
         </p>
-        <pre class="guide-code"><code>&lt;li Class="MagicFramework.Definitions.LaunchProjectileActionDef"&gt;
+        <div class="guide-card-grid">
+          <div class="guide-card">
+            <span>Flow</span>
+            <h3>Launch Now</h3>
+            <p>The cast validates and pays costs, plays its cast effect, then launches a real RimWorld projectile from `launchOrigin` to `targetSource`.</p>
+          </div>
+          <div class="guide-card">
+            <span>Impact</span>
+            <h3>Payload Later</h3>
+            <p>`onImpactActions` run after impact, shield block, destruction, explosion landing, or timeout. Use `CurrentTarget` for the hit thing and `CurrentCell` for the impact location.</p>
+          </div>
+        </div>
+        <pre class="guide-code" data-focus-tags="onImpactActions" data-focus-label="Focused: projectile impact payload"><code>&lt;li Class=&quot;MagicFramework.Definitions.LaunchProjectileActionDef&quot;&gt;
   &lt;projectileDef&gt;Bullet_Revolver&lt;/projectileDef&gt;
   &lt;launchOrigin&gt;Caster&lt;/launchOrigin&gt;
   &lt;targetSource&gt;CurrentTarget&lt;/targetSource&gt;
   &lt;onImpactActions&gt;
-    &lt;li Class="MagicFramework.Definitions.EffectActionDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.EffectActionDef&quot;&gt;
       &lt;effectDef&gt;GiantExplosion&lt;/effectDef&gt;
       &lt;soundDef&gt;Explosion_Flame&lt;/soundDef&gt;
       &lt;locationSource&gt;CurrentTarget&lt;/locationSource&gt;
       &lt;attachToTarget&gt;true&lt;/attachToTarget&gt;
     &lt;/li&gt;
-    &lt;li Class="MagicFramework.Definitions.DamageActionDef"&gt;
+    &lt;li Class=&quot;MagicFramework.Definitions.DamageActionDef&quot;&gt;
       &lt;amount&gt;12&lt;/amount&gt;
       &lt;damageDef&gt;Flame&lt;/damageDef&gt;
     &lt;/li&gt;
@@ -258,6 +394,29 @@
           `MF_Firebolt` in MF Vanilla is the production version of this pattern. It adds
           research, caster level requirements, debug labels, spell power scaling, and tuning.
         </p>
+        <table class="field-table">
+          <thead>
+            <tr><th>Field</th><th>What It Controls</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>`projectileDef`</td><td>A `ThingDef` whose `thingClass` is a RimWorld projectile, such as `Bullet_Revolver`.</td></tr>
+            <tr><td>`launchOrigin`</td><td>Where the projectile starts: `Caster`, `CurrentTarget`, or `CurrentCell`.</td></tr>
+            <tr><td>`targetSource`</td><td>What the projectile aims at: `CurrentTarget`, `CurrentCell`, or `Caster`.</td></tr>
+            <tr><td>`preventFriendlyFire`</td><td>Passes friendly-fire prevention into vanilla projectile launch where vanilla supports it.</td></tr>
+            <tr><td>`onImpactActions`</td><td>Child actions that run after projectile resolution. Put hit-dependent effects here.</td></tr>
+          </tbody>
+        </table>
+        <table class="field-table">
+          <thead>
+            <tr><th>Variant</th><th>What To Add</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Burn rider</td><td>Add `ApplyHediffActionDef` with `hediffDef` `Burn` under `onImpactActions`.</td></tr>
+            <tr><td>Small blast</td><td>Add `ExplosionActionDef` under `onImpactActions` and use `CurrentCell` for impact visuals.</td></tr>
+            <tr><td>Scaling</td><td>Add `power.casterLevelFactor` and `scaledAttributes` such as `Damage`, `Cooldown`, and optionally `Radius`.</td></tr>
+            <tr><td>Resource discovery</td><td>Search RimWorld `Data` defs and MFVanilla spell XML for `projectileDef`, `effectDef`, `soundDef`, `damageDef`, and `hediffDef` examples.</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section id="direct-versus-projectile-actions">
@@ -326,5 +485,159 @@
     <span>MagicFramework author documentation.</span>
     <a href="../index.html">Back to home</a>
   </footer>
+  <script>
+    (() => {
+      const defPattern = /^(MF_|MFV_|Example_|Bullet_|Mote_|Psycast|Explosion_|Flame$|Burn$|Blunt$|Husky$|Spark|YellowSpark|ElectricalSpark|GiantExplosion|EnergyShield_)/;
+      const rootTags = new Set(['Defs', 'MagicFramework.Definitions.SpellDef']);
+      const alwaysVisibleTags = new Set(['defName', 'label', 'description', 'range', 'castTimeTicks', 'gizmoIconPath']);
+
+      function classifyText(text) {
+        if (/^(true|false)$/i.test(text)) return 'xml-boolean';
+        if (/^-?\d+(\.\d+)?$/.test(text)) return 'xml-number';
+        if (defPattern.test(text)) return 'xml-def';
+        return '';
+      }
+
+      function span(className, text) {
+        return className ? `<span class="${className}">${text}</span>` : text;
+      }
+
+      function highlightXml(source) {
+        return source
+          .replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="xml-comment">$1</span>')
+          .replace(/(&lt;\/?)([\w.:-]+)((?:\s+[\w.:-]+=(?:"[^"]*"|&quot;[^&]*&quot;))*\s*)(\/?&gt;)/g,
+            (_match, open, tag, attrs, close) => {
+              const highlightedAttrs = attrs.replace(/([\w.:-]+)=(&quot;[^&]*&quot;|"[^"]*")/g,
+                (_attrMatch, name, value) => {
+                  const inner = value.replace(/^(&quot;|")/, '').replace(/(&quot;|")$/, '');
+                  const valueClass = inner.startsWith('MagicFramework.') ? 'xml-mf-class' : classifyText(inner) || 'xml-string';
+                  const quote = value.startsWith('&quot;') ? '&quot;' : '"';
+                  return `${span('xml-attribute', name)}<span class="xml-punctuation">=</span>${quote}${span(valueClass, inner)}${quote}`;
+                });
+              return `${span('xml-punctuation', open)}${span('xml-tag', tag)}${highlightedAttrs}${span('xml-punctuation', close)}`;
+            })
+          .replace(/(&gt;)([^<&]+)(&lt;)/g, (_match, before, text, after) => {
+            const trimmed = text.trim();
+            if (!trimmed) return `${before}${text}${after}`;
+            const leading = text.match(/^\s*/)[0];
+            const trailing = text.match(/\s*$/)[0];
+            return `${before}${leading}${span(classifyText(trimmed), trimmed)}${trailing}${after}`;
+          });
+      }
+
+      function lineTagName(line) {
+        const match = line.trim().match(/^&lt;\/?([\w.:-]+)/);
+        return match ? match[1] : '';
+      }
+
+      function isClosingLine(line) {
+        return /^&lt;\//.test(line.trim());
+      }
+
+      function isSelfClosingLine(line) {
+        return /\/&gt;\s*$/.test(line.trim());
+      }
+
+      function isVisibleLine(line, focusTags, stack) {
+        const tag = lineTagName(line);
+        if (!tag) return stack.some(item => focusTags.has(item));
+        if (rootTags.has(tag) || alwaysVisibleTags.has(tag) || focusTags.has(tag)) return true;
+        return stack.some(item => focusTags.has(item));
+      }
+
+      function renderFocusedLines(source, focusTags, showAll) {
+        const lines = source.split(/\r?\n/);
+        const stack = [];
+        const rendered = [];
+        let foldedLines = [];
+
+        function flushFolded() {
+          if (foldedLines.length > 0) {
+            const first = foldedLines[0];
+            const last = foldedLines.length > 1 ? foldedLines[foldedLines.length - 1] : null;
+            const innerCount = Math.max(0, foldedLines.length - (last ? 2 : 1));
+
+            rendered.push(`<span class="xml-line is-folded">${highlightXml(first)}</span>`);
+            if (innerCount > 0) {
+              rendered.push(`<span class="xml-line is-folded">  ... ${innerCount} folded inner line${innerCount === 1 ? '' : 's'} ...</span>`);
+            }
+            if (last) {
+              rendered.push(`<span class="xml-line is-folded">${highlightXml(last)}</span>`);
+            }
+
+            foldedLines = [];
+          }
+        }
+
+        lines.forEach(line => {
+          const tag = lineTagName(line);
+          const closing = isClosingLine(line);
+          const blank = line.trim().length === 0;
+          const visible = showAll || isVisibleLine(line, focusTags, stack);
+
+          if (blank) {
+            flushFolded();
+            rendered.push('<span class="xml-line"> </span>');
+          } else if (visible) {
+            flushFolded();
+            rendered.push(`<span class="xml-line">${highlightXml(line)}</span>`);
+          } else {
+            foldedLines.push(line);
+          }
+
+          if (tag) {
+            if (closing) {
+              const index = stack.lastIndexOf(tag);
+              if (index >= 0) stack.splice(index, 1);
+            } else if (!isSelfClosingLine(line)) {
+              stack.push(tag);
+            }
+          }
+        });
+
+        flushFolded();
+        return rendered.join('');
+      }
+
+      document.querySelectorAll('pre.guide-code').forEach(pre => {
+        const code = pre.querySelector('code');
+        const source = code.innerHTML;
+        const focusTags = new Set((pre.dataset.focusTags || '').split(',').map(item => item.trim()).filter(Boolean));
+
+        if (focusTags.size === 0) {
+          code.innerHTML = highlightXml(source);
+          return;
+        }
+
+        let showAll = false;
+        const shell = document.createElement('div');
+        shell.className = 'code-shell';
+        const toolbar = document.createElement('div');
+        toolbar.className = 'code-toolbar';
+        const label = document.createElement('span');
+        label.className = 'code-focus-label';
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'code-toggle';
+        toolbar.append(label, button);
+
+        pre.parentNode.insertBefore(shell, pre);
+        shell.append(toolbar, pre);
+
+        function render() {
+          code.innerHTML = renderFocusedLines(source, focusTags, showAll);
+          button.textContent = showAll ? 'Show focused XML' : 'Expand full XML';
+          label.textContent = showAll ? 'Full XML' : (pre.dataset.focusLabel || 'Focused XML');
+        }
+
+        button.addEventListener('click', () => {
+          showAll = !showAll;
+          render();
+        });
+
+        render();
+      });
+    })();
+  </script>
 </body>
 </html>

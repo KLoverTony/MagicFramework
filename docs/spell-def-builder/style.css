@@ -527,6 +527,41 @@ pre {
     line-height: 1.5;
 }
 
+pre .xml-punctuation {
+    color: #7f849c;
+}
+
+pre .xml-tag {
+    color: #89b4fa;
+}
+
+pre .xml-attribute {
+    color: #f9e2af;
+}
+
+pre .xml-string {
+    color: #a6e3a1;
+}
+
+pre .xml-mf-class {
+    color: #c77dff;
+    font-weight: 700;
+}
+
+pre .xml-def {
+    color: #4cc9f0;
+}
+
+pre .xml-number,
+pre .xml-boolean {
+    color: #f4d03f;
+}
+
+pre .xml-comment {
+    color: #96a0b5;
+    font-style: italic;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
