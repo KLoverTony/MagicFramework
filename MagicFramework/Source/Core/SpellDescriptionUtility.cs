@@ -503,11 +503,11 @@ public static class SpellDescriptionUtility
                 AddActionLines(lines, delay.actions, depth + 1);
                 break;
             case RepeatActionDef repeat:
-                lines.Add("Repeats " + repeat.repeatCount + " time(s), every " + FormatTicks(repeat.intervalTicks) + ".");
+                lines.Add("Repeats " + DescribeScalableCount(repeat.repeatCount, repeat.scalableRepeatCount) + ", every " + DescribeScalableInterval(repeat.intervalTicks, repeat.scalableIntervalTicks) + ".");
                 AddActionLines(lines, repeat.actions, depth + 1);
                 break;
             case LaunchProjectileActionDef projectile:
-                lines.Add("Launches " + ResolveDefLabel<ThingDef>(projectile.projectileDef, "a projectile") + ".");
+                lines.Add("Launches " + ResolveDefLabel<ThingDef>(projectile.projectileDef, "a projectile") + DescribeProjectileLaunch(projectile) + ".");
                 AddActionLines(lines, projectile.onImpactActions, depth + 1);
                 break;
             case TeleportActionDef teleport:
@@ -516,13 +516,13 @@ public static class SpellDescriptionUtility
                 break;
             case KnockbackActionDef knockback:
                 string impactText = knockback.impactDamageAmount > 0f ? " Collisions deal " + FormatNumber(knockback.impactDamageAmount) + " " + ColorizeDamageLabel(ResolveDefLabel<DamageDef>(knockback.impactDamageDef, "blunt")) + " damage." : string.Empty;
-                lines.Add("Pushes the target back up to " + knockback.distance + " cell(s)." + impactText);
+                lines.Add("Pushes the target back up to " + DescribeScalableDistance(knockback.distance, knockback.scalableDistance) + "." + impactText);
                 break;
             case PullActionDef pull:
-                lines.Add("Pulls the target up to " + pull.distance + " cell(s) toward the caster.");
+                lines.Add("Pulls the target up to " + DescribeScalableDistance(pull.distance, pull.scalableDistance) + " toward the caster.");
                 break;
             case MovePawnTowardPointActionDef movePawn:
-                lines.Add("Moves the target up to " + movePawn.distance + " cell(s) toward the spell point.");
+                lines.Add("Moves the target up to " + DescribeScalableDistance(movePawn.distance, movePawn.scalableDistance) + " toward the spell point.");
                 break;
             case MoveStoneChunksActionDef chunks:
                 lines.Add("Draws nearby stone chunks toward the spell point.");
@@ -601,6 +601,24 @@ public static class SpellDescriptionUtility
         return parts.Count == 0 ? "stat changes" : string.Join(", ", parts);
     }
 
+    private static string DescribeScalableDistance(int distance, ScalableFloatDef scalableDistance)
+    {
+        string text = (distance > 0 ? distance : 1) + " cell(s)";
+        return scalableDistance == null ? text : text + ", scaling with spell power";
+    }
+
+    private static string DescribeScalableCount(int count, ScalableFloatDef scalableCount)
+    {
+        string text = count + " time(s)";
+        return scalableCount == null ? text : text + ", scaling with spell power";
+    }
+
+    private static string DescribeScalableInterval(int intervalTicks, ScalableFloatDef scalableIntervalTicks)
+    {
+        string text = FormatTicks(intervalTicks);
+        return scalableIntervalTicks == null ? text : text + ", scaling with spell power";
+    }
+
     private static string DescribeStatusEffect(string defName)
     {
         if (string.IsNullOrWhiteSpace(defName))
@@ -617,7 +635,7 @@ public static class SpellDescriptionUtility
         string label = string.IsNullOrWhiteSpace(statusEffectDef.label) ? "a reusable status effect" : statusEffectDef.label;
         if (statusEffectDef.categories == null || statusEffectDef.categories.Count == 0)
         {
-            return label;
+            return label + DescribeStatusRefreshPolicy(statusEffectDef.refreshPolicy);
         }
 
         List<string> categories = new();
@@ -630,7 +648,60 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return categories.Count == 0 ? label : label + " (" + string.Join(", ", categories) + ")";
+        string categoryText = categories.Count == 0 ? string.Empty : " (" + string.Join(", ", categories) + ")";
+        return label + categoryText + DescribeStatusRefreshPolicy(statusEffectDef.refreshPolicy);
+    }
+
+    private static string DescribeProjectileLaunch(LaunchProjectileActionDef projectile)
+    {
+        if (projectile == null)
+        {
+            return string.Empty;
+        }
+
+        List<string> parts = new();
+        if (projectile.launchOrigin != ProjectileLaunchOriginSource.Caster)
+        {
+            parts.Add("from " + DescribeProjectileLaunchOrigin(projectile.launchOrigin));
+        }
+
+        if (projectile.targetSource != ProjectileTargetSource.CurrentTarget)
+        {
+            parts.Add("toward " + DescribeProjectileTargetSource(projectile.targetSource));
+        }
+
+        return parts.Count == 0 ? string.Empty : " " + string.Join(" ", parts);
+    }
+
+    private static string DescribeProjectileLaunchOrigin(ProjectileLaunchOriginSource launchOrigin)
+    {
+        return launchOrigin switch
+        {
+            ProjectileLaunchOriginSource.CurrentTarget => "the current target",
+            ProjectileLaunchOriginSource.CurrentCell => "the spell point",
+            _ => "the caster"
+        };
+    }
+
+    private static string DescribeProjectileTargetSource(ProjectileTargetSource targetSource)
+    {
+        return targetSource switch
+        {
+            ProjectileTargetSource.CurrentCell => "the spell point",
+            ProjectileTargetSource.Caster => "the caster",
+            _ => "the current target"
+        };
+    }
+
+    private static string DescribeStatusRefreshPolicy(SpellStatusRefreshPolicy refreshPolicy)
+    {
+        return refreshPolicy switch
+        {
+            SpellStatusRefreshPolicy.IgnoreIfActive => "; ignored if already active",
+            SpellStatusRefreshPolicy.StackDuration => "; duration stacks",
+            SpellStatusRefreshPolicy.Replace => "; replaces existing",
+            _ => string.Empty
+        };
     }
 
     private static string DescribeTerrainPatch(TerrainPatchActionDef terrain)

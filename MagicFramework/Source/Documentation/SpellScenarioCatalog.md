@@ -176,10 +176,10 @@ Open Gaps:
 - `targetType` is a raw string today; mixed pawn-or-cell targeting is not strongly modeled.
 - `ExplosionActionWorker` has basic flame explosion behavior, but the damage type, fire chance, falloff, and visual/audio details are not fully authorable yet.
 - `ApplyHediffActionWorker` has basic severity adjustment behavior, but body-part targeting and richer hediff policies are not modeled yet.
-- `LaunchProjectileActionWorker` now models projectile travel and delayed impact timing, but exact hit-thing context for misses, cover interception, and shield blocking is still coarse.
+- `LaunchProjectileActionWorker` now models projectile travel and delayed impact timing. Impact actions receive a named impact result for hit, shield block, no-hit impact, destruction, or timeout; cover interception is treated as part of vanilla hit/no-hit handling unless a future spell needs deeper custom projectile context.
 - Player targeting rules like `pawnOrCell`, line of sight, and range semantics are not yet enforced by the framework runtime.
 - Ignition may want something more specific than a generic hediff, depending on RimWorld fire semantics.
-- Impact actions receive the projectile's last known cell, but they do not yet receive a first-class impact result object.
+- Impact actions receive the projectile's last known cell plus first-class impact variables such as `ProjectileImpactResult`, `ProjectileBlockedByShield`, and `ProjectileHitThing`.
 
 Notes:
 `Fireball` is an excellent first "stress" spell because it forces us to handle location targeting, impact points, area queries, and secondary effects together.

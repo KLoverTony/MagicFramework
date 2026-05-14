@@ -27,6 +27,10 @@
       </tags>
     </meta>
 
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+    </power>
+
     <learning>
       <canBeLearned>true</canBeLearned>
       <researchPrerequisites>
@@ -93,6 +97,11 @@
           <li Class="MagicFramework.Definitions.KnockbackActionDef">
             <debugLabel>Force Push knockback</debugLabel>
             <distance>4</distance>
+            <scalableDistance>
+              <baseValue>4</baseValue>
+              <perPower>0.25</perPower>
+              <max>7</max>
+            </scalableDistance>
             <requireStandableDestination>true</requireStandableDestination>
             <requireWalkableDestination>true</requireWalkableDestination>
             <allowHitCasterCell>false</allowHitCasterCell>

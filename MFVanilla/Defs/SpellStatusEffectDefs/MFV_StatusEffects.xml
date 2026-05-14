@@ -61,6 +61,7 @@
       <li>debuff</li>
       <li>physical</li>
     </categories>
+    <refreshPolicy>Replace</refreshPolicy>
     <durationTicks>300</durationTicks>
     <statusCue>
       <hediffDef>MF_Weakened</hediffDef>
@@ -136,6 +137,7 @@
       <li>control</li>
       <li>cold</li>
     </categories>
+    <refreshPolicy>IgnoreIfActive</refreshPolicy>
     <durationTicks>90</durationTicks>
     <statusCue>
       <hediffDef>MF_Frozen</hediffDef>
@@ -159,6 +161,7 @@
       <li>control</li>
       <li>water</li>
     </categories>
+    <refreshPolicy>IgnoreIfActive</refreshPolicy>
     <durationTicks>90</durationTicks>
     <statusCue>
       <hediffDef>MF_Waterbound</hediffDef>

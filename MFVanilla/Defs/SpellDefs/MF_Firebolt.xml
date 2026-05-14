@@ -109,6 +109,8 @@
           <li Class="MagicFramework.Definitions.LaunchProjectileActionDef">
             <debugLabel>Firebolt projectile</debugLabel>
             <projectileDef>Bullet_Revolver</projectileDef>
+            <launchOrigin>Caster</launchOrigin>
+            <targetSource>CurrentTarget</targetSource>
             <onImpactActions>
               <li Class="MagicFramework.Definitions.EffectActionDef">
                 <debugLabel>Firebolt impact effect</debugLabel>

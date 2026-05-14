@@ -150,18 +150,19 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         GetOrCreateState(caster).SetCooldownReadyTick(spellDef.defName, currentTick + cooldownTicks);
     }
 
-    public void ApplyStatModifiers(
+    public bool ApplyStatModifiers(
         Thing target,
         Thing caster,
         SpellDef spellDef,
         int durationTicks,
         bool replaceExistingFromCasterSpell,
+        SpellStatusRefreshPolicy refreshPolicy,
         SpellStatusCueDef statusCue,
         IEnumerable<SpellStatModifierDef> authoredModifiers)
     {
         if (target == null || spellDef == null || authoredModifiers == null)
         {
-            return;
+            return false;
         }
 
         activeStatModifiers ??= new List<ActiveSpellStatModifier>();
@@ -209,22 +210,34 @@ public sealed class SpellRuntimeGameComponent : GameComponent
 
         if (modifier.modifiers.Count == 0)
         {
-            return;
+            return false;
         }
 
-        if (replaceExistingFromCasterSpell && TryRefreshStatModifier(target, caster, spellDef, modifier))
+        if (refreshPolicy == SpellStatusRefreshPolicy.IgnoreIfActive && HasActiveStatModifier(target, caster, spellDef, modifier))
+        {
+            return false;
+        }
+
+        if (refreshPolicy == SpellStatusRefreshPolicy.StackDuration && TryStackStatModifierDuration(target, caster, spellDef, durationTicks, modifier))
         {
             EnsureIndicatorApplied(modifier);
-            return;
+            return true;
         }
 
-        if (replaceExistingFromCasterSpell)
+        if (refreshPolicy == SpellStatusRefreshPolicy.RefreshDuration && TryRefreshStatModifier(target, caster, spellDef, modifier))
+        {
+            EnsureIndicatorApplied(modifier);
+            return true;
+        }
+
+        if (replaceExistingFromCasterSpell || refreshPolicy == SpellStatusRefreshPolicy.Replace)
         {
             RemoveStatModifiers(target, caster, spellDef);
         }
 
         activeStatModifiers.Add(modifier);
         EnsureIndicatorApplied(modifier);
+        return true;
     }
 
     public void ApplySustainedStatModifiers(
@@ -886,6 +899,65 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             }
 
             existing.expireAtTick = replacement.expireAtTick;
+            existing.indicatorHediffDef = replacement.indicatorHediffDef;
+            existing.indicatorSeverity = replacement.indicatorSeverity;
+            existing.removeIndicatorOnExpire = replacement.removeIndicatorOnExpire;
+            existing.statusCueLabel = replacement.statusCueLabel;
+            existing.statusCueDescription = replacement.statusCueDescription;
+            existing.modifiers = replacement.modifiers;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool HasActiveStatModifier(Thing target, Thing caster, SpellDef spellDef, ActiveSpellStatModifier replacement = null)
+    {
+        if (activeStatModifiers == null)
+        {
+            return false;
+        }
+
+        for (int i = activeStatModifiers.Count - 1; i >= 0; i--)
+        {
+            ActiveSpellStatModifier existing = activeStatModifiers[i];
+            if (existing == null || existing.target == null || existing.target.Destroyed)
+            {
+                activeStatModifiers.RemoveAt(i);
+                continue;
+            }
+
+            if (!existing.isSustained && CanRefreshStatModifier(existing, target, caster, spellDef, replacement ?? existing))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool TryStackStatModifierDuration(Thing target, Thing caster, SpellDef spellDef, int durationTicks, ActiveSpellStatModifier replacement)
+    {
+        if (activeStatModifiers == null || replacement == null)
+        {
+            return false;
+        }
+
+        for (int i = activeStatModifiers.Count - 1; i >= 0; i--)
+        {
+            ActiveSpellStatModifier existing = activeStatModifiers[i];
+            if (existing == null || existing.target == null || existing.target.Destroyed)
+            {
+                activeStatModifiers.RemoveAt(i);
+                continue;
+            }
+
+            if (existing.isSustained || !CanRefreshStatModifier(existing, target, caster, spellDef, replacement))
+            {
+                continue;
+            }
+
+            existing.expireAtTick = Mathf.Max(existing.expireAtTick, Find.TickManager?.TicksGame ?? 0) + Mathf.Max(1, durationTicks);
             existing.indicatorHediffDef = replacement.indicatorHediffDef;
             existing.indicatorSeverity = replacement.indicatorSeverity;
             existing.removeIndicatorOnExpire = replacement.removeIndicatorOnExpire;

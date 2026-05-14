@@ -4,6 +4,32 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- Deterministic spell random utility.
+  Current state:
+  - `SpellDeterministicRandom` derives stable random-looking values from explicit gameplay salt such as spell seed, spell def, caster ID, map ID, targets, cells, and authored channels.
+  - The utility supports hash values, float `0..1`, chance checks, inclusive integer ranges, float ranges, and deterministic shuffling.
+  - Random-chance conditions, stun actions, random teleport destinations, explosion spawn rolls/cells, and chain-lightning branch/stun decisions now use deterministic framework-owned randomness instead of ambient `Rand`.
+  - Chain-lightning pulses persist the original spell random seed so queued branches remain deterministic across save/load.
+  - Framework-owned gameplay code should prefer this utility for future chance rolls, random ranges, random selection, and shuffling.
+  Notes:
+  - The utility is intended for gameplay decisions. Pure presentation jitter should remain harmless, but framework-owned chain visual jitter is also deterministic now.
+  - Vanilla systems invoked by framework actions may still perform their own internal randomness.
+
+- MF-011 projectile support.
+  Current state:
+  - `LaunchProjectileActionDef` launches vanilla RimWorld projectiles and supports authored hit flags plus friendly-fire prevention.
+  - Projectile launch authoring can choose launch origin (`Caster`, `CurrentTarget`, or `CurrentCell`) and target source (`CurrentTarget`, `CurrentCell`, or `Caster`).
+  - `onImpactActions` are tracked by map runtime state and run after projectile impact, explosion landing/detonation, projectile destruction, or timeout.
+  - Projectile impact hooks capture exact hit thing and shield-block state where vanilla `Projectile.Impact(Thing hitThing, bool blockedByShield)` exposes them.
+  - Impact context resolves to the hit thing when available, otherwise the projectile's last known cell.
+  - Projectile impact execution variables include `ProjectileImpactCaptured`, `ProjectileImpactResult`, `ProjectileBlockedByShield`, and `ProjectileHitThing`.
+  - `ProjectileImpactResult` distinguishes `HitThing`, `ShieldBlocked`, `ImpactNoThing`, `Destroyed`, and `Timeout`.
+  - `MF_Firebolt` and `MF_Fireball` validate explicit caster-to-target projectile launch authoring.
+  Completion note:
+  - Cover interception is not kept as an active MF-011 blocker because the current vanilla hook surface exposes the impacted thing and shield-block state, while cover details are folded into vanilla combat logging/cover internals.
+  - Arcing and overhead projectile behavior should remain projectile-def authoring through vanilla projectile fields such as `arcHeightFactor` and `flyOverhead`; add per-launch override support only if future content proves it needs runtime mutation.
+  - Custom spell projectile classes are not needed for the current authoring surface; reopen as a new task only if vanilla projectiles cannot expose a future spell's required context.
+
 - MF-005 lifecycle hook backfill.
   Current state:
   - `LifecycleHooks.md` defines shared create, pulse, trigger, expire, remove, break, and legacy end semantics.

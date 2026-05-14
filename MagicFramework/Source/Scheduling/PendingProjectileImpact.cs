@@ -16,6 +16,10 @@ public sealed class PendingProjectileImpact : IExposable
     private LocalTargetInfo currentTarget;
     private List<LocalTargetInfo> currentTargets = new();
     private LocalTargetInfo initialTarget;
+    private bool impactBlockedByShield;
+    private bool impactCaptured;
+    private Thing impactHitThing;
+    private ProjectileImpactResultKind impactResult = ProjectileImpactResultKind.Pending;
     private IntVec3 lastKnownProjectileCell = IntVec3.Invalid;
     private float powerValue;
     private int powerTier;
@@ -77,6 +81,22 @@ public sealed class PendingProjectileImpact : IExposable
 
     public string DebugLabel => $"{spellDef?.defName ?? "<unknown spell>"} projectile impact";
 
+    public void MarkImpact(Thing hitThing, bool blockedByShield)
+    {
+        impactCaptured = true;
+        impactBlockedByShield = blockedByShield;
+        impactHitThing = hitThing;
+        impactResult = ResolveCapturedImpactResult(hitThing, blockedByShield);
+        if (hitThing != null && !hitThing.Destroyed)
+        {
+            lastKnownProjectileCell = hitThing.Position;
+        }
+        else if (projectile != null)
+        {
+            lastKnownProjectileCell = projectile.Position;
+        }
+    }
+
     public void RefreshProjectileCell()
     {
         if (projectile != null && projectile.Spawned)
@@ -87,12 +107,24 @@ public sealed class PendingProjectileImpact : IExposable
 
     public bool IsReadyToResolve(int currentTick)
     {
-        if (projectile == null || projectile.Destroyed)
+        if (impactCaptured)
         {
             return true;
         }
 
-        return currentTick >= timeoutTick;
+        if (currentTick >= timeoutTick)
+        {
+            impactResult = ProjectileImpactResultKind.Timeout;
+            return true;
+        }
+
+        if (projectile == null || projectile.Destroyed)
+        {
+            impactResult = ProjectileImpactResultKind.Destroyed;
+            return true;
+        }
+
+        return false;
     }
 
     public bool TryCreateExecutionContext(Map map, out SpellContext context)
@@ -123,6 +155,10 @@ public sealed class PendingProjectileImpact : IExposable
         };
         context.executionState.costsApplied = true;
         context.executionState.variables = variables?.Clone() ?? new SpellVariableStore();
+        context.executionState.variables.SetValue("ProjectileImpactCaptured", impactCaptured);
+        context.executionState.variables.SetValue("ProjectileImpactResult", impactResult.ToString());
+        context.executionState.variables.SetValue("ProjectileBlockedByShield", impactBlockedByShield);
+        context.executionState.variables.SetValue("ProjectileHitThing", impactHitThing?.ThingID ?? string.Empty);
 
         if (currentTargets != null)
         {
@@ -155,6 +191,10 @@ public sealed class PendingProjectileImpact : IExposable
         Scribe_References.Look(ref caster, "caster");
         Scribe_Defs.Look(ref spellDef, "spellDef");
         Scribe_TargetInfo.Look(ref initialTarget, "initialTarget");
+        Scribe_References.Look(ref impactHitThing, "impactHitThing");
+        Scribe_Values.Look(ref impactCaptured, "impactCaptured");
+        Scribe_Values.Look(ref impactBlockedByShield, "impactBlockedByShield");
+        Scribe_Values.Look(ref impactResult, "impactResult", ProjectileImpactResultKind.Pending);
         Scribe_TargetInfo.Look(ref currentTarget, "currentTarget");
         Scribe_Collections.Look(ref currentTargets, "currentTargets", LookMode.TargetInfo);
         Scribe_Values.Look(ref currentCell, "currentCell", IntVec3.Invalid);
@@ -176,12 +216,37 @@ public sealed class PendingProjectileImpact : IExposable
 
     private LocalTargetInfo ResolveCurrentTargetAtImpact(IntVec3 impactCell)
     {
+        if (impactHitThing != null && !impactHitThing.Destroyed)
+        {
+            return new LocalTargetInfo(impactHitThing);
+        }
+
         if (currentTarget.Thing != null && !currentTarget.Thing.Destroyed)
         {
             return currentTarget;
         }
 
         return impactCell.IsValid ? new LocalTargetInfo(impactCell) : currentTarget;
+    }
+
+    private static ProjectileImpactResultKind ResolveCapturedImpactResult(Thing hitThing, bool blockedByShield)
+    {
+        if (blockedByShield)
+        {
+            return ProjectileImpactResultKind.ShieldBlocked;
+        }
+
+        return hitThing != null ? ProjectileImpactResultKind.HitThing : ProjectileImpactResultKind.ImpactNoThing;
+    }
+
+    private enum ProjectileImpactResultKind
+    {
+        Pending,
+        HitThing,
+        ShieldBlocked,
+        ImpactNoThing,
+        Destroyed,
+        Timeout
     }
 
     private sealed class ProjectileImpactActionPath : IExposable

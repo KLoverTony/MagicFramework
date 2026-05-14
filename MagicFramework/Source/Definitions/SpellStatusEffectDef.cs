@@ -11,6 +11,7 @@ public class SpellStatusEffectDef : Def
     public int durationTicks = 300;
     public ScalableFloatDef scalableDurationTicks;
     public List<string> categories = new();
+    public SpellStatusRefreshPolicy refreshPolicy = SpellStatusRefreshPolicy.RefreshDuration;
     public SpellStatusCueDef statusCue;
     public List<SpellStatModifierDef> statModifiers = new();
     public List<SpellActionDef> onApplyActions = new();
@@ -22,4 +23,12 @@ public class SpellStatusEffectDef : Def
         statModifiers ??= new List<SpellStatModifierDef>();
         onApplyActions ??= new List<SpellActionDef>();
     }
+}
+
+public enum SpellStatusRefreshPolicy
+{
+    RefreshDuration,
+    IgnoreIfActive,
+    StackDuration,
+    Replace
 }

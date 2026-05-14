@@ -110,6 +110,8 @@
           <li Class="MagicFramework.Definitions.LaunchProjectileActionDef">
             <debugLabel>Fireball projectile</debugLabel>
             <projectileDef>Bullet_IncendiaryLauncher</projectileDef>
+            <launchOrigin>Caster</launchOrigin>
+            <targetSource>CurrentTarget</targetSource>
             <onImpactActions>
               <li Class="MagicFramework.Definitions.EffectActionDef">
                 <debugLabel>Fireball impact effect</debugLabel>

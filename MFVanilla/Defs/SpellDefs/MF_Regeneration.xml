@@ -112,6 +112,11 @@
             <debugLabel>Regeneration healing pulses</debugLabel>
             <intervalTicks>120</intervalTicks>
             <repeatCount>6</repeatCount>
+            <scalableRepeatCount>
+              <baseValue>6</baseValue>
+              <perPower>0.15</perPower>
+              <max>9</max>
+            </scalableRepeatCount>
             <includeImmediate>true</includeImmediate>
             <actions>
               <li Class="MagicFramework.Definitions.EffectActionDef">

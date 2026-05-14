@@ -88,17 +88,17 @@ This milestone adds gameplay depth once framework rules are stable.
 | --- | --- | --- | --- |
 | MF-010 Buff/debuff primitives | P2 | M | Reusable status defs are in place; remaining work is policy, scalars, and conversion cleanup. |
 | MF-014 Summon/spawn expansion | P2 | M | Opens wards, constructs, hazards, and beacons. |
-| MF-011 Projectile support | P2 | M | Improves combat feel and correctness. |
+| MF-011 Projectile support | P2 | M | Complete first pass; impact context, launch authoring, and vanilla-bound policy decisions are in place. |
 
 Implementation order:
 1. Finish the MF-010 follow-through: status categories, stacking/refresh policy, named scalars, and a small conversion pass for spells that benefit from premade statuses.
 2. Expand summon/spawn support for temporary objects, hazards, wards, and constructs.
-3. Improve projectile impact context after inspecting what RimWorld exposes cleanly.
+3. Projectile impact context is complete for the current vanilla projectile surface; reopen only for future content that needs custom projectile classes or per-launch arcing overrides.
 4. Waters Embrace SpellDrowningHediff is owned by the spell and fades immediately after the spell fades which is not the desired effect. Consider  giving SpellDrowningHediff its own decay behavior, and changing Water’s Embrace so it applies/increases/refreshes the hediff without scheduling spell-owned removal in the same way. Then the spell ending stops adding pressure, but the pawn still has to recover from what already happened.
 
 Smoke tests:
 - Spawn a temporary object/ward and confirm expiry/save/load cleanup.
-- Test projectile spells against pawn hits, misses, walls, shielded pawns, and cover interception if exposed.
+- Test projectile spells against pawn hits, misses, walls, shielded pawns, and cover-like interceptions during normal smoke passes.
 
 ## Milestone 5: Chain, Visual, And Event Expansion
 

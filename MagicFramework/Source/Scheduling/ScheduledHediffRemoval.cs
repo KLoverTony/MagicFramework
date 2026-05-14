@@ -27,6 +27,11 @@ public sealed class ScheduledHediffRemoval : IExposable
 
     public string DebugLabel => hediffDef?.defName ?? "<null hediff>";
 
+    public void ExtendBy(int ticks)
+    {
+        executeAtTick += ticks > 0 ? ticks : 1;
+    }
+
     public bool Matches(Pawn otherPawn, HediffDef otherHediffDef, string otherBodyPartDef)
     {
         return pawn == otherPawn
@@ -138,6 +143,34 @@ public sealed class HediffRemovalMapComponent : MapComponent
 
         scheduledRemovals.Insert(insertIndex, scheduledRemoval);
         return true;
+    }
+
+    public bool EnqueueOrExtend(ScheduledHediffRemoval scheduledRemoval, int extensionTicks)
+    {
+        if (scheduledRemoval == null)
+        {
+            return false;
+        }
+
+        scheduledRemovals ??= new List<ScheduledHediffRemoval>();
+        for (int i = scheduledRemovals.Count - 1; i >= 0; i--)
+        {
+            ScheduledHediffRemoval existingRemoval = scheduledRemovals[i];
+            if (existingRemoval == null)
+            {
+                scheduledRemovals.RemoveAt(i);
+                continue;
+            }
+
+            if (scheduledRemoval.Matches(existingRemoval))
+            {
+                scheduledRemovals.RemoveAt(i);
+                existingRemoval.ExtendBy(extensionTicks);
+                return Enqueue(existingRemoval);
+            }
+        }
+
+        return Enqueue(scheduledRemoval);
     }
 
     public override void MapComponentTick()

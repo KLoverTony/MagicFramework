@@ -65,6 +65,7 @@
       <li>debuff</li>
       <li>physical</li>
     </categories>
+    <refreshPolicy>Replace</refreshPolicy>
     <durationTicks>300</durationTicks>
     <statusCue>
       <hediffDef>MF_Weakened</hediffDef>

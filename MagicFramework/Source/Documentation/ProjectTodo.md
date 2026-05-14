@@ -21,7 +21,6 @@ Priority key:
 | --- | --- | --- | --- | --- |
 | MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support. |
 | MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives beyond direct stat modifiers. |
-| MF-011 | P2 | M | Projectiles | Improve projectile impact context and launch authoring. |
 | MF-012 | P2 | L | Chains | Generalize delayed branching chain support. |
 | MF-014 | P2 | M | Summons | Extend summon/spawn primitives beyond temporary trained creatures. |
 | MF-016 | P2 | S | UI | Add a player-facing spell details UI concept or first pass. |
@@ -33,7 +32,6 @@ Priority key:
 | MF-025 | P3 | M | Events | Add celestial event enhancement rules and gameplay hooks. |
 | MF-026 | P3 | M | Visuals | Continue persistent visual support. |
 | MF-027 | P3 | S | Content | Add future validation spell gizmo icons as spells are added. |
-| MF-028 | P3 | S | Design | Review which common statuses deserve dedicated primitives after reusable status adoption. |
 | MF-029 | P3 | M | Fire | Investigate real RimWorld fire integration for `Wall of Fire`. |
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
 | MF-031 | P3 | L | Docs | Write a full MagicFramework spell design guide. |
@@ -62,17 +60,17 @@ Current state:
 - Magic Framework mod settings expose global per-power scaling factors for lightweight scaled attributes.
 - Explicit `SpellPowerScalarDef` entries remain available for spell-specific tuning and take precedence over lightweight global scaling.
 - `PowerTierConditionDef` and `SpellPowerConditionDef` support structural spell changes through conditionals.
-- Scalable support exists for damage, healing, explosion radius/damage, targeting range, spawned thing count, durations, and several validation spells.
+- Scalable support exists for damage, healing, explosion radius/damage, targeting range, spawned thing count, durations, repeat/pulse count, displacement distance, and several validation spells.
 - `MF_Firebolt` now validates lightweight damage/cooldown scaling.
 - `MF_Fireball` now validates lightweight damage/radius scaling.
 - MFVanilla healing, lightning, rune, trap, and fire-field spells now use lightweight `scaledAttributes` where caster level should affect damage, healing, radius, or duration.
+- `MF_Regeneration` now validates scalable repeat/pulse count.
+- `MF_ForcePush` and `MF_ForcePull` now validate scalable displacement distance.
 - `MF_Regeneration` now has a reusable visible regeneration status cue while retaining its repeated healing pulses.
 
 Candidate additions:
 - finish auditing remaining MFVanilla spells that need new scalar targets rather than the current damage/healing/radius/duration/cost/cooldown list
 - add player-facing display of the active global scaling factors where useful
-- scalable repeat count or pulse count for regeneration, auras, and repeated effects
-- scalable displacement distance for push/pull spells
 - scalable summon duration, summon count, or tiered summon selection
 - shield-specific scaling for sustained mana upkeep, absorption efficiency, and force-field strength
 - scalable target count for chains, bursts, and multi-target spells
@@ -96,44 +94,34 @@ Current state:
 - `TimedStatusEffectActionDef` can apply a visible timed status wrapper, run `onApplyActions`, schedule `onExpireActions`, replace prior caster/spell instances, and clean up its status cue.
 - `SpellStatusEffectDef` plus `ApplyStatusEffectActionDef` supports reusable premade status bundles with default duration, status cue, stat modifiers, and immediate `onApplyActions`.
 - `SpellStatusEffectDef.categories` supports lightweight reusable status metadata such as `buff`, `debuff`, `control`, `healing`, `movement`, and elemental/family tags.
+- `SpellStatusEffectDef.refreshPolicy` supports `RefreshDuration`, `IgnoreIfActive`, `StackDuration`, and `Replace` behavior for reusable statuses.
 - Sustained stat modifiers can reference `SpellStatusEffectDef` payloads while preserving maintenance and break behavior.
-- Generated spell summaries include reusable status categories when authored.
+- Generated spell summaries include reusable status categories and non-default refresh policies when authored.
 - `MF_Haste`, `MF_Might`, Might backlash, `MF_BlessingOfVigor`, `MF_Freeze`, and `MF_WatersEmbrace` now use reusable premade status defs in MFVanilla where the effect is a simple timed stat/status bundle.
-- MFVanilla reusable status defs now classify their buff/debuff/control/healing/movement families with `categories`.
+- MFVanilla reusable status defs now classify their buff/debuff/control/healing/movement families with `categories` and validate replace/ignore refresh behavior.
+- Dedicated common status review is complete for the current authoring surface: `StunActionDef` remains the only dedicated control primitive for now; root/immobilize, silence, charm, and ignite should stay as reusable status/hediff/action compositions until content proves repeated authoring or cleanup complexity.
 
 Candidates:
-- stacking and refresh policies for reusable statuses
 - named parameters/scalars for reusable status defs
 - reusable status expiry actions once scheduled actions can target def-owned action trees
 - broader conversion pass for existing authored stat/status spells where reuse makes XML clearer
 - capacity modifiers
 - accuracy, dodge, armor, casting-speed modifiers
-- root/immobilize, silence, charm, stun, ignite as dedicated primitives if authoring proves repetitive
 - status cleanup groups, immunity checks, and visible player-facing explanations
-
-### MF-011 Projectile Support
-
-Goal: make projectile spells feel like real RimWorld combat objects without losing spell context.
-
-Current state:
-- `LaunchProjectileActionDef` launches vanilla projectiles.
-- Impact actions run after projectile impact/destruction/timeout.
-- Impact context resolves to the projectile's last known cell.
-
-Remaining work:
-- Capture exact hit thing where RimWorld exposes it.
-- Account for misses, cover interception, and shield blocking.
-- Add richer authored launch origins and arcing/overhead policy.
-- Consider custom spell projectile classes only when vanilla projectiles cannot expose enough context.
 
 ### MF-012 Branching Chains
 
 Goal: generalize `ChainLightningActionDef` into reusable delayed chain state.
 
+Current state:
+- `ChainLightningActionDef` supports delayed branching chain pulses with authored per-hit actions.
+- Chain pulses preserve the originating spell seed through save/load.
+- Gameplay random decisions now use `SpellDeterministicRandom`, a stable hash-based utility, instead of ambient `Rand`.
+- Chain branch count, target shuffling, fallback stun chance, random-chance conditions, random teleport cells, and explosion spawn rolls/cells are deterministic from explicit spell/gameplay state.
+
 Future needs:
 - authored per-hop action lists
 - visited-target policies shared with target queries
-- deterministic seeded random branching
 - configurable branching count, forward bias, falloff, and target caps
 - richer beam/arc visuals between targets
 
@@ -281,21 +269,6 @@ Goal: add custom gizmo icons for future validation spells as they are added.
 Current wired icons include:
 - `MF_ArcSeeker`, `MF_BlessingOfVigor`, `MF_BlinkStep`, `MF_ChainLightning`, `MF_CreateFood`, `MF_DelayedBlastRune`, `MF_Disintegrate`, `MF_Fireball`, `MF_Firebolt`, `MF_FlameField`, `MF_ForceField`, `MF_ForcePull`, `MF_ForcePush`, `MF_Haste`, `MF_Heal`, `MF_ManaShield`, `MF_Might`, `MF_Regeneration`, `MF_RuneTrap`, `MF_SummonDog`, and `MF_WallOfFire`.
 
-### MF-028 Dedicated Common Status Primitive Review
-
-Goal: review which common effects still deserve first-class action defs after the reusable status-def layer matures.
-
-Candidates:
-- ignite
-- stun
-- charm
-- silence
-- root / immobilize
-
-Decision rule:
-- Prefer `SpellStatusEffectDef` for reusable stat/status bundles.
-- Add a dedicated primitive when authoring repeats, cleanup is subtle, or RimWorld behavior needs a wrapper.
-
 ### MF-029 Real Fire Integration For Wall Of Fire
 
 Goal: decide whether `Wall of Fire` should use real RimWorld fire objects or remain a custom magical hazard.
@@ -337,8 +310,13 @@ Target coverage:
 
 Goal: Gate any mechanisms that would not be supported in multiplayer mods
 
+Current state:
+ - `SpellDeterministicRandom` provides stable hash-derived values for gameplay decisions that need random-looking behavior.
+ - Current MagicFramework gameplay calls no longer use ambient `Rand`; visual-only or vanilla-internal randomness may still occur outside framework-owned decisions.
+ - New framework-owned gameplay code should prefer `SpellDeterministicRandom` whenever it needs chance rolls, random ranges, random selection, or shuffling.
+
 Target coverage:
- - using System.Random, UnityEngine.Random, or time-based randomness without Multiplayer-safe syncing.
+ - using `Verse.Rand`, `System.Random`, `UnityEngine.Random`, random collection helpers, or time-based randomness without Multiplayer-safe syncing.
  - depending on real time, frame rate, local UI timing, thread timing, or machine-specific order.
  - changing game state from UI code.
  - running logic only on one client.

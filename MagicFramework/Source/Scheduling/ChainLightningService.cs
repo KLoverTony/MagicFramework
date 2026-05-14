@@ -45,6 +45,7 @@ public sealed class ChainLightningService
             initialTarget.Position,
             currentTick,
             0,
+            context.randomSeed,
             actionPath));
     }
 
@@ -63,7 +64,7 @@ public sealed class ChainLightningService
 
         Thing sourceThing = pulse.SourceThing != null && !pulse.SourceThing.Destroyed ? pulse.SourceThing : null;
         IntVec3 sourceCell = pulse.SourceCell.IsValid ? pulse.SourceCell : sourceThing?.Position ?? pulse.Caster?.Position ?? pulse.TargetThing.Position;
-        SpellContext pulseContext = BuildEnhancementContext(map, pulse.Caster, pulse.SpellDef);
+        SpellContext pulseContext = BuildEnhancementContext(map, pulse.Caster, pulse.SpellDef, pulse.RandomSeed);
         StrikeTarget(pulseContext, sourceThing, sourceCell, pulse.TargetThing, actionDef);
 
         if (pulse.HopIndex >= actionDef.maxHops)
@@ -71,7 +72,7 @@ public sealed class ChainLightningService
             return;
         }
 
-        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, pulse.SpellDef, sourceCell, pulse.TargetThing, actionDef);
+        List<Thing> nextTargets = FindNextTargets(map, pulse.Caster, pulse.SpellDef, sourceCell, pulse.TargetThing, actionDef, pulse);
         if (nextTargets.Count == 0)
         {
             return;
@@ -91,6 +92,7 @@ public sealed class ChainLightningService
                 nextTargets[i].Position,
                 executeAtTick,
                 pulse.HopIndex + 1,
+                pulse.RandomSeed,
                 pulse.ActionPath));
         }
     }
@@ -112,7 +114,7 @@ public sealed class ChainLightningService
                 initialTarget = new LocalTargetInfo(targetThing),
                 currentTarget = new LocalTargetInfo(targetThing),
                 currentCell = targetThing.Position,
-                randomSeed = Find.TickManager?.TicksGame ?? 0
+                randomSeed = pulseContext?.randomSeed ?? 0
             };
             hitContext.currentTargets.Add(hitContext.currentTarget);
             hitContext.executionState.costsApplied = true;
@@ -125,7 +127,11 @@ public sealed class ChainLightningService
             DamageInfo damageInfo = new(damageDef, damageAmount, actionDef.armorPenetration, instigator: caster);
             targetThing.TakeDamage(damageInfo);
 
-            if (targetThing is Pawn targetPawn && actionDef.stunChance > 0f && Rand.Chance(actionDef.stunChance))
+            if (targetThing is Pawn targetPawn && actionDef.stunChance > 0f && SpellDeterministicRandom.Chance(
+                    actionDef.stunChance,
+                    SpellDeterministicRandom.Append(
+                        SpellDeterministicRandom.ContextSalt(pulseContext, "ChainLightningFallbackStun"),
+                        SpellDeterministicRandom.StableThingId(targetThing))))
             {
                 targetPawn.stances?.stunner?.StunFor(actionDef.stunTicks > 0 ? actionDef.stunTicks : 1, caster);
                 SpawnFleck(map, targetPawn.DrawPos, actionDef.stunFleckDef, 1f);
@@ -144,11 +150,11 @@ public sealed class ChainLightningService
         }
     }
 
-    private static List<Thing> FindNextTargets(Map map, Thing caster, SpellDef spellDef, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef)
+    private static List<Thing> FindNextTargets(Map map, Thing caster, SpellDef spellDef, IntVec3 sourceCell, Thing currentThing, ChainLightningActionDef actionDef, ChainLightningPulse pulse)
     {
         List<Thing> candidates = new();
         Vector2 forward = ResolveForward(caster, sourceCell, currentThing);
-        SpellContext filterContext = BuildEnhancementContext(map, caster, spellDef);
+        SpellContext filterContext = BuildEnhancementContext(map, caster, spellDef, pulse?.RandomSeed ?? 0);
         float jumpRadius = SpellEnhancementUtility.ResolveRadius(filterContext, actionDef.jumpRadius);
         foreach (Thing thing in map.listerThings?.AllThings ?? new List<Thing>())
         {
@@ -189,18 +195,34 @@ public sealed class ChainLightningService
             return candidates;
         }
 
-        Shuffle(candidates);
+        object[] chainSalt = SpellDeterministicRandom.Append(
+            SpellDeterministicRandom.ContextSalt(filterContext, "ChainLightningBranching"),
+            pulse?.HopIndex ?? 0,
+            SpellDeterministicRandom.StableThingId(currentThing),
+            SpellDeterministicRandom.StableCellId(sourceCell));
+        SpellDeterministicRandom.Shuffle(candidates, chainSalt);
         candidates.Sort((left, right) =>
         {
             float leftScore = TargetQueryUtility.ForwardScore(currentThing.Position, left.Position, forward);
             float rightScore = TargetQueryUtility.ForwardScore(currentThing.Position, right.Position, forward);
             int scoreCompare = rightScore.CompareTo(leftScore);
-            return scoreCompare != 0 ? scoreCompare : left.Position.DistanceTo(currentThing.Position).CompareTo(right.Position.DistanceTo(currentThing.Position));
+            if (scoreCompare != 0)
+            {
+                return scoreCompare;
+            }
+
+            int distanceCompare = left.Position.DistanceTo(currentThing.Position).CompareTo(right.Position.DistanceTo(currentThing.Position));
+            if (distanceCompare != 0)
+            {
+                return distanceCompare;
+            }
+
+            return SpellDeterministicRandom.StableThingId(left).CompareTo(SpellDeterministicRandom.StableThingId(right));
         });
 
         int minBranches = Mathf.Max(1, actionDef.minBranches);
         int maxBranches = Mathf.Max(minBranches, actionDef.maxBranches);
-        int desiredCount = Rand.RangeInclusive(minBranches, maxBranches);
+        int desiredCount = SpellDeterministicRandom.RangeInclusive(minBranches, maxBranches, SpellDeterministicRandom.Append(chainSalt, "desiredCount"));
         int takeCount = Mathf.Min(desiredCount, candidates.Count);
         if (!actionDef.allowRepeatTargets)
         {
@@ -216,13 +238,14 @@ public sealed class ChainLightningService
         return results;
     }
 
-    private static SpellContext BuildEnhancementContext(Map map, Thing caster, SpellDef spellDef)
+    private static SpellContext BuildEnhancementContext(Map map, Thing caster, SpellDef spellDef, int randomSeed = 0)
     {
         return new SpellContext
         {
             caster = caster,
             map = map,
-            spellDef = spellDef
+            spellDef = spellDef,
+            randomSeed = randomSeed
         };
     }
 
@@ -255,9 +278,9 @@ public sealed class ChainLightningService
         {
             float t = i / (float)steps;
             Vector3 point = Vector3.Lerp(source, target, t);
-            point.x += Rand.Range(-0.20f, 0.20f);
-            point.z += Rand.Range(-0.20f, 0.20f);
-            SpawnFleck(map, point, actionDef.lineFleckDef, Rand.Range(0.75f, 1.15f));
+            point.x += SpellDeterministicRandom.Range(-0.20f, 0.20f, "ChainLightningVisualX", SpellDeterministicRandom.StableThingId(targetThing), i, steps);
+            point.z += SpellDeterministicRandom.Range(-0.20f, 0.20f, "ChainLightningVisualZ", SpellDeterministicRandom.StableThingId(targetThing), i, steps);
+            SpawnFleck(map, point, actionDef.lineFleckDef, SpellDeterministicRandom.Range(0.75f, 1.15f, "ChainLightningVisualScale", SpellDeterministicRandom.StableThingId(targetThing), i, steps));
             if (i % 3 == 0)
             {
                 SpawnFleck(map, Vector3.Lerp(previousPoint, point, 0.5f), "MicroSparksFast", 0.7f);
@@ -298,12 +321,4 @@ public sealed class ChainLightningService
         return DamageDefOf.Burn;
     }
 
-    private static void Shuffle<T>(List<T> list)
-    {
-        for (int i = list.Count - 1; i > 0; i--)
-        {
-            int swapIndex = Rand.RangeInclusive(0, i);
-            (list[i], list[swapIndex]) = (list[swapIndex], list[i]);
-        }
-    }
 }

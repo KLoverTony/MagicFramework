@@ -35,6 +35,32 @@ public sealed class ProjectileImpactMapComponent : MapComponent
         return true;
     }
 
+    public bool NotifyProjectileImpact(Projectile projectile, Thing hitThing, bool blockedByShield)
+    {
+        if (projectile == null || pendingImpacts == null)
+        {
+            return false;
+        }
+
+        for (int i = pendingImpacts.Count - 1; i >= 0; i--)
+        {
+            PendingProjectileImpact pendingImpact = pendingImpacts[i];
+            if (pendingImpact == null)
+            {
+                pendingImpacts.RemoveAt(i);
+                continue;
+            }
+
+            if (pendingImpact.Projectile == projectile)
+            {
+                pendingImpact.MarkImpact(hitThing, blockedByShield);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public override void MapComponentTick()
     {
         if (pendingImpacts == null || pendingImpacts.Count == 0)

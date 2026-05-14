@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using HarmonyLib;
 using MagicFramework.Definitions;
 using MagicFramework.Debug;
+using MagicFramework.Scheduling;
 using RimWorld;
 using Verse;
 
@@ -19,6 +20,7 @@ public static class MagicFrameworkHarmony
         PatchStatValueHook(harmony);
         PatchDamageHook(harmony);
         PatchPawnDrawHook(harmony);
+        PatchProjectileImpactHook(harmony);
         harmony.PatchAll();
         Log.Message("[MagicFramework] Harmony patches applied.");
     }
@@ -81,6 +83,31 @@ public static class MagicFrameworkHarmony
     public static void DrawSpellForceFieldOverlayPostfix(Pawn __instance, UnityEngine.Vector3 drawLoc, bool flip = false)
     {
         SpellRuntimeGameComponent.Instance?.DrawForceFieldOverlay(__instance, drawLoc);
+    }
+
+    private static void PatchProjectileImpactHook(Harmony harmony)
+    {
+        var postfix = new HarmonyMethod(typeof(MagicFrameworkHarmony).GetMethod(nameof(CaptureProjectileImpactPostfix)));
+        PatchProjectileImpactMethod(harmony, typeof(Projectile), postfix);
+        PatchProjectileImpactMethod(harmony, typeof(Projectile_Explosive), postfix);
+    }
+
+    private static void PatchProjectileImpactMethod(Harmony harmony, System.Type projectileType, HarmonyMethod postfix)
+    {
+        var impactMethod = AccessTools.Method(projectileType, "Impact", new[] { typeof(Thing), typeof(bool) });
+        if (impactMethod != null)
+        {
+            harmony.Patch(impactMethod, postfix: postfix);
+            return;
+        }
+
+        Log.Warning($"[MagicFramework] Could not locate {projectileType.Name}.Impact for spell projectile context patching.");
+    }
+
+    public static void CaptureProjectileImpactPostfix(Projectile __instance, Thing hitThing, bool blockedByShield = false)
+    {
+        Map map = __instance?.MapHeld ?? __instance?.Map;
+        map?.GetComponent<ProjectileImpactMapComponent>()?.NotifyProjectileImpact(__instance, hitThing, blockedByShield);
     }
 }
 

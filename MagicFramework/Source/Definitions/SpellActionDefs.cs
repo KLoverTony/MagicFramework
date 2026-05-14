@@ -443,6 +443,7 @@ public sealed class MoveStoneChunksActionDef : SpellActionDef
 public sealed class KnockbackActionDef : SpellActionDef
 {
     public int distance = 3;
+    public ScalableFloatDef scalableDistance;
     public bool requireStandableDestination = true;
     public bool requireWalkableDestination = true;
     public bool allowHitCasterCell;
@@ -460,6 +461,7 @@ public sealed class KnockbackActionDef : SpellActionDef
 public sealed class PullActionDef : SpellActionDef
 {
     public int distance = 3;
+    public ScalableFloatDef scalableDistance;
     public bool requireStandableDestination = true;
     public bool requireWalkableDestination = true;
     public int minDistanceFromCaster = 1;
@@ -474,6 +476,7 @@ public sealed class MovePawnTowardPointActionDef : SpellActionDef
 {
     public TargetQueryCenterSource centerSource = TargetQueryCenterSource.CurrentCell;
     public int distance = 1;
+    public ScalableFloatDef scalableDistance;
     public int minDistanceFromCenter;
     public bool requireStandableDestination = true;
     public bool requireWalkableDestination = true;
@@ -903,6 +906,8 @@ public sealed class SpawnedFilthEntry
 public sealed class LaunchProjectileActionDef : SpellActionDef
 {
     public string projectileDef;
+    public ProjectileLaunchOriginSource launchOrigin = ProjectileLaunchOriginSource.Caster;
+    public ProjectileTargetSource targetSource = ProjectileTargetSource.CurrentTarget;
     public ProjectileHitFlags hitFlags = ProjectileHitFlags.All;
     public bool preventFriendlyFire;
     public int impactTimeoutPaddingTicks = 60;
@@ -911,6 +916,20 @@ public sealed class LaunchProjectileActionDef : SpellActionDef
     public override IEnumerable<SpellActionDef> GetChildActions() => onImpactActions;
 
     public override SpellActionWorker CreateWorker() => new LaunchProjectileActionWorker();
+}
+
+public enum ProjectileLaunchOriginSource
+{
+    Caster,
+    CurrentTarget,
+    CurrentCell
+}
+
+public enum ProjectileTargetSource
+{
+    CurrentTarget,
+    CurrentCell,
+    Caster
 }
 
 /// <summary>

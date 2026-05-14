@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Targeting;
 using Verse;
@@ -216,7 +217,7 @@ public sealed class RandomChanceConditionWorker : SpellConditionWorker
         RandomChanceConditionDef chanceDef = conditionDef as RandomChanceConditionDef;
         float chance = chanceDef?.chance ?? 1f;
         chance = chance < 0f ? 0f : chance > 1f ? 1f : chance;
-        return Rand.Chance(chance);
+        return SpellDeterministicRandom.Chance(chance, SpellDeterministicRandom.ContextSalt(context, "RandomChanceCondition"));
     }
 }
 
