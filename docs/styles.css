@@ -399,6 +399,54 @@ dd {
   font-size: 1.06rem;
 }
 
+.author-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.resource-card {
+  display: block;
+  min-height: 154px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: var(--shadow);
+}
+
+.resource-card:hover {
+  border-color: var(--gold);
+}
+
+.resource-card span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--green);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.resource-card strong,
+.resource-card small {
+  display: block;
+}
+
+.resource-card strong {
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 1.12rem;
+}
+
+.resource-card small {
+  color: var(--muted);
+}
+
 .site-footer {
   justify-content: space-between;
   gap: 18px;
@@ -424,7 +472,8 @@ dd {
   .feature-grid,
   .mod-grid,
   .tool-callout,
-  .load-order {
+  .load-order,
+  .author-resource-grid {
     grid-template-columns: 1fr;
   }
 

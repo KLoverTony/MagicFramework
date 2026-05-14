@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MagicFramework spell authoring guide for RimWorld mod authors.">
+  <title>MagicFramework Spell Design Guide</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    .guide-shell {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      gap: clamp(24px, 4vw, 56px);
+      padding: clamp(36px, 6vw, 78px) clamp(18px, 5vw, 72px);
+    }
+
+    .guide-nav {
+      position: sticky;
+      top: 88px;
+      align-self: start;
+      display: grid;
+      gap: 10px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .guide-nav a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .guide-nav a:hover {
+      color: var(--gold);
+    }
+
+    .guide-content {
+      max-width: 980px;
+    }
+
+    .guide-content section {
+      scroll-margin-top: 92px;
+      margin-bottom: clamp(42px, 6vw, 76px);
+    }
+
+    .guide-content h1 {
+      font-size: clamp(2.7rem, 6vw, 5.2rem);
+    }
+
+    .guide-card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .guide-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+    }
+
+    .guide-card span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .guide-card p {
+      color: var(--muted);
+    }
+
+    .guide-code {
+      overflow: auto;
+      padding: 18px;
+      border: 1px solid #303840;
+      border-radius: 8px;
+      background: #0f1115;
+      color: #cdd6f4;
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
+    .field-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+    }
+
+    .field-table th,
+    .field-table td {
+      padding: 12px;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .field-table th {
+      color: var(--green);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      .guide-shell,
+      .guide-card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .guide-nav {
+        position: static;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../index.html" aria-label="Oracle RimWorld Mods home">
+      <img src="../assets/magic-framework-icon.png" alt="">
+      <span>Oracle RimWorld Mods</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="../index.html#framework">Framework</a>
+      <a href="../index.html#tools">Tools</a>
+      <a href="../spell-def-builder/index.html">SpellForge</a>
+      <a href="#top">Guide</a>
+    </nav>
+  </header>
+
+  <main id="top" class="guide-shell">
+    <aside class="guide-nav" aria-label="Guide sections">
+      <a href="#start">Start Here</a>
+      <a href="#first-direct-spell-minor-heal">Minor Heal</a>
+      <a href="#first-projectile-spell-ember-bolt">Ember Bolt</a>
+      <a href="#direct-versus-projectile-actions">Direct vs Projectile</a>
+      <a href="#spelldef-anatomy">SpellDef Anatomy</a>
+      <a href="#builder-integration">Builder Integration</a>
+      <a href="../spell-def-builder/index.html">Open SpellForge</a>
+    </aside>
+
+    <article class="guide-content">
+      <section id="start">
+        <p class="eyebrow">MF-031 Author Guide</p>
+        <h1>MagicFramework Spell Design Guide</h1>
+        <p>
+          MagicFramework spells are RimWorld XML defs built from targeting rules, costs,
+          requirements, and composable action trees. Start with one of the small examples,
+          then move into the reference sections when you need more control.
+        </p>
+        <div class="guide-card-grid">
+          <a class="resource-card" href="#first-direct-spell-minor-heal">
+            <span>First Spell</span>
+            <strong>Minor Heal</strong>
+            <small>Validate an allied pawn, pay mana, start cooldown, and heal immediately.</small>
+          </a>
+          <a class="resource-card" href="#first-projectile-spell-ember-bolt">
+            <span>Projectile</span>
+            <strong>Ember Bolt</strong>
+            <small>Launch now, then run impact actions after the projectile resolves.</small>
+          </a>
+          <a class="resource-card" href="#spelldef-anatomy">
+            <span>Reference</span>
+            <strong>SpellDef Anatomy</strong>
+            <small>Learn the top-level sections that shape a spell.</small>
+          </a>
+          <a class="resource-card" href="../spell-def-builder/index.html">
+            <span>Builder</span>
+            <strong>Open SpellForge</strong>
+            <small>Use the browser builder to generate starter XML.</small>
+          </a>
+        </div>
+      </section>
+
+      <section id="first-direct-spell-minor-heal">
+        <p class="eyebrow">First Direct Spell</p>
+        <h2>Minor Heal</h2>
+        <p>
+          A direct spell validates a target, pays costs, and runs actions immediately against
+          that target. This example heals an allied pawn and allows self-casting.
+        </p>
+        <pre class="guide-code"><code>&lt;MagicFramework.Definitions.SpellDef&gt;
+  &lt;defName&gt;Example_MinorHeal&lt;/defName&gt;
+  &lt;label&gt;minor heal&lt;/label&gt;
+  &lt;description&gt;Restores a small amount of health to an allied pawn.&lt;/description&gt;
+  &lt;range&gt;12&lt;/range&gt;
+  &lt;castTimeTicks&gt;25&lt;/castTimeTicks&gt;
+
+  &lt;targeting&gt;
+    &lt;shape&gt;Single&lt;/shape&gt;
+    &lt;primaryTargetType&gt;Pawn&lt;/primaryTargetType&gt;
+    &lt;pawnAffinity&gt;Ally&lt;/pawnAffinity&gt;
+    &lt;allowSelfTarget&gt;true&lt;/allowSelfTarget&gt;
+    &lt;requireLineOfSight&gt;true&lt;/requireLineOfSight&gt;
+    &lt;range&gt;12&lt;/range&gt;
+  &lt;/targeting&gt;
+
+  &lt;requirements&gt;
+    &lt;li Class="MagicFramework.Definitions.ManaRequirementDef"&gt;
+      &lt;amount&gt;6&lt;/amount&gt;
+    &lt;/li&gt;
+    &lt;li Class="MagicFramework.Definitions.CooldownRequirementDef"&gt;
+      &lt;cooldownTicks&gt;120&lt;/cooldownTicks&gt;
+    &lt;/li&gt;
+  &lt;/requirements&gt;
+
+  &lt;costs&gt;
+    &lt;li Class="MagicFramework.Definitions.ManaCostDef"&gt;
+      &lt;amount&gt;6&lt;/amount&gt;
+    &lt;/li&gt;
+    &lt;li Class="MagicFramework.Definitions.CooldownCostDef"&gt;
+      &lt;cooldownTicks&gt;120&lt;/cooldownTicks&gt;
+    &lt;/li&gt;
+  &lt;/costs&gt;
+
+  &lt;actions&gt;
+    &lt;li Class="MagicFramework.Definitions.HealActionDef"&gt;
+      &lt;amount&gt;10&lt;/amount&gt;
+    &lt;/li&gt;
+  &lt;/actions&gt;
+&lt;/MagicFramework.Definitions.SpellDef&gt;</code></pre>
+        <p>
+          Change `HealActionDef.amount` for strength, `targeting.range` for reach,
+          and the mana/cooldown requirement and cost pairs for balance.
+        </p>
+      </section>
+
+      <section id="first-projectile-spell-ember-bolt">
+        <p class="eyebrow">First Projectile Spell</p>
+        <h2>Ember Bolt</h2>
+        <p>
+          Projectile spells launch an authored projectile now and run `onImpactActions` later.
+          Put hit-dependent effects under `onImpactActions`, not beside the projectile action.
+        </p>
+        <pre class="guide-code"><code>&lt;li Class="MagicFramework.Definitions.LaunchProjectileActionDef"&gt;
+  &lt;projectileDef&gt;Bullet_Revolver&lt;/projectileDef&gt;
+  &lt;launchOrigin&gt;Caster&lt;/launchOrigin&gt;
+  &lt;targetSource&gt;CurrentTarget&lt;/targetSource&gt;
+  &lt;onImpactActions&gt;
+    &lt;li Class="MagicFramework.Definitions.EffectActionDef"&gt;
+      &lt;effectDef&gt;GiantExplosion&lt;/effectDef&gt;
+      &lt;soundDef&gt;Explosion_Flame&lt;/soundDef&gt;
+      &lt;locationSource&gt;CurrentTarget&lt;/locationSource&gt;
+      &lt;attachToTarget&gt;true&lt;/attachToTarget&gt;
+    &lt;/li&gt;
+    &lt;li Class="MagicFramework.Definitions.DamageActionDef"&gt;
+      &lt;amount&gt;12&lt;/amount&gt;
+      &lt;damageDef&gt;Flame&lt;/damageDef&gt;
+    &lt;/li&gt;
+  &lt;/onImpactActions&gt;
+&lt;/li&gt;</code></pre>
+        <p>
+          `MF_Firebolt` in MF Vanilla is the production version of this pattern. It adds
+          research, caster level requirements, debug labels, spell power scaling, and tuning.
+        </p>
+      </section>
+
+      <section id="direct-versus-projectile-actions">
+        <p class="eyebrow">Core Mental Model</p>
+        <h2>Direct Versus Projectile Actions</h2>
+        <p>
+          Use a direct action when the effect should happen as soon as the cast completes.
+          Use projectile impact actions when the effect should wait for vanilla projectile
+          resolution.
+        </p>
+        <div class="guide-card-grid">
+          <div class="guide-card">
+            <span>Direct</span>
+            <h3>Immediate Payload</h3>
+            <p>`HealActionDef`, direct `DamageActionDef`, and most simple buffs run against the current target as soon as the spell executes.</p>
+          </div>
+          <div class="guide-card">
+            <span>Projectile</span>
+            <h3>Impact Payload</h3>
+            <p>`LaunchProjectileActionDef` stores its child payload under `onImpactActions` so effects happen only after the projectile reports an impact result.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="spelldef-anatomy">
+        <p class="eyebrow">Reference</p>
+        <h2>SpellDef Anatomy</h2>
+        <table class="field-table">
+          <thead>
+            <tr><th>Field</th><th>Purpose</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>`defName`</td><td>Stable unique identifier used by saves, references, generated scrolls, and other defs.</td></tr>
+            <tr><td>`label`</td><td>Player-facing spell name.</td></tr>
+            <tr><td>`description`</td><td>Player-facing description. Can include generated detail tokens such as `{MF:SpellSummary}`.</td></tr>
+            <tr><td>`range`</td><td>Default display and legacy range. Also set `targeting.range` for validation clarity.</td></tr>
+            <tr><td>`castTimeTicks`</td><td>Warmup duration before execution. `60` ticks is one in-game second.</td></tr>
+            <tr><td>`gizmoIconPath`</td><td>Texture path under `Textures`, without the file extension.</td></tr>
+            <tr><td>`meta`</td><td>Tier, elements, domains, disciplines, and tags for display and rule matching.</td></tr>
+            <tr><td>`learning`</td><td>Research and requirement gates for acquiring the spell.</td></tr>
+            <tr><td>`targeting`</td><td>Initial player targeter policy.</td></tr>
+            <tr><td>`requirements`</td><td>Cast-time checks such as mana, cooldown, Arcane gift, and caster level.</td></tr>
+            <tr><td>`costs`</td><td>Resources or state applied after validation succeeds.</td></tr>
+            <tr><td>`actions`</td><td>The execution tree that performs spell effects.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="builder-integration">
+        <p class="eyebrow">Browser Workflow</p>
+        <h2>Use The Guide With SpellForge</h2>
+        <p>
+          SpellForge should present this guide as example cards and field help rather than
+          duplicating a separate documentation source. Start from a pattern, generate XML,
+          then use the guide anchors for details and validation.
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="../spell-def-builder/index.html">Open SpellForge</a>
+          <a class="button secondary" href="https://github.com/KLoverTony/MagicFramework/blob/main/MagicFramework/Source/Documentation/SpellDesignGuide.md">Markdown Source</a>
+        </div>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <span>MagicFramework author documentation.</span>
+    <a href="../index.html">Back to home</a>
+  </footer>
+</body>
+</html>
