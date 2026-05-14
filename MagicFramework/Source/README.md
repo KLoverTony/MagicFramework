@@ -8,6 +8,11 @@ This folder contains the SDK-style C# project for the Magic Framework RimWorld 1
 - Authored validation spell XML lives in `Mods/MFVanilla/Defs/SpellDefs`; MagicFramework keeps framework code, runtime state, marker defs, procedural FX defs, and debug fallback spells.
 - The project uses Harmony for runtime patches and references RimWorld/Unity assemblies from the local Steam install.
 
+## Author Documentation
+
+- [Spell Design Guide](Documentation/SpellDesignGuide.md) is the MF-031 authoring guide for building MagicFramework spells.
+- [Targeting Policy](Documentation/TargetingPolicy.md) and [Lifecycle Hooks](Documentation/LifecycleHooks.md) provide focused reference material for two high-risk authoring areas.
+
 ## Requirements
 
 1. Install a .NET SDK with MSBuild support for `net472`.

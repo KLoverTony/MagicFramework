@@ -17,6 +17,18 @@ Priority key:
 
 ## Priority Index
 
+## Version 1 Wrap-Up
+
+MagicFramework and MFVanilla are now published on GitHub and Steam Workshop. The remaining version 1 work should focus on release hygiene, confidence testing, and author documentation rather than adding new framework surface area.
+
+Release-blocking checklist:
+- Confirm MagicFramework and MFVanilla `About.xml` dependency/download metadata points at the published Workshop pages.
+- Run a clean build for both assemblies and deploy the current output to the local RimWorld mod folders.
+- Smoke test the first-party validation spells that cover the stable authoring surface: projectile, explosion, heal, regeneration, chain, teleport/displacement, maintained shield, sustained stat buff, area aura, terrain patch, summon, rune/trap, and generated spell details.
+- Smoke test MFVanilla progression: research gates, Arcane Ink production, generated scroll recipes, scroll learning, spell details, and settings.
+- Capture any remaining known issues as non-blocking version 1 notes unless they affect startup, save/load, cleanup, or first-party spell usability.
+- Begin MF-031 documentation from the stable surface instead of waiting for later expansion tasks such as AI casting, magic equipment, real fire integration, or AeternusFaith follow-up systems.
+
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
 | MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support. |
@@ -294,7 +306,10 @@ Possible uses:
 Goal: write a complete authoring guide for MagicFramework spells.
 
 Sequencing note:
-- Do not start this until there are no further active MagicFramework framework to-dos, so the guide documents a stable authoring surface instead of chasing moving targets.
+- Start the version 1 guide now against the stable authoring surface. Later exploratory work should add appendices or follow-up sections instead of blocking the first published guide.
+
+Working document:
+- [SpellDesignGuide.md](SpellDesignGuide.md)
 
 Target coverage:
 - top-level `SpellDef` fields
@@ -306,6 +321,14 @@ Target coverage:
 - procedural FX metadata and explicit visual/sound actions
 - common spell patterns: projectile, delayed rune, trap, wall, aura, displacement, buff, debuff, summon
 - validation and regression expectations
+
+Documentation pass order:
+1. Establish the guide structure, terminology, and minimum viable spell example.
+2. Document `SpellDef` anatomy, targeting, requirements, costs, cooldowns, and learning.
+3. Document action tree execution context, target/cell sources, queries, conditions, and deterministic random expectations.
+4. Document persistent lifecycle hooks for zones, walls, force fields, persistent effects, triggers, summons, and spawned things.
+5. Document scaling, power tiers, enhancement rules, generated descriptions, details UI, and settings.
+6. Add pattern recipes for first-party MFVanilla examples and a final validation checklist.
 
 ### MF-032 Compatibility
 

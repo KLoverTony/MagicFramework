@@ -139,19 +139,23 @@ Smoke tests:
 
 ## Milestone 7: Late Expansion And Documentation
 
-These should wait until the framework surface is steadier.
+The version 1 framework surface is steady enough to begin author-facing documentation. Large expansion systems should remain future work, but the spell design guide should now document the current supported surface and call out deferred capabilities explicitly.
 
 | Task | Priority | Complexity | Reason |
 | --- | --- | --- | --- |
 | MF-028 Dedicated common status review | P3 | S | Revisit after reusable status defs prove which effects still need dedicated primitives. |
 | MF-024 Magic tools/weapons | P3 | L | May depend on common status and spell-container decisions. |
-| MF-031 Spell design guide | P3 | L | Should document a stable authoring surface. |
+| MF-031 Spell design guide | P3 | L | Version 1 documentation pass can begin from the stable authoring surface. |
 
 Recommended order:
-1. Review which statuses still deserve dedicated primitives.
-2. Explore magic tools and weapons.
-3. Write the full spell design guide after lifecycle, targeting, scaling, settings, and UI have settled.
+1. Write the version 1 spell design guide from the current lifecycle, targeting, scaling, settings, UI, and validation spell surface.
+2. Review which statuses still deserve dedicated primitives after guide gaps reveal repeated authoring friction.
+3. Explore magic tools and weapons as next-version design work.
 
 ## Recommended Next Step
 
-Finish the small MF-010 follow-through while the status system is fresh: document the reusable status authoring pattern, add simple category/stacking policy, and convert any obvious first-party stat/status spells where premade defs make the XML clearer.
+Finish version 1 release hygiene and start MF-031:
+- confirm published Workshop dependency/download metadata in both `About.xml` files
+- run clean builds and local deployment for MagicFramework and MFVanilla
+- smoke test the first-party validation spell suite plus MFVanilla research, scroll, and settings loops
+- draft [SpellDesignGuide.md](SpellDesignGuide.md) with `SpellDef` anatomy, targeting, action trees, lifecycle hooks, scaling, FX, generated descriptions, and validation recipes
