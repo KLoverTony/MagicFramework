@@ -318,6 +318,15 @@ public static class SpellDebugCasting
             Log.Warning($"[MagicFramework] Could not load gizmo icon '{spellDef.gizmoIconPath}' for {spellDef.defName ?? "<unknown spell>"}.");
         }
 
+        if (!string.IsNullOrWhiteSpace(spellDef?.defName))
+        {
+            Texture2D conventionIcon = ContentFinder<Texture2D>.Get($"UI/Gizmos/Spells/{spellDef.defName}", false);
+            if (conventionIcon != null)
+            {
+                return conventionIcon;
+            }
+        }
+
         return ContentFinder<Texture2D>.Get(fallbackIconPath, true);
     }
 

@@ -9,6 +9,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -54,6 +55,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -99,6 +101,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -144,6 +147,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -189,6 +193,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -234,6 +239,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_RunicInscription</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -279,6 +285,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_ArcaneSecrets</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -322,6 +329,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Geomancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -367,6 +375,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -412,6 +421,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -457,6 +467,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -502,6 +513,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_ArcaneSecrets</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -547,6 +559,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -592,6 +605,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -637,6 +651,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -682,6 +697,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -727,6 +743,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Vitalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -772,6 +789,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_ArcaneSecrets</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -817,6 +835,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -862,6 +881,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Vitalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -907,6 +927,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -952,6 +973,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -997,6 +1019,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Soulcraft</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1040,6 +1063,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_RunicInscription</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1085,6 +1109,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Summoning</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1130,6 +1155,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Spellcraft</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1175,6 +1201,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1220,6 +1247,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Transformation</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1265,6 +1293,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Vitalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1310,6 +1339,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1355,6 +1385,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aquamancy</researchPrerequisite>
     <ingredients>
       <li>
         <filter>

@@ -369,6 +369,64 @@ h3 {
     gap: 0.45rem;
 }
 
+.payload-check-field {
+    justify-content: flex-end;
+    min-height: 4.1rem;
+}
+
+.payload-check-field input {
+    width: 1rem;
+    min-height: 1rem;
+}
+
+.payload-check-field {
+    flex-direction: row !important;
+    align-items: center;
+}
+
+.def-select-field {
+    min-width: 0;
+}
+
+.def-select-field select {
+    cursor: pointer;
+}
+
+.custom-def-input {
+    margin-top: 0.15rem;
+}
+
+.status-cue-field {
+    grid-column: 1 / -1;
+    display: grid;
+    gap: 0.35rem;
+    padding: 0.85rem;
+    border: 1px solid rgba(76, 201, 240, 0.22);
+    border-radius: 8px;
+    background: rgba(76, 201, 240, 0.08);
+}
+
+.status-cue-field.is-hidden {
+    display: none;
+}
+
+.status-cue-field span {
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.status-cue-field strong {
+    color: #fff;
+}
+
+.status-cue-field small {
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
 label {
     color: var(--text-muted);
     font-size: 0.86rem;

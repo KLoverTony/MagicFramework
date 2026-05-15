@@ -11,13 +11,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const payloadToolbar = document.getElementById('payloadToolbar');
     const payloadStack = document.getElementById('payloadStack');
 
+    const customDefOption = '__new__';
+    const knownDefs = {
+        damageDef: ['Blunt', 'Flame', 'Burn', 'EMP', 'Bomb', 'Cut'],
+        statusEffectDef: [
+            'MFV_Status_Haste',
+            'MFV_Status_Might',
+            'MFV_Status_MightBacklashWeakness',
+            'MFV_Status_BlessedVigor',
+            'MFV_Status_Regenerating',
+            'MFV_Status_FrozenSlow',
+            'MFV_Status_WaterboundSlow'
+        ],
+        hediffDef: [
+            'Burn',
+            'MF_Hasted',
+            'MF_BlessedVigor',
+            'MF_Mighty',
+            'MF_Weakened',
+            'MF_ForceFielded',
+            'MF_ManaShielded',
+            'MF_Regenerating',
+            'MF_SharedEssence',
+            'MF_Frozen',
+            'MF_Waterbound',
+            'MF_HeldUnder'
+        ],
+        pawnKindDef: ['Husky']
+    };
+
+    const statusCueHediffs = {
+        MFV_Status_Haste: 'MF_Hasted',
+        MFV_Status_Might: 'MF_Mighty',
+        MFV_Status_MightBacklashWeakness: 'MF_Weakened',
+        MFV_Status_BlessedVigor: 'MF_BlessedVigor',
+        MFV_Status_Regenerating: 'MF_Regenerating',
+        MFV_Status_FrozenSlow: 'MF_Frozen',
+        MFV_Status_WaterboundSlow: 'MF_Waterbound'
+    };
+
     const payloadTypes = {
         damage: {
             title: 'Damage',
             summary: payload => `deal <strong>${escapeHtml(payload.amount)} ${escapeHtml(payload.damageDef)}</strong> damage`,
             fields: [
                 { key: 'amount', label: 'Damage Amount', type: 'number', step: '0.1' },
-                { key: 'damageDef', label: 'Damage Def', type: 'text' }
+                { key: 'damageDef', label: 'Damage Def', type: 'def', options: knownDefs.damageDef }
             ],
             defaults: { amount: 10, damageDef: 'Blunt' }
         },
@@ -41,26 +80,28 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Status',
             summary: payload => `apply status <strong>${escapeHtml(payload.statusEffectDef)}</strong>`,
             fields: [
-                { key: 'statusEffectDef', label: 'Status Effect Def', type: 'text' },
-                { key: 'durationTicks', label: 'Override Duration', type: 'number', step: '1' }
+                { key: 'statusEffectDef', label: 'Status Effect Def', type: 'def', options: knownDefs.statusEffectDef },
+                { key: 'durationTicks', label: 'Override Duration', type: 'number', step: '1' },
+                { key: 'showCue', label: 'Show Cue', type: 'checkbox' },
+                { key: 'statusCue', label: 'Visible Hediff Cue', type: 'statusCue' }
             ],
-            defaults: { statusEffectDef: 'MFV_Status_Haste', durationTicks: -1 }
+            defaults: { statusEffectDef: 'MFV_Status_Haste', durationTicks: -1, showCue: true }
         },
         hediff: {
             title: 'Hediff',
             summary: payload => `apply hediff <strong>${escapeHtml(payload.hediffDef)}</strong>`,
             fields: [
-                { key: 'hediffDef', label: 'Hediff Def', type: 'text' },
+                { key: 'hediffDef', label: 'Hediff Def', type: 'def', options: knownDefs.hediffDef },
                 { key: 'severity', label: 'Severity', type: 'number', step: '0.01' },
                 { key: 'durationTicks', label: 'Duration', type: 'number', step: '1' }
             ],
-            defaults: { hediffDef: 'MF_Burning', severity: 0.2, durationTicks: 0 }
+            defaults: { hediffDef: 'Burn', severity: 0.2, durationTicks: 0 }
         },
         summon: {
             title: 'Summon',
             summary: payload => `summon <strong>${escapeHtml(payload.pawnKindDef)}</strong> for <strong>${escapeHtml(payload.durationTicks)}</strong> ticks`,
             fields: [
-                { key: 'pawnKindDef', label: 'PawnKind Def', type: 'text' },
+                { key: 'pawnKindDef', label: 'PawnKind Def', type: 'def', options: knownDefs.pawnKindDef },
                 { key: 'durationTicks', label: 'Duration', type: 'number', step: '1' }
             ],
             defaults: { pawnKindDef: 'Husky', durationTicks: 2500 }
@@ -104,8 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 includeBuildings: true,
                 includeItems: true,
                 payloads: [
-                    { type: 'damage', amount: 10, damageDef: 'Flame' },
-                    { type: 'hediff', hediffDef: 'MF_Burning', severity: 0.2, durationTicks: 300 }
+                    { type: 'damage', amount: 10, damageDef: 'Flame' }
                 ],
                 targetRadius: 3.9,
                 manaCost: 20,
@@ -258,6 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('label').addEventListener('input', syncGeneratedDefs);
         payloadToolbar.addEventListener('click', addPayloadFromButton);
         payloadStack.addEventListener('input', handlePayloadInput);
+        payloadStack.addEventListener('change', handlePayloadInput);
         payloadStack.addEventListener('click', handlePayloadClick);
         viewXmlBtn.addEventListener('click', toggleXml);
         copyXmlBtn.addEventListener('click', copyXml);
@@ -322,7 +363,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const payload = currentPayloads.find(item => item.id === input.dataset.payloadId);
         if (!payload) return;
 
-        payload[input.dataset.payloadKey] = input.type === 'number' ? parseNumber(input.value) : input.value;
+        const field = getPayloadField(payload.type, input.dataset.payloadKey);
+        if (input.dataset.defSelect === 'true') {
+            const customKey = customDefFlagKey(input.dataset.payloadKey);
+            if (input.value === customDefOption) {
+                payload[customKey] = true;
+                payload[input.dataset.payloadKey] = customDefValue(payload, field);
+            } else {
+                delete payload[customKey];
+                payload[input.dataset.payloadKey] = input.value;
+            }
+            renderPayloadStack();
+            updatePreview();
+            return;
+        }
+
+        if (input.dataset.customDefInput === 'true') {
+            payload[customDefFlagKey(input.dataset.payloadKey)] = true;
+        }
+
+        if (input.type === 'checkbox') {
+            payload[input.dataset.payloadKey] = input.checked;
+        } else {
+            payload[input.dataset.payloadKey] = input.type === 'number' ? parseNumber(input.value) : input.value;
+        }
+        if (input.dataset.payloadKey === 'showCue') {
+            renderPayloadStack();
+        }
         updatePreview();
     }
 
@@ -342,17 +409,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPayloadStack() {
         payloadStack.innerHTML = currentPayloads.map((payload, index) => {
             const def = payloadTypes[payload.type];
-            const fields = def.fields.map(field => `
-                <label>
-                    <span>${field.label}</span>
-                    <input
-                        type="${field.type}"
-                        value="${escapeHtml(payload[field.key] ?? '')}"
-                        step="${field.step || ''}"
-                        data-payload-id="${payload.id}"
-                        data-payload-key="${field.key}">
-                </label>
-            `).join('');
+            const fields = def.fields.map(field => renderPayloadField(payload, field)).join('');
 
             return `
                 <article class="payload-card" data-payload-card="${payload.id}">
@@ -367,6 +424,98 @@ document.addEventListener('DOMContentLoaded', () => {
                 </article>
             `;
         }).join('');
+    }
+
+    function renderPayloadField(payload, field) {
+        if (field.type === 'def') {
+            return renderDefField(payload, field);
+        }
+
+        if (field.type === 'checkbox') {
+            return `
+                <label class="payload-check-field">
+                    <input
+                        type="checkbox"
+                        ${payload[field.key] ? 'checked' : ''}
+                        data-payload-id="${payload.id}"
+                        data-payload-key="${field.key}">
+                    <span>${field.label}</span>
+                </label>
+            `;
+        }
+
+        if (field.type === 'statusCue') {
+            return renderStatusCueField(payload, field);
+        }
+
+        return `
+            <label>
+                <span>${field.label}</span>
+                <input
+                    type="${field.type}"
+                    value="${escapeHtml(payload[field.key] ?? '')}"
+                    step="${field.step || ''}"
+                    data-payload-id="${payload.id}"
+                    data-payload-key="${field.key}">
+            </label>
+        `;
+    }
+
+    function renderStatusCueField(payload, field) {
+        const cue = statusCueHediffs[payload.statusEffectDef] || 'Defined by the selected status effect';
+        return `
+            <div class="status-cue-field ${payload.showCue ? '' : 'is-hidden'}" title="The status effect supplies gameplay behavior. The hediff is the visible pawn health/status cue attached by that status.">
+                <span>${field.label}</span>
+                <strong>${escapeHtml(cue)}</strong>
+                <small>Status effects own duration, scaling, cleanup, and stat modifiers. The hediff cue is only the visible pawn marker.</small>
+            </div>
+        `;
+    }
+
+    function renderDefField(payload, field) {
+        const value = String(payload[field.key] ?? '');
+        const options = field.options || [];
+        const isKnownValue = options.includes(value);
+        const showCustom = payload[customDefFlagKey(field.key)] || (value && !isKnownValue);
+        const selectValue = showCustom ? customDefOption : value;
+        const optionMarkup = options.map(option => `
+            <option value="${escapeHtml(option)}" ${selectValue === option ? 'selected' : ''}>${escapeHtml(option)}</option>
+        `).join('');
+
+        return `
+            <label class="def-select-field">
+                <span>${field.label}</span>
+                <select
+                    data-payload-id="${payload.id}"
+                    data-payload-key="${field.key}"
+                    data-def-select="true">
+                    ${optionMarkup}
+                    <option value="${customDefOption}" ${selectValue === customDefOption ? 'selected' : ''}>New / custom...</option>
+                </select>
+                <input
+                    class="custom-def-input"
+                    type="text"
+                    value="${escapeHtml(showCustom ? value : '')}"
+                    placeholder="Enter new defName"
+                    data-payload-id="${payload.id}"
+                    data-payload-key="${field.key}"
+                    data-custom-def-input="true"
+                    ${showCustom ? '' : 'hidden'}>
+            </label>
+        `;
+    }
+
+    function getPayloadField(type, key) {
+        return payloadTypes[type]?.fields.find(field => field.key === key);
+    }
+
+    function customDefValue(payload, field) {
+        const currentValue = String(payload[field.key] ?? '');
+        return field.options?.includes(currentValue) ? '' : currentValue;
+    }
+
+    function customDefFlagKey(key) {
+        return `__custom_${key}`;
     }
 
     function syncGeneratedDefs() {
@@ -418,7 +567,9 @@ document.addEventListener('DOMContentLoaded', () => {
             soundDef: getVal('soundDef'),
             manaCost: getVal('manaCost'),
             cooldownTicks: getVal('cooldownTicks'),
-            payloads: currentPayloads.map(({ id, ...payload }) => ({ ...payload }))
+            payloads: currentPayloads.map(({ id, ...payload }) => Object.fromEntries(
+                Object.entries(payload).filter(([key]) => !key.startsWith('__custom_'))
+            ))
         };
     }
 

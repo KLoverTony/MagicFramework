@@ -107,6 +107,8 @@ try {
     $writer.WriteStartElement('Defs')
 
     foreach ($record in $spellRecords) {
+        $researchPrerequisites = @($record.Research)
+
         $writer.WriteStartElement('ThingDef')
         $writer.WriteAttributeString('ParentName', 'MFV_SpellScrollBase')
 
@@ -140,9 +142,9 @@ try {
         $writer.WriteStartElement('li')
         $writer.WriteAttributeString('Class', 'MFVanilla.Core.CompProperties_UseEffectLearnSpell')
         $writer.WriteElementString('spell', $record.DefName)
-        if ($record.Research.Count -gt 0) {
+        if ($researchPrerequisites.Count -gt 0) {
             $writer.WriteStartElement('requiredResearch')
-            foreach ($researchDefName in $record.Research) {
+            foreach ($researchDefName in $researchPrerequisites) {
                 $writer.WriteElementString('li', $researchDefName)
             }
             $writer.WriteEndElement()
@@ -171,6 +173,8 @@ try {
     $recipeWriter.WriteStartElement('Defs')
 
     foreach ($record in $spellRecords) {
+        $researchPrerequisites = @($record.Research)
+
         $recipeWriter.WriteStartElement('RecipeDef')
         $recipeWriter.WriteElementString('defName', "MFV_ScribeScroll_$($record.DefName)")
         $recipeWriter.WriteElementString('label', "scribe scroll ($($record.Label))")
@@ -180,6 +184,9 @@ try {
         $recipeWriter.WriteElementString('workSpeedStat', 'GeneralLaborSpeed')
         $recipeWriter.WriteElementString('effectWorking', 'Tailor')
         $recipeWriter.WriteElementString('soundWorking', 'Recipe_Tailor')
+        if ($researchPrerequisites.Count -gt 0) {
+            $recipeWriter.WriteElementString('researchPrerequisite', $researchPrerequisites[0])
+        }
 
         $recipeWriter.WriteStartElement('ingredients')
         $recipeWriter.WriteStartElement('li')

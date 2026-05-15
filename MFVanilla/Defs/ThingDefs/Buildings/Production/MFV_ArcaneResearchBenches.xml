@@ -49,6 +49,9 @@
     <designationCategory>Production</designationCategory>
     <uiOrder>2602</uiOrder>
     <surfaceType>Item</surfaceType>
+    <researchPrerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </researchPrerequisites>
     <building>
       <paintable>true</paintable>
       <workTableRoomRole>Laboratory</workTableRoomRole>
@@ -202,7 +205,7 @@
     <label>scribing table</label>
     <description>A careful writing station for preparing spell scrolls from papyrus and parchment.</description>
     <thingClass>Building_WorkTable</thingClass>
-    <size>(2,2)</size>
+    <size>(3,1)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Woody</li>
@@ -215,7 +218,7 @@
       <texPath>Things/Building/Production/Scribing table</texPath>
       <graphicClass>Graphic_Multi</graphicClass>
       <shaderType>CutoutComplex</shaderType>
-      <drawSize>(2,2)</drawSize>
+      <drawSize>(3,1)</drawSize>
       <damageData>
         <cornerTL>Damage/Corner</cornerTL>
         <cornerTR>Damage/Corner</cornerTR>

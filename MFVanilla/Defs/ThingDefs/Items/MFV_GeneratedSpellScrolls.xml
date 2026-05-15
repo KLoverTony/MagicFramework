@@ -626,6 +626,9 @@
       </li>
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_Tornado</spell>
+        <requiredResearch>
+          <li>MFV_Aeromancy</li>
+        </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
     </comps>

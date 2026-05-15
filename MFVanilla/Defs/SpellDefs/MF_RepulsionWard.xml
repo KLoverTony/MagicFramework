@@ -4,7 +4,7 @@
     <defName>MF_RepulsionWard</defName>
     <label>repulsion ward</label>
     <description>Maintains a compact arcane ward that periodically blinks nearby enemies away from its anchor point.</description>
-    <gizmoIconPath>UI/Gizmos/Spells/MF_BlinkStep</gizmoIconPath>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_RepulsionWard</gizmoIconPath>
     <range>0</range>
     <castTimeTicks>45</castTimeTicks>
 
