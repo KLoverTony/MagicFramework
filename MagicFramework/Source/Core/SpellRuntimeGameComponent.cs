@@ -160,7 +160,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         SpellStatusCueDef statusCue,
         IEnumerable<SpellStatModifierDef> authoredModifiers)
     {
-        if (target == null || spellDef == null || authoredModifiers == null)
+        if (target == null || authoredModifiers == null)
         {
             return false;
         }
@@ -750,6 +750,16 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         {
             RunSustainedBreakActions(breakRecords[i]);
         }
+    }
+
+    public void ClearItemStatusEffects(Thing sourceItem, Thing target)
+    {
+        if (sourceItem == null || target == null)
+        {
+            return;
+        }
+
+        ClearStatModifiers(target, sourceItem, null, ClearStatModifierScope.FromCurrentCaster, null, null, false);
     }
 
     public void ApplyStatAdjustments(Thing thing, StatDef statDef, ref float value)

@@ -65,6 +65,12 @@ Current release hygiene checklist:
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
 | MF-040 | P1 | S | Content | Introduce a first launch splash screen and include important notes |
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
+| MF-042 | P1 | M | MFVanilla | Add scalable arcane treasure chests as quest/loot/world rewards. |
+| MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
+| MF-044 | P2 | L | MFVanilla | Add static per-map leyline maps and Leyline Sensitivity gameplay. |
+| MF-045 | P2 | L | MFVanilla | Add elemental tribes, themed traders, and later magic-capable hostile pawns. |
+| MF-046 | P2 | M | MFVanilla | Expand thin elemental schools with new spells and utility effects. |
+| MF-047 | P2 | M | Equipment | Give first enchanted weapons unique MagicFramework-backed features. |
 
 ## P1 Release And Content Priorities
 
@@ -90,6 +96,8 @@ Current state:
 - Magic heaters and torches now consume fire foci, magic passive coolers consume water foci, and arcane spires consume air foci.
 - The Arcane Forge is now an active enchantment bench gated by linked arcane spires. Its first weapon set includes Flaming Longsword, Zephyr Spear, Tidebreaker Mace, and Stonefall Mace, all transformed from good-or-better mundane weapons while preserving final quality.
 - Arcane Forge setup costs have been tuned down for release readiness while keeping the four-spire requirement as the advanced enchantment gate.
+- Arcane Forge smoke testing confirmed build requirements, linked-spire gating, bill availability, and the first enchanted weapon set are working well.
+- Enchanted weapon products now assign the enchanter as the art author when quality-generated art is present, avoiding unknown authors on high-quality outputs.
 
 Priority:
 - review the full production chain from raw inputs through finished scrolls and magic utility items
@@ -102,11 +110,9 @@ Priority:
 Next steps:
 1. Smoke test trader stock and buy behavior for shaman, neolithic bulk, outlander bulk, and orbital bulk traders, with special attention to whether purchasable gemstone dust supports early Arcane Ink before Lapidary.
 2. Review gemstone vein availability, mining output, market values, and stack sizes so gemstone dust and elemental focus production do not become either invisible or too abundant.
-3. Smoke test the Arcane Forge loop: research Enchantment/Fabrication, build the forge and four air-focus spires, confirm inspect text and bill availability, then craft each enchanted weapon from good-or-better source weapons.
-4. Balance the first enchanted weapon set against excellent/masterwork vanilla weapons: damage riders, work amounts, market values, source weapon requirements, and focus costs.
-5. Decide whether elemental foci or enchanted weapons should appear in trader stock, quest rewards, or remain colony-crafted for the first release.
-6. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop and elemental focus loop feel stable.
-7. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll, cut gemstones, make foci, and enchant a weapon.
+3. Decide whether elemental foci or enchanted weapons should appear in trader stock, quest rewards, or remain colony-crafted for the first release.
+4. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop and elemental focus loop feel stable.
+5. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll, cut gemstones, make foci, and enchant a weapon.
 
 Success criteria:
 - a player can understand what to build next without dev knowledge
@@ -118,7 +124,15 @@ Success criteria:
 
 Goal: add a small number of features that deepen the released content without opening a broad framework expansion.
 
+Next-release content direction:
+- Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
+- Make arcane treasure chests the next priority content system because they connect MFVanilla to quests, map finds, loot, traders, gemstones, scrolls, foci, enchanted gear, silver, and gold.
+- Treat elemental tribes, leyline maps, school expansion, and special enchanted weapon behavior as major candidate pillars for the same or following release, depending on implementation scope.
+- Audit research fields with no current application. Either attach real content to them or remove/hide them until they have a purpose.
+- Reconsider plasteel/component costs on arcane benches and infrastructure after the content set is known. Prefer magical, pre-industrial, or trade-economy materials where they preserve meaningful scarcity.
+
 Good candidates:
+- scalable arcane treasure chests as quest rewards, rare loot, and random discoveries
 - more utility recipes or buildings that consume magic production outputs
 - targeted Arcane Forge expansions that reuse the elemental focus model without becoming a broad equipment framework
 - one or two additional spell families only if they validate already-supported primitives or a narrowly needed framework hook
@@ -129,6 +143,241 @@ Good candidates:
 Deferral rule:
 - defer anything that primarily exists to prove a speculative framework system rather than make MFVanilla better now
 - defer hostile AI casting, magic weapons/tools, real fire integration, and celestial event depth until after MFVanilla and AeternusFaith first-edition goals are in hand
+
+### MF-042 Arcane Treasure Chests
+
+Goal: add an arcane treasure chest system that makes MFVanilla content appear as mission rewards, rare loot, and occasional world/map discoveries.
+
+Priority:
+- this is the favored next MFVanilla content system before broad tuning
+- use treasure chests to make scrolls, gemstones, foci, enchanted weapons, silver, gold, and future magic items feel discoverable outside colony production
+- scale rewards with mission value and game advancement so early chests are useful without trivializing late rewards
+
+Target behavior:
+- a chest opens into a pseudo-random reward bundle with approximately one major item, two minor items, a few gemstones, silver, and gold
+- major rewards can include rare scrolls, elemental foci, enchanted weapons, future staves/wands/apparel, or artifacts
+- minor rewards can include arcane ink, papyrus/parchment, exotic herbs, gemstone dust, cut gemstones, common scrolls, or small foci
+- reward generation should account for game stage, quest/reward value, map wealth, storyteller points, or an authored chest tier
+- generation must be deterministic and multiplayer-friendly once the chest exists, so save/load or multiple clients cannot reroll the same chest unexpectedly
+- every spawned chest should store a unique stable ID/hash plus tier/value metadata; the reward generator should derive all pseudo-random choices from that stored data rather than ambient `Rand`
+- chests should be usable by quests, ancient/ruin-style placement, traders/loot sources if appropriate, and possible dev/test spawning
+- future trapped/cursed chest variants should use the same stable ID/hash path so curse outcomes are deterministic and multiplayer-friendly
+
+Implementation questions:
+- should the chest be a minifiable thing, haulable item, building-like container, or use-effect item?
+- should rewards be generated when the chest spawns, when it is opened, or generated from a stored seed/tier at spawn and realized on open? - preferred: store seed/id at spawn, realize deterministic loot on open
+- should there be separate chest defs for common, fine, excellent, masterwork, and legendary arcane caches, or a single def with comp properties?
+- should hostile maps, ancient dangers, quests, and traders use the same loot table with different tier/weight inputs?
+- should the chest ever be trapped, cursed, faction-owned, or locked behind research/Arcane Gift?
+- can existing trader stock generator/ThingSetMaker mechanisms provide enough weighted selection, or is a small custom loot-table def simpler and more transparent?
+- should curse traps be authored as separate trap tables, mixed into treasure tables, or implemented as an optional chest comp that runs MagicFramework-style effects on open?
+
+First implementation pass:
+1. Define the chest thing and opening UX. - initial `MFV_ArcaneTreasureChest` and `MFV_GreaterArcaneTreasureChest` item defs added
+2. Add a comp that assigns and saves a stable chest ID/hash on spawn, plus tier/value metadata. - initial saved stable ID and tier support added
+3. Build a deterministic generator that uses the saved chest ID/hash as its pseudo-random seed and never depends on ambient `Rand` during reward selection. - initial local deterministic hash/random path added
+4. Compare reuse of trader/stock generator tables against a custom MFVanilla loot-table def; choose the simpler path that keeps results deterministic and author-friendly. - chose custom XML `ArcaneTreasureTableDef` for first pass
+5. Build reward tables for major, minor, gemstone, silver, and gold buckets. - initial standard table added with XML-editable buckets, weights, counts, tier gates, and optional quality
+6. Add dev/debug spawning and logging for generated contents.
+7. Smoke test XML load, chest use job, stable inspect ID, spawned reward placement, save/load repeatability, and opened chest destruction.
+8. Wire into one safe acquisition path first, then broaden to quests/loot. - initial rare quest reward eligibility and ancient temple/ancient complex loot patches added; no trader inventory integration
+9. Later: add cursed/trapped chest support, preferably as deterministic XML-authored curse tables or MagicFramework action lists triggered on open.
+
+Success criteria:
+- opening a chest feels like a magical reward, not a plain resource bundle
+- rewards are useful at multiple colony stages without breaking the production loop
+- generated output is stable across save/load
+- generated output is deterministic from the stored chest ID/hash and tier/value data, supporting multiplayer-friendly behavior
+- loot tables are easy to extend as MFVanilla gains staves, robes, wands, familiars, artifacts, or more spell schools
+
+### MF-043 MFVanilla Next-Release Content Pillars
+
+Goal: define the full content shape for the next MFVanilla release before final tuning.
+
+Candidate pillars:
+- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration.
+- Elemental school completion: fill thin schools, especially water, while adding spells that use existing primitives where possible.
+- Leyline gameplay: make Leyline Sensitivity reveal or use a static per-map leyline map, then later connect nodes to mana, buildings, rituals, or incidents.
+- Elemental cultures: fire, earth, air, and water tribes with themed traders first, and hostile magic pawns later once AI casting exists.
+- Enchanted weapon identity: give each current Arcane Forge weapon a unique special feature rather than only adjusted damage.
+- Arcane material economy: reduce or replace plasteel/component dependency on magical production where a pre-industrial magic economy makes more sense.
+
+Candidate spells:
+- Air: Air Blast, Fly.
+- Fire/heat: Heat, Warmth.
+- Earth: Golem, Earthy Grave, Stoneskin.
+- Water: Deluge, Extinguish.
+
+Research audit:
+- identify research projects with no current unlocks or gameplay effect
+- decide whether each should receive content in this release, move to a later release, or be removed/hidden until useful
+- ensure research names imply real player-facing outcomes rather than only future intent
+
+Task plan:
+1. Inventory current MFVanilla unlocks by research project: spells, benches, recipes, buildings, items, traders, and settings-visible behavior.
+2. Mark empty or weak projects, especially Leyline Sensitivity and advanced school nodes, with a proposed content role or removal/defer decision.
+3. Pick the next-release pillar set, with treasure chests as the default first pillar.
+4. Identify which pillar items need new MagicFramework code versus XML/content-only work.
+5. Reorder tuning tasks after content scope is known.
+
+Sequencing note:
+- avoid deep balance work until treasure chests, spell additions, and any material-cost philosophy changes have settled enough to see the full economy.
+
+### MF-044 Leyline Map And Sensitivity Gameplay
+
+Goal: make Leyline Sensitivity reveal a stable, useful magical geography layer for each map.
+
+Design direction:
+- generate a hidden static leyline map per RimWorld map, conceptually similar to the deep-drill resource overlay but expressing magical flow rather than mineable resources
+- store the leyline data on a map component so it survives save/load and does not reroll unexpectedly
+- start with debug/reveal tools before adding strong gameplay dependencies
+- use Leyline Sensitivity as the first player-facing unlock for seeing, sensing, or exploiting the leyline map
+
+Target behavior:
+- each map receives pseudo-random leyline paths and possible leyline nodes during or shortly after map creation
+- generated layout should be deterministic from map/game state where practical
+- leylines should remain static thereafter unless a future explicit event or spell changes them
+- research, buildings, rituals, or spells can later query local leyline strength or proximity to a node
+
+Implementation questions:
+- should leyline data be a cell grid, sparse path list, node list, or a combination?
+- should the overlay reveal exact strength, only approximate bands, or only nodes until deeper research?
+- should leylines affect mana regeneration, spell power, ritual quality, building efficiency, treasure placement, incidents, or all of these over time?
+- should leyline nodes be rare enough to drive colony placement decisions, or common enough to influence local base layout?
+
+First implementation pass:
+1. Add a map component that generates and saves leyline paths/nodes.
+2. Add dev-mode debug drawing and logging for generated leyline data.
+3. Add a simple overlay or inspection mode gated by Leyline Sensitivity.
+4. Add one low-risk gameplay hook, such as improved mana recovery or arcane research speed near a node, only after the map layer is stable.
+
+Success criteria:
+- Leyline Sensitivity has an immediately understandable use
+- leyline data is stable across save/load
+- future systems can query leyline strength without knowing generation internals
+- the overlay provides enough information to feel magical without overwhelming normal map play
+
+### MF-045 Elemental Tribes And Themed Traders
+
+Goal: add fire, earth, air, and water themed cultures that make elemental magic feel present in the world, first through traders and later through hostile magic pawns.
+
+Design direction:
+- start with faction/trader/content identity before hostile caster AI
+- each elemental tribe should have a distinct trade profile, visual flavor, likely goods, and preferred magic school
+- hostile spellcasting should wait for authored AI spell metadata and a safe AI casting path
+
+Target behavior:
+- fire tribe traders favor pyromancy scrolls, fire foci, rubies, heat/light infrastructure, and aggressive magic goods
+- earth tribe traders favor geomancy scrolls, earth foci, emeralds, stone/gem materials, defensive goods, and construction-adjacent items
+- air tribe traders favor aeromancy scrolls, air foci, topaz, mobility/control goods, and arcane spire/focus supplies
+- water tribe traders favor aquamancy scrolls, water foci, sapphires, cooling/protection goods, medicine-adjacent items, and extinguishing tools
+- factions can later produce hostile pawns with appropriate magic loadouts once AI casting exists
+
+Implementation questions:
+- should these be four full factions, trader kinds attached to existing factions, or rare world pawns/caravans?
+- should they be neutral by default, mixed relations, or scenario/storyteller controlled?
+- should their identities be tribal, monastic, guild-like, cultic, or mixed by element?
+- should they sell finished enchanted gear, only inputs, or occasional rare major items through treasure chests/rewards?
+
+First implementation pass:
+1. Define the faction/trader scope without AI casting.
+2. Add themed stock generators for elemental goods, scrolls, gemstones, and foci.
+3. Add names/descriptions/backstory flavor sufficient for world presence.
+4. Smoke test caravan/orbital/trader generation and buy/sell behavior.
+5. Defer hostile caster behavior to the AI casting task unless a very narrow scripted encounter is safer.
+
+Success criteria:
+- elemental magic appears in the world economy, not only player crafting
+- each tribe/trader has a recognizable trade identity
+- no hostile pawn depends on unimplemented AI spellcasting
+- future AI caster loadouts have clear faction/theme homes
+
+### MF-046 Elemental Spell Expansion
+
+Goal: fill thin elemental schools and add high-value utility spells that make MFVanilla feel less like a validation pack.
+
+Priority spell candidates:
+- Air Blast: push, stagger, damage, or knockback using displacement primitives.
+- Fly: mobility/terrain bypass fantasy; likely needs careful framework and pathing design before implementation.
+- Heat: targeted warming, heat damage, or room-temperature utility depending on design.
+- Warmth: safer colony utility, probably a pawn/room comfort or hypothermia-protection effect.
+- Golem: earth summon, likely requiring summon/spawn expansion and a pawn kind.
+- Earthy Grave: earth control spell; possible immobilize, bury, down, slow, or terrain hazard.
+- Stoneskin: defensive earth status using armor/stat modifiers and movement penalties.
+- Deluge: water area effect, extinguish support, wet/frost synergy, or terrain/filth effect.
+- Extinguish: fire-clearing utility, likely a small framework action if no existing primitive covers it cleanly.
+
+Design direction:
+- prioritize spells that strengthen underused schools and can be authored with current primitives
+- use new framework hooks only when they clearly support multiple future spells or item features
+- prefer utility and colony-support spells alongside combat spells so each school has a play identity
+
+First implementation pass:
+1. Classify each candidate as XML-only, small framework hook, or large framework feature.
+2. Select two or three low-risk spells for the next content slice, likely Air Blast, Stoneskin, and Extinguish/Warmth.
+3. Add spell defs, scroll generation coverage, research gates, icons, and generated summaries.
+4. Smoke test targeting, mana/cooldown, scroll learning, and save/load for any persistent effects.
+
+Success criteria:
+- water and earth no longer feel obviously thin
+- new spells have clear research and scroll paths
+- each added spell either improves player gameplay or validates a reusable framework primitive
+- large ideas such as Fly and Golem are scoped before implementation rather than squeezed into a small pass
+
+### MF-047 Enchanted Weapon Special Features
+
+Goal: give the first Arcane Forge weapons unique identities backed by MagicFramework mechanics where practical.
+
+Current weapon set:
+- Flaming Longsword
+- Zephyr Spear
+- Tidebreaker Mace
+- Stonefall Mace
+
+Candidate features:
+- Flaming Longsword: ignite chance, small flame burst, heat status, or fire vulnerability interaction on hit.
+- Zephyr Spear: movement speed bonus while equipped, air-blast proc, short reach/control identity, or dodge/evasion bonus.
+- Tidebreaker Mace: chill, slow, wet/frostbite synergy, extinguish splash, or defensive water effect on hit.
+- Stonefall Mace: knockback, stun, armor break, stagger, or extra blunt impact on heavy hits.
+
+Framework direction:
+- consider a reusable equipment comp that triggers MagicFramework action lists on melee hit, equip, unequip, tick, or damage taken
+- keep the first implementation narrow enough for the four weapons, but avoid hardcoding weapon-specific behavior in generic combat patches
+- ensure triggered effects are deterministic enough for save/load and multiplayer-sensitive behavior
+
+Current framework support:
+- `CompProperties_MagicItemAbilities` / `CompMagicItemAbilities` can be attached to ThingDefs to grant activated spell-like powers from equipped, worn, or carried items.
+- Item abilities reference existing `SpellDef` entries and execute through the normal MagicFramework targeting, validation, warmup, FX, cost, and action pipeline without adding the spell to a pawn's known-spell list.
+- Activated item powers expose pawn gizmos, can require the item to be equipped/worn, can optionally require Arcane Gift, can consume the item on use, and use item-local cooldowns saved on the comp.
+- Passive item statuses can reference `SpellStatusEffectDef` entries and are refreshed by a saved game component while the source item remains equipped or worn.
+- `SpellContext.sourceItem` records the item that supplied the ability so future action workers, logs, triggers, or requirements can distinguish item-sourced magic from ordinary pawn spells.
+- Zephyr Spear now validates both paths with an equipped-only `Zephyr Gust` activated power and a `Zephyr Stride` passive movement status.
+- Item melee triggers can run authored MagicFramework action lists on successful melee damage, with item-local cooldowns and deterministic chance checks.
+- Item damage resistance can scale incoming damage by `DamageDef` and prevent authored direct hediff applications, so equipment protection can cover both vanilla damage and MagicFramework spell actions.
+- Flaming Longsword now provides flame ward fire protection, Flame damage resistance, Burn prevention, and retains its existing flame damage rider.
+- Tidebreaker Mace now provides water ward fire suppression, partial Flame damage resistance, an activated `Quenching Wave` extinguish power, and a stagger trigger.
+- Stonefall Mace now provides a `Stoneguard` armor passive and a stagger/knockback trigger.
+
+Implementation questions:
+- should weapon specials be authored directly on ThingDefs through a comp, through a separate MagicWeaponEffectDef, or through existing SpellActionDef lists?
+- should procs spend mana, have cooldowns, require Arcane Gift, or function for any wielder?
+- should passive bonuses appear in stats, inspect strings, or generated descriptions?
+- how should friendly fire and forced movement be handled for on-hit effects?
+
+First implementation pass:
+1. Design the smallest reusable equipment-trigger bridge that can call MagicFramework-style effects. - initial activated-power bridge done
+2. Author one item ability on an MFVanilla weapon or test item and smoke test targeting, cooldown, save/load, and gizmo display. - Zephyr Spear example added
+3. Add passive/status support for while-equipped effects without making them learned spells. - initial support done
+4. Add inspect strings/tooltips so players understand each special feature.
+5. Add on-hit/on-damage trigger support only after activated and passive item abilities are stable. - initial melee trigger support done
+6. Expand to the remaining three weapons only after the trigger path is stable. - initial expansion done
+7. Smoke test all four enchanted weapons in game: gizmos, passives, fire behavior, melee triggers, cooldowns, save/load, and art details.
+8. Smoke test Flame spell damage against Flaming Longsword and Tidebreaker Mace wielders; the former should heavily resist Flame and block direct Burn hediff application, while the latter should partially resist Flame and keep extinguishing attached fire.
+
+Success criteria:
+- each enchanted weapon has a memorable mechanical identity
+- special features reuse or inform MagicFramework primitives rather than isolated one-off code
+- behavior remains understandable, deterministic, and safe in ordinary melee combat
 
 ### MF-039 AeternusFaith First Edition
 
@@ -513,13 +762,17 @@ Goal: Introduce a first launch splash screen and include important notes
 Target coverage: 
  - Inform players about mod settings to enable/disable tech themed vanilla research.
  - Consider other important details (to be determined)
+ - host in Magic Framework to provide a utility for dependent mods
+ - if possible, allow the utility to absorb details from any dependent mod and present it in one splashscreen instead of multiple
+ - place a mod settings button in each dependent mod to re-show the latest notes 
+ - this should be used for major changes and version info
 
 ### MF-041 Arcane forge
 
 Goal: Introduce an Arcane Forge production item
 
 Target coverage: 
- - smoke test requirements to build this mid-late game item
- - validate spire-link gating, inspect strings, and bill availability
- - balance recipes for transforming good-or-better mundane weapons into magic versions
+ - smoke test requirements to build this mid-late game item - done
+ - validate spire-link gating, inspect strings, and bill availability - done
+ - balance recipes for transforming good-or-better mundane weapons into magic versions - initial pass done
  - decide whether the first weapon set needs custom textures before release

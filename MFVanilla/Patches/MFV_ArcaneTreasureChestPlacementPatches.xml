@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <!-- Rare ancient danger cache placement. This affects the classic ancient temple contents set. -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThingSetMakerDef[defName="MapGen_AncientTempleContents"]/root/options</xpath>
+    <value>
+      <li>
+        <chance>0.18</chance>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_ArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
+      <li>
+        <chance>0.06</chance>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_GreaterArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
+    </value>
+  </Operation>
+
+  <!-- Rare ancient complex room loot. This covers mission/site-style ancient structures. -->
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/ThingSetMakerDef[defName="MapGen_AncientComplexRoomLoot_Default"]/root/options</xpath>
+    <value>
+      <li>
+        <weight>0.20</weight>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_ArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
+      <li>
+        <weight>0.06</weight>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_GreaterArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MFV_TidebreakerExtinguish</defName>
+    <label>Tidebreaker extinguish</label>
+    <description>Releases a surge of bound water magic that extinguishes nearby flames.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_WatersEmbrace</gizmoIconPath>
+    <range>12</range>
+    <castTimeTicks>20</castTimeTicks>
+
+    <learning>
+      <canBeLearned>false</canBeLearned>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>PawnOrCell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>12</range>
+    </targeting>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Tidebreaker extinguish sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Tidebreaker water pulse</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ExtinguishFireActionDef">
+            <debugLabel>Tidebreaker extinguish fires</debugLabel>
+            <locationSource>CurrentTarget</locationSource>
+            <radius>5</radius>
+            <includeAttachedFires>true</includeAttachedFires>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+
+</Defs>

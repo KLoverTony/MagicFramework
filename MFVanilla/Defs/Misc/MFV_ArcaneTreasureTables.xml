@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <MFVanilla.Core.ArcaneTreasureTableDef>
+    <defName>MFV_ArcaneTreasureTable_Standard</defName>
+    <label>standard arcane treasure table</label>
+    <buckets>
+      <li>
+        <label>major</label>
+        <rolls>1</rolls>
+        <entries>
+          <li><thingDef>MFV_FireArcaneFocus</thingDef><weight>3</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_WaterArcaneFocus</thingDef><weight>3</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_EarthArcaneFocus</thingDef><weight>3</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_AirArcaneFocus</thingDef><weight>3</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_SpellScroll_MF_Firebolt</thingDef><weight>2</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_SpellScroll_MF_Heal</thingDef><weight>2</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_SpellScroll_MF_BlinkStep</thingDef><weight>2</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>2</minTier></li>
+          <li><thingDef>MFV_SpellScroll_MF_Fireball</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>3</minTier></li>
+          <li><thingDef>MFV_FlamingLongsword</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>4</minTier><quality>Good</quality></li>
+          <li><thingDef>MFV_ZephyrSpear</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>4</minTier><quality>Good</quality></li>
+          <li><thingDef>MFV_TidebreakerMace</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>4</minTier><quality>Good</quality></li>
+          <li><thingDef>MFV_StonefallMace</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>4</minTier><quality>Good</quality></li>
+        </entries>
+      </li>
+      <li>
+        <label>minor</label>
+        <rolls>2</rolls>
+        <entries>
+          <li><thingDef>MFV_ArcaneInk</thingDef><weight>4</weight><minCount>6</minCount><maxCount>14</maxCount></li>
+          <li><thingDef>MFV_Papyrus</thingDef><weight>3</weight><minCount>10</minCount><maxCount>24</maxCount></li>
+          <li><thingDef>MFV_Parchment</thingDef><weight>3</weight><minCount>6</minCount><maxCount>16</maxCount></li>
+          <li><thingDef>MFV_GemstoneDust</thingDef><weight>4</weight><minCount>18</minCount><maxCount>45</maxCount></li>
+          <li><thingDef>MFV_ExoticHerbs</thingDef><weight>3</weight><minCount>12</minCount><maxCount>30</maxCount></li>
+          <li><thingDef>MFV_SpellScroll_MF_CreateFood</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount></li>
+          <li><thingDef>MFV_SpellScroll_MF_Haste</thingDef><weight>1</weight><minCount>1</minCount><maxCount>1</maxCount><minTier>2</minTier></li>
+        </entries>
+      </li>
+      <li>
+        <label>gemstones</label>
+        <rolls>3</rolls>
+        <entries>
+          <li><thingDef>MFV_CommonRuby</thingDef><weight>2</weight><minCount>1</minCount><maxCount>3</maxCount></li>
+          <li><thingDef>MFV_CommonSapphire</thingDef><weight>2</weight><minCount>1</minCount><maxCount>3</maxCount></li>
+          <li><thingDef>MFV_CommonEmerald</thingDef><weight>2</weight><minCount>1</minCount><maxCount>3</maxCount></li>
+          <li><thingDef>MFV_CommonTopaz</thingDef><weight>2</weight><minCount>1</minCount><maxCount>3</maxCount></li>
+          <li><thingDef>MFV_CommonAmethyst</thingDef><weight>2</weight><minCount>1</minCount><maxCount>3</maxCount></li>
+          <li><thingDef>MFV_CommonDiamond</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount><minTier>2</minTier></li>
+          <li><thingDef>MFV_FineRuby</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount><minTier>3</minTier></li>
+          <li><thingDef>MFV_FineSapphire</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount><minTier>3</minTier></li>
+          <li><thingDef>MFV_FineEmerald</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount><minTier>3</minTier></li>
+          <li><thingDef>MFV_FineTopaz</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount><minTier>3</minTier></li>
+        </entries>
+      </li>
+      <li>
+        <label>silver</label>
+        <rolls>1</rolls>
+        <entries>
+          <li><thingDef>Silver</thingDef><weight>1</weight><minCount>80</minCount><maxCount>220</maxCount></li>
+        </entries>
+      </li>
+      <li>
+        <label>gold</label>
+        <rolls>1</rolls>
+        <entries>
+          <li><thingDef>Gold</thingDef><weight>1</weight><minCount>8</minCount><maxCount>22</maxCount></li>
+        </entries>
+      </li>
+    </buckets>
+  </MFVanilla.Core.ArcaneTreasureTableDef>
+
+</Defs>

@@ -1868,6 +1868,74 @@ public sealed class StunActionWorker : SpellActionWorker
     }
 }
 
+public sealed class ExtinguishFireActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        ExtinguishFireActionDef extinguishDef = actionDef as ExtinguishFireActionDef;
+        if (context?.map == null || extinguishDef == null)
+        {
+            return;
+        }
+
+        IntVec3 center = ResolveCenter(context, extinguishDef.locationSource);
+        if (!center.IsValid)
+        {
+            return;
+        }
+
+        ThingDef fireDef = DefDatabase<ThingDef>.GetNamedSilentFail("Fire");
+        if (fireDef == null)
+        {
+            return;
+        }
+
+        int extinguishedCount = 0;
+        List<Thing> fires = context.map.listerThings.ThingsOfDef(fireDef);
+        for (int i = fires.Count - 1; i >= 0; i--)
+        {
+            if (fires[i] is not Fire fire)
+            {
+                continue;
+            }
+
+            Thing attachedParent = MagicItemUtility.AttachedParent(fire);
+            IntVec3 fireCell = attachedParent?.Position ?? fire.Position;
+            if (!fireCell.IsValid || fireCell.DistanceTo(center) > extinguishDef.radius)
+            {
+                continue;
+            }
+
+            if (attachedParent != null && !extinguishDef.includeAttachedFires)
+            {
+                continue;
+            }
+
+            fire.TakeDamage(new DamageInfo(DamageDefOf.Extinguish, extinguishDef.extinguishDamage, instigator: context.caster));
+            extinguishedCount++;
+        }
+
+        FleckDef fleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(extinguishDef.fleckDef);
+        if (fleckDef != null)
+        {
+            FleckMaker.Static(center, context.map, fleckDef, Mathf.Max(1f, extinguishDef.radius * 0.4f));
+        }
+
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Extinguished {extinguishedCount} fire(s) near {center}.");
+    }
+
+    private static IntVec3 ResolveCenter(SpellContext context, SpellEffectLocationSource locationSource)
+    {
+        return locationSource switch
+        {
+            SpellEffectLocationSource.Caster => context.caster?.Position ?? IntVec3.Invalid,
+            SpellEffectLocationSource.CurrentTarget => context.currentTarget.IsValid ? context.currentTarget.Cell : IntVec3.Invalid,
+            SpellEffectLocationSource.CurrentCell => context.currentCell,
+            _ => context.currentTarget.IsValid ? context.currentTarget.Cell : context.caster?.Position ?? IntVec3.Invalid
+        };
+    }
+}
+
 public sealed class HealActionWorker : SpellActionWorker
 {
     public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
@@ -2359,6 +2427,12 @@ public sealed class ApplyHediffActionWorker : SpellActionWorker
         if (resolvedHediffDef == null)
         {
             Log.Warning($"[MagicFramework] ApplyHediffActionWorker skipped because hediff def '{hediffActionDef.hediffDef ?? "<null>"}' could not be resolved.");
+            return;
+        }
+
+        if (MagicItemUtility.PreventsHediff(targetPawn, resolvedHediffDef))
+        {
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Prevented hediff {resolvedHediffDef.defName} on {targetPawn.LabelCap} due to magic item protection.");
             return;
         }
 

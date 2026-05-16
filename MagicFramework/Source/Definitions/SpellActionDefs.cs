@@ -740,6 +740,17 @@ public sealed class StunActionDef : SpellActionDef
     public override SpellActionWorker CreateWorker() => new StunActionWorker();
 }
 
+public sealed class ExtinguishFireActionDef : SpellActionDef
+{
+    public SpellEffectLocationSource locationSource = SpellEffectLocationSource.CurrentTarget;
+    public float radius = 3f;
+    public float extinguishDamage = 9999f;
+    public bool includeAttachedFires = true;
+    public string fleckDef = "DustPuff";
+
+    public override SpellActionWorker CreateWorker() => new ExtinguishFireActionWorker();
+}
+
 /// <summary>
 /// Heals injuries on the current pawn target, sharing healing evenly across wounds.
 /// </summary>

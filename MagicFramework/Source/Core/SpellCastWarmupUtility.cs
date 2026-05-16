@@ -18,6 +18,17 @@ public static class SpellCastWarmupUtility
         SpellExecutor executor,
         Action<bool, SpellContext> onComplete)
     {
+        StartOrExecute(pawn, spellDef, target, executor, onComplete, null);
+    }
+
+    public static void StartOrExecute(
+        Pawn pawn,
+        SpellDef spellDef,
+        LocalTargetInfo target,
+        SpellExecutor executor,
+        Action<bool, SpellContext> onComplete,
+        Action<SpellContext> configureContext)
+    {
         if (pawn == null || spellDef == null || executor == null)
         {
             onComplete?.Invoke(false, null);
@@ -27,12 +38,13 @@ public static class SpellCastWarmupUtility
         int warmupTicks = Math.Max(0, spellDef.castTimeTicks);
         if (warmupTicks <= 0)
         {
-            bool completed = executor.TryExecute(spellDef, pawn, target, out SpellContext immediateContext);
+            bool completed = executor.TryExecute(spellDef, pawn, target, out SpellContext immediateContext, true, configureContext);
             onComplete?.Invoke(completed, immediateContext);
             return;
         }
 
         SpellContext validationContext = executor.BuildContext(spellDef, pawn, target);
+        configureContext?.Invoke(validationContext);
         if (!new SpellCastValidator().TryValidate(validationContext))
         {
             onComplete?.Invoke(false, validationContext);
@@ -47,7 +59,8 @@ public static class SpellCastWarmupUtility
             target,
             Find.TickManager.TicksGame + warmupTicks,
             executor,
-            onComplete));
+            onComplete,
+            configureContext));
     }
 }
 
@@ -108,6 +121,7 @@ public sealed class PendingSpellWarmup
     private readonly LocalTargetInfo target;
     private readonly SpellExecutor executor;
     private readonly Action<bool, SpellContext> onComplete;
+    private readonly Action<SpellContext> configureContext;
 
     public PendingSpellWarmup(
         Pawn caster,
@@ -115,13 +129,15 @@ public sealed class PendingSpellWarmup
         LocalTargetInfo target,
         int executeAtTick,
         SpellExecutor executor,
-        Action<bool, SpellContext> onComplete)
+        Action<bool, SpellContext> onComplete,
+        Action<SpellContext> configureContext = null)
     {
         this.caster = caster;
         this.spellDef = spellDef;
         this.target = target;
         this.executor = executor;
         this.onComplete = onComplete;
+        this.configureContext = configureContext;
         ExecuteAtTick = executeAtTick;
     }
 
@@ -142,7 +158,7 @@ public sealed class PendingSpellWarmup
             return;
         }
 
-        bool completed = executor.TryExecute(spellDef, caster, target, out SpellContext context, false);
+        bool completed = executor.TryExecute(spellDef, caster, target, out SpellContext context, false, configureContext);
         onComplete?.Invoke(completed, context);
     }
 }

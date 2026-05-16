@@ -28,6 +28,113 @@
   </MagicFramework.Definitions.SpellStatusEffectDef>
 
   <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_ZephyrStride</defName>
+    <label>zephyr stride</label>
+    <description>Bound air magic lightens this pawn's stride while the item remains equipped.</description>
+    <categories>
+      <li>buff</li>
+      <li>movement</li>
+      <li>air</li>
+      <li>item</li>
+    </categories>
+    <durationTicks>360</durationTicks>
+    <statusCue>
+      <hediffDef>MF_Hasted</hediffDef>
+      <label>Zephyr stride</label>
+      <description>Bound air magic from an equipped item is lightening this pawn's movement.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>1.08</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_FlameWard</defName>
+    <label>flame ward</label>
+    <description>Bound fire magic turns flame aside while the item remains equipped.</description>
+    <categories>
+      <li>buff</li>
+      <li>fire</li>
+      <li>item</li>
+    </categories>
+    <durationTicks>360</durationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Flame ward</label>
+      <description>Bound fire magic from an equipped item is protecting this pawn from catching fire.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ArmorRating_Heat</statDef>
+        <offset>0.20</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_WaterWard</defName>
+    <label>water ward</label>
+    <description>Bound water magic douses flame before it can take hold.</description>
+    <categories>
+      <li>buff</li>
+      <li>water</li>
+      <li>fire</li>
+      <li>item</li>
+    </categories>
+    <durationTicks>360</durationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Water ward</label>
+      <description>Bound water magic from an equipped item is suppressing flames around this pawn.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ArmorRating_Heat</statDef>
+        <offset>0.12</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Stoneguard</defName>
+    <label>stoneguard</label>
+    <description>Bound earth magic hardens the wielder's stance and skin.</description>
+    <categories>
+      <li>buff</li>
+      <li>earth</li>
+      <li>defense</li>
+      <li>item</li>
+    </categories>
+    <durationTicks>360</durationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Stoneguard</label>
+      <description>Bound earth magic from an equipped item is improving this pawn's armor.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ArmorRating_Sharp</statDef>
+        <offset>0.12</offset>
+      </li>
+      <li>
+        <statDef>ArmorRating_Blunt</statDef>
+        <offset>0.12</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_Might</defName>
     <label>mighty</label>
     <description>Strengthens a pawn, improving melee damage and carrying capacity.</description>

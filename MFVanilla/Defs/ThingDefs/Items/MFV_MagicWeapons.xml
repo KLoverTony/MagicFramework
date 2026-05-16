@@ -16,6 +16,7 @@
       <li>LongSword</li>
       <li>MFV_MagicWeapon</li>
     </weaponTags>
+    <smeltable>false</smeltable>
     <thingSetMakerTags>
       <li>RewardStandardQualitySuper</li>
     </thingSetMakerTags>
@@ -23,11 +24,42 @@
       <WorkToMake>18000</WorkToMake>
       <Mass>2</Mass>
       <MarketValue>900</MarketValue>
+      <MaxHitPoints>2000</MaxHitPoints>
       <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
     </statBases>
     <relicChance>3</relicChance>
     <equippedAngleOffset>-65</equippedAngleOffset>
     <recipeMaker IsNull="True" />
+    <comps>
+      <li>
+        <compClass>CompQuality</compClass>
+      </li>
+      <li Class="CompProperties_Art">
+        <nameMaker>NamerArtWeaponMelee</nameMaker>
+        <descriptionMaker>ArtDescription_WeaponMelee</descriptionMaker>
+        <minQualityForArtistic>Excellent</minQualityForArtistic>
+      </li>
+      <li Class="MagicFramework.Core.CompProperties_MagicItemAbilities">
+        <fireAttachChanceFactor>0.02</fireAttachChanceFactor>
+        <damageResistances>
+          <li>
+            <damageDef>Flame</damageDef>
+            <damageFactor>0.25</damageFactor>
+            <preventedHediffs>
+              <li>Burn</li>
+            </preventedHediffs>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </damageResistances>
+        <passiveStatuses>
+          <li>
+            <statusEffectDef>MFV_Status_FlameWard</statusEffectDef>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </passiveStatuses>
+      </li>
+    </comps>
     <tools>
       <li>
         <label>handle</label>
@@ -86,6 +118,7 @@
       <li>Spear</li>
       <li>MFV_MagicWeapon</li>
     </weaponTags>
+    <smeltable>false</smeltable>
     <thingSetMakerTags>
       <li>RewardStandardQualitySuper</li>
     </thingSetMakerTags>
@@ -93,11 +126,40 @@
       <WorkToMake>15000</WorkToMake>
       <Mass>1.8</Mass>
       <MarketValue>820</MarketValue>
+      <MaxHitPoints>2000</MaxHitPoints>
       <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
     </statBases>
     <relicChance>3</relicChance>
     <equippedAngleOffset>-25</equippedAngleOffset>
     <recipeMaker IsNull="True" />
+    <comps>
+      <li>
+        <compClass>CompQuality</compClass>
+      </li>
+      <li Class="CompProperties_Art">
+        <nameMaker>NamerArtWeaponMelee</nameMaker>
+        <descriptionMaker>ArtDescription_WeaponMelee</descriptionMaker>
+        <minQualityForArtistic>Excellent</minQualityForArtistic>
+      </li>
+      <li Class="MagicFramework.Core.CompProperties_MagicItemAbilities">
+        <abilities>
+          <li>
+            <spell>MF_ForcePush</spell>
+            <label>Zephyr Gust</label>
+            <description>Release the spear's bound air pressure as a focused gust that shoves a hostile target away.</description>
+            <cooldownTicks>900</cooldownTicks>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </abilities>
+        <passiveStatuses>
+          <li>
+            <statusEffectDef>MFV_Status_ZephyrStride</statusEffectDef>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </passiveStatuses>
+      </li>
+    </comps>
     <tools>
       <li>
         <label>shaft</label>
@@ -142,6 +204,7 @@
       <li>MedievalMeleeDecent</li>
       <li>MFV_MagicWeapon</li>
     </weaponTags>
+    <smeltable>false</smeltable>
     <thingSetMakerTags>
       <li>RewardStandardQualitySuper</li>
     </thingSetMakerTags>
@@ -149,11 +212,63 @@
       <WorkToMake>9000</WorkToMake>
       <Mass>1.35</Mass>
       <MarketValue>760</MarketValue>
+      <MaxHitPoints>2000</MaxHitPoints>
       <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
     </statBases>
     <relicChance>3</relicChance>
     <equippedAngleOffset>-65</equippedAngleOffset>
     <recipeMaker IsNull="True" />
+    <comps>
+      <li>
+        <compClass>CompQuality</compClass>
+      </li>
+      <li Class="CompProperties_Art">
+        <nameMaker>NamerArtWeaponMelee</nameMaker>
+        <descriptionMaker>ArtDescription_WeaponMelee</descriptionMaker>
+        <minQualityForArtistic>Excellent</minQualityForArtistic>
+      </li>
+      <li Class="MagicFramework.Core.CompProperties_MagicItemAbilities">
+        <fireAttachChanceFactor>0.25</fireAttachChanceFactor>
+        <extinguishOwnerWhenBurning>true</extinguishOwnerWhenBurning>
+        <damageResistances>
+          <li>
+            <damageDef>Flame</damageDef>
+            <damageFactor>0.60</damageFactor>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </damageResistances>
+        <abilities>
+          <li>
+            <spell>MFV_TidebreakerExtinguish</spell>
+            <label>Quenching Wave</label>
+            <description>Release Tidebreaker's bound water in a wave that extinguishes nearby flames.</description>
+            <cooldownTicks>1200</cooldownTicks>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </abilities>
+        <passiveStatuses>
+          <li>
+            <statusEffectDef>MFV_Status_WaterWard</statusEffectDef>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </passiveStatuses>
+        <meleeTriggers>
+          <li>
+            <label>Tidebreaker stagger</label>
+            <chance>0.25</chance>
+            <cooldownTicks>300</cooldownTicks>
+            <actions>
+              <li Class="MagicFramework.Definitions.StunActionDef">
+                <debugLabel>Tidebreaker stagger</debugLabel>
+                <chance>1</chance>
+                <stunTicks>45</stunTicks>
+              </li>
+            </actions>
+          </li>
+        </meleeTriggers>
+      </li>
+    </comps>
     <tools>
       <li>
         <label>handle</label>
@@ -197,6 +312,7 @@
       <li>MedievalMeleeDecent</li>
       <li>MFV_MagicWeapon</li>
     </weaponTags>
+    <smeltable>false</smeltable>
     <thingSetMakerTags>
       <li>RewardStandardQualitySuper</li>
     </thingSetMakerTags>
@@ -204,11 +320,53 @@
       <WorkToMake>9000</WorkToMake>
       <Mass>1.55</Mass>
       <MarketValue>760</MarketValue>
+      <MaxHitPoints>2000</MaxHitPoints>
       <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
     </statBases>
     <relicChance>3</relicChance>
     <equippedAngleOffset>-65</equippedAngleOffset>
     <recipeMaker IsNull="True" />
+    <comps>
+      <li>
+        <compClass>CompQuality</compClass>
+      </li>
+      <li Class="CompProperties_Art">
+        <nameMaker>NamerArtWeaponMelee</nameMaker>
+        <descriptionMaker>ArtDescription_WeaponMelee</descriptionMaker>
+        <minQualityForArtistic>Excellent</minQualityForArtistic>
+      </li>
+      <li Class="MagicFramework.Core.CompProperties_MagicItemAbilities">
+        <passiveStatuses>
+          <li>
+            <statusEffectDef>MFV_Status_Stoneguard</statusEffectDef>
+            <requireEquipped>true</requireEquipped>
+          </li>
+        </passiveStatuses>
+        <meleeTriggers>
+          <li>
+            <label>Stonefall stagger</label>
+            <chance>0.35</chance>
+            <cooldownTicks>240</cooldownTicks>
+            <actions>
+              <li Class="MagicFramework.Definitions.StunActionDef">
+                <debugLabel>Stonefall stagger</debugLabel>
+                <chance>1</chance>
+                <stunTicks>60</stunTicks>
+              </li>
+              <li Class="MagicFramework.Definitions.KnockbackActionDef">
+                <debugLabel>Stonefall knockback</debugLabel>
+                <distance>2</distance>
+                <requireStandableDestination>true</requireStandableDestination>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <impactDamageAmount>4</impactDamageAmount>
+                <impactDamageDef>Blunt</impactDamageDef>
+              </li>
+            </actions>
+          </li>
+        </meleeTriggers>
+      </li>
+    </comps>
     <tools>
       <li>
         <label>handle</label>

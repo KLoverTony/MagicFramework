@@ -10,6 +10,7 @@ namespace MagicFramework.Context;
 public sealed class SpellContext
 {
     public Thing caster;
+    public Thing sourceItem;
     public Map map;
     public SpellDef spellDef;
     public LocalTargetInfo initialTarget;

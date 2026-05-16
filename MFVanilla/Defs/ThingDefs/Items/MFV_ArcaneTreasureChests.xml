@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_ArcaneTreasureChestBase" Abstract="True">
+    <thingClass>ThingWithComps</thingClass>
+    <category>Item</category>
+    <label>arcane treasure chest</label>
+    <description>A sealed cache of magically curated spoils. Its contents are bound to the cache's stable arcane signature and are revealed only when opened.</description>
+
+    <selectable>true</selectable>
+    <stackLimit>1</stackLimit>
+    <thingCategories>
+      <li>ItemsMisc</li>
+    </thingCategories>
+    <thingSetMakerTags>
+      <li>RewardStandardLowFreq</li>
+    </thingSetMakerTags>
+    <tradeability>Sellable</tradeability>
+    <techLevel>Medieval</techLevel>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <MarketValue>450</MarketValue>
+      <Mass>3.5</Mass>
+      <Flammability>0.2</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneTreasureChestBase">
+    <defName>MFV_ArcaneTreasureChest</defName>
+    <label>arcane treasure chest</label>
+    <graphicData>
+      <texPath>Things/Item/Shell/TreasureChest</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.9</drawSize>
+      <color>(0.5,0.36,0.78)</color>
+    </graphicData>
+    <comps>
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open chest</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectOpenArcaneTreasure">
+        <treasureTable>MFV_ArcaneTreasureTable_Standard</treasureTable>
+        <tier>2</tier>
+        <targetValue>700</targetValue>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneTreasureChestBase">
+    <defName>MFV_GreaterArcaneTreasureChest</defName>
+    <label>greater arcane treasure chest</label>
+    <graphicData>
+      <texPath>Things/Item/Shell/TreasureChest_Greater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.9</drawSize>
+      <color>(0.5,0.36,0.78)</color>
+    </graphicData>
+    <statBases>
+      <MarketValue>950</MarketValue>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open chest</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectOpenArcaneTreasure">
+        <treasureTable>MFV_ArcaneTreasureTable_Standard</treasureTable>
+        <tier>4</tier>
+        <targetValue>1400</targetValue>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

@@ -64,6 +64,11 @@ public static class MagicFrameworkHarmony
     {
         absorbed = false;
         SpellRuntimeGameComponent.Instance?.ApplyForceFieldDamageReduction(__instance, ref dinfo, ref absorbed);
+        if (!absorbed && __instance is Pawn pawn)
+        {
+            MagicItemUtility.ApplyDamageResistance(pawn, ref dinfo, ref absorbed);
+        }
+
         return !absorbed;
     }
 
@@ -167,6 +172,11 @@ public static class MagicFrameworkPawnGizmoPatch
             foreach (Gizmo spellGizmo in SpellGizmoUtility.CreateKnownSpellGizmos(__instance))
             {
                 yield return spellGizmo;
+            }
+
+            foreach (Gizmo itemAbilityGizmo in MagicItemGizmoUtility.CreateItemAbilityGizmos(__instance))
+            {
+                yield return itemAbilityGizmo;
             }
         }
     }

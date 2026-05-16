@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
-using UnityEngine;
 using Verse;
 
 namespace MFVanilla.Core;
@@ -48,12 +47,12 @@ public static class EnchantmentUtility
         }
 
         Thing product = ThingMaker.MakeThing(productDef);
-        product.HitPoints = GenMath.RoundRandom(product.MaxHitPoints * (sourceWeapon.HitPoints / (float)sourceWeapon.MaxHitPoints));
-        product.HitPoints = Mathf.Clamp(product.HitPoints, 1, product.MaxHitPoints);
+        product.HitPoints = product.MaxHitPoints;
 
         if (sourceWeapon.TryGetQuality(out QualityCategory quality))
         {
             product.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
+            product.TryGetComp<CompArt>()?.JustCreatedBy(worker);
         }
 
         products = new List<Thing> { product };

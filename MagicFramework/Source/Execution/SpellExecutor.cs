@@ -47,7 +47,19 @@ public sealed class SpellExecutor
 
     public bool TryExecute(SpellDef spellDef, Thing caster, LocalTargetInfo initialTarget, out SpellContext context, bool playCastStartFx = true)
     {
+        return TryExecute(spellDef, caster, initialTarget, out context, playCastStartFx, null);
+    }
+
+    public bool TryExecute(
+        SpellDef spellDef,
+        Thing caster,
+        LocalTargetInfo initialTarget,
+        out SpellContext context,
+        bool playCastStartFx,
+        System.Action<SpellContext> configureContext)
+    {
         context = BuildContext(spellDef, caster, initialTarget);
+        configureContext?.Invoke(context);
 
         if (!validator.TryValidate(context))
         {
