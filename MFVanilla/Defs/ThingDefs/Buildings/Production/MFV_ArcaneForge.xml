@@ -6,22 +6,23 @@
     <label>arcane forge</label>
     <description>An enchantment bench with stabilizing clamps, focusing channels, and warded toolheads for binding durable magic into weapons, armor, and other high-value gear.</description>
     <thingClass>Building_WorkTable</thingClass>
-    <size>(5,5)</size>
+    <tickerType>Normal</tickerType>
+    <size>(3,3)</size>
     <stuffCategories>
       <li>Metallic</li>
       <li>Stony</li>
     </stuffCategories>
     <costStuffCount>150</costStuffCount>
     <costList>
-      <Steel>200</Steel>
-      <Plasteel>50</Plasteel>
-      <ComponentIndustrial>12</ComponentIndustrial>
+      <Steel>160</Steel>
+      <Plasteel>30</Plasteel>
+      <ComponentIndustrial>8</ComponentIndustrial>
     </costList>
     <graphicData>
       <texPath>Things/Building/Production/ArcaneForge</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <shaderType>CutoutComplex</shaderType>
-      <drawSize>(5,5)</drawSize>
+      <drawSize>(3,3)</drawSize>
       <damageData>
         <cornerTL>Damage/Corner</cornerTL>
         <cornerTR>Damage/Corner</cornerTR>
@@ -36,7 +37,7 @@
     <pathCost>50</pathCost>
     <statBases>
       <MaxHitPoints>350</MaxHitPoints>
-      <WorkToBuild>12000</WorkToBuild>
+      <WorkToBuild>10000</WorkToBuild>
       <Flammability>0.4</Flammability>
       <WorkTableWorkSpeedFactor>1.0</WorkTableWorkSpeedFactor>
     </statBases>
@@ -65,8 +66,16 @@
     <comps>
       <li Class="CompProperties_AffectedByFacilities">
         <linkableFacilities>
-          <li>ToolCabinet</li>
+          <li>MFV_ArcaneSpire</li>
         </linkableFacilities>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_ArcaneForge">
+        <requiredSpireCount>4</requiredSpireCount>
+        <lightningIntervalTicksMin>300</lightningIntervalTicksMin>
+        <lightningIntervalTicksMax>600</lightningIntervalTicksMax>
+        <spireRadius>10</spireRadius>
+        <lightningFlashFleckDef>SparkFlash</lightningFlashFleckDef>
+        <syncPulseChance>0.12</syncPulseChance>
       </li>
     </comps>
     <placeWorkers>
@@ -76,4 +85,3 @@
   </ThingDef>
 
 </Defs>
-

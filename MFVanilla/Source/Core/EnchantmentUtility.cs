@@ -8,18 +8,28 @@ namespace MFVanilla.Core;
 
 public static class EnchantmentUtility
 {
-    private const string FlamingLongswordRecipeDefName = "MFV_EnchantFlamingLongsword";
-    private const string LongswordDefName = "MeleeWeapon_LongSword";
-    private const string FlamingLongswordDefName = "MFV_FlamingLongsword";
-
-    public static bool IsLongsword(Thing thing)
+    private static readonly EnchantmentRecipe[] Recipes =
     {
-        return thing?.def?.defName == LongswordDefName;
+        new("MFV_EnchantFlamingLongsword", "MeleeWeapon_LongSword", "MFV_FlamingLongsword"),
+        new("MFV_EnchantZephyrSpear", "MeleeWeapon_Spear", "MFV_ZephyrSpear"),
+        new("MFV_EnchantTidebreakerMace", "MeleeWeapon_Mace", "MFV_TidebreakerMace"),
+        new("MFV_EnchantStonefallMace", "MeleeWeapon_Mace", "MFV_StonefallMace"),
+    };
+
+    public static bool IsEnchantableSourceWeapon(Thing thing, RecipeDef recipeDef)
+    {
+        EnchantmentRecipe recipe = RecipeFor(recipeDef);
+        return recipe != null && thing?.def?.defName == recipe.SourceDefName;
     }
 
-    public static bool IsGoodOrBetterLongsword(Thing thing)
+    public static bool IsEnchantmentRecipe(RecipeDef recipeDef)
     {
-        if (!IsLongsword(thing)) return false;
+        return RecipeFor(recipeDef) != null;
+    }
+
+    public static bool IsGoodOrBetterSourceWeapon(Thing thing, RecipeDef recipeDef)
+    {
+        if (!IsEnchantableSourceWeapon(thing, recipeDef)) return false;
         return thing.TryGetQuality(out QualityCategory quality) && quality >= QualityCategory.Good;
     }
 
@@ -27,21 +37,21 @@ public static class EnchantmentUtility
     {
         products = null;
 
-        if (recipeDef?.defName != FlamingLongswordRecipeDefName) return false;
+        EnchantmentRecipe recipe = RecipeFor(recipeDef);
+        if (recipe == null) return false;
 
-        Thing sourceSword = ingredients?.FirstOrDefault(IsLongsword);
-        ThingDef productDef = DefDatabase<ThingDef>.GetNamedSilentFail(FlamingLongswordDefName);
-        if (sourceSword == null || productDef == null)
+        Thing sourceWeapon = ingredients?.FirstOrDefault(thing => IsGoodOrBetterSourceWeapon(thing, recipeDef));
+        ThingDef productDef = DefDatabase<ThingDef>.GetNamedSilentFail(recipe.ProductDefName);
+        if (sourceWeapon == null || productDef == null)
         {
             return false;
         }
 
-        Thing product = ThingMaker.MakeThing(productDef, sourceSword.Stuff);
-        product.HitPoints = GenMath.RoundRandom(product.MaxHitPoints * (sourceSword.HitPoints / (float)sourceSword.MaxHitPoints));
+        Thing product = ThingMaker.MakeThing(productDef);
+        product.HitPoints = GenMath.RoundRandom(product.MaxHitPoints * (sourceWeapon.HitPoints / (float)sourceWeapon.MaxHitPoints));
         product.HitPoints = Mathf.Clamp(product.HitPoints, 1, product.MaxHitPoints);
-        product.SetFactionDirect(sourceSword.Faction);
 
-        if (sourceSword.TryGetQuality(out QualityCategory quality))
+        if (sourceWeapon.TryGetQuality(out QualityCategory quality))
         {
             product.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
         }
@@ -49,31 +59,23 @@ public static class EnchantmentUtility
         products = new List<Thing> { product };
         return true;
     }
-}
 
-public class SpecialThingFilterWorker_GoodOrBetterLongsword : SpecialThingFilterWorker
-{
-    public override bool Matches(Thing t)
+    private static EnchantmentRecipe RecipeFor(RecipeDef recipeDef)
     {
-        return EnchantmentUtility.IsGoodOrBetterLongsword(t);
+        return recipeDef == null ? null : Recipes.FirstOrDefault(recipe => recipe.RecipeDefName == recipeDef.defName);
     }
 
-    public override bool CanEverMatch(ThingDef def)
+    private sealed class EnchantmentRecipe
     {
-        return def?.defName == "MeleeWeapon_LongSword";
-    }
-}
+        public EnchantmentRecipe(string recipeDefName, string sourceDefName, string productDefName)
+        {
+            RecipeDefName = recipeDefName;
+            SourceDefName = sourceDefName;
+            ProductDefName = productDefName;
+        }
 
-public class SpecialThingFilterWorker_NormalOrWorseLongsword : SpecialThingFilterWorker
-{
-    public override bool Matches(Thing t)
-    {
-        if (t?.def?.defName != "MeleeWeapon_LongSword") return false;
-        return !t.TryGetQuality(out QualityCategory quality) || quality < QualityCategory.Good;
-    }
-
-    public override bool CanEverMatch(ThingDef def)
-    {
-        return def?.defName == "MeleeWeapon_LongSword";
+        public string RecipeDefName { get; }
+        public string SourceDefName { get; }
+        public string ProductDefName { get; }
     }
 }

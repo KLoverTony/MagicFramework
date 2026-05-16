@@ -109,7 +109,7 @@
   </ThingDef>
 
   <ThingDef Name="MFV_ArcaneFocusBase" ParentName="MFV_GemstoneResourceBase" Abstract="True">
-    <description>A polished gemstone assembly prepared to hold stable arcane charge. It is useful as a reagent for enchantment, infrastructure, and other precision magical work.</description>
+    <description>A polished gemstone assembly prepared to hold stable elemental charge. It is useful as a reagent for enchantment, infrastructure, and other precision magical work.</description>
     <graphicData>
       <texPath>Things/Item/Arcane_ink</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -127,44 +127,51 @@
   </ThingDef>
 
   <ThingDef ParentName="MFV_ArcaneFocusBase">
-    <defName>MFV_ArcaneFocus</defName>
-    <label>arcane focus</label>
-  </ThingDef>
-
-  <ThingDef ParentName="MFV_ArcaneFocusBase">
-    <defName>MFV_FineArcaneFocus</defName>
-    <label>fine arcane focus</label>
+    <defName>MFV_FireArcaneFocus</defName>
+    <label>fire arcane focus</label>
+    <description>A ruby focus prepared to hold stable fire-aspected arcane charge. It is useful for heat, flame, light, and fire enchantments.</description>
     <graphicData>
       <texPath>Things/Item/Arcane_ink</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
-      <color>(0.55,0.38,1)</color>
+      <color>(1,0.12,0.08)</color>
     </graphicData>
-    <statBases>
-      <MaxHitPoints>90</MaxHitPoints>
-      <MarketValue>120</MarketValue>
-      <Mass>0.12</Mass>
-      <Flammability>0</Flammability>
-      <DeteriorationRate>0</DeteriorationRate>
-    </statBases>
   </ThingDef>
 
   <ThingDef ParentName="MFV_ArcaneFocusBase">
-    <defName>MFV_ExquisiteArcaneFocus</defName>
-    <label>exquisite arcane focus</label>
+    <defName>MFV_WaterArcaneFocus</defName>
+    <label>water arcane focus</label>
+    <description>A sapphire focus prepared to hold stable water-aspected arcane charge. It is useful for cooling, flow, protection, and water enchantments.</description>
     <graphicData>
       <texPath>Things/Item/Arcane_ink</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
-      <color>(0.72,0.55,1)</color>
+      <color>(0.12,0.42,1)</color>
     </graphicData>
-    <statBases>
-      <MaxHitPoints>90</MaxHitPoints>
-      <MarketValue>260</MarketValue>
-      <Mass>0.12</Mass>
-      <Flammability>0</Flammability>
-      <DeteriorationRate>0</DeteriorationRate>
-    </statBases>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneFocusBase">
+    <defName>MFV_EarthArcaneFocus</defName>
+    <label>earth arcane focus</label>
+    <description>An emerald focus prepared to hold stable earth-aspected arcane charge. It is useful for stone, growth, stability, and earth enchantments.</description>
+    <graphicData>
+      <texPath>Things/Item/Arcane_ink</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+      <color>(0.08,0.75,0.24)</color>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneFocusBase">
+    <defName>MFV_AirArcaneFocus</defName>
+    <label>air arcane focus</label>
+    <description>A topaz focus prepared to hold stable air-aspected arcane charge. It is useful for wind, lightning, conduction, and air enchantments.</description>
+    <graphicData>
+      <texPath>Things/Item/Arcane_ink</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+      <color>(1,0.72,0.14)</color>
+    </graphicData>
   </ThingDef>
 
   <ThingDef ParentName="MFV_GemstoneChunkBase"><defName>MFV_RubyChunk</defName><label>ruby chunk</label><graphicData><texPath>Things/Item/Arcane_ink</texPath><graphicClass>Graphic_Single</graphicClass><drawSize>0.8</drawSize><color>(0.75,0.05,0.08)</color></graphicData></ThingDef>

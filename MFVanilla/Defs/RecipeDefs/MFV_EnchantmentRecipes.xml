@@ -4,13 +4,14 @@
   <RecipeDef>
     <defName>MFV_EnchantFlamingLongsword</defName>
     <label>enchant flaming longsword</label>
-    <description>Bind an arcane focus into a longsword, creating a flaming longsword.</description>
+    <description>Bind a fire arcane focus into a longsword, creating a flaming longsword.</description>
     <jobString>Enchanting flaming longsword.</jobString>
     <workAmount>3600</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Smith</effectWorking>
     <soundWorking>Recipe_Smith</soundWorking>
     <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <productHasIngredientStuff>false</productHasIngredientStuff>
     <ingredients>
       <li>
         <filter>
@@ -23,7 +24,7 @@
       <li>
         <filter>
           <thingDefs>
-            <li>MFV_ArcaneFocus</li>
+            <li>MFV_FireArcaneFocus</li>
           </thingDefs>
         </filter>
         <count>1</count>
@@ -32,11 +33,155 @@
     <fixedIngredientFilter>
       <thingDefs>
         <li>MeleeWeapon_LongSword</li>
-        <li>MFV_ArcaneFocus</li>
+        <li>MFV_FireArcaneFocus</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
       <MFV_FlamingLongsword>1</MFV_FlamingLongsword>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <skillRequirements>
+      <Crafting>8</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>MFV_ArcaneForge</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_EnchantZephyrSpear</defName>
+    <label>enchant Zephyr Spear</label>
+    <description>Bind an air arcane focus into a spear, creating Zephyr Spear.</description>
+    <jobString>Enchanting Zephyr Spear.</jobString>
+    <workAmount>3200</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Smith</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <productHasIngredientStuff>false</productHasIngredientStuff>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MeleeWeapon_Spear</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_AirArcaneFocus</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MeleeWeapon_Spear</li>
+        <li>MFV_AirArcaneFocus</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_ZephyrSpear>1</MFV_ZephyrSpear>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <skillRequirements>
+      <Crafting>8</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>MFV_ArcaneForge</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_EnchantTidebreakerMace</defName>
+    <label>enchant Tidebreaker Mace</label>
+    <description>Bind a water arcane focus into a mace, creating Tidebreaker Mace.</description>
+    <jobString>Enchanting Tidebreaker Mace.</jobString>
+    <workAmount>3000</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Smith</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <productHasIngredientStuff>false</productHasIngredientStuff>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MeleeWeapon_Mace</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_WaterArcaneFocus</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MeleeWeapon_Mace</li>
+        <li>MFV_WaterArcaneFocus</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_TidebreakerMace>1</MFV_TidebreakerMace>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <skillRequirements>
+      <Crafting>8</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>MFV_ArcaneForge</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_EnchantStonefallMace</defName>
+    <label>enchant Stonefall Mace</label>
+    <description>Bind an earth arcane focus into a mace, creating Stonefall Mace.</description>
+    <jobString>Enchanting Stonefall Mace.</jobString>
+    <workAmount>3000</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Smith</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <productHasIngredientStuff>false</productHasIngredientStuff>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MeleeWeapon_Mace</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_EarthArcaneFocus</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MeleeWeapon_Mace</li>
+        <li>MFV_EarthArcaneFocus</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_StonefallMace>1</MFV_StonefallMace>
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>

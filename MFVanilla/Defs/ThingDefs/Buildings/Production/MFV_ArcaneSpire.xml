@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>MFV_ArcaneSpire</defName>
+    <label>arcane spire</label>
+    <description>A resonant arcane conductor that stabilizes enchantment work when arranged around an arcane forge.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <designationCategory>Production</designationCategory>
+    <uiOrder>2615</uiOrder>
+    <graphicData>
+      <texPath>Things/Building/Production/ArcaneSpire</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.35</fillPercent>
+    <pathCost>25</pathCost>
+    <useHitPoints>true</useHitPoints>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.25</staticSunShadowHeight>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <researchPrerequisites>
+      <li>MFV_Enchantment</li>
+    </researchPrerequisites>
+    <costList>
+      <Steel>60</Steel>
+      <Plasteel>10</Plasteel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+      <MFV_AirArcaneFocus>1</MFV_AirArcaneFocus>
+    </costList>
+    <statBases>
+      <MaxHitPoints>180</MaxHitPoints>
+      <WorkToBuild>3200</WorkToBuild>
+      <Flammability>0.3</Flammability>
+    </statBases>
+    <building>
+      <paintable>true</paintable>
+    </building>
+    <comps>
+      <li Class="CompProperties_Facility">
+        <linkableBuildings>
+          <li>MFV_ArcaneForge</li>
+        </linkableBuildings>
+        <maxSimultaneous>1</maxSimultaneous>
+        <maxDistance>10</maxDistance>
+        <requiresLOS>true</requiresLOS>
+      </li>
+    </comps>
+    <placeWorkers>
+      <li>PlaceWorker_ShowFacilitiesConnections</li>
+    </placeWorkers>
+  </ThingDef>
+
+</Defs>

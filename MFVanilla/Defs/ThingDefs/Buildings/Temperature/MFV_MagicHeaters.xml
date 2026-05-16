@@ -54,7 +54,7 @@
   <ThingDef ParentName="MFV_MagicHeaterBase">
     <defName>MFV_MagicHeater</defName>
     <label>magic heater</label>
-    <description>An enchanted heater built around an arcane focus. It warms indoor spaces without electricity and stops pushing heat once the room is comfortable.</description>
+    <description>An enchanted heater built around a fire arcane focus. It warms indoor spaces without electricity and stops pushing heat once the room is comfortable.</description>
     <graphicData>
       <texPath>Things/Building/Temperature/MagicHeater</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -62,7 +62,7 @@
     </graphicData>
     <costList>
       <Steel>50</Steel>
-      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
     </costList>
     <uiOrder>2401</uiOrder>
     <comps>
@@ -81,7 +81,7 @@
   <ThingDef ParentName="MFV_MagicHeaterBase">
     <defName>MFV_FineMagicHeater</defName>
     <label>fine magic heater</label>
-    <description>An enchanted heater built around a fine arcane focus. It warms indoor spaces faster than a standard magic heater, while still stopping once the room is comfortable.</description>
+    <description>An enchanted heater built around fire-aspected fittings. It warms indoor spaces faster than a standard magic heater, while still stopping once the room is comfortable.</description>
     <graphicData>
       <texPath>Things/Building/Temperature/FineMagicHeater</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -89,7 +89,8 @@
     </graphicData>
     <costList>
       <Steel>50</Steel>
-      <MFV_FineArcaneFocus>1</MFV_FineArcaneFocus>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
+      <Silver>25</Silver>
     </costList>
     <uiOrder>2402</uiOrder>
     <comps>
@@ -108,7 +109,7 @@
   <ThingDef ParentName="MFV_MagicHeaterBase">
     <defName>MFV_ExquisiteMagicHeater</defName>
     <label>exquisite magic heater</label>
-    <description>An enchanted heater built around an exquisite arcane focus. It strongly warms indoor spaces, while still stopping once the room is comfortable.</description>
+    <description>An enchanted heater built around reinforced fire-aspected fittings. It strongly warms indoor spaces, while still stopping once the room is comfortable.</description>
     <graphicData>
       <texPath>Things/Building/Temperature/ExquisiteMagicHeater</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -116,7 +117,9 @@
     </graphicData>
     <costList>
       <Steel>50</Steel>
-      <MFV_ExquisiteArcaneFocus>1</MFV_ExquisiteArcaneFocus>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
+      <Silver>35</Silver>
+      <Gold>5</Gold>
     </costList>
     <uiOrder>2403</uiOrder>
     <comps>

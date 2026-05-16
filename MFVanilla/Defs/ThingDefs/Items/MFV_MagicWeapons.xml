@@ -7,9 +7,8 @@
     <description>A longsword carrying a bound flame enchantment. Its edge burns hot enough to sear flesh and kindle targets while remaining stable in its wielder's hand.</description>
     <possessionCount>1</possessionCount>
     <graphicData>
-      <texPath>Things/Item/Equipment/WeaponMelee/LongSword</texPath>
+      <texPath>Things/Item/Flaming_Sword</texPath>
       <graphicClass>Graphic_Single</graphicClass>
-      <color>(1,0.45,0.18)</color>
     </graphicData>
     <techLevel>Medieval</techLevel>
     <weaponTags>
@@ -17,7 +16,6 @@
       <li>LongSword</li>
       <li>MFV_MagicWeapon</li>
     </weaponTags>
-    <costStuffCount>100</costStuffCount>
     <thingSetMakerTags>
       <li>RewardStandardQualitySuper</li>
     </thingSetMakerTags>
@@ -30,10 +28,6 @@
     <relicChance>3</relicChance>
     <equippedAngleOffset>-65</equippedAngleOffset>
     <recipeMaker IsNull="True" />
-    <stuffCategories>
-      <li>Metallic</li>
-      <li>Woody</li>
-    </stuffCategories>
     <tools>
       <li>
         <label>handle</label>
@@ -70,6 +64,174 @@
             <def>Flame</def>
             <amount>8</amount>
             <chance>0.45</chance>
+          </li>
+        </extraMeleeDamages>
+      </li>
+    </tools>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseMeleeWeapon_Sharp_Quality">
+    <defName>MFV_ZephyrSpear</defName>
+    <label>Zephyr Spear</label>
+    <description>A spear carrying a bound air enchantment. Its point rides sudden pressure shifts, striking with uncanny reach and snapping gusts.</description>
+    <possessionCount>1</possessionCount>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponMelee/Spear</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <techLevel>Medieval</techLevel>
+    <weaponTags>
+      <li>NeolithicMeleeAdvanced</li>
+      <li>MedievalMeleeAdvanced</li>
+      <li>Spear</li>
+      <li>MFV_MagicWeapon</li>
+    </weaponTags>
+    <thingSetMakerTags>
+      <li>RewardStandardQualitySuper</li>
+    </thingSetMakerTags>
+    <statBases>
+      <WorkToMake>15000</WorkToMake>
+      <Mass>1.8</Mass>
+      <MarketValue>820</MarketValue>
+      <Flammability>0</Flammability>
+    </statBases>
+    <relicChance>3</relicChance>
+    <equippedAngleOffset>-25</equippedAngleOffset>
+    <recipeMaker IsNull="True" />
+    <tools>
+      <li>
+        <label>shaft</label>
+        <capacities>
+          <li>Blunt</li>
+          <li>Poke</li>
+        </capacities>
+        <power>13</power>
+        <cooldownTime>2.35</cooldownTime>
+      </li>
+      <li>
+        <label>point</label>
+        <capacities>
+          <li>Stab</li>
+        </capacities>
+        <power>23</power>
+        <armorPenetration>0.50</armorPenetration>
+        <cooldownTime>2.35</cooldownTime>
+        <extraMeleeDamages>
+          <li>
+            <def>TornadoScratch</def>
+            <amount>7</amount>
+            <chance>0.40</chance>
+          </li>
+        </extraMeleeDamages>
+      </li>
+    </tools>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseMeleeWeapon_Blunt_Quality">
+    <defName>MFV_TidebreakerMace</defName>
+    <label>Tidebreaker Mace</label>
+    <description>A mace carrying a bound water enchantment. Each impact lands with a cold, crashing weight that chills armor and flesh alike.</description>
+    <possessionCount>1</possessionCount>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponMelee/Mace</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <uiIconScale>1.2</uiIconScale>
+    <techLevel>Medieval</techLevel>
+    <weaponTags>
+      <li>MedievalMeleeDecent</li>
+      <li>MFV_MagicWeapon</li>
+    </weaponTags>
+    <thingSetMakerTags>
+      <li>RewardStandardQualitySuper</li>
+    </thingSetMakerTags>
+    <statBases>
+      <WorkToMake>9000</WorkToMake>
+      <Mass>1.35</Mass>
+      <MarketValue>760</MarketValue>
+      <Flammability>0</Flammability>
+    </statBases>
+    <relicChance>3</relicChance>
+    <equippedAngleOffset>-65</equippedAngleOffset>
+    <recipeMaker IsNull="True" />
+    <tools>
+      <li>
+        <label>handle</label>
+        <capacities>
+          <li>Poke</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+      <li>
+        <label>head</label>
+        <labelUsedInLogging>false</labelUsedInLogging>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>16.5</power>
+        <cooldownTime>2</cooldownTime>
+        <extraMeleeDamages>
+          <li>
+            <def>Frostbite</def>
+            <amount>6</amount>
+            <chance>0.40</chance>
+          </li>
+        </extraMeleeDamages>
+      </li>
+    </tools>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseMeleeWeapon_Blunt_Quality">
+    <defName>MFV_StonefallMace</defName>
+    <label>Stonefall Mace</label>
+    <description>A mace carrying a bound earth enchantment. Its head falls with unnatural certainty, adding crushing force to clean hits.</description>
+    <possessionCount>1</possessionCount>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponMelee/Mace</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <uiIconScale>1.2</uiIconScale>
+    <techLevel>Medieval</techLevel>
+    <weaponTags>
+      <li>MedievalMeleeDecent</li>
+      <li>MFV_MagicWeapon</li>
+    </weaponTags>
+    <thingSetMakerTags>
+      <li>RewardStandardQualitySuper</li>
+    </thingSetMakerTags>
+    <statBases>
+      <WorkToMake>9000</WorkToMake>
+      <Mass>1.55</Mass>
+      <MarketValue>760</MarketValue>
+      <Flammability>0</Flammability>
+    </statBases>
+    <relicChance>3</relicChance>
+    <equippedAngleOffset>-65</equippedAngleOffset>
+    <recipeMaker IsNull="True" />
+    <tools>
+      <li>
+        <label>handle</label>
+        <capacities>
+          <li>Poke</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2</cooldownTime>
+      </li>
+      <li>
+        <label>head</label>
+        <labelUsedInLogging>false</labelUsedInLogging>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>18</power>
+        <armorPenetration>0.28</armorPenetration>
+        <cooldownTime>2.2</cooldownTime>
+        <extraMeleeDamages>
+          <li>
+            <def>Blunt</def>
+            <amount>7</amount>
+            <chance>0.35</chance>
           </li>
         </extraMeleeDamages>
       </li>

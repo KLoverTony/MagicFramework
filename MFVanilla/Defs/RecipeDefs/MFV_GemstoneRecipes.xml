@@ -138,10 +138,10 @@
   </RecipeDef>
 
   <RecipeDef>
-    <defName>MFV_MakeArcaneFocus</defName>
-    <label>make arcane focus</label>
-    <description>Set cut gemstones into a simple conductive frame to make an arcane focus.</description>
-    <jobString>Making arcane focus.</jobString>
+    <defName>MFV_MakeFireArcaneFocus</defName>
+    <label>make fire arcane focus</label>
+    <description>Set cut rubies into a simple conductive frame to make a fire arcane focus.</description>
+    <jobString>Making fire arcane focus.</jobString>
     <workAmount>500</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Smith</effectWorking>
@@ -152,11 +152,6 @@
         <filter>
           <thingDefs>
             <li>MFV_CommonRuby</li>
-            <li>MFV_CommonSapphire</li>
-            <li>MFV_CommonEmerald</li>
-            <li>MFV_CommonDiamond</li>
-            <li>MFV_CommonAmethyst</li>
-            <li>MFV_CommonTopaz</li>
           </thingDefs>
         </filter>
         <count>3</count>
@@ -173,133 +168,143 @@
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_CommonRuby</li>
+        <li>Silver</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_LapidaryBench</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_MakeWaterArcaneFocus</defName>
+    <label>make water arcane focus</label>
+    <description>Set cut sapphires into a simple conductive frame to make a water arcane focus.</description>
+    <jobString>Making water arcane focus.</jobString>
+    <workAmount>500</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_CommonSapphire</li>
+          </thingDefs>
+        </filter>
+        <count>3</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Silver</li>
+          </thingDefs>
+        </filter>
+        <count>15</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
         <li>MFV_CommonSapphire</li>
+        <li>Silver</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_WaterArcaneFocus>1</MFV_WaterArcaneFocus>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_LapidaryBench</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_MakeEarthArcaneFocus</defName>
+    <label>make earth arcane focus</label>
+    <description>Set cut emeralds into a simple conductive frame to make an earth arcane focus.</description>
+    <jobString>Making earth arcane focus.</jobString>
+    <workAmount>500</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_CommonEmerald</li>
+          </thingDefs>
+        </filter>
+        <count>3</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Silver</li>
+          </thingDefs>
+        </filter>
+        <count>15</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
         <li>MFV_CommonEmerald</li>
-        <li>MFV_CommonDiamond</li>
-        <li>MFV_CommonAmethyst</li>
+        <li>Silver</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_EarthArcaneFocus>1</MFV_EarthArcaneFocus>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_LapidaryBench</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_MakeAirArcaneFocus</defName>
+    <label>make air arcane focus</label>
+    <description>Set cut topazes into a simple conductive frame to make an air arcane focus.</description>
+    <jobString>Making air arcane focus.</jobString>
+    <workAmount>500</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_CommonTopaz</li>
+          </thingDefs>
+        </filter>
+        <count>3</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>Silver</li>
+          </thingDefs>
+        </filter>
+        <count>15</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
         <li>MFV_CommonTopaz</li>
         <li>Silver</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>
-      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
-    </products>
-    <workSkill>Crafting</workSkill>
-    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
-    <recipeUsers>
-      <li>MFV_LapidaryBench</li>
-    </recipeUsers>
-  </RecipeDef>
-
-  <RecipeDef>
-    <defName>MFV_MakeFineArcaneFocus</defName>
-    <label>make fine arcane focus</label>
-    <description>Set fine cut gemstones into a carefully prepared conductive frame to make a stronger arcane focus.</description>
-    <jobString>Making fine arcane focus.</jobString>
-    <workAmount>700</workAmount>
-    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-    <effectWorking>Smith</effectWorking>
-    <soundWorking>Recipe_Machining</soundWorking>
-    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>MFV_FineRuby</li>
-            <li>MFV_FineSapphire</li>
-            <li>MFV_FineEmerald</li>
-            <li>MFV_FineDiamond</li>
-            <li>MFV_FineAmethyst</li>
-            <li>MFV_FineTopaz</li>
-          </thingDefs>
-        </filter>
-        <count>2</count>
-      </li>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>Silver</li>
-          </thingDefs>
-        </filter>
-        <count>25</count>
-      </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>MFV_FineRuby</li>
-        <li>MFV_FineSapphire</li>
-        <li>MFV_FineEmerald</li>
-        <li>MFV_FineDiamond</li>
-        <li>MFV_FineAmethyst</li>
-        <li>MFV_FineTopaz</li>
-        <li>Silver</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <products>
-      <MFV_FineArcaneFocus>1</MFV_FineArcaneFocus>
-    </products>
-    <workSkill>Crafting</workSkill>
-    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
-    <recipeUsers>
-      <li>MFV_LapidaryBench</li>
-    </recipeUsers>
-  </RecipeDef>
-
-  <RecipeDef>
-    <defName>MFV_MakeExquisiteArcaneFocus</defName>
-    <label>make exquisite arcane focus</label>
-    <description>Set an exquisite gemstone into gold and silver fittings to make a powerful arcane focus.</description>
-    <jobString>Making exquisite arcane focus.</jobString>
-    <workAmount>900</workAmount>
-    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
-    <effectWorking>Smith</effectWorking>
-    <soundWorking>Recipe_Machining</soundWorking>
-    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
-    <ingredients>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>MFV_ExquisiteRuby</li>
-            <li>MFV_ExquisiteSapphire</li>
-            <li>MFV_ExquisiteEmerald</li>
-            <li>MFV_ExquisiteDiamond</li>
-            <li>MFV_ExquisiteAmethyst</li>
-            <li>MFV_ExquisiteTopaz</li>
-          </thingDefs>
-        </filter>
-        <count>1</count>
-      </li>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>Silver</li>
-          </thingDefs>
-        </filter>
-        <count>35</count>
-      </li>
-      <li>
-        <filter>
-          <thingDefs>
-            <li>Gold</li>
-          </thingDefs>
-        </filter>
-        <count>5</count>
-      </li>
-    </ingredients>
-    <fixedIngredientFilter>
-      <thingDefs>
-        <li>MFV_ExquisiteRuby</li>
-        <li>MFV_ExquisiteSapphire</li>
-        <li>MFV_ExquisiteEmerald</li>
-        <li>MFV_ExquisiteDiamond</li>
-        <li>MFV_ExquisiteAmethyst</li>
-        <li>MFV_ExquisiteTopaz</li>
-        <li>Silver</li>
-        <li>Gold</li>
-      </thingDefs>
-    </fixedIngredientFilter>
-    <products>
-      <MFV_ExquisiteArcaneFocus>1</MFV_ExquisiteArcaneFocus>
+      <MFV_AirArcaneFocus>1</MFV_AirArcaneFocus>
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>

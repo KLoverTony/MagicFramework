@@ -50,10 +50,10 @@
   <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
     <defName>MFV_MagicPassiveCooler</defName>
     <label>magic passive cooler</label>
-    <description>An enchanted cooler built around an arcane focus. It cools indoor spaces without electricity or refueling, though it is not efficient enough to refrigerate food.</description>
+    <description>An enchanted cooler built around a water arcane focus. It cools indoor spaces without electricity or refueling, though it is not efficient enough to refrigerate food.</description>
     <costList>
       <WoodLog>50</WoodLog>
-      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+      <MFV_WaterArcaneFocus>1</MFV_WaterArcaneFocus>
     </costList>
     <uiOrder>2404</uiOrder>
     <comps>
@@ -72,10 +72,11 @@
   <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
     <defName>MFV_FineMagicPassiveCooler</defName>
     <label>fine magic passive cooler</label>
-    <description>An enchanted cooler built around a fine arcane focus. It cools indoor spaces without electricity or refueling, and can draw the air colder than a standard passive cooler.</description>
+    <description>An enchanted cooler built around water-aspected fittings. It cools indoor spaces without electricity or refueling, and can draw the air colder than a standard passive cooler.</description>
     <costList>
       <WoodLog>50</WoodLog>
-      <MFV_FineArcaneFocus>1</MFV_FineArcaneFocus>
+      <MFV_WaterArcaneFocus>1</MFV_WaterArcaneFocus>
+      <Silver>25</Silver>
     </costList>
     <uiOrder>2405</uiOrder>
     <comps>
@@ -94,10 +95,12 @@
   <ThingDef ParentName="MFV_MagicPassiveCoolerBase">
     <defName>MFV_ExquisiteMagicPassiveCooler</defName>
     <label>exquisite magic passive cooler</label>
-    <description>An enchanted cooler built around an exquisite arcane focus. It cools indoor spaces without electricity or refueling, and can keep a room below freezing in favorable conditions.</description>
+    <description>An enchanted cooler built around reinforced water-aspected fittings. It cools indoor spaces without electricity or refueling, and can keep a room below freezing in favorable conditions.</description>
     <costList>
       <WoodLog>50</WoodLog>
-      <MFV_ExquisiteArcaneFocus>1</MFV_ExquisiteArcaneFocus>
+      <MFV_WaterArcaneFocus>1</MFV_WaterArcaneFocus>
+      <Silver>35</Silver>
+      <Gold>5</Gold>
     </costList>
     <uiOrder>2406</uiOrder>
     <comps>

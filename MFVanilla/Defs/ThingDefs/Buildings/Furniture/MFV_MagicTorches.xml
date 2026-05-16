@@ -4,10 +4,10 @@
   <ThingDef ParentName="TorchLamp">
     <defName>MFV_MagicTorchLamp</defName>
     <label>magic torch lamp</label>
-    <description>An enchanted torch that burns with a cold blue flame. It lights an area without needing refueling, and produces a small amount of heat.</description>
+    <description>An enchanted torch built around a fire arcane focus. It lights an area without needing refueling, and produces a small amount of heat.</description>
     <costList Inherit="False">
       <WoodLog>20</WoodLog>
-      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
     </costList>
     <researchPrerequisites>
       <li>MFV_Enchantment</li>
@@ -64,7 +64,7 @@
   <ThingDef ParentName="TorchLamp">
     <defName>MFV_MagicTorchWallLamp</defName>
     <label>magic wall torch lamp</label>
-    <description>An enchanted wall-mounted torch that burns with a cold blue flame. It lights an area without needing refueling, and produces a small amount of heat.</description>
+    <description>An enchanted wall-mounted torch built around a fire arcane focus. It lights an area without needing refueling, and produces a small amount of heat.</description>
     <rotatable>true</rotatable>
     <graphicData>
       <texPath>Things/Building/Misc/WallTorch/WallTorch</texPath>
@@ -84,7 +84,7 @@
     <pathCost>0</pathCost>
     <costList Inherit="False">
       <WoodLog>15</WoodLog>
-      <MFV_ArcaneFocus>1</MFV_ArcaneFocus>
+      <MFV_FireArcaneFocus>1</MFV_FireArcaneFocus>
     </costList>
     <building>
       <isEdifice>false</isEdifice>

@@ -69,6 +69,16 @@ public static class MFVanillaPatcher
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(GenRecipe_MakeRecipeProducts_Postfix))
         );
 
+        harmony.Patch(
+            AccessTools.Method(typeof(WorkGiver_DoBill), "IsUsableIngredient"),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(WorkGiver_DoBill_IsUsableIngredient_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(WorkGiver_DoBill), "ThingIsUsableBillGiver"),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(WorkGiver_DoBill_ThingIsUsableBillGiver_Postfix))
+        );
+
         _isPatched = true;
         Log.Message("[MFVanilla] Vanilla tech research suppression patches applied.");
     }
@@ -217,6 +227,26 @@ public static class MFVanillaPatcher
         if (GemstoneUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> products))
         {
             __result = products;
+        }
+    }
+
+    private static void WorkGiver_DoBill_IsUsableIngredient_Postfix(Thing t, Bill bill, ref bool __result)
+    {
+        if (!__result || !EnchantmentUtility.IsEnchantmentRecipe(bill?.recipe)) return;
+        if (EnchantmentUtility.IsEnchantableSourceWeapon(t, bill.recipe) && !EnchantmentUtility.IsGoodOrBetterSourceWeapon(t, bill.recipe))
+        {
+            __result = false;
+        }
+    }
+
+    private static void WorkGiver_DoBill_ThingIsUsableBillGiver_Postfix(Thing thing, ref bool __result)
+    {
+        if (!__result) return;
+
+        CompArcaneForge arcaneForge = thing?.TryGetComp<CompArcaneForge>();
+        if (arcaneForge != null && !arcaneForge.HasRequiredSpires)
+        {
+            __result = false;
         }
     }
 

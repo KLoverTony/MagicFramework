@@ -35,6 +35,7 @@ Current release hygiene checklist:
 - Smoke test MFVanilla progression after production-tree changes: research gates, workbenches, Arcane Ink, parchment/papyrus, gemstones, generated scroll recipes, scroll learning, spell details, and settings.
 - Smoke test AeternusFaith before release: ideology load, ritual circles/rooms, lecterns, skeleton rite, ossuary rite, spectre rite, undead cleanup, save/load, and small-screen ritual dialogs.
 - Capture any remaining known issues as post-release notes unless they affect startup, save/load, cleanup, or first-party usability.
+- Update modversion label in about.xml files commensurate with developmental progress.
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
@@ -63,7 +64,7 @@ Current release hygiene checklist:
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
 | MF-040 | P1 | S | Content | Introduce a first launch splash screen and include important notes |
-| MF-041 | P3 | M | Content | Introduce an Arcane Forge production item |
+| MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
 
 ## P1 Release And Content Priorities
 
@@ -85,6 +86,10 @@ Current state:
 - Research sequencing intentionally leaves Lapidary and Alchemy disconnected: colonies can buy gemstone dust for early Arcane Ink, then research Lapidary later when they want self-sufficient gemstone production.
 - Papyrus can now be pressed from wood logs or plant matter such as hay, keeping wood useful while allowing a more literal plant-fiber route.
 - MFVanilla builds successfully after the production-chain and research-tree changes.
+- Arcane foci are now split by the first four elemental production paths: fire foci from ruby, water foci from sapphire, earth foci from emerald, and air foci from topaz. The flaming longsword recipe now consumes a fire arcane focus.
+- Magic heaters and torches now consume fire foci, magic passive coolers consume water foci, and arcane spires consume air foci.
+- The Arcane Forge is now an active enchantment bench gated by linked arcane spires. Its first weapon set includes Flaming Longsword, Zephyr Spear, Tidebreaker Mace, and Stonefall Mace, all transformed from good-or-better mundane weapons while preserving final quality.
+- Arcane Forge setup costs have been tuned down for release readiness while keeping the four-spire requirement as the advanced enchantment gate.
 
 Priority:
 - review the full production chain from raw inputs through finished scrolls and magic utility items
@@ -96,11 +101,12 @@ Priority:
 
 Next steps:
 1. Smoke test trader stock and buy behavior for shaman, neolithic bulk, outlander bulk, and orbital bulk traders, with special attention to whether purchasable gemstone dust supports early Arcane Ink before Lapidary.
-2. Review gemstone vein availability, mining output, market values, and stack sizes so gemstone dust does not become either invisible or too abundant.
-3. Decide the first typed-focus model for magic utility items: generic arcane foci for now, gemstone-family foci, or domain foci such as fire/water/earth/air/life/spirit.
-4. Update magic heaters, coolers, torches, and future utility buildings once the focus model is chosen.
-5. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop feels stable.
-6. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll.
+2. Review gemstone vein availability, mining output, market values, and stack sizes so gemstone dust and elemental focus production do not become either invisible or too abundant.
+3. Smoke test the Arcane Forge loop: research Enchantment/Fabrication, build the forge and four air-focus spires, confirm inspect text and bill availability, then craft each enchanted weapon from good-or-better source weapons.
+4. Balance the first enchanted weapon set against excellent/masterwork vanilla weapons: damage riders, work amounts, market values, source weapon requirements, and focus costs.
+5. Decide whether elemental foci or enchanted weapons should appear in trader stock, quest rewards, or remain colony-crafted for the first release.
+6. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop and elemental focus loop feel stable.
+7. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll, cut gemstones, make foci, and enchant a weapon.
 
 Success criteria:
 - a player can understand what to build next without dev knowledge
@@ -114,6 +120,7 @@ Goal: add a small number of features that deepen the released content without op
 
 Good candidates:
 - more utility recipes or buildings that consume magic production outputs
+- targeted Arcane Forge expansions that reuse the elemental focus model without becoming a broad equipment framework
 - one or two additional spell families only if they validate already-supported primitives or a narrowly needed framework hook
 - stronger integration between spell metadata, scroll recipes, research, and generated descriptions
 - clearer player feedback for spell scaling, active enhancement rules, and unlock paths
@@ -507,10 +514,12 @@ Target coverage:
  - Inform players about mod settings to enable/disable tech themed vanilla research.
  - Consider other important details (to be determined)
 
-### MF-040 Arcane forge
+### MF-041 Arcane forge
 
 Goal: Introduce an Arcane Forge production item
 
 Target coverage: 
- - develop requirements to build this mid - late game item
- - develop recipes for transforming mundane weapons (ie. swords) of high quality into magic versions (eg. flame sword, runic blade, etc), 
+ - smoke test requirements to build this mid-late game item
+ - validate spire-link gating, inspect strings, and bill availability
+ - balance recipes for transforming good-or-better mundane weapons into magic versions
+ - decide whether the first weapon set needs custom textures before release
