@@ -12,6 +12,7 @@ public static class GemstoneUtility
     public const string BreakChunkRecipeDefName = "MFV_BreakGemstoneChunk";
     public const string BreakDenseChunkRecipeDefName = "MFV_BreakDenseGemstoneChunk";
     public const string CutGemstoneRecipeDefName = "MFV_CutGemstone";
+    public const string GemstoneDustDefName = "MFV_GemstoneDust";
 
     private static readonly GemstoneFamily[] Families =
     {
@@ -76,8 +77,9 @@ public static class GemstoneUtility
                 return true;
             }
 
-            string productDefName = family.CutDefNameForSkill(SkillLevel(worker, SkillDefOf.Crafting));
-            products = MakeProducts(productDefName, 1);
+            GemstoneCutResult result = family.CutResultForSkill(SkillLevel(worker, SkillDefOf.Crafting));
+            products = MakeProducts(result.DefName, 1);
+            AddProduct(products, GemstoneDustDefName, result.DustYield);
             return true;
         }
 
@@ -115,6 +117,16 @@ public static class GemstoneUtility
         return new List<Thing> { thing };
     }
 
+    private static void AddProduct(List<Thing> products, string defName, int count)
+    {
+        ThingDef thingDef = DefDatabase<ThingDef>.GetNamedSilentFail(defName);
+        if (thingDef == null) return;
+
+        Thing thing = ThingMaker.MakeThing(thingDef);
+        thing.stackCount = count;
+        products.Add(thing);
+    }
+
     private static int SkillLevel(Pawn pawn, SkillDef skillDef)
     {
         return pawn?.skills?.GetSkill(skillDef)?.Level ?? 0;
@@ -132,9 +144,9 @@ public static class GemstoneUtility
         private readonly string _standardChunkDefName;
         private readonly string _denseChunkDefName;
         public readonly string RawPieceDefName;
-        private readonly string _commonCutDefName;
-        private readonly string _fineCutDefName;
-        private readonly string _exquisiteCutDefName;
+        private readonly GemstoneCutResult _commonCut;
+        private readonly GemstoneCutResult _fineCut;
+        private readonly GemstoneCutResult _exquisiteCut;
 
         public GemstoneFamily(string label, string standardChunkDefName, string denseChunkDefName, string rawPieceDefName, string commonCutDefName, string fineCutDefName, string exquisiteCutDefName)
         {
@@ -142,9 +154,9 @@ public static class GemstoneUtility
             _standardChunkDefName = standardChunkDefName;
             _denseChunkDefName = denseChunkDefName;
             RawPieceDefName = rawPieceDefName;
-            _commonCutDefName = commonCutDefName;
-            _fineCutDefName = fineCutDefName;
-            _exquisiteCutDefName = exquisiteCutDefName;
+            _commonCut = new GemstoneCutResult(commonCutDefName, 3);
+            _fineCut = new GemstoneCutResult(fineCutDefName, 2);
+            _exquisiteCut = new GemstoneCutResult(exquisiteCutDefName, 1);
         }
 
         public string Label { get; }
@@ -166,16 +178,28 @@ public static class GemstoneUtility
             };
         }
 
-        public string CutDefNameForSkill(int craftingSkill)
+        public GemstoneCutResult CutResultForSkill(int craftingSkill)
         {
             float normalizedSkill = Mathf.Clamp01(craftingSkill / 20f);
             float exquisiteChance = Mathf.Lerp(0f, 0.18f, Mathf.InverseLerp(8f, 20f, craftingSkill));
             float fineChance = Mathf.Lerp(0.08f, 0.55f, normalizedSkill);
             float roll = Rand.Value;
 
-            if (roll < exquisiteChance) return _exquisiteCutDefName;
-            if (roll < exquisiteChance + fineChance) return _fineCutDefName;
-            return _commonCutDefName;
+            if (roll < exquisiteChance) return _exquisiteCut;
+            if (roll < exquisiteChance + fineChance) return _fineCut;
+            return _commonCut;
         }
+    }
+
+    private readonly struct GemstoneCutResult
+    {
+        public GemstoneCutResult(string defName, int dustYield)
+        {
+            DefName = defName;
+            DustYield = dustYield;
+        }
+
+        public string DefName { get; }
+        public int DustYield { get; }
     }
 }

@@ -10,6 +10,9 @@
     <thingCategories>
       <li>ResourcesRaw</li>
     </thingCategories>
+    <tradeTags>
+      <li>MFV_Gemstone</li>
+    </tradeTags>
     <stackLimit>75</stackLimit>
     <statBases>
       <MaxHitPoints>80</MaxHitPoints>
@@ -49,6 +52,26 @@
       <MaxHitPoints>70</MaxHitPoints>
       <MarketValue>5</MarketValue>
       <Mass>0.04</Mass>
+      <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_GemstoneResourceBase">
+    <defName>MFV_GemstoneDust</defName>
+    <label>gemstone dust</label>
+    <description>Fine crystalline dust collected while cutting gemstones. Alchemists use it to stabilize arcane ink for scrollwork.</description>
+    <graphicData>
+      <texPath>Things/Item/Gemstone_dust</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.55</drawSize>
+      <color>(0.72,0.68,0.82)</color>
+    </graphicData>
+    <stackLimit>150</stackLimit>
+    <statBases>
+      <MaxHitPoints>50</MaxHitPoints>
+      <MarketValue>2.5</MarketValue>
+      <Mass>0.01</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
     </statBases>

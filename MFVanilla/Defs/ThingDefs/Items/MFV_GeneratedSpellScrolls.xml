@@ -132,7 +132,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_DelayedBlastRune</spell>
         <requiredResearch>
-          <li>MFV_RunicInscription</li>
+          <li>MFV_Enchantment</li>
           <li>MFV_Pyromancy</li>
         </requiredResearch>
       </li>
@@ -558,7 +558,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_RuneTrap</spell>
         <requiredResearch>
-          <li>MFV_RunicInscription</li>
+          <li>MFV_Enchantment</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />

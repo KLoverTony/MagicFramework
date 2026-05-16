@@ -34,7 +34,7 @@
     <learning>
       <canBeLearned>true</canBeLearned>
       <researchPrerequisites>
-        <li>MFV_RunicInscription</li>
+        <li>MFV_Enchantment</li>
         <li>MFV_Pyromancy</li>
       </researchPrerequisites>
       <requirements>

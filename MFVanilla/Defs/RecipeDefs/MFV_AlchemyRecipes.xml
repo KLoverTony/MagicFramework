@@ -4,9 +4,9 @@
   <RecipeDef>
     <defName>MFV_MakeArcaneInk</defName>
     <label>make arcane ink</label>
-    <description>Steep and reduce exotic herbs into a concentrated ink suitable for magical writing.</description>
+    <description>Steep exotic herbs with gemstone dust into a concentrated ink suitable for magical writing.</description>
     <jobString>Making arcane ink.</jobString>
-    <workAmount>350</workAmount>
+    <workAmount>420</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Cook</effectWorking>
     <soundWorking>Recipe_CookMeal</soundWorking>
@@ -20,10 +20,19 @@
         </filter>
         <count>10</count>
       </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_GemstoneDust</li>
+          </thingDefs>
+        </filter>
+        <count>2</count>
+      </li>
     </ingredients>
     <fixedIngredientFilter>
       <thingDefs>
         <li>MFV_ExoticHerbs</li>
+        <li>MFV_GemstoneDust</li>
       </thingDefs>
     </fixedIngredientFilter>
     <products>

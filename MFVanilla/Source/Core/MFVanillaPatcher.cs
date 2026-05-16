@@ -208,6 +208,12 @@ public static class MFVanillaPatcher
 
     private static void GenRecipe_MakeRecipeProducts_Postfix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, ref IEnumerable<Thing> __result)
     {
+        if (EnchantmentUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> enchantedProducts))
+        {
+            __result = enchantedProducts;
+            return;
+        }
+
         if (GemstoneUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> products))
         {
             __result = products;

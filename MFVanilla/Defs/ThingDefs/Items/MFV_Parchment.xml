@@ -13,6 +13,9 @@
     <thingCategories>
       <li>ResourcesRaw</li>
     </thingCategories>
+    <tradeTags>
+      <li>MFV_ArcaneReagent</li>
+    </tradeTags>
     <stackLimit>75</stackLimit>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>

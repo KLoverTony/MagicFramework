@@ -2,6 +2,23 @@
 <Defs>
 
   <WorkGiverDef>
+    <defName>MFV_DoBillsPapyrusPress</defName>
+    <label>make papyrus</label>
+    <giverClass>WorkGiver_DoBill</giverClass>
+    <workType>Crafting</workType>
+    <priorityInType>86</priorityInType>
+    <fixedBillGiverDefs>
+      <li>MFV_PapyrusPress</li>
+    </fixedBillGiverDefs>
+    <verb>make papyrus at</verb>
+    <gerund>making papyrus at</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
     <defName>MFV_DoBillsParchmenteryBench</defName>
     <label>make parchment</label>
     <giverClass>WorkGiver_DoBill</giverClass>
@@ -63,6 +80,23 @@
     </fixedBillGiverDefs>
     <verb>work at</verb>
     <gerund>working at</gerund>
+    <requiredCapacities>
+      <li>Manipulation</li>
+    </requiredCapacities>
+    <prioritizeSustains>true</prioritizeSustains>
+  </WorkGiverDef>
+
+  <WorkGiverDef>
+    <defName>MFV_DoBillsArcaneForge</defName>
+    <label>forge magic items</label>
+    <giverClass>WorkGiver_DoBill</giverClass>
+    <workType>Crafting</workType>
+    <priorityInType>81</priorityInType>
+    <fixedBillGiverDefs>
+      <li>MFV_ArcaneForge</li>
+    </fixedBillGiverDefs>
+    <verb>enchant at</verb>
+    <gerund>enchanting at</gerund>
     <requiredCapacities>
       <li>Manipulation</li>
     </requiredCapacities>

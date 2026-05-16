@@ -94,7 +94,7 @@
   <RecipeDef>
     <defName>MFV_CutGemstone</defName>
     <label>cut gemstone</label>
-    <description>Cut and polish a raw gemstone piece into a finished gemstone.</description>
+    <description>Cut and polish a raw gemstone piece into a finished gemstone, collecting more usable gemstone dust when more of the stone is ground away.</description>
     <jobString>Cutting gemstone.</jobString>
     <workAmount>360</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -128,6 +128,7 @@
     </fixedIngredientFilter>
     <products>
       <MFV_CommonRuby>1</MFV_CommonRuby>
+      <MFV_GemstoneDust>3</MFV_GemstoneDust>
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>

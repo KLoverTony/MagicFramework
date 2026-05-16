@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <!-- Disabled while isolating play-data load crash.
+  <SpecialThingFilterDef>
+    <defName>MFV_AllowGoodOrBetterLongswords</defName>
+    <label>good or better longswords</label>
+    <description>Allows longswords with good or better quality.</description>
+    <workerClass>MFVanilla.Core.SpecialThingFilterWorker_GoodOrBetterLongsword</workerClass>
+  </SpecialThingFilterDef>
+
+  <SpecialThingFilterDef>
+    <defName>MFV_DisallowNormalOrWorseLongswords</defName>
+    <label>normal or worse longswords</label>
+    <description>Matches longswords below good quality.</description>
+    <workerClass>MFVanilla.Core.SpecialThingFilterWorker_NormalOrWorseLongsword</workerClass>
+  </SpecialThingFilterDef>
+  -->
+
+</Defs>

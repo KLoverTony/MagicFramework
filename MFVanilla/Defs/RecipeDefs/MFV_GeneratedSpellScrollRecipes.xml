@@ -239,7 +239,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_RunicInscription</researchPrerequisite>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1063,7 +1063,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_RunicInscription</researchPrerequisite>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
     <ingredients>
       <li>
         <filter>

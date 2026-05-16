@@ -16,6 +16,9 @@
     <thingCategories>
       <li>ItemsMisc</li>
     </thingCategories>
+    <tradeTags>
+      <li>MFV_SpellScroll</li>
+    </tradeTags>
     <tradeability>Sellable</tradeability>
     <techLevel>Neolithic</techLevel>
     <statBases>

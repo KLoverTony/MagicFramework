@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <RecipeDef>
+    <defName>MFV_EnchantFlamingLongsword</defName>
+    <label>enchant flaming longsword</label>
+    <description>Bind an arcane focus into a longsword, creating a flaming longsword.</description>
+    <jobString>Enchanting flaming longsword.</jobString>
+    <workAmount>3600</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Smith</effectWorking>
+    <soundWorking>Recipe_Smith</soundWorking>
+    <researchPrerequisite>MFV_Enchantment</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MeleeWeapon_LongSword</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneFocus</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MeleeWeapon_LongSword</li>
+        <li>MFV_ArcaneFocus</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_FlamingLongsword>1</MFV_FlamingLongsword>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <skillRequirements>
+      <Crafting>8</Crafting>
+    </skillRequirements>
+    <recipeUsers>
+      <li>MFV_ArcaneForge</li>
+    </recipeUsers>
+  </RecipeDef>
+
+</Defs>

@@ -2,11 +2,52 @@
 <Defs>
 
   <RecipeDef>
+    <defName>MFV_MakePapyrus</defName>
+    <label>make papyrus</label>
+    <description>Press wood pulp, hay, or other plant fibers into simple papyrus sheets for notes, formulae, and low-order scrollwork.</description>
+    <jobString>Making papyrus.</jobString>
+    <workAmount>320</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Papyrus</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>WoodLog</li>
+          </thingDefs>
+          <categories>
+            <li>PlantMatter</li>
+          </categories>
+        </filter>
+        <count>8</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>WoodLog</li>
+      </thingDefs>
+      <categories>
+        <li>PlantMatter</li>
+      </categories>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_Papyrus>5</MFV_Papyrus>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_PapyrusPress</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
     <defName>MFV_MakeParchment</defName>
     <label>make parchment</label>
-    <description>Turn wood into pressed parchment sheets for arcane writing.</description>
+    <description>Scrape, stretch, and dry leather into durable parchment sheets for formal scrollwork.</description>
     <jobString>Making parchment.</jobString>
-    <workAmount>450</workAmount>
+    <workAmount>520</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
@@ -14,17 +55,17 @@
     <ingredients>
       <li>
         <filter>
-          <thingDefs>
-            <li>WoodLog</li>
-          </thingDefs>
+          <categories>
+            <li>Leathers</li>
+          </categories>
         </filter>
-        <count>10</count>
+        <count>12</count>
       </li>
     </ingredients>
     <fixedIngredientFilter>
-      <thingDefs>
-        <li>WoodLog</li>
-      </thingDefs>
+      <categories>
+        <li>Leathers</li>
+      </categories>
     </fixedIngredientFilter>
     <products>
       <MFV_Parchment>5</MFV_Parchment>

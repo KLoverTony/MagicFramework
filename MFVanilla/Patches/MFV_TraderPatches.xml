@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/TraderKindDef[defName="Caravan_Neolithic_ShamanMerchant"]/stockGenerators</xpath>
+    <value>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_ExoticHerbs</thingDef>
+        <countRange>15~45</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_GemstoneDust</thingDef>
+        <countRange>8~24</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_ArcaneInk</thingDef>
+        <countRange>1~5</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Papyrus</thingDef>
+        <countRange>8~24</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Parchment</thingDef>
+        <countRange>4~12</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_RubyChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SapphireChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_EmeraldChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_AmethystChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_TopazChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_DiamondChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_Tag">
+        <tradeTag>MFV_SpellScroll</tradeTag>
+        <thingDefCountRange>1~2</thingDefCountRange>
+        <countRange>0~1</countRange>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_ArcaneReagent</tag>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_Gemstone</tag>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_SpellScroll</tag>
+      </li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/TraderKindDef[defName="Caravan_Neolithic_BulkGoods"]/stockGenerators</xpath>
+    <value>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_ExoticHerbs</thingDef>
+        <countRange>10~30</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_GemstoneDust</thingDef>
+        <countRange>4~16</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Papyrus</thingDef>
+        <countRange>8~24</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Parchment</thingDef>
+        <countRange>3~10</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_RubyChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SapphireChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_EmeraldChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_AmethystChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_TopazChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_DiamondChunk</thingDef>
+        <countRange>0~1</countRange>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_ArcaneReagent</tag>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_Gemstone</tag>
+      </li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/TraderKindDef[defName="Caravan_Outlander_BulkGoods"]/stockGenerators</xpath>
+    <value>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_ExoticHerbs</thingDef>
+        <countRange>15~45</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_GemstoneDust</thingDef>
+        <countRange>8~24</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Papyrus</thingDef>
+        <countRange>12~36</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Parchment</thingDef>
+        <countRange>6~18</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_RubyChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SapphireChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_EmeraldChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_AmethystChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_TopazChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_DiamondChunk</thingDef>
+        <countRange>0~2</countRange>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_ArcaneReagent</tag>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_Gemstone</tag>
+      </li>
+    </value>
+  </Operation>
+
+  <Operation Class="PatchOperationAdd">
+    <xpath>/Defs/TraderKindDef[defName="Orbital_BulkGoods"]/stockGenerators</xpath>
+    <value>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_ExoticHerbs</thingDef>
+        <countRange>20~60</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_GemstoneDust</thingDef>
+        <countRange>12~36</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Papyrus</thingDef>
+        <countRange>20~60</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_Parchment</thingDef>
+        <countRange>10~30</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_RubyChunk</thingDef>
+        <countRange>0~4</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SapphireChunk</thingDef>
+        <countRange>0~4</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_EmeraldChunk</thingDef>
+        <countRange>0~4</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_AmethystChunk</thingDef>
+        <countRange>0~4</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_TopazChunk</thingDef>
+        <countRange>0~4</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_DiamondChunk</thingDef>
+        <countRange>0~3</countRange>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_ArcaneReagent</tag>
+      </li>
+      <li Class="StockGenerator_BuyTradeTag">
+        <tag>MFV_Gemstone</tag>
+      </li>
+    </value>
+  </Operation>
+
+</Patch>

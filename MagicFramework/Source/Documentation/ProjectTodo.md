@@ -11,34 +11,48 @@ Complexity key:
 
 Priority key:
 - `P0`: immediate stability or correctness.
-- `P1`: high-value framework capability.
+- `P1`: near-term release, content, or framework work.
 - `P2`: content/runtime polish.
 - `P3`: nice-to-have, experiments, or later expansion.
 
 ## Priority Index
 
-## Version 1 Wrap-Up
+## Post-Release Direction
 
-MagicFramework and MFVanilla are now published on GitHub and Steam Workshop. The remaining version 1 work should focus on release hygiene, confidence testing, and author documentation rather than adding new framework surface area.
+MagicFramework and MFVanilla now have a first public edition. The next phase should treat the framework as released software: keep the published surface stable, round out MFVanilla into a satisfying first-party content mod, and move AeternusFaith from promising prototype to first-edition release candidate.
 
-Release-blocking checklist:
-- Confirm MagicFramework and MFVanilla `About.xml` dependency/download metadata points at the published Workshop pages.
-- Run a clean build for both assemblies and deploy the current output to the local RimWorld mod folders.
+Near-term priority order:
+1. Protect the released mods: fix startup, save/load, cleanup, bad XML, broken research/recipes, and first-party spell usability issues immediately.
+2. Finish MFVanilla's production and progression loop: make Arcane Ink, scrolls, research benches, gemstones, herbs, parchment, scribing, and spell learning feel coherent from early colony through advanced magic.
+3. Add only the framework features that directly improve MFVanilla or unblock AeternusFaith first-edition content.
+4. Prepare AeternusFaith for first release with focused ritual UX, undead cleanup, faith content gates, and release packaging.
+5. Keep larger framework expansions, AI casting, equipment systems, custom wall atlas work, and deep event systems behind the first-edition content goals.
+
+Current release hygiene checklist:
+- Keep MagicFramework and MFVanilla Workshop metadata, dependency metadata, and local deployed assemblies synchronized after changes.
+- Run clean builds for changed assemblies before copying to the local RimWorld mod folders.
 - Smoke test the first-party validation spells that cover the stable authoring surface: projectile, explosion, heal, regeneration, chain, teleport/displacement, maintained shield, sustained stat buff, area aura, terrain patch, summon, rune/trap, and generated spell details.
-- Smoke test MFVanilla progression: research gates, Arcane Ink production, generated scroll recipes, scroll learning, spell details, and settings.
-- Capture any remaining known issues as non-blocking version 1 notes unless they affect startup, save/load, cleanup, or first-party spell usability.
-- Begin MF-031 documentation from the stable surface instead of waiting for later expansion tasks such as AI casting, magic equipment, real fire integration, or AeternusFaith follow-up systems.
+- Smoke test MFVanilla progression after production-tree changes: research gates, workbenches, Arcane Ink, parchment/papyrus, gemstones, generated scroll recipes, scroll learning, spell details, and settings.
+- Smoke test AeternusFaith before release: ideology load, ritual circles/rooms, lecterns, skeleton rite, ossuary rite, spectre rite, undead cleanup, save/load, and small-screen ritual dialogs.
+- Capture any remaining known issues as post-release notes unless they affect startup, save/load, cleanup, or first-party usability.
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
-| MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support. |
-| MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives beyond direct stat modifiers. |
-| MF-012 | P2 | L | Chains | Generalize delayed branching chain support. |
-| MF-014 | P2 | M | Summons | Extend summon/spawn primitives beyond temporary trained creatures. |
-| MF-016 | P2 | S | UI | Add a player-facing spell details UI concept or first pass. |
-| MF-019 | P2 | M | AeternusFaith | Improve ritual dialogs with pawn avatars and clearer invalid-state feedback. |
+| MF-037 | P1 | M | MFVanilla | Round out production trees, resource flow, and research pacing. |
+| MF-038 | P1 | M | MFVanilla | Add a few high-value content features that make production and progression feel complete. |
+| MF-039 | P1 | M | AeternusFaith | Prepare the first-edition release candidate and packaging checklist. |
+| MF-019 | P1 | M | AeternusFaith | Improve ritual dialogs with pawn avatars and clearer invalid-state feedback. |
+| MF-033 | P1 | S | AeternusFaith | Shroudhymn summoned spectres should despawn cleanly. |
+| MF-034 | P1 | S | AeternusFaith | Add corresponding lecterns as placeable objects in ritual circle action gizmos. |
+| MF-035 | P1 | S | AeternusFaith | Ritual summons should only be performable by Bonewrights (ideology role). |
 | MF-020 | P2 | M | AeternusFaith | Tie psychic sensitivity into haunting effects. |
-| MF-021 | P2 | L | AeternusFaith | Add pseudo-relationship memory for raised undead. |
+| MF-009 | P2 | M | Spell power | Continue typed spell power and scaling support where content needs it. |
+| MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives where content proves repeated authoring pain. |
+| MF-014 | P2 | M | Summons | Extend summon/spawn primitives beyond temporary trained creatures. |
+| MF-016 | P2 | S | UI | Polish generated spell details and active modifier presentation. |
+| MF-031 | P2 | L | Docs | Write a full MagicFramework spell design guide from the released surface. |
+| MF-021 | P3 | L | AeternusFaith | Add pseudo-relationship memory for raised undead. |
+| MF-012 | P3 | L | Chains | Generalize delayed branching chain support. |
 | MF-023 | P3 | L | AeternusFaith | Build custom wall atlas and auto-joining support. |
 | MF-024 | P3 | L | Content | Start magic tools and weapons framework/content. |
 | MF-025 | P3 | M | Events | Add celestial event enhancement rules and gameplay hooks. |
@@ -46,14 +60,85 @@ Release-blocking checklist:
 | MF-027 | P3 | S | Content | Add future validation spell gizmo icons as spells are added. |
 | MF-029 | P3 | M | Fire | Investigate real RimWorld fire integration for `Wall of Fire`. |
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
-| MF-031 | P3 | L | Docs | Write a full MagicFramework spell design guide. |
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
-| MF-033 | P3 | S | Content | Shroudhymn summoned spectres should despawn cleanly. |
-| MF-034 | P3 | S | Content | Add corresponding lecterns as placeable objects in ritual circle action gizmos. |
-| MF-035 | P3 | S | Content | Ritual summons should only be performable by Bonewrights (ideology role). |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
+| MF-040 | P1 | S | Content | Introduce a first launch splash screen and include important notes |
+| MF-041 | P3 | M | Content | Introduce an Arcane Forge production item |
 
-## P1 Framework Capabilities
+## P1 Release And Content Priorities
+
+### MF-037 MFVanilla Production And Progression
+
+Goal: make MFVanilla feel like a complete first-party expansion instead of a spell validation pack.
+
+Current state:
+- Initial production-chain review completed.
+- Papyrus is now the early plant-fiber sheet recipe: wood -> papyrus at the papyrus press.
+- Parchment is now the later durable animal-skin sheet recipe: leather -> parchment at the parchmentery bench.
+- Runic Inscription has been removed from the active MFVanilla tree for now; rune trap scroll access now sits under Enchantment, and scribing is gated by Spellcraft.
+- Gemstone dust now exists as a generic tradeable raw resource.
+- Cutting raw gemstone pieces now produces the cut gemstone plus gemstone dust, with more dust from lower-quality cuts: common gives 3, fine gives 2, exquisite gives 1.
+- Arcane ink now requires exotic herbs plus gemstone dust, making lapidary part of the core scroll-production loop while keeping a single ink type.
+- Shaman merchants now stock MFVanilla arcane reagents, gemstone materials, rough gemstone chunks, and occasional spell scrolls; they buy MFVanilla reagents, gemstones, and scrolls.
+- Bulk goods traders now stock the practical production inputs: exotic herbs, gemstone dust, papyrus, parchment, and small amounts of rough gemstone chunks; they buy MFVanilla reagents and gemstones.
+- The papyrus press now has final multi-directional building textures at `Things/Building/Production/PapyrusPress`.
+- Research sequencing intentionally leaves Lapidary and Alchemy disconnected: colonies can buy gemstone dust for early Arcane Ink, then research Lapidary later when they want self-sufficient gemstone production.
+- Papyrus can now be pressed from wood logs or plant matter such as hay, keeping wood useful while allowing a more literal plant-fiber route.
+- MFVanilla builds successfully after the production-chain and research-tree changes.
+
+Priority:
+- review the full production chain from raw inputs through finished scrolls and magic utility items
+- make sure each bench has a clear role, research position, recipe set, work type, texture, cost, and power/facility story
+- tune Arcane Ink, parchment/papyrus, gemstones, herbs, and generated spell scroll costs so the early loop is useful and the advanced loop has meaningful investment
+- check that research gates unlock recipes, benches, utility buildings, and spell access in a sensible order
+- add missing descriptions, inspect strings, category placement, tradeability, stack sizes, market values, and bulk/storage behavior where content feels placeholder
+- smoke test a new colony path: discover Arcane gift, unlock early research, craft inputs, make scrolls, learn spells, and progress into advanced production
+
+Next steps:
+1. Smoke test trader stock and buy behavior for shaman, neolithic bulk, outlander bulk, and orbital bulk traders, with special attention to whether purchasable gemstone dust supports early Arcane Ink before Lapidary.
+2. Review gemstone vein availability, mining output, market values, and stack sizes so gemstone dust does not become either invisible or too abundant.
+3. Decide the first typed-focus model for magic utility items: generic arcane foci for now, gemstone-family foci, or domain foci such as fire/water/earth/air/life/spirit.
+4. Update magic heaters, coolers, torches, and future utility buildings once the focus model is chosen.
+5. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop feels stable.
+6. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll.
+
+Success criteria:
+- a player can understand what to build next without dev knowledge
+- every production building earns its footprint in the colony
+- scroll learning and generated scroll recipes feel like part of the same economy as the spells
+- the content works as a stable example for third-party spell authors
+
+### MF-038 MFVanilla Feature Completion
+
+Goal: add a small number of features that deepen the released content without opening a broad framework expansion.
+
+Good candidates:
+- more utility recipes or buildings that consume magic production outputs
+- one or two additional spell families only if they validate already-supported primitives or a narrowly needed framework hook
+- stronger integration between spell metadata, scroll recipes, research, and generated descriptions
+- clearer player feedback for spell scaling, active enhancement rules, and unlock paths
+- balance pass for mana, cooldowns, costs, work amounts, and resource scarcity
+
+Deferral rule:
+- defer anything that primarily exists to prove a speculative framework system rather than make MFVanilla better now
+- defer hostile AI casting, magic weapons/tools, real fire integration, and celestial event depth until after MFVanilla and AeternusFaith first-edition goals are in hand
+
+### MF-039 AeternusFaith First Edition
+
+Goal: get AeternusFaith ready for its first public release as a focused faith/ritual content mod.
+
+Release-candidate checklist:
+- verify `About.xml`, dependency metadata, preview/icon assets, assembly output, and Workshop/GitHub packaging expectations
+- decide the first-edition content boundary: which memes, precepts, roles, rituals, apparel, buildings, undead, and spectral systems are included
+- smoke test ideology generation, role assignment, ritual action gizmos, ritual jobs, room/lectern placement, corpse selection, reservation/reachability, save/load, and cleanup
+- make ritual invalid states readable enough that players can recover without opening logs
+- ensure undead/spectre lifecycle behavior is predictable: spawn, ownership/faction, control expectations, expiration/despawn, death/downing, and map removal
+- keep pseudo-relationship memory and custom wall auto-joining as post-first-edition unless release testing shows they are essential to the core fantasy
+
+First-edition emphasis:
+- Ossanith skeleton and ossuary loops should be reliable and understandable.
+- Shroudhymn spectre content should be stable enough that it does not leave stale pawns, spectral state, or player confusion.
+- Bonewright role requirements should make ritual access feel intentional rather than arbitrary.
 
 ## P2 Framework Polish
 
@@ -412,4 +497,20 @@ Candidate first pass:
  - Create a reusable `SpellAIUtility` that lists known castable spells, checks mana/cooldown/requirements, enumerates valid targets using the existing targeting rules, and scores spell-target pairs.
  - Start with self/ally buffs, direct hostile single-target damage/control, and simple summons. Defer walls, traps/runes, resurrection, long-lived fields, teleport swaps, displacement, chain spells, and large radius attacks until the scorer can reason about collateral risk.
  - Add a small hostile humanlike caster generation hook with settings and debug logging, then validate with one or two MFVanilla spells before opening the whole content set.
- 
+
+
+### MF-040 Splash screen
+
+Goal: Introduce a first launch splash screen and include important notes
+
+Target coverage: 
+ - Inform players about mod settings to enable/disable tech themed vanilla research.
+ - Consider other important details (to be determined)
+
+### MF-040 Arcane forge
+
+Goal: Introduce an Arcane Forge production item
+
+Target coverage: 
+ - develop requirements to build this mid - late game item
+ - develop recipes for transforming mundane weapons (ie. swords) of high quality into magic versions (eg. flame sword, runic blade, etc), 

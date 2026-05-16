@@ -57,6 +57,7 @@ Core/
  ArcaneGiftStudyGameComponent.cs
  ArcaneGiftUtility.cs
  CompUseEffect_LearnSpell.cs
+ EnchantmentUtility.cs
  GemstoneUtility.cs
  MFVanillaMod.cs
  MFVanillaPatcher.cs
