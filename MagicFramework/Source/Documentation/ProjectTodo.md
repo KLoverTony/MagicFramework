@@ -39,7 +39,6 @@ Current release hygiene checklist:
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
-| MF-037 | P1 | M | MFVanilla | Round out production trees, resource flow, and research pacing. |
 | MF-038 | P1 | M | MFVanilla | Add a few high-value content features that make production and progression feel complete. |
 | MF-039 | P1 | M | AeternusFaith | Prepare the first-edition release candidate and packaging checklist. |
 | MF-019 | P1 | M | AeternusFaith | Improve ritual dialogs with pawn avatars and clearer invalid-state feedback. |
@@ -64,7 +63,6 @@ Current release hygiene checklist:
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
-| MF-042 | P1 | M | MFVanilla | Add scalable arcane treasure chests as quest/loot/world rewards. |
 | MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
 | MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
 | MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
@@ -99,6 +97,12 @@ Current state:
 - Arcane Forge setup costs have been tuned down for release readiness while keeping the four-spire requirement as the advanced enchantment gate.
 - Arcane Forge smoke testing confirmed build requirements, linked-spire gating, bill availability, and the first enchanted weapon set are working well.
 - Enchanted weapon products now assign the enchanter as the art author when quality-generated art is present, avoiding unknown authors on high-quality outputs.
+- Trader stock smoke testing confirmed relevant MFVanilla production stocks are appearing in tested traders. Shaman trader direct dev-spawn testing was blocked by dev UI availability, so shaman stock remains a watch item during normal playtesting rather than a release blocker.
+- Gemstone vein availability, mining output, market values, and stack sizes are provisionally accepted for the current release pass. Keep watching gemstone dust and elemental focus abundance during broader progression and treasure testing.
+- Elemental foci should remain player-crafted only for now, preserving them as an industrial requirement and gate for powerful magical items.
+- Enchanted weapons can appear as expensive, rare commodities in world rewards, loot, or limited trader contexts; tune availability so colony crafting remains the reliable path.
+- Major scroll gemstone requirements should follow elemental association and the elemental research that exposes the spell; for example, pyromancy spells use ruby-derived requirements. Non-elemental major spells can accept any elemental focus as a flexible advanced reagent.
+- Full-loop progression smoke testing is provisionally accepted for this pass: dust, herbs, ink, papyrus/parchment, scroll scribing, scroll learning, gemstone cutting, focus crafting, and weapon enchanting remain watch items during normal balance testing.
 
 Priority:
 - review the full production chain from raw inputs through finished scrolls and magic utility items
@@ -109,11 +113,7 @@ Priority:
 - smoke test a new colony path: discover Arcane gift, unlock early research, craft inputs, make scrolls, learn spells, and progress into advanced production
 
 Next steps:
-1. Smoke test trader stock and buy behavior for shaman, neolithic bulk, outlander bulk, and orbital bulk traders, with special attention to whether purchasable gemstone dust supports early Arcane Ink before Lapidary.
-2. Review gemstone vein availability, mining output, market values, and stack sizes so gemstone dust and elemental focus production do not become either invisible or too abundant.
-3. Decide whether elemental foci or enchanted weapons should appear in trader stock, quest rewards, or remain colony-crafted for the first release.
-4. Add specific gemstone requirements to major scrolls only after the basic dust-and-ink loop and elemental focus loop feel stable.
-5. Run an in-game smoke test of the full loop: buy or craft gemstone dust, grow herbs, make ink, make papyrus/parchment, scribe scroll, read scroll, cut gemstones, make foci, and enchant a weapon.
+- Watch production pacing, reagent abundance, and player clarity during normal playtesting; reopen MF-037 only for concrete release-blocking issues.
 
 Success criteria:
 - a player can understand what to build next without dev knowledge
@@ -127,7 +127,7 @@ Goal: add a small number of features that deepen the released content without op
 
 Next-release content direction:
 - Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
-- Make arcane treasure chests the next priority content system because they connect MFVanilla to quests, map finds, loot, traders, gemstones, scrolls, foci, enchanted gear, silver, and gold.
+- Make arcane treasure chests the next priority content system because they connect MFVanilla to quests, map finds, loot, traders, gemstones, scrolls, enchanted gear, silver, and gold.
 - Treat elemental tribes, leyline maps, school expansion, and special enchanted weapon behavior as major candidate pillars for the same or following release, depending on implementation scope.
 - Audit research fields with no current application. Either attach real content to them or remove/hide them until they have a purpose.
 - Reconsider plasteel/component costs on arcane benches and infrastructure after the content set is known. Prefer magical, pre-industrial, or trade-economy materials where they preserve meaningful scarcity.
@@ -149,15 +149,17 @@ Deferral rule:
 
 Goal: add an arcane treasure chest system that makes MFVanilla content appear as mission rewards, rare loot, and occasional world/map discoveries.
 
+Status: complete for the current release pass; future cursed/trapped variants remain deferred expansion work.
+
 Priority:
 - this is the favored next MFVanilla content system before broad tuning
-- use treasure chests to make scrolls, gemstones, foci, enchanted weapons, silver, gold, and future magic items feel discoverable outside colony production
+- use treasure chests to make scrolls, gemstones, enchanted weapons, silver, gold, and future magic items feel discoverable outside colony production
 - scale rewards with mission value and game advancement so early chests are useful without trivializing late rewards
 
 Target behavior:
 - a chest opens into a pseudo-random reward bundle with approximately one major item, two minor items, a few gemstones, silver, and gold
-- major rewards can include rare scrolls, elemental foci, enchanted weapons, future staves/wands/apparel, or artifacts
-- minor rewards can include arcane ink, papyrus/parchment, exotic herbs, gemstone dust, cut gemstones, common scrolls, or small foci
+- major rewards can include rare scrolls, enchanted weapons, future staves/wands/apparel, or artifacts
+- minor rewards can include arcane ink, papyrus/parchment, exotic herbs, gemstone dust, cut gemstones, or common scrolls
 - reward generation should account for game stage, quest/reward value, map wealth, storyteller points, or an authored chest tier
 - generation must be deterministic and multiplayer-friendly once the chest exists, so save/load or multiple clients cannot reroll the same chest unexpectedly
 - every spawned chest should store a unique stable ID/hash plus tier/value metadata; the reward generator should derive all pseudo-random choices from that stored data rather than ambient `Rand`
@@ -179,13 +181,13 @@ First implementation pass:
 3. Build a deterministic generator that uses the saved chest ID/hash as its pseudo-random seed and never depends on ambient `Rand` during reward selection. - initial local deterministic hash/random path added
 4. Compare reuse of trader/stock generator tables against a custom MFVanilla loot-table def; choose the simpler path that keeps results deterministic and author-friendly. - chose custom XML `ArcaneTreasureTableDef` for first pass
 5. Build reward tables for major, minor, gemstone, silver, and gold buckets. - roll-band table added with XML-editable buckets, 1d100-style roll ranges, chest/bucket roll bonuses, counts, weights, and optional quality
-6. Add dev/debug spawning and logging for generated contents.
-7. Smoke test XML load, chest use job, stable inspect ID, spawned reward placement, save/load repeatability, and opened chest destruction.
-8. Wire into one safe acquisition path first, then broaden to quests/loot. - initial rare quest reward eligibility and ancient temple/ancient complex loot patches added; no trader inventory integration
+6. Add dev/debug spawning and logging for generated contents. - sufficient validation coverage exists through direct testing and spawned-site generation for this pass
+7. Smoke test XML load, chest use job, stable inspect ID, spawned reward placement, save/load repeatability, and opened chest destruction. - confirmed chest generation works, treasure release is stable and constant across saves, and spawned rewards behave properly
+8. Wire into one safe acquisition path first, then broaden to quests/loot. - initial rare quest reward eligibility and ancient temple/ancient complex loot patches added; spawned-site generation confirmed; no trader inventory integration
 9. Hide raw deterministic chest IDs from normal player-facing inspect text while retaining dev-mode diagnostics. - done; chests now show authored cache magnitude labels
 10. Add a third/highest chest tier for rarer, higher-magnitude rewards. - initial `MFV_GrandArcaneTreasureChest` added
 11. Add broader high-band rewards: quality armor/weapons, jade, devilstrand cloth, high-quality small art, and rare materials. - initial table entries added
-12. Later: add cursed/trapped chest support, preferably as deterministic XML-authored curse tables or MagicFramework action lists triggered on open.
+12. Later: add cursed/trapped chest support, preferably as deterministic XML-authored curse tables or MagicFramework action lists triggered on open. - deferred
 
 Success criteria:
 - opening a chest feels like a magical reward, not a plain resource bundle
@@ -244,7 +246,7 @@ Vertical slice: Arcane Cache Site:
 2. Generate one compact encounter map with a clear goal: reach and extract an arcane treasure chest. - initial cache chamber generator added
 3. Place deterministic rewards using the existing arcane chest system. - initial standard chest placement added
 4. Add a minimal threat or obstacle using existing RimWorld site threats first, with mechanoids as the temporary default defender family. - initial scyther/lancer/pikeman defenders added
-5. Smoke test quest creation, map generation, chest opening, site cleanup, save/load, and reward extraction.
+5. Smoke test quest creation, map generation, chest opening, site cleanup, save/load, and reward extraction. - dev-spawned arcane cache site confirmed working: one room, mechanoid defenders, decorations, and centered chest
 
 Map generation architecture:
 - start with a small custom `GenStep` or symbol-resolver path rather than loose item scatter
@@ -254,19 +256,51 @@ Map generation architecture:
 - prefer XML-authored profiles so future mods can add new encounter themes without changing code
 
 Content layers:
-- rewards: arcane treasure chests, scrolls, foci, gemstones, enchanted weapons, silver/gold, and future artifacts
+- rewards: arcane treasure chests, scrolls, gemstones, enchanted weapons, silver/gold, and future artifacts
 - props: broken arcane spires, inert forge fragments, glyph floors, arcane torches, ritual stones, ruined benches, leyline markers, sealed containers
 - hazards: curse traps, fire/ice/lightning fields, dormant runes, unstable mana nodes, trapped doors/chests
 - defenders: vanilla mechanoid/site threats first; later rebranded arcane constructs, elemental guardians, golems, summoned creatures, or magic-capable hostile pawns once AI casting exists
+- deferred themes: leftover magic misfires and malfunctioning arcane spires that jolt nearby pawns fit a later war-torn/unstable magic site theme, not the first treasure-cache encounter
 
 Implementation phases:
-1. Design arcane site profile defs: theme, layout size, loot tier, chest def, hazard chance, defender/threat tags, and prop tables.
-2. Implement the Arcane Cache Site vertical slice with a single profile and one chest.
-3. Add deterministic generation diagnostics in dev mode so a site can report its seed/profile/chest ID.
-4. Expand into Arcane Ruin Generator: multiple rooms, themed dressing, side loot, and optional hazards.
-5. Add curse/trap integration using XML-authored trap tables or MagicFramework action lists.
-6. Add themed variants: fire shrine, flooded vault, earth-buried sanctum, wind-swept ruin, leyline node, cursed archive.
-7. Integrate higher-tier sites with quest points/game stage and future elemental tribes or magic AI when those systems exist.
+1. Design arcane site profile defs: theme, layout size, loot tier, chest def, hazard chance, defender/threat tags, and prop tables. - initial `ArcaneSiteProfileDef` supports room size, floor, wall stuff, chest def, defender pawn kinds/count, and fixed dressing placements
+2. Implement the Arcane Cache Site vertical slice with a single profile and one chest. - current cache generator now reads `MFV_ArcaneCache_Default` while preserving the tested single-room cache behavior
+3. Add deterministic generation diagnostics in dev mode so a site can report its seed/profile/chest ID. - dev-mode generation log now reports profile, tile, threat points, room, chest def/location, chest ID, and spawned defenders
+4. Add reliable dev/test spawning for arcane cache sites. - `MFVanilla - Arcane Sites` debug actions now spawn a proper `SiteMaker` arcane cache near the current map and can remove bare empty sites left by generic dev spawning
+5. Expand into Arcane Ruin Generator: multiple rooms, themed dressing, side loot, and optional hazards. - initial profile-driven circular tower layout support added; default arcane cache now uses a round wizard-tower chamber footprint, deterministic stone wall variation, a real door, and less crowded torch/spire dressing; smoke test confirmed clear torches and marble wall generation
+6. Add curse/trap integration using XML-authored trap tables or MagicFramework action lists.
+7. Add themed variants: fire shrine, flooded vault, earth-buried sanctum, wind-swept ruin, leyline node, cursed archive.
+8. Integrate higher-tier sites with quest points/game stage and future elemental tribes or magic AI when those systems exist.
+
+#### MF-049A Arcane Site Generation Utility
+
+Goal: turn the current arcane cache generator into a reusable, deterministic, profile-driven site layout utility for MFVanilla encounter maps.
+
+Reason:
+- the first cache site now works, but entry paths, exterior ruins, side rooms, reward anchors, defenders, and future hazards should not become one-off hardcoded branches
+- reusable modules let arcane caches, ruined sanctums, sealed vaults, elemental shrines, cursed archives, leyline nodes, and later war-torn magic sites share generation infrastructure
+- XML-authored profiles should let future site variants be added or patched without C# changes unless a genuinely new module behavior is needed
+
+Utility scope:
+- main-room modules: circular tower chamber first, with rectangular vaults and other footprints later
+- optional layout modules: entry path, exterior ruin dressing, side room or annex, secondary loot alcove, interior dressing, reward anchor, and defender placement
+- deterministic module selection and material selection from stored site identity/profile/quest inputs, not ambient `Rand`; separate generated sites should vary while each individual site remains stable after creation
+- profile fields for module weights, fixed module inclusion, room dimensions, material pools, prop tables, defender tables, and reward chest tier
+- dev diagnostics that report selected profile, modules, material choices, reward anchors, and defender placement
+
+First utility pass:
+1. Define `ArcaneSiteModule` metadata and profile fields for fixed modules plus optional weighted modules. - initial fixed room-module definitions added for axis, room kind, width, depth, and tower distance
+2. Refactor the current tower generation into a `MainRoom` module while preserving the tested arcane cache output. - current circular tower remains the main room and can use separate tower wall material options
+3. Add `EntryPath` as the first optional module: short stone path or paved landing leading to the door. - first deterministic entry path module added; generator now derives a stable per-site seed from site ID, creation tick, tile, site part, and profile for variation between spawned sites
+4. Add `ExteriorRuin` as the second optional module: rubble, stone chunks, broken wall stubs, and light terrain cleanup around the tower. - first deterministic exterior ruin scatter added
+5. Add `SideRoom` only after entry/exterior modules smoke test cleanly. - showcase profile now exercises axis rooms: south antechamber, east bedroom, west servants quarters, and north storage placeholder; polish passes route entry path through the antechamber, add an exterior antechamber door, push beds toward walls, clear natural/mineable rock from generated rooms, and add shelves/dresser/end-table plus low-value household storage dressing
+6. Keep hazards, magical misfires, malfunctioning spires, curse traps, and unstable mana nodes deferred until a site theme specifically asks for them.
+
+Current first consumer:
+- `MFV_ArcaneCache_Default` remains the normal first profile and should stay a compact treasure-cache encounter: readable tower, chest, modest defenders, light exterior dressing, no active magical hazards.
+- Normal `MFV_ArcaneCache` generation now uses a seeded profile pool for player-facing variants, initially `MFV_ArcaneCache_Default` and `MFV_ArcaneCache_Sealed`; the showcase profile is excluded from normal selection.
+- `MFV_ArcaneCache_Showcase` is the oversized debug/test profile for validating all current modules at once: axis rooms, antechamber, bedroom, servants quarters, storage, entry path, exterior ruin, reward anchor, and defenders.
+- Debug actions can spawn either the normal arcane cache or the showcase cache through the safe `SiteMaker` path.
 
 Enemy bridge:
 - use existing mechanoid defenders for the first Arcane Cache Site implementation so combat, pathing, down/death behavior, threat scaling, and site integration are known-good
@@ -308,7 +342,7 @@ Implementation phases:
 2. Add one or two first construct pawn kinds with fantasy labels/descriptions and borrowed mechanoid behavior/stats.
 3. Add initial textures or recolors so constructs are visually distinct from mechs.
 4. Use constructs as arcane site defenders once smoke tested.
-5. Add construct-specific drops, such as gemstone dust, arcane fragments, foci, jade, plasteel replacement candidates, or future construct cores.
+5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores.
 6. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
 7. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
 
@@ -362,10 +396,10 @@ Design direction:
 - hostile spellcasting should wait for authored AI spell metadata and a safe AI casting path
 
 Target behavior:
-- fire tribe traders favor pyromancy scrolls, fire foci, rubies, heat/light infrastructure, and aggressive magic goods
-- earth tribe traders favor geomancy scrolls, earth foci, emeralds, stone/gem materials, defensive goods, and construction-adjacent items
-- air tribe traders favor aeromancy scrolls, air foci, topaz, mobility/control goods, and arcane spire/focus supplies
-- water tribe traders favor aquamancy scrolls, water foci, sapphires, cooling/protection goods, medicine-adjacent items, and extinguishing tools
+- fire tribe traders favor pyromancy scrolls, rubies, heat/light infrastructure, and aggressive magic goods
+- earth tribe traders favor geomancy scrolls, emeralds, stone/gem materials, defensive goods, and construction-adjacent items
+- air tribe traders favor aeromancy scrolls, topaz, mobility/control goods, and arcane spire supplies
+- water tribe traders favor aquamancy scrolls, sapphires, cooling/protection goods, medicine-adjacent items, and extinguishing tools
 - factions can later produce hostile pawns with appropriate magic loadouts once AI casting exists
 
 Implementation questions:
@@ -376,7 +410,7 @@ Implementation questions:
 
 First implementation pass:
 1. Define the faction/trader scope without AI casting.
-2. Add themed stock generators for elemental goods, scrolls, gemstones, and foci.
+2. Add themed stock generators for elemental goods, scrolls, and gemstones.
 3. Add names/descriptions/backstory flavor sufficient for world presence.
 4. Smoke test caravan/orbital/trader generation and buy/sell behavior.
 5. Defer hostile caster behavior to the AI casting task unless a very narrow scripted encounter is safer.

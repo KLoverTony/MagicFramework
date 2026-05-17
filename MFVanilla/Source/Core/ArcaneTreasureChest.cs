@@ -53,6 +53,15 @@ public sealed class CompUseEffect_OpenArcaneTreasure : CompUseEffect
 
     private CompProperties_UseEffectOpenArcaneTreasure Props => (CompProperties_UseEffectOpenArcaneTreasure)props;
 
+    public string StableChestId
+    {
+        get
+        {
+            EnsureStableChestId();
+            return stableChestId;
+        }
+    }
+
     public override void PostSpawnSetup(bool respawningAfterLoad)
     {
         base.PostSpawnSetup(respawningAfterLoad);

@@ -205,7 +205,7 @@ public static class MFVanillaPatcher
         if (researcher?.CurJob == null) return;
 
         Thing bench = researcher.CurJob.GetTarget(TargetIndex.A).Thing;
-        ArcaneGiftStudyGameComponent.Instance?.NotifyResearchPerformed(researcher, bench);
+        ArcanePracticeUtility.NotifyArcaneResearchPerformed(researcher, bench);
     }
 
     private static bool Mineable_TrySpawnYield_Prefix(Mineable __instance, Map map, bool moteOnWaste, Pawn pawn)
@@ -218,6 +218,8 @@ public static class MFVanillaPatcher
 
     private static void GenRecipe_MakeRecipeProducts_Postfix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, ref IEnumerable<Thing> __result)
     {
+        ArcanePracticeUtility.NotifyArcaneProductionCompleted(worker, recipeDef);
+
         if (EnchantmentUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> enchantedProducts))
         {
             __result = enchantedProducts;

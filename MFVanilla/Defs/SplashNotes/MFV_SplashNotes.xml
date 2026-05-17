@@ -5,12 +5,13 @@
     <label>MF Vanilla</label>
     <modName>MF Vanilla</modName>
     <packageId>oracle.mfvanilla</packageId>
-    <versionKey>MFVanilla-0.6.0</versionKey>
+    <versionKey>MFVanilla-0.6.1</versionKey>
     <order>100</order>
     <notes>
       <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, and arcane discoveries instead of the standard industrial path.</li>
       <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
       <li>The magic economy is taking shape: grow herbs, prepare papyrus or parchment, grind gemstone dust, brew arcane ink, scribe scrolls, and turn raw gems into the heart of advanced magical production.</li>
+      <li>New: gifted pawns now grow as spellcasters through arcane research, scribing, alchemy, and enchantment work, unlocking higher-level spells through play instead of dev tools.</li>
       <li>Magic is easier to find in the world now. Traders can carry useful reagents and occasional scrolls, helping new colonies get started before they can make every ingredient themselves.</li>
       <li>The Arcane Forge is ready for ambitious colonies, letting skilled enchanters transform quality weapons into elemental arms powered by linked arcane spires.</li>
       <li>Arcane treasure chests are beginning to appear as magical reward caches, packed with scrolls, gems, silver, gold, enchanted prizes, and other rare finds.</li>

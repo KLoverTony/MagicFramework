@@ -4,6 +4,15 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MFVanilla caster-level growth hotfix.
+  Current state:
+  - MagicFramework caster runtime state now stores earned caster experience in addition to caster level.
+  - `SpellRuntimeGameComponent.GainCasterExperience` advances caster level up to level 20 and saves the earned experience.
+  - MFVanilla grants caster experience from arcane research performed at arcane research benches.
+  - MFVanilla grants caster experience from completed recipes at the alchemy table, scribing table, and Arcane Forge.
+  - Papyrus, parchment, and lapidary work intentionally do not grant caster experience.
+  - Gift-awakening research still works for non-gifted pawns; caster experience begins once a pawn has the Arcane gift.
+
 - MF-040 launch splash notes.
   Current state:
   - MagicFramework provides `SplashNoteDef` so framework and dependent mods can author important launch/version notes in XML.

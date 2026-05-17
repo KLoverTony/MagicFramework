@@ -1,6 +1,185 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_ArcaneCache_Default</defName>
+    <label>arcane cache</label>
+    <roomWidth>13</roomWidth>
+    <roomHeight>13</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileSandstone</floorDef>
+    <wallStuff>BlocksSandstone</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksSandstone</li>
+      <li>BlocksGranite</li>
+      <li>BlocksMarble</li>
+      <li>BlocksLimestone</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksMarble</li>
+      <li>BlocksSandstone</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
+    <defenderCount>3</defenderCount>
+    <defenderPawnKinds>
+      <li>Mech_Scyther</li>
+      <li>Mech_Lancer</li>
+      <li>Mech_Pikeman</li>
+    </defenderPawnKinds>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+    </dressing>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>5</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>6</exteriorRuinCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
+  <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_ArcaneCache_Showcase</defName>
+    <label>arcane cache showcase</label>
+    <roomWidth>13</roomWidth>
+    <roomHeight>13</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileSandstone</floorDef>
+    <wallStuff>BlocksSandstone</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksSandstone</li>
+      <li>BlocksGranite</li>
+      <li>BlocksMarble</li>
+      <li>BlocksLimestone</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksMarble</li>
+      <li>BlocksSandstone</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
+    <defenderCount>3</defenderCount>
+    <defenderPawnKinds>
+      <li>Mech_Scyther</li>
+      <li>Mech_Lancer</li>
+      <li>Mech_Pikeman</li>
+    </defenderPawnKinds>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+    </dressing>
+    <roomModules>
+      <li>
+        <axis>South</axis>
+        <kind>Antechamber</kind>
+        <width>9</width>
+        <depth>5</depth>
+      </li>
+      <li>
+        <axis>East</axis>
+        <kind>Bedroom</kind>
+        <width>7</width>
+        <depth>7</depth>
+      </li>
+      <li>
+        <axis>West</axis>
+        <kind>ServantsQuarters</kind>
+        <width>9</width>
+        <depth>6</depth>
+      </li>
+      <li>
+        <axis>North</axis>
+        <kind>Storage</kind>
+        <width>7</width>
+        <depth>5</depth>
+      </li>
+    </roomModules>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>7</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>14</exteriorRuinCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
+  <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_ArcaneCache_Sealed</defName>
+    <label>sealed arcane cache</label>
+    <roomWidth>11</roomWidth>
+    <roomHeight>11</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileSandstone</floorDef>
+    <wallStuff>BlocksSandstone</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksGranite</li>
+      <li>BlocksMarble</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksGranite</li>
+      <li>BlocksMarble</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_GreaterArcaneTreasureChest</chestThingDef>
+    <defenderCount>4</defenderCount>
+    <defenderPawnKinds>
+      <li>Mech_Scyther</li>
+      <li>Mech_Lancer</li>
+      <li>Mech_Pikeman</li>
+    </defenderPawnKinds>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>7</offsetX>
+        <offsetZ>7</offsetZ>
+      </li>
+    </dressing>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>3</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>4</exteriorRuinCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
   <SitePartDef>
     <defName>MFV_ArcaneCache</defName>
     <label>arcane cache</label>
@@ -19,15 +198,44 @@
     </tags>
   </SitePartDef>
 
+  <SitePartDef>
+    <defName>MFV_ArcaneCache_Showcase</defName>
+    <label>arcane cache showcase</label>
+    <description>A debug-only oversized arcane cache that exposes all current modular site pieces.</description>
+    <workerClass>MFVanilla.Core.SitePartWorker_ArcaneCache</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>An oversized debug arcane cache showcase lies nearby.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <wantsThreatPoints>true</wantsThreatPoints>
+    <minThreatPoints>250</minThreatPoints>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MFV_ArcaneCache</li>
+      <li>MFV_ArcaneCache_Showcase</li>
+    </tags>
+  </SitePartDef>
+
   <GenStepDef>
     <defName>MFV_ArcaneCache</defName>
     <linkWithSite>MFV_ArcaneCache</linkWithSite>
     <order>420</order>
     <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
-      <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
-      <roomWidth>13</roomWidth>
-      <roomHeight>11</roomHeight>
-      <defenderCount>3</defenderCount>
+      <profile>MFV_ArcaneCache_Default</profile>
+      <profilePool>
+        <li>MFV_ArcaneCache_Default</li>
+        <li>MFV_ArcaneCache_Sealed</li>
+      </profilePool>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>MFV_ArcaneCache_Showcase</defName>
+    <linkWithSite>MFV_ArcaneCache_Showcase</linkWithSite>
+    <order>420</order>
+    <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
+      <profile>MFV_ArcaneCache_Showcase</profile>
     </genStep>
   </GenStepDef>
 

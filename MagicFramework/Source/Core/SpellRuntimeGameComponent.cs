@@ -16,6 +16,7 @@ namespace MagicFramework.Core;
 public sealed class SpellRuntimeGameComponent : GameComponent
 {
     private const float DefaultStartingMana = 100f;
+    private const int MaxCasterLevel = 20;
     private List<CasterRuntimeState> casterStates = new();
     private List<ActiveSpellStatModifier> activeStatModifiers = new();
     private List<ActiveSpellForceField> activeForceFields = new();
@@ -71,8 +72,49 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         CasterRuntimeState state = GetOrCreateState(pawn);
-        state.casterLevel = Mathf.Max(0, level);
+        state.casterLevel = Mathf.Clamp(level, 0, MaxCasterLevel);
+        state.casterExperience = Mathf.Max(state.casterExperience, TotalExperienceForLevel(state.casterLevel));
         state.debugCasterLevel = state.casterLevel;
+    }
+
+    public float GetCasterExperience(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            return 0f;
+        }
+
+        return GetOrCreateState(pawn).casterExperience;
+    }
+
+    public bool GainCasterExperience(Pawn pawn, float amount, bool showLevelUpMessage = true)
+    {
+        if (pawn == null || amount <= 0f)
+        {
+            return false;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        int oldLevel = state.casterLevel;
+        state.casterExperience += amount;
+
+        while (state.casterLevel < MaxCasterLevel && state.casterExperience >= TotalExperienceForLevel(state.casterLevel + 1))
+        {
+            state.casterLevel++;
+        }
+
+        if (state.casterLevel <= oldLevel)
+        {
+            return false;
+        }
+
+        state.debugCasterLevel = state.casterLevel;
+        if (showLevelUpMessage && pawn.Faction == Faction.OfPlayer)
+        {
+            Messages.Message($"{pawn.LabelShortCap} has reached caster level {state.casterLevel}.", pawn, MessageTypeDefOf.PositiveEvent);
+        }
+
+        return true;
     }
 
     public int GetDebugCasterLevel(Thing caster)
@@ -104,6 +146,22 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         };
         state.debugCasterLevel = state.casterLevel;
         return state.casterLevel;
+    }
+
+    private static float TotalExperienceForLevel(int level)
+    {
+        if (level <= 0)
+        {
+            return 0f;
+        }
+
+        float total = 0f;
+        for (int i = 1; i <= level; i++)
+        {
+            total += 800f + ((i - 1) * 300f);
+        }
+
+        return total;
     }
 
     public bool HasEnoughMana(Thing caster, float amount)
@@ -1874,6 +1932,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         public bool hasArcaneGift;
         public int casterLevel;
         public int debugCasterLevel;
+        public float casterExperience;
         private List<SpellCooldownEntry> cooldowns = new();
         private List<string> knownSpellDefNames = new();
 
@@ -1940,6 +1999,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             Scribe_Values.Look(ref hasArcaneGift, "hasArcaneGift");
             Scribe_Values.Look(ref casterLevel, "casterLevel");
             Scribe_Values.Look(ref debugCasterLevel, "debugCasterLevel");
+            Scribe_Values.Look(ref casterExperience, "casterExperience");
             Scribe_Collections.Look(ref cooldowns, "cooldowns", LookMode.Deep);
             Scribe_Collections.Look(ref knownSpellDefNames, "knownSpellDefNames", LookMode.Value);
 
@@ -1956,6 +2016,12 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             if (Scribe.mode == LoadSaveMode.PostLoadInit && casterLevel == 0 && debugCasterLevel > 0)
             {
                 casterLevel = debugCasterLevel;
+            }
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
+                casterLevel = Mathf.Clamp(casterLevel, 0, MaxCasterLevel);
+                casterExperience = Mathf.Max(casterExperience, TotalExperienceForLevel(casterLevel));
             }
         }
 
