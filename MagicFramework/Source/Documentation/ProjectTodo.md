@@ -67,6 +67,8 @@ Current release hygiene checklist:
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
 | MF-042 | P1 | M | MFVanilla | Add scalable arcane treasure chests as quest/loot/world rewards. |
 | MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
+| MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
+| MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
 | MF-044 | P2 | L | MFVanilla | Add static per-map leyline maps and Leyline Sensitivity gameplay. |
 | MF-045 | P2 | L | MFVanilla | Add elemental tribes, themed traders, and later magic-capable hostile pawns. |
 | MF-046 | P2 | M | MFVanilla | Expand thin elemental schools with new spells and utility effects. |
@@ -177,11 +179,14 @@ First implementation pass:
 2. Add a comp that assigns and saves a stable chest ID/hash on spawn, plus tier/value metadata. - initial saved stable ID and tier support added
 3. Build a deterministic generator that uses the saved chest ID/hash as its pseudo-random seed and never depends on ambient `Rand` during reward selection. - initial local deterministic hash/random path added
 4. Compare reuse of trader/stock generator tables against a custom MFVanilla loot-table def; choose the simpler path that keeps results deterministic and author-friendly. - chose custom XML `ArcaneTreasureTableDef` for first pass
-5. Build reward tables for major, minor, gemstone, silver, and gold buckets. - initial standard table added with XML-editable buckets, weights, counts, tier gates, and optional quality
+5. Build reward tables for major, minor, gemstone, silver, and gold buckets. - roll-band table added with XML-editable buckets, 1d100-style roll ranges, chest/bucket roll bonuses, counts, weights, and optional quality
 6. Add dev/debug spawning and logging for generated contents.
 7. Smoke test XML load, chest use job, stable inspect ID, spawned reward placement, save/load repeatability, and opened chest destruction.
 8. Wire into one safe acquisition path first, then broaden to quests/loot. - initial rare quest reward eligibility and ancient temple/ancient complex loot patches added; no trader inventory integration
-9. Later: add cursed/trapped chest support, preferably as deterministic XML-authored curse tables or MagicFramework action lists triggered on open.
+9. Hide raw deterministic chest IDs from normal player-facing inspect text while retaining dev-mode diagnostics. - done; chests now show authored cache magnitude labels
+10. Add a third/highest chest tier for rarer, higher-magnitude rewards. - initial `MFV_GrandArcaneTreasureChest` added
+11. Add broader high-band rewards: quality armor/weapons, jade, devilstrand cloth, high-quality small art, and rare materials. - initial table entries added
+12. Later: add cursed/trapped chest support, preferably as deterministic XML-authored curse tables or MagicFramework action lists triggered on open.
 
 Success criteria:
 - opening a chest feels like a magical reward, not a plain resource bundle
@@ -196,6 +201,7 @@ Goal: define the full content shape for the next MFVanilla release before final 
 
 Candidate pillars:
 - Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration.
+- Arcane encounter maps: high-quality mission sites such as arcane caches, ruined sanctums, sealed vaults, leyline ruptures, elemental shrines, and cursed archives.
 - Elemental school completion: fill thin schools, especially water, while adding spells that use existing primitives where possible.
 - Leyline gameplay: make Leyline Sensitivity reveal or use a static per-map leyline map, then later connect nodes to mana, buildings, rituals, or incidents.
 - Elemental cultures: fire, earth, air, and water tribes with themed traders first, and hostile magic pawns later once AI casting exists.
@@ -222,6 +228,96 @@ Task plan:
 
 Sequencing note:
 - avoid deep balance work until treasure chests, spell additions, and any material-cost philosophy changes have settled enough to see the full economy.
+
+### MF-049 Arcane Encounter Maps And Mission Sites
+
+Goal: build pseudo-random arcane-themed mission maps as a high-quality MFVanilla content pillar, not just generic item stashes with magic loot.
+
+Feature vision:
+- create world sites and mission maps that feel like magical places: arcane caches, ruined sanctums, sealed vaults, leyline ruptures, elemental shrines, cursed archives, and later faction/tribe-themed ritual sites
+- use deterministic site/map seeds so layout, loot, curse/trap outcomes, and major encounter choices are stable across save/load and multiplayer-friendly
+- make treasure chests one reward anchor inside the larger encounter, rather than the entire encounter
+- use vanilla mechanoids as the temporary standard site enemy so the first mission slice can rely on proven RimWorld threat behavior
+- support authored XML profiles for layout themes, loot tables, hazard/trap tables, prop sets, and future defender sets
+
+Vertical slice: Arcane Cache Site:
+1. Add a basic `SitePartDef` / quest opportunity that creates a small arcane cache site on the world map. - initial `MFV_ArcaneCache` site part and linked gen step added
+2. Generate one compact encounter map with a clear goal: reach and extract an arcane treasure chest. - initial cache chamber generator added
+3. Place deterministic rewards using the existing arcane chest system. - initial standard chest placement added
+4. Add a minimal threat or obstacle using existing RimWorld site threats first, with mechanoids as the temporary default defender family. - initial scyther/lancer/pikeman defenders added
+5. Smoke test quest creation, map generation, chest opening, site cleanup, save/load, and reward extraction.
+
+Map generation architecture:
+- start with a small custom `GenStep` or symbol-resolver path rather than loose item scatter
+- keep generation deterministic from site tile, quest/site ID, and authored profile data
+- place a readable structure: entrance, approach space, vault/chamber, loot anchor, optional side room, debris/ruin dressing, and threat/hazard positions
+- use existing walls/floors/props first, then add arcane-specific props as needed
+- prefer XML-authored profiles so future mods can add new encounter themes without changing code
+
+Content layers:
+- rewards: arcane treasure chests, scrolls, foci, gemstones, enchanted weapons, silver/gold, and future artifacts
+- props: broken arcane spires, inert forge fragments, glyph floors, arcane torches, ritual stones, ruined benches, leyline markers, sealed containers
+- hazards: curse traps, fire/ice/lightning fields, dormant runes, unstable mana nodes, trapped doors/chests
+- defenders: vanilla mechanoid/site threats first; later rebranded arcane constructs, elemental guardians, golems, summoned creatures, or magic-capable hostile pawns once AI casting exists
+
+Implementation phases:
+1. Design arcane site profile defs: theme, layout size, loot tier, chest def, hazard chance, defender/threat tags, and prop tables.
+2. Implement the Arcane Cache Site vertical slice with a single profile and one chest.
+3. Add deterministic generation diagnostics in dev mode so a site can report its seed/profile/chest ID.
+4. Expand into Arcane Ruin Generator: multiple rooms, themed dressing, side loot, and optional hazards.
+5. Add curse/trap integration using XML-authored trap tables or MagicFramework action lists.
+6. Add themed variants: fire shrine, flooded vault, earth-buried sanctum, wind-swept ruin, leyline node, cursed archive.
+7. Integrate higher-tier sites with quest points/game stage and future elemental tribes or magic AI when those systems exist.
+
+Enemy bridge:
+- use existing mechanoid defenders for the first Arcane Cache Site implementation so combat, pathing, down/death behavior, threat scaling, and site integration are known-good
+- avoid globally replacing vanilla mechanoids; the temporary use should be local to arcane mission construction
+- migrate the fantasy-facing enemy identity to MF-050 Arcane Constructs once the mission loop works
+
+Success criteria:
+- the first arcane site feels like a real mission location, not a chest spawned in a field
+- generation is stable enough for save/load and multiplayer-friendly play
+- content authors can add or patch encounter profiles through XML
+- rewards, threats, and hazards scale with mission tier without replacing the normal production loop
+- the system can grow into elemental sites, cursed vaults, and faction/tribe encounters without a rewrite
+
+### MF-050 Arcane Constructs, Golems, And Automata
+
+Goal: create a fantasy-facing enemy family for MFVanilla by reusing proven mechanoid combat roles as golems, automata, sentinels, and arcane constructs.
+
+Rationale:
+- mechanoid mechanics already provide hostile AI, combat behavior, site/raid integration, threat scaling, pathing, death handling, and save/load stability
+- rebranding selected mechanoid roles removes tech-themed enemies from fantasy arcane missions without requiring custom magic AI immediately
+- constructs give MFVanilla a recurring enemy identity and a story-facing guardian/ancient-defense faction for arcane sites
+
+Design direction:
+- do not globally replace vanilla mechanoids
+- create MFVanilla-specific construct pawn kinds/races or wrappers that borrow mechanoid role patterns where practical
+- use constructs mainly in arcane cache sites, ruined sanctums, sealed vaults, cursed archives, elemental shrines, and later elemental tribe/AI content
+- start mechanically conservative, then add custom textures, drops, resistances, vulnerabilities, and magic interactions after the mission loop is stable
+
+Role mapping candidates:
+- militor-style enemy -> lesser clay automaton, bronze servitor, or shardling
+- scyther-style enemy -> blade automaton, wind-cutter, or rune-slasher
+- lancer-style enemy -> crystal sentinel or arcane beam warden
+- pikeman-style enemy -> rune-ballista construct
+- centipede-style enemy -> siege golem or iron colossus
+- termite-style enemy -> breach golem or stonebreaker automaton
+
+Implementation phases:
+1. Use vanilla mechanoid defenders temporarily in MF-049 Arcane Cache Site maps.
+2. Add one or two first construct pawn kinds with fantasy labels/descriptions and borrowed mechanoid behavior/stats.
+3. Add initial textures or recolors so constructs are visually distinct from mechs.
+4. Use constructs as arcane site defenders once smoke tested.
+5. Add construct-specific drops, such as gemstone dust, arcane fragments, foci, jade, plasteel replacement candidates, or future construct cores.
+6. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
+7. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
+
+Success criteria:
+- arcane sites no longer feel like tech/mechanoid encounters once construct skins and defs are in place
+- the first implementation keeps the reliability of mechanoid combat without requiring custom hostile magic AI
+- construct roles are readable to players and scale naturally from low-tier cache guardians to high-tier vault defenders
+- the system supports future story identity: ancient arcane defense systems, cursed guardians, elemental constructs, and automata recovered or studied by players
 
 ### MF-044 Leyline Map And Sensitivity Gameplay
 

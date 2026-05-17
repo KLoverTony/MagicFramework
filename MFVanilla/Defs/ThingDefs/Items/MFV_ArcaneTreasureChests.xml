@@ -30,7 +30,7 @@
     <defName>MFV_ArcaneTreasureChest</defName>
     <label>arcane treasure chest</label>
     <graphicData>
-      <texPath>Things/Item/Shell/TreasureChest</texPath>
+      <texPath>Things/Item/TreasureChest</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.9</drawSize>
       <color>(0.5,0.36,0.78)</color>
@@ -45,6 +45,8 @@
         <treasureTable>MFV_ArcaneTreasureTable_Standard</treasureTable>
         <tier>2</tier>
         <targetValue>700</targetValue>
+        <rollBonus>0</rollBonus>
+        <magnitudeLabel>modest</magnitudeLabel>
       </li>
     </comps>
   </ThingDef>
@@ -53,7 +55,7 @@
     <defName>MFV_GreaterArcaneTreasureChest</defName>
     <label>greater arcane treasure chest</label>
     <graphicData>
-      <texPath>Things/Item/Shell/TreasureChest_Greater</texPath>
+      <texPath>Things/Item/TreasureChest_Greater</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.9</drawSize>
       <color>(0.5,0.36,0.78)</color>
@@ -71,6 +73,38 @@
         <treasureTable>MFV_ArcaneTreasureTable_Standard</treasureTable>
         <tier>4</tier>
         <targetValue>1400</targetValue>
+        <rollBonus>30</rollBonus>
+        <magnitudeLabel>greater</magnitudeLabel>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneTreasureChestBase">
+    <defName>MFV_GrandArcaneTreasureChest</defName>
+    <label>grand arcane treasure chest</label>
+    <description>A sealed cache of unusually dense magical spoils. The bindings around it hum with layered promise and risk.</description>
+    <graphicData>
+      <texPath>Things/Item/TreasureChest_Greater</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>1.0</drawSize>
+      <color>(0.78,0.58,1)</color>
+    </graphicData>
+    <statBases>
+      <MarketValue>1800</MarketValue>
+      <Mass>4.5</Mass>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Open chest</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectOpenArcaneTreasure">
+        <treasureTable>MFV_ArcaneTreasureTable_Standard</treasureTable>
+        <tier>5</tier>
+        <targetValue>2200</targetValue>
+        <rollBonus>65</rollBonus>
+        <magnitudeLabel>grand</magnitudeLabel>
       </li>
     </comps>
   </ThingDef>

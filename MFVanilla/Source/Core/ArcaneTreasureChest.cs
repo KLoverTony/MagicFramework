@@ -15,6 +15,7 @@ public sealed class ArcaneTreasureBucketDef
 {
     public string label;
     public int rolls = 1;
+    public int rollBonus;
     public List<ArcaneTreasureEntryDef> entries = new();
 }
 
@@ -22,6 +23,8 @@ public sealed class ArcaneTreasureEntryDef
 {
     public ThingDef thingDef;
     public float weight = 1f;
+    public int minRoll = int.MinValue;
+    public int maxRoll = int.MaxValue;
     public int minCount = 1;
     public int maxCount = 1;
     public int minTier;
@@ -34,6 +37,8 @@ public sealed class CompProperties_UseEffectOpenArcaneTreasure : CompProperties_
     public ArcaneTreasureTableDef treasureTable;
     public int tier = 1;
     public int targetValue;
+    public int rollBonus;
+    public string magnitudeLabel;
 
     public CompProperties_UseEffectOpenArcaneTreasure()
     {
@@ -93,7 +98,7 @@ public sealed class CompUseEffect_OpenArcaneTreasure : CompUseEffect
         }
 
         EnsureStableChestId();
-        List<Thing> rewards = ArcaneTreasureGenerator.Generate(Props.treasureTable, Props.tier, stableChestId);
+        List<Thing> rewards = ArcaneTreasureGenerator.Generate(Props.treasureTable, Props.tier, Props.rollBonus, stableChestId);
         if (rewards.Count == 0)
         {
             Messages.Message("The arcane chest was empty.", parent, MessageTypeDefOf.NeutralEvent, false);
@@ -130,7 +135,13 @@ public sealed class CompUseEffect_OpenArcaneTreasure : CompUseEffect
     public override string CompInspectStringExtra()
     {
         EnsureStableChestId();
-        return $"Arcane cache tier: {Props.tier}\nCache ID: {stableChestId}";
+        string magnitude = string.IsNullOrWhiteSpace(Props.magnitudeLabel) ? $"tier {Props.tier}" : Props.magnitudeLabel;
+        if (Prefs.DevMode)
+        {
+            return $"Arcane cache magnitude: {magnitude}\nCache ID: {stableChestId}";
+        }
+
+        return $"Arcane cache magnitude: {magnitude}";
     }
 
     private void EnsureStableChestId()
@@ -147,7 +158,7 @@ public sealed class CompUseEffect_OpenArcaneTreasure : CompUseEffect
 
 public static class ArcaneTreasureGenerator
 {
-    public static List<Thing> Generate(ArcaneTreasureTableDef table, int tier, string stableChestId)
+    public static List<Thing> Generate(ArcaneTreasureTableDef table, int tier, int rollBonus, string stableChestId)
     {
         List<Thing> rewards = new();
         if (table?.buckets == null || string.IsNullOrWhiteSpace(stableChestId))
@@ -166,8 +177,8 @@ public static class ArcaneTreasureGenerator
             int rolls = Math.Max(0, bucket.rolls);
             for (int roll = 0; roll < rolls; roll++)
             {
-                DeterministicTreasureRandom random = new(stableChestId, table.defName, bucket.label, bucketIndex, roll, tier);
-                ArcaneTreasureEntryDef entry = PickEntry(bucket.entries, tier, random);
+                DeterministicTreasureRandom random = new(stableChestId, table.defName, bucket.label, bucketIndex, roll, tier, rollBonus);
+                ArcaneTreasureEntryDef entry = PickEntry(bucket, tier, rollBonus, random);
                 Thing reward = MakeReward(entry, tier, random);
                 if (reward != null)
                 {
@@ -179,7 +190,38 @@ public static class ArcaneTreasureGenerator
         return rewards;
     }
 
-    private static ArcaneTreasureEntryDef PickEntry(List<ArcaneTreasureEntryDef> entries, int tier, DeterministicTreasureRandom random)
+    private static ArcaneTreasureEntryDef PickEntry(ArcaneTreasureBucketDef bucket, int tier, int rollBonus, DeterministicTreasureRandom random)
+    {
+        if (HasRollBands(bucket.entries))
+        {
+            return PickRollBandEntry(bucket.entries, tier, rollBonus + bucket.rollBonus, random);
+        }
+
+        return PickWeightedEntry(bucket.entries, tier, random);
+    }
+
+    private static ArcaneTreasureEntryDef PickRollBandEntry(List<ArcaneTreasureEntryDef> entries, int tier, int rollBonus, DeterministicTreasureRandom random)
+    {
+        int roll = random.RangeInclusive(1, 100) + rollBonus;
+        List<ArcaneTreasureEntryDef> matching = new();
+        for (int i = 0; i < entries.Count; i++)
+        {
+            ArcaneTreasureEntryDef entry = entries[i];
+            if (IsEligible(entry, tier) && roll >= entry.minRoll && roll <= entry.maxRoll)
+            {
+                matching.Add(entry);
+            }
+        }
+
+        if (matching.Count == 0)
+        {
+            return null;
+        }
+
+        return PickWeightedEntry(matching, tier, random);
+    }
+
+    private static ArcaneTreasureEntryDef PickWeightedEntry(List<ArcaneTreasureEntryDef> entries, int tier, DeterministicTreasureRandom random)
     {
         float totalWeight = 0f;
         for (int i = 0; i < entries.Count; i++)
@@ -213,6 +255,25 @@ public static class ArcaneTreasureGenerator
         }
 
         return null;
+    }
+
+    private static bool HasRollBands(List<ArcaneTreasureEntryDef> entries)
+    {
+        if (entries == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            ArcaneTreasureEntryDef entry = entries[i];
+            if (entry != null && (entry.minRoll != int.MinValue || entry.maxRoll != int.MaxValue))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static Thing MakeReward(ArcaneTreasureEntryDef entry, int tier, DeterministicTreasureRandom random)

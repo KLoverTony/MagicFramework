@@ -31,6 +31,19 @@
           </fixedParams>
         </thingSetMaker>
       </li>
+      <li>
+        <chance>0.02</chance>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_GrandArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
     </value>
   </Operation>
 
@@ -58,6 +71,19 @@
             <filter>
               <thingDefs>
                 <li>MFV_GreaterArcaneTreasureChest</li>
+              </thingDefs>
+            </filter>
+            <countRange>1</countRange>
+          </fixedParams>
+        </thingSetMaker>
+      </li>
+      <li>
+        <weight>0.02</weight>
+        <thingSetMaker Class="ThingSetMaker_StackCount">
+          <fixedParams>
+            <filter>
+              <thingDefs>
+                <li>MFV_GrandArcaneTreasureChest</li>
               </thingDefs>
             </filter>
             <countRange>1</countRange>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <SitePartDef>
+    <defName>MFV_ArcaneCache</defName>
+    <label>arcane cache</label>
+    <description>A small sealed arcane cache guarded by dormant defense constructs.</description>
+    <workerClass>MFVanilla.Core.SitePartWorker_ArcaneCache</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>An arcane cache lies nearby. Its old defense systems still appear active.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <wantsThreatPoints>true</wantsThreatPoints>
+    <minThreatPoints>250</minThreatPoints>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MFV_ArcaneCache</li>
+    </tags>
+  </SitePartDef>
+
+  <GenStepDef>
+    <defName>MFV_ArcaneCache</defName>
+    <linkWithSite>MFV_ArcaneCache</linkWithSite>
+    <order>420</order>
+    <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
+      <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
+      <roomWidth>13</roomWidth>
+      <roomHeight>11</roomHeight>
+      <defenderCount>3</defenderCount>
+    </genStep>
+  </GenStepDef>
+
+</Defs>
