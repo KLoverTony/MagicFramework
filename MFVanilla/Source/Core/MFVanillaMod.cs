@@ -1,4 +1,5 @@
 using HarmonyLib;
+using MagicFramework.Core;
 using UnityEngine;
 using Verse;
 
@@ -107,6 +108,13 @@ public sealed class MFVanillaMod : Mod
 
         listing.Label("MFV_ShowTechDisabledWarningDescription".Translate());
         listing.Gap();
+
+        if (listing.ButtonText("MFV_ShowLatestMagicNotes".Translate()))
+        {
+            MagicFrameworkSplashUtility.ShowLatest();
+        }
+
+        listing.GapLine();
 
         if (listing.ButtonText("MFV_ResetSettingsToDefaults".Translate()))
         {

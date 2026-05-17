@@ -12,5 +12,6 @@
   <MFV_ShowTechDisabledWarningTooltip>Show a reminder when a game starts with vanilla tech research suppressed.</MFV_ShowTechDisabledWarningTooltip>
   <MFV_ShowTechDisabledWarningDescription>Shows a reminder when tech research suppression is active.</MFV_ShowTechDisabledWarningDescription>
 
+  <MFV_ShowLatestMagicNotes>Show latest magic notes</MFV_ShowLatestMagicNotes>
   <MFV_ResetSettingsToDefaults>Reset to defaults</MFV_ResetSettingsToDefaults>
 </LanguageData>

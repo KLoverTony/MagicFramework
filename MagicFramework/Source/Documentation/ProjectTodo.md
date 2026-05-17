@@ -63,7 +63,6 @@ Current release hygiene checklist:
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
-| MF-040 | P1 | S | Content | Introduce a first launch splash screen and include important notes |
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
 | MF-042 | P1 | M | MFVanilla | Add scalable arcane treasure chests as quest/loot/world rewards. |
 | MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
@@ -855,13 +854,22 @@ Candidate first pass:
 
 Goal: Introduce a first launch splash screen and include important notes
 
+Current state:
+ - MagicFramework now provides `SplashNoteDef` as a small XML-authored note surface for framework and dependent mod notes.
+ - Splash notes can point at a mod package ID and display the current `About/About.xml` `modVersion` next to the mod name.
+ - MagicFramework now shows a combined notes dialog from both startup and saved-game lifecycle checks when the active note set has not been seen.
+ - The seen state is saved in `MagicFrameworkSettings` as a combined note key, so new or changed dependent-mod notes can trigger the dialog without repeatedly showing old notes.
+ - MagicFramework and MFVanilla both provide player-facing splash notes with important settings notes, recent accomplishments, and planned-feature teasers.
+ - MagicFramework and MFVanilla settings both include a button to re-show the latest magic notes.
+ - MagicFramework and MFVanilla build successfully after the first pass.
+
 Target coverage: 
- - Inform players about mod settings to enable/disable tech themed vanilla research.
- - Consider other important details (to be determined)
- - host in Magic Framework to provide a utility for dependent mods
- - if possible, allow the utility to absorb details from any dependent mod and present it in one splashscreen instead of multiple
- - place a mod settings button in each dependent mod to re-show the latest notes 
- - this should be used for major changes and version info
+ - Inform players about mod settings to enable/disable tech themed vanilla research. - done for MFVanilla
+ - Consider other important details (to be determined). - initial framework, settings, and production-chain notes added
+ - host in Magic Framework to provide a utility for dependent mods. - done
+ - if possible, allow the utility to absorb details from any dependent mod and present it in one splashscreen instead of multiple. - done through `SplashNoteDef`
+ - place a mod settings button in each dependent mod to re-show the latest notes. - done for MagicFramework and MFVanilla
+ - this should be used for major changes and version info. - initial version-key support added
 
 ### MF-041 Arcane forge
 

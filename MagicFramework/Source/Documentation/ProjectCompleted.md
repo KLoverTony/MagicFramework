@@ -4,6 +4,16 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MF-040 launch splash notes.
+  Current state:
+  - MagicFramework provides `SplashNoteDef` so framework and dependent mods can author important launch/version notes in XML.
+  - Splash notes can reference a package ID and display that active mod's `About/About.xml` `modVersion`.
+  - MagicFramework collects all active splash note defs into one dialog and shows it from startup and saved-game lifecycle checks when the combined active note key has not been seen.
+  - Seen state is stored in `MagicFrameworkSettings.lastSeenSplashKey`, allowing new dependent-mod notes to trigger the dialog without repeatedly showing unchanged notes.
+  - MagicFramework and MFVanilla both provide player-facing notes with important settings reminders, recent accomplishments, and planned-feature teasers.
+  - MagicFramework and MFVanilla settings pages both include a button to re-show the latest notes.
+  - MFVanilla notes call out the vanilla tech research suppression setting and where to restore standard tech research.
+
 - Deterministic spell random utility.
   Current state:
   - `SpellDeterministicRandom` derives stable random-looking values from explicit gameplay salt such as spell seed, spell def, caster ID, map ID, targets, cells, and authored channels.

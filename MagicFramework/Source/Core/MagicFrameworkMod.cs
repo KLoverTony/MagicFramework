@@ -16,6 +16,7 @@ public sealed class MagicFrameworkMod : Mod
     {
         settings = GetSettings<MagicFrameworkSettings>();
         MagicFrameworkSettings.SetCurrent(settings);
+        MagicFrameworkSplashUtility.QueueShowIfNew();
     }
 
     public override string SettingsCategory()
@@ -30,6 +31,11 @@ public sealed class MagicFrameworkMod : Mod
         listing.Label("Interface");
         listing.GapLine();
         listing.CheckboxLabeled("Use colored spell text", ref settings.useColoredSpellText, "Adds color tags to generated spell summaries where RimWorld rich text supports them.");
+        if (listing.ButtonText("Show latest Magic Framework notes"))
+        {
+            MagicFrameworkSplashUtility.ShowLatest();
+        }
+
         listing.GapLine();
         listing.Label("Caster level scaling");
         listing.GapLine();

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MagicFramework.Core.SplashNoteDef>
+    <defName>MFV_SplashNotes_2026_05</defName>
+    <label>MF Vanilla</label>
+    <modName>MF Vanilla</modName>
+    <packageId>oracle.mfvanilla</packageId>
+    <versionKey>MFVanilla-0.6.0</versionKey>
+    <order>100</order>
+    <notes>
+      <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, and arcane discoveries instead of the standard industrial path.</li>
+      <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
+      <li>The magic economy is taking shape: grow herbs, prepare papyrus or parchment, grind gemstone dust, brew arcane ink, scribe scrolls, and turn raw gems into the heart of advanced magical production.</li>
+      <li>Magic is easier to find in the world now. Traders can carry useful reagents and occasional scrolls, helping new colonies get started before they can make every ingredient themselves.</li>
+      <li>The Arcane Forge is ready for ambitious colonies, letting skilled enchanters transform quality weapons into elemental arms powered by linked arcane spires.</li>
+      <li>Arcane treasure chests are beginning to appear as magical reward caches, packed with scrolls, gems, silver, gold, enchanted prizes, and other rare finds.</li>
+      <li>Stay tuned: future updates are planned to add more magical reward sites, arcane cache maps, expanded elemental spell schools, leyline gameplay, elemental cultures, arcane constructs, and more distinctive enchanted weapons.</li>
+      <li>You can reopen the latest notes from the MF Vanilla settings page.</li>
+    </notes>
+  </MagicFramework.Core.SplashNoteDef>
+</Defs>
