@@ -221,11 +221,11 @@ public static class MFVanillaPatcher
         return false;
     }
 
-    private static void GenRecipe_MakeRecipeProducts_Postfix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, ref IEnumerable<Thing> __result)
+    private static void GenRecipe_MakeRecipeProducts_Postfix(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, IBillGiver billGiver, ref IEnumerable<Thing> __result)
     {
         ArcanePracticeUtility.NotifyArcaneProductionCompleted(worker, recipeDef);
 
-        if (EnchantmentUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, out List<Thing> enchantedProducts))
+        if (EnchantmentUtility.TryMakeRecipeProducts(recipeDef, worker, ingredients, billGiver as Thing, out List<Thing> enchantedProducts))
         {
             __result = enchantedProducts;
             return;

@@ -22,11 +22,18 @@
   <ResearchProjectDef>
     <defName>MFV_LeylineSensitivity</defName>
     <label>leyline sensitivity</label>
-    <description>Learn to perceive the subtle currents of mana that move through land, stone, and living things.</description>
+    <description>Learn to perceive the subtle currents of mana that move through land, stone, and living things. Reveals hidden leylines on colony maps, helps gifted pawns recover mana faster near strong currents, and lets Arcane Forges resonate with nearby leyline power for a chance to improve enchanted weapon quality.
+
+Unlocks Arcane Discipline: Medium.</description>
     <baseCost>700</baseCost>
     <techLevel>Neolithic</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Medium</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_ArcaneTheory</li>
     </prerequisites>
@@ -116,11 +123,18 @@
   <ResearchProjectDef>
     <defName>MFV_Elementalism</defName>
     <label>elementalism</label>
-    <description>Study the fundamental forces of nature and their magical manipulation.</description>
+    <description>Study the fundamental forces of nature and their magical manipulation.
+
+Unlocks Arcane Discipline: Elementalist.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Elementalist</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -131,11 +145,18 @@
   <ResearchProjectDef>
     <defName>MFV_Enchantment</defName>
     <label>enchantment</label>
-    <description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.</description>
+    <description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.
+
+Unlocks Arcane Discipline: Enchanter.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Enchanter</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -146,11 +167,18 @@
   <ResearchProjectDef>
     <defName>MFV_Summoning</defName>
     <label>summoning</label>
-    <description>Study the art of calling forth and commanding otherworldly entities.</description>
+    <description>Study the art of calling forth and commanding otherworldly entities.
+
+Unlocks Arcane Discipline: Summoner.</description>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Summoner</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -161,11 +189,18 @@
   <ResearchProjectDef>
     <defName>MFV_Transformation</defName>
     <label>transformation</label>
-    <description>Study the art of changing one thing into another through magical means.</description>
+    <description>Study the art of changing one thing into another through magical means.
+
+Unlocks Arcane Discipline: Transmuter.</description>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Transmuter</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -176,11 +211,18 @@
   <ResearchProjectDef>
     <defName>MFV_Illusion</defName>
     <label>illusion</label>
-    <description>Study the art of creating deceptive images and sensory experiences through magical means.</description>
+    <description>Study the art of creating deceptive images and sensory experiences through magical means.
+
+Unlocks Arcane Discipline: Illusionist.</description>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Illusionist</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -191,11 +233,18 @@
   <ResearchProjectDef>
     <defName>MFV_Vitalism</defName>
     <label>vitalism</label>
-    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</description>
+    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.
+
+Unlocks Arcane Discipline: Vitalist.</description>
     <baseCost>1100</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Vitalist</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Spellcraft</li>
     </prerequisites>
@@ -221,11 +270,18 @@
   <ResearchProjectDef>
     <defName>MFV_Pyromancy</defName>
     <label>pyromancy</label>
-    <description>Study heat, combustion, and the deliberate shaping of magical flame.</description>
+    <description>Study heat, combustion, and the deliberate shaping of magical flame.
+
+Unlocks Arcane Discipline: Pyromancer.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Pyromancer</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Elementalism</li>
     </prerequisites>
@@ -236,11 +292,18 @@
   <ResearchProjectDef>
     <defName>MFV_Aquamancy</defName>
     <label>aquamancy</label>
-    <description>Shape water into protective and hostile magic.</description>
+    <description>Shape water into protective and hostile magic.
+
+Unlocks Arcane Discipline: Aquamancer.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Aquamancer</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Elementalism</li>
     </prerequisites>
@@ -251,11 +314,18 @@
   <ResearchProjectDef>
     <defName>MFV_Aeromancy</defName>
     <label>aeromancy</label>
-    <description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.</description>
+    <description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.
+
+Unlocks Arcane Discipline: Aeromancer.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Aeromancer</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Elementalism</li>
     </prerequisites>
@@ -266,11 +336,18 @@
   <ResearchProjectDef>
     <defName>MFV_Geomancy</defName>
     <label>geomancy</label>
-    <description>Study stone, soil, metal, and the patient strength of the earth.</description>
+    <description>Study stone, soil, metal, and the patient strength of the earth.
+
+Unlocks Arcane Discipline: Geomancer.</description>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Geomancer</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Elementalism</li>
     </prerequisites>

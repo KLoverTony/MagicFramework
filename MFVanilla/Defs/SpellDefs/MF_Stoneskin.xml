@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Stoneskin</defName>
+    <label>stoneskin</label>
+    <description>Hardens an allied pawn's skin with earth magic, improving armor at the cost of movement speed.</description>
+    <range>18</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Stoneskin</gizmoIconPath>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Earth</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Geomancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Geomancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Stoneskin</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Stoneskin cooldown ready</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Stoneskin</debugLabel>
+        <amount>10</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Stoneskin cooldown</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Stoneskin sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Stoneskin effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
+            <debugLabel>Stoneskin buff</debugLabel>
+            <statusEffectDef>MFV_Status_Stoneskin</statusEffectDef>
+            <targetSource>CurrentTarget</targetSource>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

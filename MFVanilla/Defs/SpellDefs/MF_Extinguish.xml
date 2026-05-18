@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Extinguish</defName>
+    <label>extinguish</label>
+    <description>Douses nearby flames in a burst of controlled water magic. Radius improves with caster level.</description>
+    <range>24</range>
+    <castTimeTicks>20</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Extinguish</gizmoIconPath>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Water</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aquamancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Area</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aquamancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Radius</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>24</range>
+      <radius>4</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Extinguish</debugLabel>
+        <amount>6</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Extinguish cooldown ready</debugLabel>
+        <cooldownTicks>90</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Extinguish</debugLabel>
+        <amount>6</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Extinguish cooldown</debugLabel>
+        <cooldownTicks>90</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Extinguish sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Extinguish pulse FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.ExtinguishFireActionDef">
+            <debugLabel>Extinguish fires</debugLabel>
+            <locationSource>CurrentCell</locationSource>
+            <radius>4</radius>
+            <scalableRadius>
+              <baseValue>4</baseValue>
+              <perPower>0.25</perPower>
+              <max>8</max>
+            </scalableRadius>
+            <includeAttachedFires>true</includeAttachedFires>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

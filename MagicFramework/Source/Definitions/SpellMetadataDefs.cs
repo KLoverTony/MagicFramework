@@ -35,6 +35,22 @@ public class SpellDisciplineDef : Def
 }
 
 /// <summary>
+/// A caster specialization unlocked by a research node.
+/// </summary>
+public class ArcaneDisciplineDef : Def
+{
+    public int displayOrder;
+}
+
+/// <summary>
+/// Marks a research project as unlocking an arcane discipline for gifted pawns.
+/// </summary>
+public class ArcaneDisciplineUnlockExtension : DefModExtension
+{
+    public ArcaneDisciplineDef discipline;
+}
+
+/// <summary>
 /// Flexible free-form spell marker for filtering and rule matching.
 /// </summary>
 public class SpellTagDef : Def

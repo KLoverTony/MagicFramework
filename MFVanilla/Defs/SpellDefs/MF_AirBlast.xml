@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_AirBlast</defName>
+    <label>air blast</label>
+    <description>Unleashes a cone of compressed air, battering hostile pawns and knocking them away from the caster.</description>
+    <range>20</range>
+    <castTimeTicks>25</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_AirBlast</gizmoIconPath>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Air</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aeromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aeromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Damage</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Cone</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>20</range>
+      <lineLength>7</lineLength>
+      <coneAngleDegrees>60</coneAngleDegrees>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Air Blast</debugLabel>
+        <amount>9</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Air Blast cooldown ready</debugLabel>
+        <cooldownTicks>120</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Air Blast</debugLabel>
+        <amount>9</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Air Blast cooldown</debugLabel>
+        <cooldownTicks>120</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Air Blast sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Air Blast cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Air Blast cone effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>CurrentCell</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Air Blast affect cone targets</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.ShapeTargetsQueryDef">
+              <shape>Cone</shape>
+              <originSource>Caster</originSource>
+              <centerSource>InitialTarget</centerSource>
+              <lineLength>7</lineLength>
+              <coneAngleDegrees>60</coneAngleDegrees>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>false</includeCaster>
+              <pawnAffinity>Foe</pawnAffinity>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Air Blast target effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Air Blast damage</debugLabel>
+                <amount>12</amount>
+                <scalableAmount>
+                  <baseValue>12</baseValue>
+                  <perPower>0.6</perPower>
+                  <max>24</max>
+                </scalableAmount>
+                <damageDef>Blunt</damageDef>
+                <armorPenetration>0.08</armorPenetration>
+              </li>
+              <li Class="MagicFramework.Definitions.KnockbackActionDef">
+                <debugLabel>Air Blast knockback</debugLabel>
+                <originSource>Caster</originSource>
+                <distance>3</distance>
+                <scalableDistance>
+                  <baseValue>3</baseValue>
+                  <perPower>0.2</perPower>
+                  <max>6</max>
+                </scalableDistance>
+                <requireStandableDestination>true</requireStandableDestination>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <impactDamageAmount>4</impactDamageAmount>
+                <impactDamageDef>Blunt</impactDamageDef>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

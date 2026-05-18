@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Warmth</defName>
+    <label>warmth</label>
+    <description>Maintains a gentle warming aura around an allied pawn, protecting them and nearby allies from cold without making them tolerate heat better.</description>
+    <range>16</range>
+    <castTimeTicks>30</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_FlameField</gizmoIconPath>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Fire</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Pyromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+        <li>MF_Tag_Channelled</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Pyromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>1</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>16</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Warmth</debugLabel>
+        <amount>8</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Warmth cooldown ready</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Warmth</debugLabel>
+        <amount>8</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Warmth cooldown</debugLabel>
+        <cooldownTicks>180</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Warmth sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Warmth cast effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
+            <debugLabel>Warmth maintained aura</debugLabel>
+            <statusEffectDef>MFV_Status_Warmth</statusEffectDef>
+            <targetSource>CurrentTarget</targetSource>
+            <maxDurationTicks>1800</maxDurationTicks>
+            <scalableMaxDurationTicks>
+              <baseValue>1800</baseValue>
+              <perPower>60</perPower>
+              <max>3000</max>
+            </scalableMaxDurationTicks>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+            <maxRange>16</maxRange>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenTargetDowned>false</breakWhenTargetDowned>
+            <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+            <breakWhenLineOfSightLost>true</breakWhenLineOfSightLost>
+            <maintenance>
+              <profiles>
+                <li>CasterConscious</li>
+                <li>TargetValid</li>
+                <li>Tethered</li>
+                <li>LineOfSight</li>
+              </profiles>
+              <maxRange>16</maxRange>
+            </maintenance>
+            <pulseIntervalTicks>120</pulseIntervalTicks>
+            <onPulseActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Warmth aura pulse effect</debugLabel>
+                <effectDef>PsycastAreaEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+                <debugLabel>Warmth aura affects nearby allies</debugLabel>
+                <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+                  <radius>4</radius>
+                  <centerSource>CurrentTarget</centerSource>
+                  <includePawns>true</includePawns>
+                  <includeBuildings>false</includeBuildings>
+                  <includeItems>false</includeItems>
+                  <includeCaster>true</includeCaster>
+                  <pawnAffinity>Ally</pawnAffinity>
+                </targetQuery>
+                <actions>
+                  <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
+                    <debugLabel>Warmth shared cold protection</debugLabel>
+                    <statusEffectDef>MFV_Status_WarmthAura</statusEffectDef>
+                    <targetSource>CurrentTarget</targetSource>
+                    <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+                  </li>
+                </actions>
+              </li>
+            </onPulseActions>
+            <onBreakActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Warmth break effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+            </onBreakActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

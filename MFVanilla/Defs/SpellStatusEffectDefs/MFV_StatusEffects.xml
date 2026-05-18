@@ -161,6 +161,44 @@
   </MagicFramework.Definitions.SpellStatusEffectDef>
 
   <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Stoneskin</defName>
+    <label>stoneskin</label>
+    <description>Earth magic hardens this pawn's skin, improving armor but slowing movement.</description>
+    <categories>
+      <li>buff</li>
+      <li>earth</li>
+      <li>defense</li>
+    </categories>
+    <durationTicks>900</durationTicks>
+    <scalableDurationTicks>
+      <baseValue>900</baseValue>
+      <perPower>30</perPower>
+      <max>1500</max>
+    </scalableDurationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Stoneskin</label>
+      <description>Earth magic is hardening this pawn's skin and slowing their movement.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ArmorRating_Sharp</statDef>
+        <offset>0.18</offset>
+      </li>
+      <li>
+        <statDef>ArmorRating_Blunt</statDef>
+        <offset>0.18</offset>
+      </li>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>0.85</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_MightBacklashWeakness</defName>
     <label>weakened</label>
     <description>Magical backlash weakens this pawn's strength for a short time.</description>
@@ -279,6 +317,91 @@
       <li>
         <statDef>MoveSpeed</statDef>
         <factor>0.35</factor>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Drenched</defName>
+    <label>drenched</label>
+    <description>This pawn is soaked by conjured water, slowing movement and making flame less threatening for a short time.</description>
+    <categories>
+      <li>debuff</li>
+      <li>control</li>
+      <li>water</li>
+    </categories>
+    <durationTicks>420</durationTicks>
+    <scalableDurationTicks>
+      <baseValue>420</baseValue>
+      <perPower>24</perPower>
+      <max>900</max>
+    </scalableDurationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Drenched</label>
+      <description>Conjured water is weighing this pawn down and suppressing flame.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>MoveSpeed</statDef>
+        <factor>0.82</factor>
+      </li>
+      <li>
+        <statDef>ArmorRating_Heat</statDef>
+        <offset>0.16</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_Warmth</defName>
+    <label>warmth</label>
+    <description>A maintained warming aura is protecting this pawn from cold.</description>
+    <categories>
+      <li>buff</li>
+      <li>fire</li>
+      <li>temperature</li>
+    </categories>
+    <durationTicks>300</durationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Warmth</label>
+      <description>A maintained warming aura is protecting this pawn from cold.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ComfyTemperatureMin</statDef>
+        <offset>-35</offset>
+      </li>
+    </statModifiers>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_WarmthAura</defName>
+    <label>warming aura</label>
+    <description>A nearby warming aura is protecting this pawn from cold.</description>
+    <categories>
+      <li>buff</li>
+      <li>fire</li>
+      <li>temperature</li>
+      <li>aura</li>
+    </categories>
+    <durationTicks>180</durationTicks>
+    <statusCue>
+      <hediffDef>MF_GenericSpellStatusCue</hediffDef>
+      <label>Warming aura</label>
+      <description>A nearby warming aura is protecting this pawn from cold.</description>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+    <statModifiers>
+      <li>
+        <statDef>ComfyTemperatureMin</statDef>
+        <offset>-25</offset>
       </li>
     </statModifiers>
   </MagicFramework.Definitions.SpellStatusEffectDef>

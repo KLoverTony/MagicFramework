@@ -54,6 +54,31 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         GetOrCreateState(pawn).hasArcaneGift = value;
     }
 
+    public ArcaneDisciplineDef GetArcaneDiscipline(Pawn pawn)
+    {
+        return pawn == null ? null : GetOrCreateState(pawn).arcaneDiscipline;
+    }
+
+    public void SetArcaneDiscipline(Pawn pawn, ArcaneDisciplineDef discipline)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        GetOrCreateState(pawn).arcaneDiscipline = discipline;
+    }
+
+    public void ClearArcaneDiscipline(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        GetOrCreateState(pawn).arcaneDiscipline = null;
+    }
+
     public int GetCasterLevel(Pawn pawn)
     {
         if (pawn == null)
@@ -212,6 +237,17 @@ public sealed class SpellRuntimeGameComponent : GameComponent
 
         CasterRuntimeState state = GetOrCreateState(caster);
         state.currentMana = state.currentMana > amount ? state.currentMana - amount : 0f;
+    }
+
+    public void RestoreMana(Thing caster, float amount)
+    {
+        if (caster == null || amount <= 0f)
+        {
+            return;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(caster);
+        state.currentMana = Mathf.Min(GetMaxMana(caster), state.currentMana + amount);
     }
 
     public int GetCooldownRemainingTicks(Thing caster, SpellDef spellDef)
@@ -1964,6 +2000,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         public Thing caster;
         public float currentMana;
         public bool hasArcaneGift;
+        public ArcaneDisciplineDef arcaneDiscipline;
         public int casterLevel;
         public int debugCasterLevel;
         public float casterExperience;
@@ -2031,6 +2068,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             Scribe_References.Look(ref caster, "caster");
             Scribe_Values.Look(ref currentMana, "currentMana", DefaultStartingMana);
             Scribe_Values.Look(ref hasArcaneGift, "hasArcaneGift");
+            Scribe_Defs.Look(ref arcaneDiscipline, "arcaneDiscipline");
             Scribe_Values.Look(ref casterLevel, "casterLevel");
             Scribe_Values.Look(ref debugCasterLevel, "debugCasterLevel");
             Scribe_Values.Look(ref casterExperience, "casterExperience");

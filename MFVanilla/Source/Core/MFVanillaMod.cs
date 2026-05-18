@@ -35,11 +35,17 @@ public sealed class MFVanillaMod : Mod
         /// </summary>
         public bool ShowDevModeSpellGizmos = false;
 
+        /// <summary>
+        /// Whether to show numeric leyline strength values while the leyline overlay is active and zoomed in.
+        /// </summary>
+        public bool ShowLeylineStrengthNumbers = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref DisableTechResearch, "disableTechResearch", true);
             Scribe_Values.Look(ref ShowTechDisabledWarning, "showTechDisabledWarning", true);
             Scribe_Values.Look(ref ShowDevModeSpellGizmos, "showDevModeSpellGizmos", false);
+            Scribe_Values.Look(ref ShowLeylineStrengthNumbers, "showLeylineStrengthNumbers", false);
         }
     }
 
@@ -130,6 +136,21 @@ public sealed class MFVanillaMod : Mod
         listing.Label("MFV_ShowDevModeSpellGizmosDescription".Translate());
         listing.Gap();
 
+        bool showLeylineStrengthNumbers = Settings.ShowLeylineStrengthNumbers;
+        listing.CheckboxLabeled(
+            "MFV_ShowLeylineStrengthNumbers".Translate(),
+            ref showLeylineStrengthNumbers,
+            "MFV_ShowLeylineStrengthNumbersTooltip".Translate());
+
+        if (showLeylineStrengthNumbers != Settings.ShowLeylineStrengthNumbers)
+        {
+            Settings.ShowLeylineStrengthNumbers = showLeylineStrengthNumbers;
+            WriteSettings();
+        }
+
+        listing.Label("MFV_ShowLeylineStrengthNumbersDescription".Translate());
+        listing.Gap();
+
         if (listing.ButtonText("MFV_ShowLatestMagicNotes".Translate()))
         {
             MagicFrameworkSplashUtility.ShowLatest();
@@ -142,6 +163,7 @@ public sealed class MFVanillaMod : Mod
             Settings.DisableTechResearch = true;
             Settings.ShowTechDisabledWarning = true;
             Settings.ShowDevModeSpellGizmos = false;
+            Settings.ShowLeylineStrengthNumbers = false;
             MFVanillaPatcher.NotifySettingsChanged();
             WriteSettings();
         }

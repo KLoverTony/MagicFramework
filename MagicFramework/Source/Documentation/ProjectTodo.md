@@ -37,6 +37,47 @@ Current release hygiene checklist:
 - Capture any remaining known issues as post-release notes unless they affect startup, save/load, cleanup, or first-party usability.
 - Update modversion label in about.xml files commensurate with developmental progress.
 
+## Internal Release Schedule
+
+Use this schedule as the internal release train. Each release should have a small theme, a clear content boundary, and a publish gate. When most items in a release band are implemented, built, deployed, and smoke tested, the release can be pushed; unfinished stretch items should move to a later band instead of delaying indefinitely.
+
+Release gate for every band:
+- clean builds for changed assemblies
+- deployed local mod folders match workspace content
+- version and splash notes updated
+- XML load check and focused in-game smoke tests for changed systems
+- known issues moved into post-release notes unless they affect startup, save/load, cleanup, or basic usability
+
+Recent public release:
+- MFVanilla 0.7 / MagicFramework 1.2: production loop, Arcane Forge first weapon set, enchanted weapon identities, arcane treasure chests, arcane cache sites, automata/construct defenders, and updated splash notes.
+
+Completed current slice:
+- MF-044: Leyline Sensitivity now reveals a stable hidden leyline map, supports optional numeric inspection, boosts Arcane Gift pawn mana recovery near strong currents, and gives Arcane Forges a leyline resonance chance to improve enchanted weapon quality.
+
+Next release band - MFVanilla world layer:
+- MF-043: choose the next-release content pillar set and keep research cleanup decisions current
+- MF-046: low-risk elemental spell expansion, prioritizing Deluge, Extinguish, Stoneskin, Air Blast, Heat, and Warmth before larger pathing/summon ideas
+- MF-045: elemental cultures and themed traders if the world layer needs a stronger trade/faction identity
+
+Following release band - school identity and advanced magic:
+- MF-051: mind control under Forbidden Lore
+- MF-052: illusionary pawns under Illusion
+- MF-053: undead pawns under Necromancy
+- MF-054: golems under Fleshcraft
+- MF-055: planar exploration under Planar Magic
+- MF-056: legendary weapons and magic buff rituals under Grand Sorcery
+- MF-057: chronometric resurrection under Chronomancy
+- MF-058: lichdom under Soulcraft
+
+AeternusFaith release band:
+- MF-039, MF-019, MF-033, MF-034, and MF-035 remain the first-edition release core
+- MF-059 adds decorative and religious statues as a content/presentation pass
+- MF-020, MF-021, and MF-023 remain follow-up polish unless they become release blockers
+
+Consideration backlog:
+- MF-060: evaluate paintings as decoration and platinum as a trade good; do not implement until they have a clear economy or presentation role
+- MF-061: arcane discipline specialization; research projects now label discipline unlocks in descriptions, with future work to let Arcane Gift pawns embrace one discipline and show it near the mana bar.
+
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
 | MF-038 | P1 | M | MFVanilla | Keep the MFVanilla content roadmap current after completed feature pillars and prune stale planning notes. |
@@ -66,10 +107,20 @@ Current release hygiene checklist:
 | MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
 | MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
 | MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
-| MF-044 | P2 | L | MFVanilla | Add static per-map leyline maps and Leyline Sensitivity gameplay. |
 | MF-045 | P2 | L | MFVanilla | Add elemental tribes, themed traders, and later magic-capable hostile pawns. |
 | MF-046 | P2 | M | MFVanilla | Expand thin elemental schools with new spells and utility effects. |
 | MF-047 | P2 | M | Equipment | Give first enchanted weapons unique MagicFramework-backed features. |
+| MF-051 | P2 | L | Forbidden Lore | Add mind-control magic as a dangerous forbidden school feature. |
+| MF-052 | P2 | L | Illusion | Add illusionary pawns under Illusion research. |
+| MF-053 | P2 | L | Necromancy | Add undead pawns under Necromancy research. |
+| MF-054 | P2 | L | Fleshcraft | Add golems under Fleshcraft research. |
+| MF-055 | P2 | XL | Planar Magic | Add planar exploration as an advanced magic feature. |
+| MF-056 | P2 | L | Grand Sorcery | Add legendary weapons and a magic buff ritual under Grand Sorcery. |
+| MF-057 | P2 | L | Chronomancy | Add chronometric resurrection under Chronomancy research. |
+| MF-058 | P2 | XL | Soulcraft | Add lichdom under Soulcraft research. |
+| MF-059 | P2 | M | AeternusFaith | Add decorative and religious statues. |
+| MF-060 | P3 | S | Content | Consider paintings as decoration and platinum as a trade good. |
+| MF-061 | P2 | L | MFVanilla | Add optional Arcane Discipline specialization for Arcane Gift pawns, including research-tree unlock labels, an embrace ritual, spell eligibility gating, settings support, and pawn mana-bar display text. |
 
 ## P1 Release And Content Priorities
 
@@ -207,18 +258,19 @@ Success criteria:
 Goal: define the full content shape for the next MFVanilla release before final tuning.
 
 Candidate pillars:
-- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration.
+- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration. - first treasure chest pass shipped; future work should broaden reward sources, higher-tier artifacts, and special-site integration
 - Arcane encounter maps: high-quality mission sites such as arcane caches, ruined sanctums, sealed vaults, leyline ruptures, elemental shrines, and cursed archives.
 - Elemental school completion: fill thin schools, especially water, while adding spells that use existing primitives where possible.
 - Leyline gameplay: make Leyline Sensitivity reveal or use a static per-map leyline map, then later connect nodes to mana, buildings, rituals, or incidents.
 - Elemental cultures: fire, earth, air, and water tribes with themed traders first, and hostile magic pawns later once AI casting exists.
 - Enchanted weapon identity: give each current Arcane Forge weapon a unique special feature rather than only adjusted damage.
 - Arcane material economy: reduce or replace plasteel/component dependency on magical production where a pre-industrial magic economy makes more sense.
+- Advanced school identity: add scoped features for Forbidden Lore, Illusion, Necromancy, Fleshcraft, Planar Magic, Grand Sorcery, Chronomancy, and Soulcraft as separate release-band tasks.
 
 Candidate spells:
 - Air: Air Blast, Fly.
 - Fire/heat: Heat, Warmth.
-- Earth: Golem, Earthy Grave, Stoneskin.
+- Earth: Summon Golem, Earthy Grave, Stoneskin.
 - Water: Deluge, Extinguish.
 
 Research audit:
@@ -229,12 +281,12 @@ Research audit:
 Task plan:
 1. Inventory current MFVanilla unlocks by research project: spells, benches, recipes, buildings, items, traders, and settings-visible behavior.
 2. Mark empty or weak projects, especially Leyline Sensitivity and advanced school nodes, with a proposed content role or removal/defer decision.
-3. Pick the next-release pillar set, with treasure chests as the default first pillar.
+3. Pick the next-release pillar set from leylines, elemental spell expansion, elemental cultures, and advanced-school identity work.
 4. Identify which pillar items need new MagicFramework code versus XML/content-only work.
 5. Reorder tuning tasks after content scope is known.
 
 Sequencing note:
-- avoid deep balance work until treasure chests, spell additions, and any material-cost philosophy changes have settled enough to see the full economy.
+- avoid deep balance work until spell additions, leyline hooks, advanced-school features, and any material-cost philosophy changes have settled enough to see the full economy.
 
 ### MF-049 Arcane Encounter Maps And Mission Sites
 
@@ -377,6 +429,8 @@ Success criteria:
 
 Goal: make Leyline Sensitivity reveal a stable, useful magical geography layer for each map.
 
+Status: complete for the current release slice. Future leyline effects should be opened as separate follow-up tasks once the overlay, mana recovery, and Arcane Forge resonance have been playtested.
+
 Design direction:
 - generate a hidden static leyline map per RimWorld map, conceptually similar to the deep-drill resource overlay but expressing magical flow rather than mineable resources
 - store the leyline data on a map component so it survives save/load and does not reroll unexpectedly
@@ -396,10 +450,12 @@ Implementation questions:
 - should leyline nodes be rare enough to drive colony placement decisions, or common enough to influence local base layout?
 
 First implementation pass:
-1. Add a map component that generates and saves leyline paths/nodes.
-2. Add dev-mode debug drawing and logging for generated leyline data.
-3. Add a simple overlay or inspection mode gated by Leyline Sensitivity.
-4. Add one low-risk gameplay hook, such as improved mana recovery or arcane research speed near a node, only after the map layer is stable.
+1. Add a map component that generates and saves leyline paths/nodes. - initial `LeylineMapComponent` added with a saved byte-strength grid and optional saved segment records
+2. Add dev-mode debug drawing and logging for generated leyline data. - initial dev actions added for overlay toggle, regeneration, and summary logging
+3. Add a simple overlay or inspection mode gated by Leyline Sensitivity. - initial map overlay button and cell-strength rendering added; normal access requires `MFV_LeylineSensitivity`, dev mode can preview before research; optional zoom-gated numeric strength labels added through MFVanilla settings
+4. Add one low-risk gameplay hook, such as improved mana recovery or arcane research speed near a node, only after the map layer is stable. - initial pawn mana recovery hook added: Arcane Gift pawns periodically sample peak leyline strength in a tiny radius and receive a capped mana recovery bonus
+5. Add reusable area-reading helpers for future buildings, rituals, and site placement. - initial `LeylineAreaReading` and `LeylineUtility` helpers added for cell, radius, rect, thing footprint, and capped peak-strength bonus calculations
+6. Wire leyline readings into one building as a placement reward. - Arcane Forge now reads its footprint leyline sum and gains a capped chance to improve enchanted weapon output quality by one tier; inspect text shows current resonance chance
 
 Success criteria:
 - Leyline Sensitivity has an immediately understandable use
@@ -447,15 +503,15 @@ Success criteria:
 Goal: fill thin elemental schools and add high-value utility spells that make MFVanilla feel less like a validation pack.
 
 Priority spell candidates:
-- Air Blast: push, stagger, damage, or knockback using displacement primitives.
+- Air Blast: implemented in wave 1 as blunt damage plus scalable knockback; upgraded in phase 2 to a cone spell backed by reusable cone target queries.
 - Fly: mobility/terrain bypass fantasy; likely needs careful framework and pathing design before implementation.
 - Heat: targeted warming, heat damage, or room-temperature utility depending on design.
-- Warmth: safer colony utility, probably a pawn/room comfort or hypothermia-protection effect.
-- Golem: earth summon, likely requiring summon/spawn expansion and a pawn kind.
+- Warmth: implemented in phase 2 as a maintained Pyromancy aura that protects the target and nearby allies from cold without improving heat tolerance.
+- Summon Golem: earth summon, likely requiring summon/spawn expansion and a pawn kind.
 - Earthy Grave: earth control spell; possible immobilize, bury, down, slow, or terrain hazard.
-- Stoneskin: defensive earth status using armor/stat modifiers and movement penalties.
-- Deluge: water area effect, extinguish support, wet/frost synergy, or terrain/filth effect.
-- Extinguish: fire-clearing utility, likely a small framework action if no existing primitive covers it cleanly.
+- Stoneskin: implemented in wave 1 as a defensive earth status with armor offsets and movement penalty.
+- Deluge: first draft implemented as a water area pulse that extinguishes fires, drenches pawns, and pushes them outward from the target center; terrain mud, crop destruction, and deeper wet/frost synergy remain future polish.
+- Extinguish: implemented in wave 1 using the Tidebreaker fire-clearing primitive, with a new scalable radius hook.
 
 Design direction:
 - prioritize spells that strengthen underused schools and can be authored with current primitives
@@ -463,10 +519,35 @@ Design direction:
 - prefer utility and colony-support spells alongside combat spells so each school has a play identity
 
 First implementation pass:
-1. Classify each candidate as XML-only, small framework hook, or large framework feature.
-2. Select two or three low-risk spells for the next content slice, likely Air Blast, Stoneskin, and Extinguish/Warmth.
-3. Add spell defs, scroll generation coverage, research gates, icons, and generated summaries.
+1. Completed: classified the first candidates against existing support.
+   - Air Blast: XML-only composition of `DamageActionDef` and `KnockbackActionDef`.
+   - Stoneskin: XML-only spell plus reusable `SpellStatusEffectDef`.
+   - Extinguish: existing `ExtinguishFireActionDef` from Tidebreaker, plus a small `scalableRadius` framework hook.
+   - Deluge, Heat, Warmth, Fly, Summon Golem, and Earthy Grave remain design/implementation candidates.
+2. Completed: selected Air Blast, Stoneskin, and Extinguish for wave 1.
+3. Completed: added spell defs, scroll generation coverage, research gates, and provisional reused icons.
 4. Smoke test targeting, mana/cooldown, scroll learning, and save/load for any persistent effects.
+
+Second implementation pass:
+1. Completed: added `MF_Deluge` as a learnable tier 2 Aquamancy spell.
+2. Completed: generalized `KnockbackActionDef` with an authored `originSource`, preserving caster-origin behavior by default and allowing Deluge to push pawns away from the spell center.
+3. Completed: added scalable radius support to `TargetsInRadiusQueryDef` so Deluge can keep targeting, extinguish, and pawn-effect radii aligned.
+4. Completed: added `MFV_Status_Drenched` as a short water-control status with movement slow and heat armor support.
+5. Remaining Deluge polish: temporary mud terrain, crop/small-plant destruction, richer water visuals, and possible explicit wet/frost interaction.
+
+Cone targeting follow-up:
+1. Completed: added `Cone` to `SpellTargetShape`.
+2. Completed: added `coneAngleDegrees` to spell targeting and `ShapeTargetsQueryDef`.
+3. Completed: implemented cone resolution in `ShapeTargetsQueryWorker` using caster/origin, aim cell, line length, and angle.
+4. Completed: converted `MF_AirBlast` from single-target to a 60-degree, 7-cell hostile-pawn cone.
+5. Future polish: targeting preview/overlay for cone cells and optional scalable cone length/angle authoring.
+
+Warmth follow-up:
+1. Completed: added `MF_Warmth` as a learnable Pyromancy utility spell.
+2. Completed: authored maintained `MFV_Status_Warmth` cold protection for the target using `ComfyTemperatureMin`.
+3. Completed: authored pulsed `MFV_Status_WarmthAura` for nearby allies in a 4-cell radius.
+4. Completed: generated scroll and scribing recipe coverage.
+5. Future polish: dedicated Warmth icon/visuals and possible shared temperature-aura tuning after in-game testing.
 
 Success criteria:
 - water and earth no longer feel obviously thin
@@ -528,6 +609,154 @@ Success criteria:
 - each enchanted weapon has a memorable mechanical identity
 - special features reuse or inform MagicFramework primitives rather than isolated one-off code
 - behavior remains understandable, deterministic, and safe in ordinary melee combat
+
+### MF-051 Forbidden Lore Mind Control
+
+Goal: add mind-control magic as a dangerous Forbidden Lore feature without making ordinary hostile AI or player control unstable.
+
+Design direction:
+- treat mind control as forbidden, costly, and narratively risky rather than a routine crowd-control spell
+- prefer short, readable effects first: compel movement, interrupt work, force a target to flee, temporary mental break influence, or brief ally/hostile confusion
+- avoid permanent faction conversion, pawn ownership rewrites, or deep job-driver takeover until the smaller effects are reliable
+- require clear player feedback, strong cooldown/cost pressure, and save/load-safe state cleanup
+
+First implementation pass:
+1. Identify which effects can be authored with existing mental-state, hediff, job, or forced-target primitives.
+2. Add one narrow validation spell under `MFV_ForbiddenLore`.
+3. Smoke test target validity, downed/dead cleanup, save/load, prisoner/colonist/hostile behavior, and faction edge cases.
+
+### MF-052 Illusionary Pawns
+
+Goal: add illusionary pawns under Illusion research so the school has a distinct battlefield and deception identity.
+
+Design direction:
+- start with temporary decoy pawns or mirage pawns that distract enemies without becoming full colonists
+- illusion pawns should have strict lifetime, cleanup, and save/load behavior
+- avoid inventory, needs, training, medical, romance, ideology, and caravan complexity for the first pass
+- make the player-facing difference between summoned creatures, undead, constructs, and illusions obvious
+
+First implementation pass:
+1. Define the minimal illusion pawn kind and lifetime behavior.
+2. Add one spell or item source under `MFV_Illusion`.
+3. Smoke test spawning, targeting, combat distraction, expiry, map transition, save/load, and cleanup.
+
+### MF-053 Necromancy Undead Pawns
+
+Goal: add undead pawns under Necromancy research as the first MFVanilla necromantic creature feature.
+
+Design direction:
+- distinguish MFVanilla undead from AeternusFaith ritual undead; MFVanilla should be spell/research driven, while AeternusFaith remains ideology/rite driven
+- begin with temporary or limited-control undead before persistent colony members
+- require corpse selection, reachability, reservation, faction assignment, expiry or upkeep, and cleanup to be explicit
+- avoid pseudo-relationship memory until MF-021 is ready unless the first pass stays temporary
+
+First implementation pass:
+1. Choose the first undead type: skeleton, shambling corpse, bound wraith, or similar low-scope pawn.
+2. Add a Necromancy-gated spell and scroll path.
+3. Smoke test corpse targeting, map cleanup, save/load, death/despawn behavior, and drafted/undrafted control expectations.
+
+### MF-054 Fleshcraft Golems
+
+Goal: add golems under Fleshcraft research as risky created servants or guardians rather than ordinary summons.
+
+Design direction:
+- use Fleshcraft for body-made or stitched constructs; keep earth/stone golems under elemental or construct content if that distinction matters later
+- first pass should be a controlled creature creation path, not a broad pawn crafting framework
+- avoid permanent colonist-equivalent behavior until control, upkeep, and balance are clear
+- connect costs to forbidden/advanced materials so Fleshcraft feels distinct from Arcane Forge automata
+
+First implementation pass:
+1. Decide whether the first Fleshcraft golem is temporary, bonded, or persistent with upkeep.
+2. Prototype one pawn kind and creation spell/recipe under `MFV_Fleshcraft`.
+3. Smoke test creation, commandability, expiry/upkeep, death drops, save/load, and cleanup.
+
+### MF-055 Planar Exploration
+
+Goal: add a Planar Magic feature that lets advanced colonies interact with other planes through events, expeditions, or special sites.
+
+Design direction:
+- start as a controlled exploration loop rather than full new-world simulation
+- possible forms: planar rift site, expedition incident, temporary pocket map, encounter chain, or costly scan that reveals a planar destination
+- rewards should include rare scrolls, gemstones, artifacts, legendary weapon inputs, exotic threats, and future planar materials
+- risks should be explicit: dangerous defenders, unstable exits, curses, pawn injury, or time pressure
+
+First implementation pass:
+1. Choose the minimum viable loop: world site, temporary map, or event chain.
+2. Reuse arcane site profile/generation infrastructure where possible.
+3. Smoke test generation, travel, map closure, reward extraction, save/load, and abandonment.
+
+### MF-056 Grand Sorcery Legendary Weapons And Buff Ritual
+
+Goal: make Grand Sorcery feel like colony-scale magic by adding legendary weapons and a high-impact magic buff ritual.
+
+Design direction:
+- legendary weapons should be rare capstone items, not an infinite ordinary production tier
+- buff rituals should affect a colony, party, room, or limited group with strong cost/cooldown/story constraints
+- prefer reusing MagicFramework item abilities, passive statuses, and ritual/action-list infrastructure before inventing a separate system
+- avoid power creep that makes Arcane Forge weapons obsolete too quickly
+
+First implementation pass:
+1. Define one legendary weapon acquisition path: quest reward, grand forge recipe, planar reward, or ritual outcome.
+2. Define one Grand Sorcery buff ritual with a clear target and duration.
+3. Smoke test save/load, cooldowns, stacking, removal, generated descriptions, and UI clarity.
+
+### MF-057 Chronometric Resurrection
+
+Goal: add Chronomancy resurrection that restores a pawn through time magic rather than ordinary healing or necromancy.
+
+Design direction:
+- distinguish this from Soulcraft resurrection, Necromancy undead, and AeternusFaith rites
+- possible identity: rewind a recent death, restore from a temporal echo, reverse corpse decay, or resurrect with age/time side effects
+- require strict limits so it cannot trivialize death: time window, rare materials, severe cooldown, memory/age injury, or pawn-specific anchor
+- save/load and corpse/reference cleanup are release blockers
+
+First implementation pass:
+1. Decide whether the effect targets a fresh corpse, grave, pawn record, or pre-made temporal anchor.
+2. Implement one narrow Chronomancy-gated spell or ritual.
+3. Smoke test corpse state, missing body cases, world pawn references, save/load, failure feedback, and side effects.
+
+### MF-058 Soulcraft Lichdom
+
+Goal: add lichdom under Soulcraft as a major advanced transformation with strong costs, risks, and identity.
+
+Design direction:
+- treat lichdom as a capstone character transformation, not just a buff
+- likely needs a soul anchor, phylactery-like object, altered needs/health, social consequences, and special death/reform rules
+- avoid implementing until undead, resurrection, and persistent pawn state patterns are stable enough to support it
+- player feedback, save/load, death cleanup, and exploit prevention are all release-critical
+
+First implementation pass:
+1. Scope the minimum viable lich: transformation status only, phylactery behavior, or full death/reform loop.
+2. Identify required framework hooks before content authoring.
+3. Prototype behind dev/test access before exposing through Soulcraft research.
+
+### MF-059 AeternusFaith Decorative And Religious Statues
+
+Goal: add decorative and religious statues that strengthen AeternusFaith presentation and ritual spaces.
+
+Design direction:
+- start with placeable art/building defs that fit ossuary, bonewright, grave, shrine, and ritual-room themes
+- support beauty, room impressiveness, ritual flavor, and ideology presentation without needing new ritual code
+- prefer a small coherent set over many nearly identical objects
+
+First implementation pass:
+1. Define the first statue set and research/ideology availability rules.
+2. Add textures, thing defs, costs, categories, descriptions, and room/stat effects.
+3. Smoke test placement, minification, beauty/room stats, ritual room compatibility, and save/load.
+
+### MF-060 Paintings And Platinum Consideration
+
+Goal: evaluate whether paintings as decoration and platinum as a trade good belong in the first-party content set.
+
+Consideration notes:
+- paintings could add visual variety for colonies, ritual rooms, and arcane/religious spaces, but need a clear art/category role beyond duplicating vanilla sculpture
+- platinum could be a high-value trade good, advanced magic reagent, legendary weapon input, or planar reward, but should not dilute silver/gold/gemstone economies
+- do not implement either item until a release band needs them for presentation, economy, or reward structure
+
+Decision checklist:
+1. Identify which mod owns the content: MFVanilla, AeternusFaith, or a shared decorative pack.
+2. Decide whether the content adds distinct gameplay or only visual variety.
+3. If approved, split implementation into concrete follow-up tasks.
 
 ### MF-039 AeternusFaith First Edition
 

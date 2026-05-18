@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AeternusFaith")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3de0e7c0091a50babe6156763685126a34474ead")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+149438f086aa498e6fa10f921edb2ae626d5fa75")]
 [assembly: System.Reflection.AssemblyProductAttribute("AeternusFaith")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AeternusFaith")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

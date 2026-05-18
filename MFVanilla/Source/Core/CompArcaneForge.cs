@@ -54,14 +54,15 @@ public sealed class CompArcaneForge : ThingComp
     public override string CompInspectStringExtra()
     {
         int linkedCount = LinkedArcaneSpires().Count();
+        string leylineText = LeylineQualityText();
         if (linkedCount >= Props.requiredSpireCount)
         {
-            return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nReady for enchantment.";
+            return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nReady for enchantment.{leylineText}";
         }
 
         int missingCount = Props.requiredSpireCount - linkedCount;
         string spireLabel = missingCount == 1 ? "arcane spire" : "arcane spires";
-        return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nNeeds {missingCount} more linked {spireLabel} within {Props.spireRadius:0.#} cells and line of sight before enchantment bills can be worked.";
+        return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nNeeds {missingCount} more linked {spireLabel} within {Props.spireRadius:0.#} cells and line of sight before enchantment bills can be worked.{leylineText}";
     }
 
     public IEnumerable<Thing> LinkedArcaneSpires()
@@ -136,5 +137,16 @@ public sealed class CompArcaneForge : ThingComp
         int min = Mathf.Max(1, Props.lightningIntervalTicksMin);
         int max = Mathf.Max(min, Props.lightningIntervalTicksMax);
         nextLightningTick = Find.TickManager.TicksGame + Rand.RangeInclusive(min, max);
+    }
+
+    private string LeylineQualityText()
+    {
+        float chance = EnchantmentUtility.LeylineQualityBonusChance(parent);
+        if (chance <= 0f)
+        {
+            return "\nLeyline resonance: none.";
+        }
+
+        return $"\nLeyline resonance: {chance.ToStringPercent()} chance to improve enchanted weapon quality.";
     }
 }

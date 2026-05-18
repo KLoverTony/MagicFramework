@@ -1,12 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MFVanilla.Core;
 
 public static class EnchantmentUtility
 {
+    private const float QualityBonusChancePerLeylineStrengthSum = 0.015f;
+    private const float MaxLeylineQualityBonusChance = 0.35f;
+
     private static readonly EnchantmentRecipe[] Recipes =
     {
         new("MFV_EnchantFlamingLongsword", "MeleeWeapon_LongSword", "MFV_FlamingLongsword"),
@@ -32,7 +36,7 @@ public static class EnchantmentUtility
         return thing.TryGetQuality(out QualityCategory quality) && quality >= QualityCategory.Good;
     }
 
-    public static bool TryMakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, out List<Thing> products)
+    public static bool TryMakeRecipeProducts(RecipeDef recipeDef, Pawn worker, List<Thing> ingredients, Thing billGiver, out List<Thing> products)
     {
         products = null;
 
@@ -51,12 +55,40 @@ public static class EnchantmentUtility
 
         if (sourceWeapon.TryGetQuality(out QualityCategory quality))
         {
-            product.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
+            QualityCategory finalQuality = ResolveLeylineEnhancedQuality(quality, billGiver);
+            product.TryGetComp<CompQuality>()?.SetQuality(finalQuality, ArtGenerationContext.Colony);
             product.TryGetComp<CompArt>()?.JustCreatedBy(worker);
         }
 
         products = new List<Thing> { product };
         return true;
+    }
+
+    public static float LeylineQualityBonusChance(Thing forge)
+    {
+        if (forge?.Spawned != true || forge.TryGetComp<CompArcaneForge>() == null)
+        {
+            return 0f;
+        }
+
+        LeylineAreaReading reading = LeylineUtility.ReadThingFootprint(forge);
+        return Mathf.Min(MaxLeylineQualityBonusChance, Mathf.Max(0f, reading.SumStrength * QualityBonusChancePerLeylineStrengthSum));
+    }
+
+    private static QualityCategory ResolveLeylineEnhancedQuality(QualityCategory sourceQuality, Thing billGiver)
+    {
+        if (sourceQuality >= QualityCategory.Legendary)
+        {
+            return sourceQuality;
+        }
+
+        float chance = LeylineQualityBonusChance(billGiver);
+        if (chance <= 0f || !Rand.Chance(chance))
+        {
+            return sourceQuality;
+        }
+
+        return (QualityCategory)((int)sourceQuality + 1);
     }
 
     private static EnchantmentRecipe RecipeFor(RecipeDef recipeDef)

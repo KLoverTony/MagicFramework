@@ -607,15 +607,20 @@ public sealed class KnockbackActionWorker : SpellActionWorker
     {
         KnockbackActionDef knockbackActionDef = actionDef as KnockbackActionDef;
         Pawn targetPawn = context?.currentTarget.Thing as Pawn;
-        Pawn casterPawn = context?.caster as Pawn;
         Map map = context?.map;
-        if (knockbackActionDef == null || targetPawn == null || casterPawn == null || map == null || targetPawn.Destroyed)
+        if (knockbackActionDef == null || targetPawn == null || map == null || targetPawn.Destroyed)
         {
             return;
         }
 
         int distance = SpellActionScalingUtility.ResolveDisplacementDistance(context, knockbackActionDef.distance, knockbackActionDef.scalableDistance);
-        if (!TryResolveDestination(casterPawn, targetPawn, map, knockbackActionDef, distance, out KnockbackResolution resolution))
+        IntVec3 origin = ResolveOrigin(context, knockbackActionDef);
+        if (!origin.IsValid)
+        {
+            return;
+        }
+
+        if (!TryResolveDestination(origin, targetPawn, map, knockbackActionDef, distance, out KnockbackResolution resolution))
         {
             MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] KnockbackActionWorker could not find a valid destination for {targetPawn.LabelCap}.");
             return;
@@ -634,12 +639,23 @@ public sealed class KnockbackActionWorker : SpellActionWorker
         MagicLog.Message(MagicLogSubsystem.Displacement, $"[MagicFramework] Knocked back {targetPawn.LabelCap} to {resolution.Destination}.");
     }
 
-    private static bool TryResolveDestination(Pawn casterPawn, Pawn targetPawn, Map map, KnockbackActionDef actionDef, int distance, out KnockbackResolution resolution)
+    private static IntVec3 ResolveOrigin(SpellContext context, KnockbackActionDef actionDef)
+    {
+        IntVec3 origin = TargetQueryUtility.ResolvePoint(context, actionDef.originSource);
+        if (origin.IsValid)
+        {
+            return origin;
+        }
+
+        return context?.caster?.Position ?? IntVec3.Invalid;
+    }
+
+    private static bool TryResolveDestination(IntVec3 origin, Pawn targetPawn, Map map, KnockbackActionDef actionDef, int distance, out KnockbackResolution resolution)
     {
         resolution = new KnockbackResolution(IntVec3.Invalid, false, IntVec3.Invalid);
         IntVec3 start = targetPawn.Position;
-        int dx = start.x - casterPawn.Position.x;
-        int dz = start.z - casterPawn.Position.z;
+        int dx = start.x - origin.x;
+        int dz = start.z - origin.z;
         if (dx == 0 && dz == 0)
         {
             dz = 1;
@@ -663,7 +679,7 @@ public sealed class KnockbackActionWorker : SpellActionWorker
                 break;
             }
 
-            if (!actionDef.allowHitCasterCell && candidate == casterPawn.Position)
+            if (!actionDef.allowHitCasterCell && candidate == origin)
             {
                 collided = true;
                 blockedCell = candidate;
@@ -1890,6 +1906,7 @@ public sealed class ExtinguishFireActionWorker : SpellActionWorker
             return;
         }
 
+        float radius = Mathf.Max(0.1f, SpellEnhancementUtility.ResolveScalableRadius(context, extinguishDef.radius, extinguishDef.scalableRadius));
         int extinguishedCount = 0;
         List<Thing> fires = context.map.listerThings.ThingsOfDef(fireDef);
         for (int i = fires.Count - 1; i >= 0; i--)
@@ -1901,7 +1918,7 @@ public sealed class ExtinguishFireActionWorker : SpellActionWorker
 
             Thing attachedParent = MagicItemUtility.AttachedParent(fire);
             IntVec3 fireCell = attachedParent?.Position ?? fire.Position;
-            if (!fireCell.IsValid || fireCell.DistanceTo(center) > extinguishDef.radius)
+            if (!fireCell.IsValid || fireCell.DistanceTo(center) > radius)
             {
                 continue;
             }
@@ -1918,7 +1935,7 @@ public sealed class ExtinguishFireActionWorker : SpellActionWorker
         FleckDef fleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(extinguishDef.fleckDef);
         if (fleckDef != null)
         {
-            FleckMaker.Static(center, context.map, fleckDef, Mathf.Max(1f, extinguishDef.radius * 0.4f));
+            FleckMaker.Static(center, context.map, fleckDef, Mathf.Max(1f, radius * 0.4f));
         }
 
         MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Extinguished {extinguishedCount} fire(s) near {center}.");

@@ -29,6 +29,7 @@ public sealed class CurrentTargetQueryDef : TargetQueryDef
 public sealed class TargetsInRadiusQueryDef : TargetQueryDef
 {
     public float radius;
+    public ScalableFloatDef scalableRadius;
     public TargetQueryCenterSource centerSource;
     public bool includePawns = true;
     public bool includeBuildings = true;
@@ -71,6 +72,7 @@ public sealed class ShapeTargetsQueryDef : TargetQueryDef
     public TargetQueryCenterSource centerSource = TargetQueryCenterSource.CurrentTarget;
     public float radius;
     public float lineLength;
+    public float coneAngleDegrees = 60f;
     public int wallLength;
     public int maxChains;
     public bool includePawns = true;

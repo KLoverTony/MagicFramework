@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_AirBlast</defName>
+    <label>spell scroll (air blast)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast air blast.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_AirBlast</spell>
+        <requiredResearch>
+          <li>MFV_Aeromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_ArcSeeker</defName>
     <label>spell scroll (arc seeker)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast arc seeker.</description>
@@ -140,6 +163,29 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Deluge</defName>
+    <label>spell scroll (deluge)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast deluge.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>300</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Deluge</spell>
+        <requiredResearch>
+          <li>MFV_Aquamancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_Disintegrate</defName>
     <label>spell scroll (disintegrate)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast disintegrate.</description>
@@ -185,6 +231,29 @@
         <spell>MF_EarthCall</spell>
         <requiredResearch>
           <li>MFV_Geomancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Extinguish</defName>
+    <label>spell scroll (extinguish)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast extinguish.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Extinguish</spell>
+        <requiredResearch>
+          <li>MFV_Aquamancy</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -565,6 +634,29 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Stoneskin</defName>
+    <label>spell scroll (stoneskin)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast stoneskin.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Stoneskin</spell>
+        <requiredResearch>
+          <li>MFV_Geomancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_SummonDog</defName>
     <label>spell scroll (summon dog)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast summon dog.</description>
@@ -695,6 +787,29 @@
       </li>
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_WallOfFire</spell>
+        <requiredResearch>
+          <li>MFV_Pyromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Warmth</defName>
+    <label>spell scroll (warmth)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast warmth.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>260</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Warmth</spell>
         <requiredResearch>
           <li>MFV_Pyromancy</li>
         </requiredResearch>

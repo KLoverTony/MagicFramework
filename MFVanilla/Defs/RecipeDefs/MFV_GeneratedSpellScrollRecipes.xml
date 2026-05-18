@@ -1,6 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_AirBlast</defName>
+    <label>scribe scroll (air blast)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast air blast.</description>
+    <jobString>Scribing scroll (air blast).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_AirBlast>1</MFV_SpellScroll_MF_AirBlast>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ArcSeeker</defName>
     <label>scribe scroll (arc seeker)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast arc seeker.</description>
@@ -277,6 +323,52 @@
     <displayPriority>800</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Deluge</defName>
+    <label>scribe scroll (deluge)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast deluge.</description>
+    <jobString>Scribing scroll (deluge).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aquamancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Deluge>1</MFV_SpellScroll_MF_Deluge>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Disintegrate</defName>
     <label>scribe scroll (disintegrate)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast disintegrate.</description>
@@ -365,6 +457,52 @@
       <li>MFV_ScribingTable</li>
     </recipeUsers>
     <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Extinguish</defName>
+    <label>scribe scroll (extinguish)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast extinguish.</description>
+    <jobString>Scribing scroll (extinguish).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aquamancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Extinguish>1</MFV_SpellScroll_MF_Extinguish>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Fireball</defName>
@@ -1101,6 +1239,52 @@
     <displayPriority>800</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Stoneskin</defName>
+    <label>scribe scroll (stoneskin)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast stoneskin.</description>
+    <jobString>Scribing scroll (stoneskin).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Geomancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Stoneskin>1</MFV_SpellScroll_MF_Stoneskin>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_SummonDog</defName>
     <label>scribe scroll (summon dog)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast summon dog.</description>
@@ -1375,6 +1559,52 @@
       <li>MFV_ScribingTable</li>
     </recipeUsers>
     <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Warmth</defName>
+    <label>scribe scroll (warmth)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast warmth.</description>
+    <jobString>Scribing scroll (warmth).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Warmth>1</MFV_SpellScroll_MF_Warmth>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_WatersEmbrace</defName>

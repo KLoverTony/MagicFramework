@@ -442,6 +442,7 @@ public sealed class MoveStoneChunksActionDef : SpellActionDef
 /// </summary>
 public sealed class KnockbackActionDef : SpellActionDef
 {
+    public TargetQueryCenterSource originSource = TargetQueryCenterSource.Caster;
     public int distance = 3;
     public ScalableFloatDef scalableDistance;
     public bool requireStandableDestination = true;
@@ -744,6 +745,7 @@ public sealed class ExtinguishFireActionDef : SpellActionDef
 {
     public SpellEffectLocationSource locationSource = SpellEffectLocationSource.CurrentTarget;
     public float radius = 3f;
+    public ScalableFloatDef scalableRadius;
     public float extinguishDamage = 9999f;
     public bool includeAttachedFires = true;
     public string fleckDef = "DustPuff";

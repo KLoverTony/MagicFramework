@@ -16,6 +16,10 @@
   <MFV_ShowDevModeSpellGizmosTooltip>Show Magic Framework spell testing gizmos on eligible pawns while dev mode is active.</MFV_ShowDevModeSpellGizmosTooltip>
   <MFV_ShowDevModeSpellGizmosDescription>When disabled, dev mode stays available but the large set of spell testing gizmos is hidden.</MFV_ShowDevModeSpellGizmosDescription>
 
+  <MFV_ShowLeylineStrengthNumbers>Show leyline strength numbers</MFV_ShowLeylineStrengthNumbers>
+  <MFV_ShowLeylineStrengthNumbersTooltip>Show numeric leyline power values on visible cells while the leyline overlay is active and the camera is zoomed in.</MFV_ShowLeylineStrengthNumbersTooltip>
+  <MFV_ShowLeylineStrengthNumbersDescription>When enabled, leyline cells show their raw strength values at close zoom. This is mainly useful for tuning and precise placement.</MFV_ShowLeylineStrengthNumbersDescription>
+
   <MFV_ShowLatestMagicNotes>Show latest magic notes</MFV_ShowLatestMagicNotes>
   <MFV_ResetSettingsToDefaults>Reset to defaults</MFV_ResetSettingsToDefaults>
 </LanguageData>

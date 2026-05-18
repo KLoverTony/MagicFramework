@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Deluge</defName>
+    <label>deluge</label>
+    <description>Calls down a violent surge of water that douses fires, drenches pawns, and pushes them away from the center.</description>
+    <range>24</range>
+    <castTimeTicks>60</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Deluge</gizmoIconPath>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Water</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aquamancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Control</li>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aquamancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Radius</li>
+        <li>Duration</li>
+      </scaledAttributes>
+      <tiers>
+        <li>
+          <minPower>3</minPower>
+          <tier>1</tier>
+        </li>
+        <li>
+          <minPower>7</minPower>
+          <tier>2</tier>
+        </li>
+        <li>
+          <minPower>11</minPower>
+          <tier>3</tier>
+        </li>
+      </tiers>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>24</range>
+      <radius>5</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Deluge</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Deluge cooldown ready</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Deluge</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Deluge cooldown</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Deluge sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Deluge wave FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.ExtinguishFireActionDef">
+            <debugLabel>Deluge extinguish fires</debugLabel>
+            <locationSource>CurrentCell</locationSource>
+            <radius>5</radius>
+            <scalableRadius>
+              <baseValue>5</baseValue>
+              <perPower>0.2</perPower>
+              <max>8</max>
+            </scalableRadius>
+            <includeAttachedFires>true</includeAttachedFires>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyToTargetsActionDef">
+            <debugLabel>Deluge affect pawns in radius</debugLabel>
+            <targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+              <radius>5</radius>
+              <scalableRadius>
+                <baseValue>5</baseValue>
+                <perPower>0.2</perPower>
+                <max>8</max>
+              </scalableRadius>
+              <centerSource>InitialTarget</centerSource>
+              <includePawns>true</includePawns>
+              <includeBuildings>false</includeBuildings>
+              <includeItems>false</includeItems>
+              <includeCaster>false</includeCaster>
+              <pawnAffinity>All</pawnAffinity>
+            </targetQuery>
+            <actions>
+              <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
+                <debugLabel>Deluge drench pawn</debugLabel>
+                <statusEffectDef>MFV_Status_Drenched</statusEffectDef>
+                <targetSource>CurrentTarget</targetSource>
+                <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+              </li>
+              <li Class="MagicFramework.Definitions.KnockbackActionDef">
+                <debugLabel>Deluge outward surge</debugLabel>
+                <originSource>InitialTarget</originSource>
+                <distance>2</distance>
+                <scalableDistance>
+                  <baseValue>2</baseValue>
+                  <perPower>0.15</perPower>
+                  <max>4</max>
+                </scalableDistance>
+                <requireStandableDestination>true</requireStandableDestination>
+                <requireWalkableDestination>true</requireWalkableDestination>
+                <impactDamageAmount>3</impactDamageAmount>
+                <impactDamageDef>Blunt</impactDamageDef>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

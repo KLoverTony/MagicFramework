@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>MFV_ArcaneDisciplineMarker</defName>
+    <label>arcane discipline marker</label>
+    <description>A simple ritual focus where gifted pawns can embrace an unlocked Arcane Discipline.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2805</uiOrder>
+    <graphicData>
+      <texPath>Things/Building/Production/ArcaneSpire</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.25</fillPercent>
+    <pathCost>15</pathCost>
+    <useHitPoints>true</useHitPoints>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <researchPrerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </researchPrerequisites>
+    <costList>
+      <Steel>25</Steel>
+      <MFV_ArcaneInk>5</MFV_ArcaneInk>
+    </costList>
+    <statBases>
+      <MaxHitPoints>100</MaxHitPoints>
+      <WorkToBuild>1200</WorkToBuild>
+      <Flammability>0.2</Flammability>
+    </statBases>
+    <building>
+      <paintable>true</paintable>
+    </building>
+    <comps>
+      <li Class="MFVanilla.Core.CompProperties_ArcaneDisciplineRitualMarker">
+        <commandLabel>Embrace discipline</commandLabel>
+        <commandDescription>Begin a short rite for an Arcane Gift pawn to embrace an available Arcane Discipline.</commandDescription>
+        <commandIconPath>UI/Commands/DesirePower</commandIconPath>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

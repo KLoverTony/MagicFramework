@@ -22,6 +22,7 @@ public class SpellTargetingDef
     public ScalableFloatDef scalableRange;
     public float radius;
     public float lineLength;
+    public float coneAngleDegrees = 60f;
     public int wallLength;
     public int maxChains;
 }
@@ -31,6 +32,7 @@ public enum SpellTargetShape
     Single,
     Radius,
     Line,
+    Cone,
     Wall,
     Chain
 }

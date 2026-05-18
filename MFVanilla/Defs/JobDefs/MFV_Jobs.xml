@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <JobDef>
+    <defName>MFV_EmbraceArcaneDiscipline</defName>
+    <driverClass>MFVanilla.Core.JobDriver_EmbraceArcaneDiscipline</driverClass>
+    <reportString>embracing an arcane discipline.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+</Defs>

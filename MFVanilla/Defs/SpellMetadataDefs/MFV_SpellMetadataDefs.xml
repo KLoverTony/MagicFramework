@@ -220,6 +220,73 @@
     <displayOrder>90</displayOrder>
   </MagicFramework.Definitions.SpellDisciplineDef>
 
+  <!-- Arcane Disciplines -->
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Medium</defName>
+    <label>medium</label>
+    <displayOrder>10</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Elementalist</defName>
+    <label>elementalist</label>
+    <displayOrder>20</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Enchanter</defName>
+    <label>enchanter</label>
+    <displayOrder>30</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Summoner</defName>
+    <label>summoner</label>
+    <displayOrder>40</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Transmuter</defName>
+    <label>transmuter</label>
+    <displayOrder>50</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Illusionist</defName>
+    <label>illusionist</label>
+    <displayOrder>60</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Vitalist</defName>
+    <label>vitalist</label>
+    <displayOrder>70</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Pyromancer</defName>
+    <label>pyromancer</label>
+    <displayOrder>80</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Aquamancer</defName>
+    <label>aquamancer</label>
+    <displayOrder>90</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Aeromancer</defName>
+    <label>aeromancer</label>
+    <displayOrder>100</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Geomancer</defName>
+    <label>geomancer</label>
+    <displayOrder>110</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
   <!-- Tags -->
   <MagicFramework.Definitions.SpellTagDef>
     <defName>MF_Tag_Projectile</defName>

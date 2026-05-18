@@ -352,6 +352,18 @@ public static class SpellDescriptionUtility
         {
             parts.Add(FormatNumber(targeting.radius) + "-cell radius");
         }
+        else if (targeting.shape == SpellTargetShape.Line && targeting.lineLength > 0f)
+        {
+            parts.Add(FormatNumber(targeting.lineLength) + "-cell line");
+        }
+        else if (targeting.shape == SpellTargetShape.Cone && targeting.lineLength > 0f)
+        {
+            parts.Add(FormatNumber(targeting.lineLength) + "-cell cone");
+        }
+        else if (targeting.shape == SpellTargetShape.Wall && targeting.wallLength > 0)
+        {
+            parts.Add(targeting.wallLength + "-cell wall");
+        }
 
         if (targeting.requireLineOfSight)
         {
@@ -544,6 +556,9 @@ public static class SpellDescriptionUtility
             case StunActionDef stun:
                 lines.Add("Has a " + FormatPercent(stun.chance) + " chance to stun for " + FormatTicks(stun.stunTicks) + ".");
                 break;
+            case ExtinguishFireActionDef extinguish:
+                lines.Add("Extinguishes fires in a " + DescribeScalableRadius(extinguish.radius, extinguish.scalableRadius) + " radius.");
+                break;
             case DestroyThingActionDef:
                 lines.Add("Destroys the target.");
                 break;
@@ -605,6 +620,12 @@ public static class SpellDescriptionUtility
     {
         string text = (distance > 0 ? distance : 1) + " cell(s)";
         return scalableDistance == null ? text : text + ", scaling with spell power";
+    }
+
+    private static string DescribeScalableRadius(float radius, ScalableFloatDef scalableRadius)
+    {
+        string text = FormatNumber(radius > 0f ? radius : 1f) + "-cell";
+        return scalableRadius == null ? text : text + ", scaling with spell power";
     }
 
     private static string DescribeScalableCount(int count, ScalableFloatDef scalableCount)

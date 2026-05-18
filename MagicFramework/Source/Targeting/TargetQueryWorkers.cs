@@ -36,7 +36,7 @@ public sealed class TargetsInRadiusQueryWorker : TargetQueryWorker
             return new List<LocalTargetInfo>();
         }
 
-        float radius = SpellEnhancementUtility.ResolveRadius(context, radiusDef.radius);
+        float radius = SpellEnhancementUtility.ResolveScalableRadius(context, radiusDef.radius, radiusDef.scalableRadius);
         return TargetQueryUtility.CollectOrderedTargets(
             context,
             radiusDef,
@@ -86,6 +86,7 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
             SpellTargetShape.Single => ResolveSingle(context, shapeDef),
             SpellTargetShape.Radius => ResolveRadius(context, shapeDef),
             SpellTargetShape.Line => ResolveLine(context, shapeDef),
+            SpellTargetShape.Cone => ResolveCone(context, shapeDef),
             SpellTargetShape.Wall => ResolveWall(context, shapeDef),
             SpellTargetShape.Chain => ResolveChain(context, shapeDef),
             _ => new List<LocalTargetInfo>()
@@ -159,6 +160,54 @@ public sealed class ShapeTargetsQueryWorker : TargetQueryWorker
             shapeDef.includeCaster,
             shapeDef.pawnAffinity,
             thing => TargetQueryUtility.DistanceToSegment(thing.Position, origin, lineEnd) <= 0.75f);
+    }
+
+    private static IReadOnlyList<LocalTargetInfo> ResolveCone(SpellContext context, ShapeTargetsQueryDef shapeDef)
+    {
+        IntVec3 origin = TargetQueryUtility.ResolvePoint(context, shapeDef.originSource);
+        IntVec3 center = TargetQueryUtility.ResolvePoint(context, shapeDef.centerSource);
+        if (!origin.IsValid || !center.IsValid)
+        {
+            return new List<LocalTargetInfo>();
+        }
+
+        Vector2 originVector = TargetQueryUtility.ToVector2(origin);
+        Vector2 aimVector = TargetQueryUtility.ToVector2(center) - originVector;
+        if (aimVector.sqrMagnitude < 0.001f)
+        {
+            return new List<LocalTargetInfo>();
+        }
+
+        float length = shapeDef.lineLength > 0f ? shapeDef.lineLength : shapeDef.radius;
+        length = SpellEnhancementUtility.ResolveRadius(context, length);
+        if (length <= 0f)
+        {
+            return new List<LocalTargetInfo>();
+        }
+
+        Vector2 forward = aimVector.normalized;
+        float halfAngle = Mathf.Clamp(shapeDef.coneAngleDegrees <= 0f ? 60f : shapeDef.coneAngleDegrees, 1f, 360f) * 0.5f;
+        float minDot = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
+
+        return TargetQueryUtility.CollectOrderedTargets(
+            context,
+            shapeDef,
+            shapeDef.includePawns,
+            shapeDef.includeBuildings,
+            shapeDef.includeItems,
+            shapeDef.includeCaster,
+            shapeDef.pawnAffinity,
+            thing =>
+            {
+                Vector2 offset = TargetQueryUtility.ToVector2(thing.Position) - originVector;
+                float distance = offset.magnitude;
+                if (distance > length || distance < 0.001f)
+                {
+                    return false;
+                }
+
+                return Vector2.Dot(offset.normalized, forward) >= minDot;
+            });
     }
 
     private static IReadOnlyList<LocalTargetInfo> ResolveWall(SpellContext context, ShapeTargetsQueryDef shapeDef)
