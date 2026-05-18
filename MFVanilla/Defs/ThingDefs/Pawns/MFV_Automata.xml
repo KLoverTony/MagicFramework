@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="Gun_ChargeLance">
+    <defName>MFV_Gun_CrystalLance</defName>
+    <label>crystal lance</label>
+    <description>A focused crystal emitter grown into the frame of an arcane sentinel. It releases a hard, piercing bolt of stored aetheric force.</description>
+    <tradeability>None</tradeability>
+    <destroyOnDrop>true</destroyOnDrop>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponRanged/ChargeLance</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <weaponTags Inherit="False">
+      <li>MFV_CrystalSentinelWeapon</li>
+    </weaponTags>
+  </ThingDef>
+
+  <ThingDef ParentName="NeedleGunBase">
+    <defName>MFV_Gun_RuneBallista</defName>
+    <label>rune ballista</label>
+    <description>A rune-cut projectile focus fixed into a heavy construct frame. It casts narrow force-bolts over long distances with unnerving precision.</description>
+    <tradeability>None</tradeability>
+    <destroyOnDrop>true</destroyOnDrop>
+    <graphicData>
+      <texPath>Things/Item/Equipment/WeaponRanged/NeedleGun</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <weaponTags Inherit="False">
+      <li>MFV_RuneBallistaWeapon</li>
+    </weaponTags>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_ClayAutomaton</defName>
+    <label>clay automaton</label>
+    <description>A blunt clay guardian shaped by old warding rites. Its rune-core is simple, but the body is tireless, obedient, and dangerously strong at close range.</description>
+    <statBases>
+      <MarketValue>650</MarketValue>
+      <MoveSpeed>2.8</MoveSpeed>
+      <ArmorRating_Blunt>0.24</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.32</ArmorRating_Sharp>
+      <ArmorRating_Heat>1.20</ArmorRating_Heat>
+      <PsychicSensitivity>0.25</PsychicSensitivity>
+    </statBases>
+    <tools>
+      <li>
+        <label>left fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>13</power>
+        <cooldownTime>2.25</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>right fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>13</power>
+        <cooldownTime>2.25</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>8</power>
+        <cooldownTime>2.4</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.2</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Lancer</body>
+      <baseHealthScale>0.95</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Scyther_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Scyther_Death</soundDeath>
+          <soundCall>Pawn_Mech_Scyther_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_MechanoidBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_MechanoidBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_MechanoidBash_Miss</soundMeleeMiss>
+      <detritusLeavings />
+    </race>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>3</MFV_GemstoneDust>
+      <Jade>2</Jade>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_ClayAutomaton</defName>
+    <label>clay automaton</label>
+    <labelPlural>clay automata</labelPlural>
+    <race>MFV_ClayAutomaton</race>
+    <combatPower>90</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/ClayAutomaton</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.35</drawSize>
+          <shadowData>
+            <volume>(0.35, 0.65, 0.35)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>0~0</weaponMoney>
+    <defendPointRadius>0</defendPointRadius>
+    <weaponTags />
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_RuneSlasherAutomaton</defName>
+    <label>rune-slasher automaton</label>
+    <description>A fast guardian frame fitted with crescent blades and guiding runes. It closes distance quickly, then tears at anything that violates its sealed charge.</description>
+    <statBases>
+      <MarketValue>900</MarketValue>
+      <MoveSpeed>3.6</MoveSpeed>
+      <ArmorRating_Blunt>0.18</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.38</ArmorRating_Sharp>
+      <ArmorRating_Heat>1.40</ArmorRating_Heat>
+      <PsychicSensitivity>0.35</PsychicSensitivity>
+    </statBases>
+    <tools>
+      <li>
+        <label>left rune blade</label>
+        <labelNoLocation>rune blade</labelNoLocation>
+        <capacities>
+          <li>Cut</li>
+          <li>Stab</li>
+        </capacities>
+        <power>18</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>LeftBlade</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>right rune blade</label>
+        <labelNoLocation>rune blade</labelNoLocation>
+        <capacities>
+          <li>Cut</li>
+          <li>Stab</li>
+        </capacities>
+        <power>18</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>RightBlade</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>8.5</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.2</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Scyther</body>
+      <baseHealthScale>1.18</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Scyther_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Scyther_Death</soundDeath>
+          <soundCall>Pawn_Mech_Scyther_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_MechanoidSlash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_MechanoidSlash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_MechanoidSlash_Miss</soundMeleeMiss>
+      <detritusLeavings />
+    </race>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>4</MFV_GemstoneDust>
+      <Jade>2</Jade>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_RuneSlasherAutomaton</defName>
+    <label>rune-slasher automaton</label>
+    <labelPlural>rune-slasher automata</labelPlural>
+    <race>MFV_RuneSlasherAutomaton</race>
+    <combatPower>135</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/RuneSlasherAutomaton</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.45</drawSize>
+          <shadowData>
+            <volume>(0.4, 0.75, 0.4)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>0~0</weaponMoney>
+    <defendPointRadius>0</defendPointRadius>
+    <weaponTags />
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_CrystalSentinel</defName>
+    <label>crystal sentinel</label>
+    <description>A narrow guardian automaton built around a charged crystal heart. Its polished focus can lance a target from across a chamber before the sentinel advances.</description>
+    <statBases>
+      <MarketValue>1050</MarketValue>
+      <MoveSpeed>3.0</MoveSpeed>
+      <ArmorRating_Blunt>0.18</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.36</ArmorRating_Sharp>
+      <ArmorRating_Heat>1.50</ArmorRating_Heat>
+      <PsychicSensitivity>0.45</PsychicSensitivity>
+    </statBases>
+    <tools>
+      <li>
+        <label>left fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>10</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>right fist</label>
+        <labelNoLocation>fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>10</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>8</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.2</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Lancer</body>
+      <baseHealthScale>0.78</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Scyther_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Scyther_Death</soundDeath>
+          <soundCall>Pawn_Mech_Scyther_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <detritusLeavings />
+    </race>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>5</MFV_GemstoneDust>
+      <Jade>3</Jade>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_CrystalSentinel</defName>
+    <label>crystal sentinel</label>
+    <labelPlural>crystal sentinels</labelPlural>
+    <race>MFV_CrystalSentinel</race>
+    <combatPower>175</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/CrystalSentinel</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.45</drawSize>
+          <shadowData>
+            <volume>(0.4, 0.75, 0.4)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>9999~9999</weaponMoney>
+    <weaponTags>
+      <li>MFV_CrystalSentinelWeapon</li>
+    </weaponTags>
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_RuneBallistaConstruct</defName>
+    <label>rune-ballista construct</label>
+    <description>A heavy, many-legged construct designed to hold a corridor or vault approach. Its rune-ballista fires slow, precise force-bolts that make open ground dangerous.</description>
+    <statBases>
+      <MarketValue>900</MarketValue>
+      <MoveSpeed>2.1</MoveSpeed>
+      <ArmorRating_Blunt>0.22</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.42</ArmorRating_Sharp>
+      <ArmorRating_Heat>1.60</ArmorRating_Heat>
+      <PsychicSensitivity>0.40</PsychicSensitivity>
+    </statBases>
+    <tools>
+      <li>
+        <label>front left leg</label>
+        <labelNoLocation>leg</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>11</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>FrontLeftLeg</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>front right leg</label>
+        <labelNoLocation>leg</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>11</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>FrontRightLeg</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>8</power>
+        <cooldownTime>2</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.2</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Pikeman</body>
+      <baseHealthScale>0.9</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Pikeman_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Pikeman_Death</soundDeath>
+          <soundCall>Pawn_Mech_Pikeman_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <detritusLeavings />
+    </race>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>5</MFV_GemstoneDust>
+      <Jade>3</Jade>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_RuneBallistaConstruct</defName>
+    <label>rune-ballista construct</label>
+    <labelPlural>rune-ballista constructs</labelPlural>
+    <race>MFV_RuneBallistaConstruct</race>
+    <combatPower>115</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/RuneBallistaConstruct</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>2.25</drawSize>
+          <shadowData>
+            <volume>(0.4, 0.8, 0.4)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>9999~9999</weaponMoney>
+    <weaponTags>
+      <li>MFV_RuneBallistaWeapon</li>
+    </weaponTags>
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+</Defs>

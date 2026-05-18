@@ -334,17 +334,32 @@ Role mapping candidates:
 - scyther-style enemy -> blade automaton, wind-cutter, or rune-slasher
 - lancer-style enemy -> crystal sentinel or arcane beam warden
 - pikeman-style enemy -> rune-ballista construct
-- centipede-style enemy -> siege golem or iron colossus
+- centipede/boss-style enemy -> Deep Iron Golem
 - termite-style enemy -> breach golem or stonebreaker automaton
 
+Deep Iron Golem capstone direction:
+- replace the generic Iron Colossus idea with a boss-tier Deep Iron Golem inspired by the Gravendark/Duergar campaign-setting construct
+- presentation: towering dark-metal golem, glowing force rune in the chest, slow movement, extreme durability, heavy melee threat, and anti-magic identity
+- mechanical translation for RimWorld should favor a readable boss encounter over a direct tabletop stat conversion
+- baseline role: very slow vault guardian or high-tier site boss, not a common cache defender
+- expected weaknesses: slow speed, large body, limited pursuit, possible vulnerability to being kited or controlled by terrain
+- expected strengths: high armor, high health, powerful blunt melee, resistance to heat/cold-like damage where practical, immunity or high resistance to poison/toxic/psychic-style effects where vanilla stats support it
+- force rune concept: the golem gains stored force when damaged by MagicFramework spells or future magic weapons; after enough charge it can trigger one major force behavior
+- possible first implementation of force rune behavior: charge counter hediff or comp, dev-visible inspect string, and one deterministic ability selected by health/context
+- candidate force abilities: temporary damage-reduction shield at low health, radial force blast when surrounded, or empowered slam/knockback while near full health
+- defer legendary-action complexity; RimWorld version should use cooldowns, tick logic, or triggered comps rather than tabletop turn reactions
+- defer until the four baseline automata are textured, site-tested, and tuned
+
 Implementation phases:
-1. Use vanilla mechanoid defenders temporarily in MF-049 Arcane Cache Site maps.
-2. Add one or two first construct pawn kinds with fantasy labels/descriptions and borrowed mechanoid behavior/stats.
-3. Add initial textures or recolors so constructs are visually distinct from mechs.
-4. Use constructs as arcane site defenders once smoke tested.
-5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores.
-6. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
-7. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
+1. Use vanilla mechanoid defenders temporarily in MF-049 Arcane Cache Site maps. - done for the first site-generator validation pass
+2. Add one or two first construct pawn kinds with fantasy labels/descriptions and borrowed mechanoid behavior/stats. - expanded release minimum to four first-pass automata: Clay Automaton, Rune-Slasher Automaton, Crystal Sentinel, and Rune-Ballista Construct
+3. Add initial textures or recolors so constructs are visually distinct from mechs. - pending art pass; current defs expect `Things/Pawn/Automata/ClayAutomaton`, `RuneSlasherAutomaton`, `CrystalSentinel`, and `RuneBallistaConstruct`
+4. Use constructs as arcane site defenders once smoke tested. - initial arcane cache profiles now use MFVanilla automata instead of vanilla scythers/lancers/pikemen
+5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores. - initial gemstone dust and jade butcher products added for the first pass
+6. Tune automata around slow construct identity: clay should be kiteable, rune-slasher should be the only semi-mobile pressure unit, and ranged constructs should feel like position-holding sentries. - initial speed reduction pass added
+7. Add Deep Iron Golem as the boss/capstone construct once baseline automata pass texture and site testing.
+8. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
+9. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
 
 Success criteria:
 - arcane sites no longer feel like tech/mechanoid encounters once construct skins and defs are in place

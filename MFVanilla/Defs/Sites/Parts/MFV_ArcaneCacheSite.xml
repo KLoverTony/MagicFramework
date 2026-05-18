@@ -24,9 +24,9 @@
     <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
-      <li>Mech_Scyther</li>
-      <li>Mech_Lancer</li>
-      <li>Mech_Pikeman</li>
+      <li>MFV_ClayAutomaton</li>
+      <li>MFV_RuneSlasherAutomaton</li>
+      <li>MFV_CrystalSentinel</li>
     </defenderPawnKinds>
     <dressing>
       <li>
@@ -79,9 +79,10 @@
     <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
-      <li>Mech_Scyther</li>
-      <li>Mech_Lancer</li>
-      <li>Mech_Pikeman</li>
+      <li>MFV_ClayAutomaton</li>
+      <li>MFV_RuneSlasherAutomaton</li>
+      <li>MFV_CrystalSentinel</li>
+      <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
     <dressing>
       <li>
@@ -158,9 +159,9 @@
     <chestThingDef>MFV_GreaterArcaneTreasureChest</chestThingDef>
     <defenderCount>4</defenderCount>
     <defenderPawnKinds>
-      <li>Mech_Scyther</li>
-      <li>Mech_Lancer</li>
-      <li>Mech_Pikeman</li>
+      <li>MFV_RuneSlasherAutomaton</li>
+      <li>MFV_CrystalSentinel</li>
+      <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
     <dressing>
       <li>
@@ -202,9 +203,9 @@
     <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
-      <li>Mech_Scyther</li>
-      <li>Mech_Lancer</li>
-      <li>Mech_Pikeman</li>
+      <li>MFV_ClayAutomaton</li>
+      <li>MFV_RuneSlasherAutomaton</li>
+      <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
     <dressing>
       <li>
