@@ -89,7 +89,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
 
     public bool GainCasterExperience(Pawn pawn, float amount, bool showLevelUpMessage = true)
     {
-        if (pawn == null || amount <= 0f)
+        if (pawn == null || amount <= 0f || !HasArcaneGift(pawn))
         {
             return false;
         }
@@ -115,6 +115,40 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         return true;
+    }
+
+    public float GetCasterExperienceProgress(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            return 0f;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        if (state.casterLevel >= MaxCasterLevel)
+        {
+            return 1f;
+        }
+
+        float currentLevelExperience = TotalExperienceForLevel(state.casterLevel);
+        float nextLevelExperience = TotalExperienceForLevel(state.casterLevel + 1);
+        return Mathf.InverseLerp(currentLevelExperience, nextLevelExperience, state.casterExperience);
+    }
+
+    public float GetCasterExperienceToNextLevel(Pawn pawn)
+    {
+        if (pawn == null)
+        {
+            return 0f;
+        }
+
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        if (state.casterLevel >= MaxCasterLevel)
+        {
+            return 0f;
+        }
+
+        return Mathf.Max(0f, TotalExperienceForLevel(state.casterLevel + 1) - state.casterExperience);
     }
 
     public int GetDebugCasterLevel(Thing caster)

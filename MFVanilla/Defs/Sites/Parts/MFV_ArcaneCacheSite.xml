@@ -249,6 +249,65 @@
     <exteriorRuinCount>10</exteriorRuinCount>
   </MFVanilla.Core.ArcaneSiteProfileDef>
 
+  <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_ArcaneCache_DeepIronVault</defName>
+    <label>deep iron vault</label>
+    <roomWidth>15</roomWidth>
+    <roomHeight>15</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileGranite</floorDef>
+    <wallStuff>BlocksGranite</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksGranite</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksGranite</li>
+      <li>BlocksSlate</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_GrandArcaneTreasureChest</chestThingDef>
+    <defenderCount>1</defenderCount>
+    <maxDefenderCount>1</maxDefenderCount>
+    <defenderPawnKinds>
+      <li>MFV_DeepIronGolem</li>
+    </defenderPawnKinds>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>11</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>11</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>11</offsetX>
+        <offsetZ>11</offsetZ>
+      </li>
+    </dressing>
+    <roomModules>
+      <li>
+        <axis>South</axis>
+        <kind>Antechamber</kind>
+        <width>9</width>
+        <depth>5</depth>
+      </li>
+    </roomModules>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>4</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>8</exteriorRuinCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
   <SitePartDef>
     <defName>MFV_ArcaneCache</defName>
     <label>arcane cache</label>
@@ -307,6 +366,11 @@
           <profile>MFV_ArcaneCache_Sealed</profile>
           <weight>1</weight>
           <minThreatPoints>700</minThreatPoints>
+        </li>
+        <li>
+          <profile>MFV_ArcaneCache_DeepIronVault</profile>
+          <weight>0.35</weight>
+          <minThreatPoints>1200</minThreatPoints>
         </li>
       </profileEntries>
     </genStep>

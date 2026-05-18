@@ -79,6 +79,11 @@ public static class MFVanillaPatcher
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(WorkGiver_DoBill_ThingIsUsableBillGiver_Postfix))
         );
 
+        harmony.Patch(
+            AccessTools.Method(typeof(WorkGiver_DoBill), nameof(WorkGiver_DoBill.JobOnThing), new[] { typeof(Pawn), typeof(Thing), typeof(bool) }),
+            prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(WorkGiver_DoBill_JobOnThing_Prefix))
+        );
+
         _isPatched = true;
         Log.Message("[MFVanilla] Vanilla tech research suppression patches applied.");
     }
@@ -250,6 +255,23 @@ public static class MFVanillaPatcher
         {
             __result = false;
         }
+    }
+
+    private static bool WorkGiver_DoBill_JobOnThing_Prefix(Pawn pawn, Thing thing, ref Job __result)
+    {
+        if (!RequiresArcaneGiftWorker(thing) || SpellRuntimeGameComponent.Instance?.HasArcaneGift(pawn) == true)
+        {
+            return true;
+        }
+
+        __result = null;
+        return false;
+    }
+
+    private static bool RequiresArcaneGiftWorker(Thing thing)
+    {
+        string defName = thing?.def?.defName;
+        return defName == "MFV_ScribingTable" || defName == "MFV_ArcaneForge";
     }
 
     private static void RefreshOpenResearchWindows()

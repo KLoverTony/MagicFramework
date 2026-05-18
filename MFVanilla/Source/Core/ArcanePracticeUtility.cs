@@ -29,27 +29,34 @@ public static class ArcanePracticeUtility
             return;
         }
 
-        ArcaneGiftStudyGameComponent.Instance?.NotifyResearchPerformed(pawn, bench);
-        if (!HasArcaneGift(pawn))
-        {
-            return;
-        }
-
         float xp = bench?.def?.defName == ArcaneGiftUtility.AdvancedBenchDefName
             ? AdvancedResearchExperiencePerTick
             : BasicResearchExperiencePerTick;
+
+        if (!HasArcaneGift(pawn))
+        {
+            ArcaneGiftStudyGameComponent.Instance?.NotifyArcanePracticeExposure(pawn, xp);
+            return;
+        }
+
         SpellRuntimeGameComponent.Instance?.GainCasterExperience(pawn, xp);
     }
 
     public static void NotifyArcaneProductionCompleted(Pawn pawn, RecipeDef recipeDef)
     {
-        if (pawn == null || recipeDef == null || !HasArcaneGift(pawn) || !IsArcanePracticeRecipe(recipeDef))
+        if (pawn == null || recipeDef == null || !IsArcanePracticeRecipe(recipeDef))
         {
             return;
         }
 
         float workAmount = recipeDef.WorkAmountTotal(null);
         float xp = Mathf.Clamp(workAmount * ProductionExperiencePerWork, MinimumProductionExperience, MaximumProductionExperience);
+        if (!HasArcaneGift(pawn))
+        {
+            ArcaneGiftStudyGameComponent.Instance?.NotifyArcanePracticeExposure(pawn, xp);
+            return;
+        }
+
         SpellRuntimeGameComponent.Instance?.GainCasterExperience(pawn, xp);
     }
 

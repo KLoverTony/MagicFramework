@@ -24,6 +24,7 @@ public sealed class ArcaneSiteProfileDef : Def
     public ThingDef doorDef;
     public ThingDef chestThingDef;
     public int defenderCount = 3;
+    public int maxDefenderCount = -1;
     public List<PawnKindDef> defenderPawnKinds;
     public List<ArcaneSiteDressingDef> dressing;
     public List<ArcaneSiteRoomModuleDef> roomModules;
@@ -605,15 +606,25 @@ public sealed class GenStep_ArcaneCache : GenStep
         int baseCount = Math.Max(1, profile.defenderCount);
         if (points >= 900f)
         {
-            return Math.Max(baseCount + 2, 5);
+            return ApplyDefenderCap(Math.Max(baseCount + 2, 5), profile);
         }
 
         if (points >= 500f)
         {
-            return Math.Max(baseCount + 1, 4);
+            return ApplyDefenderCap(Math.Max(baseCount + 1, 4), profile);
         }
 
-        return baseCount;
+        return ApplyDefenderCap(baseCount, profile);
+    }
+
+    private static int ApplyDefenderCap(int count, ArcaneSiteProfileDef profile)
+    {
+        if (profile?.maxDefenderCount > 0)
+        {
+            return Math.Min(count, profile.maxDefenderCount);
+        }
+
+        return count;
     }
 
     private static List<Pawn> SpawnDefenders(Map map, CellRect room, int count, ArcaneSiteProfileDef profile)

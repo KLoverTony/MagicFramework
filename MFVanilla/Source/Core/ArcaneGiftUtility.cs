@@ -9,10 +9,8 @@ public static class ArcaneGiftUtility
     public const string TraitDefName = "MFV_ArcaneGift";
     public const string BasicBenchDefName = "MFV_ArcaneResearchBench";
     public const string AdvancedBenchDefName = "MFV_AdvancedArcaneResearchBench";
-    public const int StudyThresholdTicks = 120000;
-    public const int RollIntervalTicks = 2500;
-    public const float BasicBenchChance = 0.02f;
-    public const float AdvancedBenchChance = 0.04f;
+    public const float ArcanePracticeExposureThreshold = 800f;
+    public const float ArcanePracticeGiftChance = 0.01f;
 
     private static TraitDef _arcaneGiftTrait;
 
@@ -39,7 +37,7 @@ public static class ArcaneGiftUtility
         {
             Find.LetterStack.ReceiveLetter(
                 "Arcane gift awakened",
-                $"{pawn.LabelShortCap}'s long hours at the arcane research bench have awakened an Arcane Gift.",
+                $"{pawn.LabelShortCap}'s repeated work with arcane practice has awakened an Arcane Gift.",
                 LetterDefOf.PositiveEvent,
                 pawn);
         }
@@ -83,8 +81,4 @@ public static class ArcaneGiftUtility
         return defName == BasicBenchDefName || defName == AdvancedBenchDefName;
     }
 
-    public static float GiftChanceForBench(Thing thing)
-    {
-        return thing?.def?.defName == AdvancedBenchDefName ? AdvancedBenchChance : BasicBenchChance;
-    }
 }

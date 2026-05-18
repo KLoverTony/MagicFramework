@@ -39,7 +39,7 @@ Current release hygiene checklist:
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
-| MF-038 | P1 | M | MFVanilla | Add a few high-value content features that make production and progression feel complete. |
+| MF-038 | P1 | M | MFVanilla | Keep the MFVanilla content roadmap current after completed feature pillars and prune stale planning notes. |
 | MF-039 | P1 | M | AeternusFaith | Prepare the first-edition release candidate and packaging checklist. |
 | MF-019 | P1 | M | AeternusFaith | Improve ritual dialogs with pawn avatars and clearer invalid-state feedback. |
 | MF-033 | P1 | S | AeternusFaith | Shroudhymn summoned spectres should despawn cleanly. |
@@ -123,23 +123,29 @@ Success criteria:
 
 ### MF-038 MFVanilla Feature Completion
 
-Goal: add a small number of features that deepen the released content without opening a broad framework expansion.
+Goal: keep the near-term MFVanilla content roadmap current after completed feature pillars, and identify which remaining release ideas should become concrete tasks.
+
+Status:
+- Partially superseded by follow-up tasks. Arcane treasure chests were promoted into MF-042 and are complete for the current release pass.
+- Arcane Forge first-edition weapon work is tracked by MF-041.
+- Encounter maps and construct enemies are tracked by MF-049 and MF-050.
+- This item remains open as a planning and cleanup bucket, especially for research nodes and stale documentation that no longer match live content.
 
 Next-release content direction:
 - Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
-- Make arcane treasure chests the next priority content system because they connect MFVanilla to quests, map finds, loot, traders, gemstones, scrolls, enchanted gear, silver, and gold.
-- Treat elemental tribes, leyline maps, school expansion, and special enchanted weapon behavior as major candidate pillars for the same or following release, depending on implementation scope.
+- Treat elemental tribes, leyline maps, school expansion, and special enchanted weapon behavior as major candidate pillars for upcoming releases, depending on implementation scope.
 - Audit research fields with no current application. Either attach real content to them or remove/hide them until they have a purpose.
 - Reconsider plasteel/component costs on arcane benches and infrastructure after the content set is known. Prefer magical, pre-industrial, or trade-economy materials where they preserve meaningful scarcity.
+- Bring `Mods/MFVanilla/Documentation/ModPlan.md` back in sync with live XML before treating it as authoritative; it still references removed or renamed research nodes such as old runic/infrastructure planning.
 
 Good candidates:
-- scalable arcane treasure chests as quest rewards, rare loot, and random discoveries
 - more utility recipes or buildings that consume magic production outputs
 - targeted Arcane Forge expansions that reuse the elemental focus model without becoming a broad equipment framework
 - one or two additional spell families only if they validate already-supported primitives or a narrowly needed framework hook
 - stronger integration between spell metadata, scroll recipes, research, and generated descriptions
 - clearer player feedback for spell scaling, active enhancement rules, and unlock paths
 - balance pass for mana, cooldowns, costs, work amounts, and resource scarcity
+- concrete follow-up tasks for underused research nodes, especially Leyline Sensitivity, Illusion, Fleshcraft, Planar Magic, Infernal Pact, Grand Sorcery, and Chronomancy
 
 Deferral rule:
 - defer anything that primarily exists to prove a speculative framework system rather than make MFVanilla better now
@@ -357,7 +363,7 @@ Implementation phases:
 4. Use constructs as arcane site defenders once smoke tested. - initial arcane cache profiles now use MFVanilla automata instead of vanilla scythers/lancers/pikemen
 5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores. - initial gemstone dust and jade butcher products added for the first pass
 6. Tune automata around slow construct identity: clay should be kiteable, rune-slasher should be the only semi-mobile pressure unit, and ranged constructs should feel like position-holding sentries. - initial speed reduction pass added
-7. Add Deep Iron Golem as the boss/capstone construct once baseline automata pass texture and site testing. - initial dev-spawnable `MFV_DeepIronGolem` added, but not yet integrated into normal site profiles
+7. Add Deep Iron Golem as the boss/capstone construct once baseline automata pass texture and site testing. - initial `MFV_DeepIronGolem` added and integrated into a rare high-threat `MFV_ArcaneCache_DeepIronVault` profile with a grand arcane treasure chest
 8. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
 9. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
 

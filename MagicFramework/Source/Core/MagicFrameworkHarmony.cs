@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Reflection;
 using HarmonyLib;
 using MagicFramework.Definitions;
 using MagicFramework.Debug;
@@ -126,7 +127,7 @@ public static class MagicFrameworkPawnGizmoPatch
             yield return gizmo;
         }
 
-        if (Prefs.DevMode && __instance != null && (__instance.IsColonistPlayerControlled || __instance.IsPrisonerOfColony || __instance.IsSlaveOfColony))
+        if (Prefs.DevMode && MFVanillaDevModeSettings.ShowDevModeSpellGizmos && __instance != null && (__instance.IsColonistPlayerControlled || __instance.IsPrisonerOfColony || __instance.IsSlaveOfColony))
         {
             yield return SpellDebugCasting.CreateCasterLevelGizmo(__instance);
             yield return SpellDebugCasting.CreateArcaneGiftGizmo(__instance);
@@ -178,6 +179,22 @@ public static class MagicFrameworkPawnGizmoPatch
             {
                 yield return itemAbilityGizmo;
             }
+        }
+    }
+}
+
+internal static class MFVanillaDevModeSettings
+{
+    private static readonly System.Type ModType = AccessTools.TypeByName("MFVanilla.Core.MFVanillaMod");
+    private static readonly PropertyInfo SettingsProperty = ModType?.GetProperty("Settings", BindingFlags.Public | BindingFlags.Static);
+
+    public static bool ShowDevModeSpellGizmos
+    {
+        get
+        {
+            object settings = SettingsProperty?.GetValue(null, null);
+            FieldInfo settingField = settings?.GetType().GetField("ShowDevModeSpellGizmos", BindingFlags.Public | BindingFlags.Instance);
+            return settingField != null && (bool)settingField.GetValue(settings);
         }
     }
 }

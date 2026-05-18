@@ -30,10 +30,16 @@ public sealed class MFVanillaMod : Mod
         /// </summary>
         public bool ShowTechDisabledWarning = true;
 
+        /// <summary>
+        /// Whether to show Magic Framework spell debug gizmos while dev mode is active.
+        /// </summary>
+        public bool ShowDevModeSpellGizmos = false;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref DisableTechResearch, "disableTechResearch", true);
             Scribe_Values.Look(ref ShowTechDisabledWarning, "showTechDisabledWarning", true);
+            Scribe_Values.Look(ref ShowDevModeSpellGizmos, "showDevModeSpellGizmos", false);
         }
     }
 
@@ -109,6 +115,21 @@ public sealed class MFVanillaMod : Mod
         listing.Label("MFV_ShowTechDisabledWarningDescription".Translate());
         listing.Gap();
 
+        bool showDevModeSpellGizmos = Settings.ShowDevModeSpellGizmos;
+        listing.CheckboxLabeled(
+            "MFV_ShowDevModeSpellGizmos".Translate(),
+            ref showDevModeSpellGizmos,
+            "MFV_ShowDevModeSpellGizmosTooltip".Translate());
+
+        if (showDevModeSpellGizmos != Settings.ShowDevModeSpellGizmos)
+        {
+            Settings.ShowDevModeSpellGizmos = showDevModeSpellGizmos;
+            WriteSettings();
+        }
+
+        listing.Label("MFV_ShowDevModeSpellGizmosDescription".Translate());
+        listing.Gap();
+
         if (listing.ButtonText("MFV_ShowLatestMagicNotes".Translate()))
         {
             MagicFrameworkSplashUtility.ShowLatest();
@@ -120,6 +141,7 @@ public sealed class MFVanillaMod : Mod
         {
             Settings.DisableTechResearch = true;
             Settings.ShowTechDisabledWarning = true;
+            Settings.ShowDevModeSpellGizmos = false;
             MFVanillaPatcher.NotifySettingsChanged();
             WriteSettings();
         }
