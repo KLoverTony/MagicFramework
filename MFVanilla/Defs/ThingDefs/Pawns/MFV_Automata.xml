@@ -405,4 +405,120 @@
     <techHediffsChance>0</techHediffsChance>
   </PawnKindDef>
 
+  <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_DeepIronGolem</defName>
+    <label>deep iron golem</label>
+    <description>A towering construct forged from dark deep iron and animated by a bound force rune. It is slow and ponderous, but its rune drinks in violent energy until it can harden into a shield or erupt in a crushing wave.</description>
+    <statBases>
+      <MarketValue>3200</MarketValue>
+      <MoveSpeed>1.65</MoveSpeed>
+      <ArmorRating_Blunt>0.55</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.82</ArmorRating_Sharp>
+      <ArmorRating_Heat>2.00</ArmorRating_Heat>
+      <PsychicSensitivity>0</PsychicSensitivity>
+      <ToxicResistance>1</ToxicResistance>
+      <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+      <Flammability>0</Flammability>
+    </statBases>
+    <tools>
+      <li>
+        <label>left deep iron fist</label>
+        <labelNoLocation>deep iron fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>30</power>
+        <cooldownTime>3.15</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>right deep iron fist</label>
+        <labelNoLocation>deep iron fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>30</power>
+        <cooldownTime>3.15</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>16</power>
+        <cooldownTime>3.6</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.15</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Lancer</body>
+      <baseBodySize>3.2</baseBodySize>
+      <baseHealthScale>4.2</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Pikeman_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Pikeman_Death</soundDeath>
+          <soundCall>Pawn_Mech_Pikeman_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_MechanoidBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_MechanoidBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_MechanoidBash_Miss</soundMeleeMiss>
+      <detritusLeavings />
+    </race>
+    <comps>
+      <li Class="MFVanilla.Core.CompProperties_DeepIronForceRune">
+        <chargesRequired>5</chargesRequired>
+        <maxCharges>10</maxCharges>
+        <abilityCooldownTicks>900</abilityCooldownTicks>
+        <shieldDurationTicks>2500</shieldDurationTicks>
+        <shieldDamageFactor>0.5</shieldDamageFactor>
+        <lowHealthShieldThreshold>0.5</lowHealthShieldThreshold>
+        <blastRadius>5.9</blastRadius>
+        <blastDamage>28</blastDamage>
+        <blastKnockbackDistance>4</blastKnockbackDistance>
+        <blastMinimumHostilePawns>2</blastMinimumHostilePawns>
+        <shieldOverlayTexturePath>Things/Mote/ShieldBubble</shieldOverlayTexturePath>
+        <shieldImpactFleckDef>BulletShieldAreaEffect</shieldImpactFleckDef>
+        <shieldOverlayScale>3.8</shieldOverlayScale>
+      </li>
+    </comps>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>15</MFV_GemstoneDust>
+      <Jade>10</Jade>
+      <Gold>5</Gold>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_DeepIronGolem</defName>
+    <label>deep iron golem</label>
+    <labelPlural>deep iron golems</labelPlural>
+    <race>MFV_DeepIronGolem</race>
+    <combatPower>520</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/DeepIronGolem</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>3.15</drawSize>
+          <shadowData>
+            <volume>(0.75, 1.0, 0.75)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>0~0</weaponMoney>
+    <defendPointRadius>0</defendPointRadius>
+    <weaponTags />
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
 </Defs>

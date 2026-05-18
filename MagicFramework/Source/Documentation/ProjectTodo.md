@@ -345,8 +345,8 @@ Deep Iron Golem capstone direction:
 - expected weaknesses: slow speed, large body, limited pursuit, possible vulnerability to being kited or controlled by terrain
 - expected strengths: high armor, high health, powerful blunt melee, resistance to heat/cold-like damage where practical, immunity or high resistance to poison/toxic/psychic-style effects where vanilla stats support it
 - force rune concept: the golem gains stored force when damaged by MagicFramework spells or future magic weapons; after enough charge it can trigger one major force behavior
-- possible first implementation of force rune behavior: charge counter hediff or comp, dev-visible inspect string, and one deterministic ability selected by health/context
-- candidate force abilities: temporary damage-reduction shield at low health, radial force blast when surrounded, or empowered slam/knockback while near full health
+- possible first implementation of force rune behavior: charge counter hediff or comp, dev-visible inspect string, and one deterministic ability selected by health/context - initial `CompDeepIronForceRune` added with saved charges, inspect string, shield state, and context-triggered abilities
+- candidate force abilities: temporary damage-reduction shield at low health, radial force blast when surrounded, or empowered slam/knockback while near full health - initial shield and radial force blast added; empowered slam remains deferred
 - defer legendary-action complexity; RimWorld version should use cooldowns, tick logic, or triggered comps rather than tabletop turn reactions
 - defer until the four baseline automata are textured, site-tested, and tuned
 
@@ -357,7 +357,7 @@ Implementation phases:
 4. Use constructs as arcane site defenders once smoke tested. - initial arcane cache profiles now use MFVanilla automata instead of vanilla scythers/lancers/pikemen
 5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores. - initial gemstone dust and jade butcher products added for the first pass
 6. Tune automata around slow construct identity: clay should be kiteable, rune-slasher should be the only semi-mobile pressure unit, and ranged constructs should feel like position-holding sentries. - initial speed reduction pass added
-7. Add Deep Iron Golem as the boss/capstone construct once baseline automata pass texture and site testing.
+7. Add Deep Iron Golem as the boss/capstone construct once baseline automata pass texture and site testing. - initial dev-spawnable `MFV_DeepIronGolem` added, but not yet integrated into normal site profiles
 8. Add elemental variants and resistances/vulnerabilities after fire/water/earth/air content is broader.
 9. Consider later MagicFramework interactions: spells that disrupt constructs, bind golems, repair automata, or animate inert guardians.
 
