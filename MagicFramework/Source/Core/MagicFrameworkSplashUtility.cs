@@ -160,17 +160,16 @@ public sealed class Dialog_MagicFrameworkSplash : Window
             y += 32f;
             Text.Font = GameFont.Small;
 
-            for (int i = 0; i < note.notes.Count; i++)
+            GUI.color = new Color(0.88f, 0.9f, 0.86f);
+            foreach (string noteText in note.notes)
             {
-                string noteText = note.notes[i];
                 string line = "- " + noteText;
                 float height = Text.CalcHeight(line, viewRect.width - 12f);
-                GUI.color = noteColors[i % noteColors.Length];
                 Widgets.Label(new Rect(12f, y, viewRect.width - 12f, height), line);
-                GUI.color = originalColor;
                 y += height + 8f;
             }
 
+            GUI.color = originalColor;
             y += 14f;
         }
 

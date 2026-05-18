@@ -55,6 +55,14 @@ public sealed class ArcaneSiteRoomModuleDef
     public int distanceFromTower = 0;
 }
 
+public sealed class ArcaneSiteProfileEntryDef
+{
+    public ArcaneSiteProfileDef profile;
+    public float weight = 1f;
+    public float minThreatPoints;
+    public float maxThreatPoints = float.MaxValue;
+}
+
 public enum ArcaneSiteAxis
 {
     North,
@@ -76,6 +84,7 @@ public sealed class GenStep_ArcaneCache : GenStep
 {
     public ArcaneSiteProfileDef profile;
     public List<ArcaneSiteProfileDef> profilePool;
+    public List<ArcaneSiteProfileEntryDef> profileEntries;
     public string chestThingDef = "MFV_ArcaneTreasureChest";
     public int roomWidth = 13;
     public int roomHeight = 11;
@@ -92,7 +101,8 @@ public sealed class GenStep_ArcaneCache : GenStep
 
         ArcaneSiteProfileDef baseProfile = ResolveProfile();
         int siteSeed = ResolveSiteSeed(map, parms, baseProfile);
-        ArcaneSiteProfileDef resolvedProfile = ResolveProfileForSite(siteSeed, baseProfile);
+        float threatPoints = ResolveThreatPoints(parms);
+        ArcaneSiteProfileDef resolvedProfile = ResolveProfileForSite(siteSeed, threatPoints, baseProfile);
         IntVec3 center = FindCacheCenter(map);
         CellRect room = CellRect.CenteredOn(center, resolvedProfile.roomWidth, resolvedProfile.roomHeight).ClipInsideMap(map);
         siteSeed = ResolveSiteSeed(map, parms, resolvedProfile);
@@ -121,8 +131,41 @@ public sealed class GenStep_ArcaneCache : GenStep
             };
     }
 
-    private ArcaneSiteProfileDef ResolveProfileForSite(int siteSeed, ArcaneSiteProfileDef fallback)
+    private ArcaneSiteProfileDef ResolveProfileForSite(int siteSeed, float threatPoints, ArcaneSiteProfileDef fallback)
     {
+        if (!profileEntries.NullOrEmpty())
+        {
+            List<ArcaneSiteProfileEntryDef> eligible = new();
+            float totalWeight = 0f;
+            for (int i = 0; i < profileEntries.Count; i++)
+            {
+                ArcaneSiteProfileEntryDef entry = profileEntries[i];
+                if (entry?.profile == null || entry.weight <= 0f || threatPoints < entry.minThreatPoints || threatPoints > entry.maxThreatPoints)
+                {
+                    continue;
+                }
+
+                eligible.Add(entry);
+                totalWeight += entry.weight;
+            }
+
+            if (eligible.Count > 0 && totalWeight > 0f)
+            {
+                float pick = StableRange(siteSeed, fallback?.shortHash ?? 0, totalWeight);
+                float cursor = 0f;
+                for (int i = 0; i < eligible.Count; i++)
+                {
+                    cursor += eligible[i].weight;
+                    if (pick <= cursor)
+                    {
+                        return eligible[i].profile;
+                    }
+                }
+
+                return eligible[eligible.Count - 1].profile;
+            }
+        }
+
         if (profilePool.NullOrEmpty())
         {
             return fallback;
@@ -130,6 +173,11 @@ public sealed class GenStep_ArcaneCache : GenStep
 
         int index = StableIndex(siteSeed, fallback?.shortHash ?? 0, profilePool.Count);
         return profilePool[index] ?? fallback;
+    }
+
+    private static float ResolveThreatPoints(GenStepParams parms)
+    {
+        return parms.sitePart?.parms?.threatPoints ?? parms.sitePart?.parms?.points ?? 0f;
     }
 
     private static IntVec3 FindCacheCenter(Map map)
@@ -755,6 +803,23 @@ public sealed class GenStep_ArcaneCache : GenStep
             hash = (hash * 397) ^ tile;
             hash = (hash * 397) ^ profileHash;
             return (hash & int.MaxValue) % count;
+        }
+    }
+
+    private static float StableRange(int siteSeed, int salt, float max)
+    {
+        if (max <= 0f)
+        {
+            return 0f;
+        }
+
+        unchecked
+        {
+            int hash = 17;
+            hash = (hash * 397) ^ siteSeed;
+            hash = (hash * 397) ^ salt;
+            int positive = hash & int.MaxValue;
+            return (positive / (float)int.MaxValue) * max;
         }
     }
 }

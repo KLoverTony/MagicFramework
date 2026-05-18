@@ -180,6 +180,74 @@
     <exteriorRuinCount>4</exteriorRuinCount>
   </MFVanilla.Core.ArcaneSiteProfileDef>
 
+  <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_ArcaneCache_Ruined</defName>
+    <label>ruined arcane cache</label>
+    <roomWidth>13</roomWidth>
+    <roomHeight>13</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileSandstone</floorDef>
+    <wallStuff>BlocksSandstone</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksSandstone</li>
+      <li>BlocksGranite</li>
+      <li>BlocksLimestone</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksMarble</li>
+      <li>BlocksSandstone</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
+    <defenderCount>3</defenderCount>
+    <defenderPawnKinds>
+      <li>Mech_Scyther</li>
+      <li>Mech_Lancer</li>
+      <li>Mech_Pikeman</li>
+    </defenderPawnKinds>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>3</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>3</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>9</offsetX>
+        <offsetZ>9</offsetZ>
+      </li>
+    </dressing>
+    <roomModules>
+      <li>
+        <axis>South</axis>
+        <kind>Antechamber</kind>
+        <width>9</width>
+        <depth>5</depth>
+      </li>
+      <li>
+        <axis>North</axis>
+        <kind>Storage</kind>
+        <width>7</width>
+        <depth>5</depth>
+      </li>
+    </roomModules>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>6</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>10</exteriorRuinCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
   <SitePartDef>
     <defName>MFV_ArcaneCache</defName>
     <label>arcane cache</label>
@@ -223,10 +291,23 @@
     <order>420</order>
     <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
       <profile>MFV_ArcaneCache_Default</profile>
-      <profilePool>
-        <li>MFV_ArcaneCache_Default</li>
-        <li>MFV_ArcaneCache_Sealed</li>
-      </profilePool>
+      <profileEntries>
+        <li>
+          <profile>MFV_ArcaneCache_Default</profile>
+          <weight>6</weight>
+          <minThreatPoints>0</minThreatPoints>
+        </li>
+        <li>
+          <profile>MFV_ArcaneCache_Ruined</profile>
+          <weight>3</weight>
+          <minThreatPoints>350</minThreatPoints>
+        </li>
+        <li>
+          <profile>MFV_ArcaneCache_Sealed</profile>
+          <weight>1</weight>
+          <minThreatPoints>700</minThreatPoints>
+        </li>
+      </profileEntries>
     </genStep>
   </GenStepDef>
 

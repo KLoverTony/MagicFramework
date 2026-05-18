@@ -298,7 +298,7 @@ First utility pass:
 
 Current first consumer:
 - `MFV_ArcaneCache_Default` remains the normal first profile and should stay a compact treasure-cache encounter: readable tower, chest, modest defenders, light exterior dressing, no active magical hazards.
-- Normal `MFV_ArcaneCache` generation now uses a seeded profile pool for player-facing variants, initially `MFV_ArcaneCache_Default` and `MFV_ArcaneCache_Sealed`; the showcase profile is excluded from normal selection.
+- Normal `MFV_ArcaneCache` generation now uses seeded, weighted, threat-gated profile entries for player-facing variants: `MFV_ArcaneCache_Default` is common from the start, `MFV_ArcaneCache_Ruined` appears from mid threat, and `MFV_ArcaneCache_Sealed` appears rarely at higher threat; the showcase profile remains excluded from normal selection.
 - `MFV_ArcaneCache_Showcase` is the oversized debug/test profile for validating all current modules at once: axis rooms, antechamber, bedroom, servants quarters, storage, entry path, exterior ruin, reward anchor, and defenders.
 - Debug actions can spawn either the normal arcane cache or the showcase cache through the safe `SiteMaker` path.
 
