@@ -14,7 +14,7 @@ public sealed class SpellManaGizmo : Gizmo
     private static readonly Color ExperienceColor = new(0.72f, 0.48f, 0.95f, 0.95f);
     private static readonly Color ExperienceHighlightColor = new(0.92f, 0.78f, 1f, 0.95f);
     private const float Width = 140f;
-    private const float GizmoHeight = 104f;
+    private const float GizmoHeight = 86f;
     private readonly Pawn pawn;
 
     public SpellManaGizmo(Pawn pawn)
@@ -44,15 +44,10 @@ public sealed class SpellManaGizmo : Gizmo
         float experienceToNextLevel = runtime?.GetCasterExperienceToNextLevel(pawn) ?? 0f;
 
         Text.Font = GameFont.Small;
-        Text.Anchor = TextAnchor.UpperLeft;
-        Widgets.Label(new Rect(rect.x + 8f, rect.y + 6f, rect.width - 16f, 24f), "Mana");
+        Text.Anchor = TextAnchor.MiddleCenter;
+        Widgets.Label(new Rect(rect.x + 8f, rect.y + 6f, rect.width - 16f, 22f), $"{disciplineLabel}, lvl {casterLevel}");
 
-        Text.Anchor = TextAnchor.UpperRight;
-        Widgets.Label(
-            new Rect(rect.x + 8f, rect.y + 6f, rect.width - 16f, 24f),
-            $"{currentMana:0.#}/{maxMana:0.#}");
-
-        Rect barRect = new(rect.x + 8f, rect.y + 34f, rect.width - 16f, 18f);
+        Rect barRect = new(rect.x + 8f, rect.y + 32f, rect.width - 16f, 18f);
         Widgets.DrawBoxSolid(barRect, BarBackColor);
         Rect fillRect = new(barRect.x, barRect.y, barRect.width * manaFillPercent, barRect.height);
         Widgets.DrawBoxSolid(fillRect, ManaColor);
@@ -69,10 +64,7 @@ public sealed class SpellManaGizmo : Gizmo
         Widgets.DrawBox(experienceBarRect);
 
         Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(new Rect(rect.x + 8f, rect.y + 64f, rect.width - 16f, 18f), $"Lv. {casterLevel} - {manaFillPercent.ToStringPercent("F0")}");
-
-        Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(new Rect(rect.x + 8f, rect.y + 82f, rect.width - 16f, 18f), $"Discipline: {disciplineLabel}");
+        Widgets.Label(new Rect(rect.x + 8f, rect.y + 64f, rect.width - 16f, 18f), manaFillPercent.ToStringPercent("F0"));
         Text.Anchor = TextAnchor.UpperLeft;
 
         string experienceTooltip = casterLevel >= 20

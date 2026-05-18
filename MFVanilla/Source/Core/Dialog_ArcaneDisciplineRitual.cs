@@ -11,7 +11,7 @@ namespace MFVanilla.Core;
 
 public sealed class Dialog_ArcaneDisciplineRitual : Window
 {
-    private const float RowHeight = 44f;
+    private const float RowHeight = 62f;
     private readonly CompArcaneDisciplineRitualMarker marker;
     private Vector2 pawnScroll;
     private Vector2 disciplineScroll;
@@ -65,7 +65,12 @@ public sealed class Dialog_ArcaneDisciplineRitual : Window
         Widgets.DrawMenuSection(rect);
         Widgets.Label(new Rect(rect.x + 8f, rect.y + 6f, rect.width - 16f, 26f), "Pawn");
         Rect content = new(rect.x + 8f, rect.y + 34f, rect.width - 16f, rect.height - 42f);
-        List<Pawn> pawns = marker.PawnCandidates().Where(pawn => pawn != null && !pawn.Destroyed).OrderBy(pawn => pawn.LabelShortCap).ToList();
+        List<Pawn> pawns = marker.PawnCandidates()
+            .Where(pawn => pawn != null
+                && !pawn.Destroyed
+                && SpellRuntimeGameComponent.Instance?.HasArcaneGift(pawn) == true)
+            .OrderBy(pawn => pawn.LabelShortCap)
+            .ToList();
         if (pawns.Count == 0)
         {
             DrawEmpty(content, "No colonists available.");
@@ -118,7 +123,7 @@ public sealed class Dialog_ArcaneDisciplineRitual : Window
         Widgets.ThingIcon(new Rect(row.x + 4f, row.y + 4f, 36f, 36f), pawn);
         string current = SpellRuntimeGameComponent.Instance?.GetArcaneDiscipline(pawn)?.LabelCap ?? "No discipline";
         DrawRowText(new Rect(row.x + 46f, row.y, row.width - 112f, row.height), pawn.LabelShortCap, current, report);
-        DrawUseButton(new Rect(row.xMax - 58f, row.y + 8f, 54f, 28f), report, () => selectedPawn = pawn);
+        DrawUseButton(new Rect(row.xMax - 58f, row.y + 17f, 54f, 28f), report, () => selectedPawn = pawn);
     }
 
     private void DrawDisciplineRow(Rect row, ArcaneDisciplineDef discipline, AcceptanceReport report)
@@ -127,7 +132,7 @@ public sealed class Dialog_ArcaneDisciplineRitual : Window
         ResearchProjectDef research = ArcaneDisciplineUtility.GetUnlockResearch(discipline);
         string detail = research == null ? "No research link" : research.LabelCap;
         DrawRowText(new Rect(row.x + 4f, row.y, row.width - 70f, row.height), discipline.LabelCap, detail, report);
-        DrawUseButton(new Rect(row.xMax - 58f, row.y + 8f, 54f, 28f), report, () => selectedDiscipline = discipline);
+        DrawUseButton(new Rect(row.xMax - 58f, row.y + 17f, 54f, 28f), report, () => selectedDiscipline = discipline);
     }
 
     private AcceptanceReport CanStart()
@@ -186,7 +191,10 @@ public sealed class Dialog_ArcaneDisciplineRitual : Window
         Color originalColor = GUI.color;
         Widgets.Label(new Rect(row.x, row.y + 4f, row.width, 21f), label);
         GUI.color = report.Accepted ? ColoredText.SubtleGrayColor : ColorLibrary.RedReadable;
-        Widgets.Label(new Rect(row.x, row.y + 24f, row.width, 18f), report.Accepted ? subLabel : report.Reason);
+        bool oldWordWrap = Text.WordWrap;
+        Text.WordWrap = true;
+        Widgets.Label(new Rect(row.x, row.y + 24f, row.width, row.height - 26f), report.Accepted ? subLabel : report.Reason);
+        Text.WordWrap = oldWordWrap;
         GUI.color = originalColor;
     }
 

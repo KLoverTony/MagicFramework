@@ -105,7 +105,9 @@ Unlocks Arcane Discipline: Medium.</description>
   <ResearchProjectDef>
     <defName>MFV_ForbiddenLore</defName>
     <label>forbidden lore</label>
-    <description>Record the first principles of magic that most traditions refuse to teach openly.</description>
+    <description>Record the first principles of magic that most traditions refuse to teach openly.
+
+Unlocks Arcane Discipline: Heretic.</description>
     <baseCost>2000</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -116,6 +118,11 @@ Unlocks Arcane Discipline: Medium.</description>
       <li>MFV_Necromancy</li>
     </hiddenPrerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Heretic</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>1.5</researchViewX>
     <researchViewY>6</researchViewY>
   </ResearchProjectDef>
@@ -377,11 +384,18 @@ Unlocks Arcane Discipline: Geomancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Necromancy</defName>
     <label>necromancy</label>
-    <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</description>
+    <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.
+
+Unlocks Arcane Discipline: Necromancer.</description>
     <baseCost>1400</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Necromancer</discipline>
+      </li>
+    </modExtensions>
     <prerequisites>
       <li>MFV_Vitalism</li>
     </prerequisites>
@@ -392,7 +406,9 @@ Unlocks Arcane Discipline: Geomancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Fleshcraft</defName>
     <label>fleshcraft</label>
-    <description>Alter living tissue through invasive magic, trading stability for power and survival.</description>
+    <description>Alter living tissue through invasive magic, trading stability for power and survival.
+
+Unlocks Arcane Discipline: Golemancer.</description>
     <baseCost>2600</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -401,6 +417,11 @@ Unlocks Arcane Discipline: Geomancer.</description>
       <li>MFV_Necromancy</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Golemancer</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>8</researchViewX>
     <researchViewY>4.5</researchViewY>
   </ResearchProjectDef>
@@ -440,7 +461,9 @@ Unlocks Arcane Discipline: Geomancer.</description>
   <ResearchProjectDef>
     <defName>MFV_InfernalPact</defName>
     <label>infernal pact</label>
-    <description>Study binding bargains, sacrificial power, and the summoning of infernal allies.</description>
+    <description>Study binding bargains, sacrificial power, and the summoning of infernal allies.
+
+Unlocks Arcane Discipline: Warlock.</description>
     <baseCost>2800</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -449,6 +472,11 @@ Unlocks Arcane Discipline: Geomancer.</description>
       <li>MFV_Soulcraft</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Warlock</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>11</researchViewX>
     <researchViewY>4.5</researchViewY>
   </ResearchProjectDef>
@@ -473,7 +501,9 @@ Unlocks Arcane Discipline: Geomancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Chronomancy</defName>
     <label>chronomancy</label>
-    <description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.</description>
+    <description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.
+
+Unlocks Arcane Discipline: Chronomancer.</description>
     <baseCost>3600</baseCost>
     <techLevel>Spacer</techLevel>
     <tab>MFV_Arcane</tab>
@@ -482,6 +512,11 @@ Unlocks Arcane Discipline: Geomancer.</description>
       <li>MFV_GrandSorcery</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Chronomancer</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>12</researchViewX>
     <researchViewY>5.5</researchViewY>
   </ResearchProjectDef>

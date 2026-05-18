@@ -287,6 +287,36 @@
     <displayOrder>110</displayOrder>
   </MagicFramework.Definitions.ArcaneDisciplineDef>
 
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Necromancer</defName>
+    <label>necromancer</label>
+    <displayOrder>120</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Golemancer</defName>
+    <label>golemancer</label>
+    <displayOrder>130</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Warlock</defName>
+    <label>warlock</label>
+    <displayOrder>140</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Heretic</defName>
+    <label>heretic</label>
+    <displayOrder>150</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Chronomancer</defName>
+    <label>chronomancer</label>
+    <displayOrder>160</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
   <!-- Tags -->
   <MagicFramework.Definitions.SpellTagDef>
     <defName>MF_Tag_Projectile</defName>
