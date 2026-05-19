@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MagicFramework.Core;
+using MagicFramework.Definitions;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -57,6 +58,11 @@ public static class MFVanillaPatcher
         harmony.Patch(
             AccessTools.Method(typeof(ResearchManager), nameof(ResearchManager.ResearchPerformed)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchManager_ResearchPerformed_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.Method(typeof(Bill), nameof(Bill.PawnAllowedToStartAnew)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Bill_PawnAllowedToStartAnew_Postfix))
         );
 
         harmony.Patch(
@@ -211,6 +217,19 @@ public static class MFVanillaPatcher
 
         Thing bench = researcher.CurJob.GetTarget(TargetIndex.A).Thing;
         ArcanePracticeUtility.NotifyArcaneResearchPerformed(researcher, bench);
+    }
+
+    private static void Bill_PawnAllowedToStartAnew_Postfix(Bill __instance, Pawn p, ref bool __result)
+    {
+        if (!__result || p == null) return;
+
+        SpellDef spell = __instance?.recipe?.GetModExtension<ScribeSpellScrollRecipeExtension>()?.spell;
+        if (spell == null) return;
+
+        if (SpellRuntimeGameComponent.Instance?.KnowsSpell(p, spell) != true)
+        {
+            __result = false;
+        }
     }
 
     private static bool Mineable_TrySpawnYield_Prefix(Mineable __instance, Map map, bool moteOnWaste, Pawn pawn)

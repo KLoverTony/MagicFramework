@@ -20,6 +20,10 @@
   <MFV_ShowLeylineStrengthNumbersTooltip>Show numeric leyline power values on visible cells while the leyline overlay is active and the camera is zoomed in.</MFV_ShowLeylineStrengthNumbersTooltip>
   <MFV_ShowLeylineStrengthNumbersDescription>When enabled, leyline cells show their raw strength values at close zoom. This is mainly useful for tuning and precise placement.</MFV_ShowLeylineStrengthNumbersDescription>
 
+  <MFV_IgnoreArcaneDisciplineRestrictions>Ignore Arcane Discipline restrictions</MFV_IgnoreArcaneDisciplineRestrictions>
+  <MFV_IgnoreArcaneDisciplineRestrictionsTooltip>Allow Arcane Gift pawns to learn spells regardless of their embraced Arcane Discipline.</MFV_IgnoreArcaneDisciplineRestrictionsTooltip>
+  <MFV_IgnoreArcaneDisciplineRestrictionsDescription>When enabled, Arcane Disciplines remain visible role labels but do not restrict spell learning. Disable this to enforce discipline-based spell access once the restriction system is active.</MFV_IgnoreArcaneDisciplineRestrictionsDescription>
+
   <MFV_ShowLatestMagicNotes>Show latest magic notes</MFV_ShowLatestMagicNotes>
   <MFV_ResetSettingsToDefaults>Reset to defaults</MFV_ResetSettingsToDefaults>
 </LanguageData>

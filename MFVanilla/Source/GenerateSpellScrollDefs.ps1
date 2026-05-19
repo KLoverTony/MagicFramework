@@ -226,6 +226,12 @@ try {
 
         $recipeWriter.WriteElementString('workSkill', 'Crafting')
         $recipeWriter.WriteElementString('requiredGiverWorkType', 'Crafting')
+        $recipeWriter.WriteStartElement('modExtensions')
+        $recipeWriter.WriteStartElement('li')
+        $recipeWriter.WriteAttributeString('Class', 'MFVanilla.Core.ScribeSpellScrollRecipeExtension')
+        $recipeWriter.WriteElementString('spell', $record.DefName)
+        $recipeWriter.WriteEndElement()
+        $recipeWriter.WriteEndElement()
         $recipeWriter.WriteStartElement('recipeUsers')
         $recipeWriter.WriteElementString('li', 'MFV_ScribingTable')
         $recipeWriter.WriteEndElement()

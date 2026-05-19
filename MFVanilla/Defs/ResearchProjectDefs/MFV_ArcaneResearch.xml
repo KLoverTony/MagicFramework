@@ -22,9 +22,10 @@
   <ResearchProjectDef>
     <defName>MFV_LeylineSensitivity</defName>
     <label>leyline sensitivity</label>
-    <description>Learn to perceive the subtle currents of mana that move through land, stone, and living things. Reveals hidden leylines on colony maps, helps gifted pawns recover mana faster near strong currents, and lets Arcane Forges resonate with nearby leyline power for a chance to improve enchanted weapon quality.
-
-Unlocks Arcane Discipline: Medium.</description>
+    <description>Learn to perceive the subtle currents of mana that move through land, stone, and living things. Reveals hidden leylines on colony maps, helps gifted pawns recover mana faster near strong currents, and lets Arcane Forges resonate with nearby leyline power for a chance to improve enchanted weapon quality.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Medium</li>
+    </customUnlockTexts>
     <baseCost>700</baseCost>
     <techLevel>Neolithic</techLevel>
     <tab>MFV_Arcane</tab>
@@ -105,9 +106,10 @@ Unlocks Arcane Discipline: Medium.</description>
   <ResearchProjectDef>
     <defName>MFV_ForbiddenLore</defName>
     <label>forbidden lore</label>
-    <description>Record the first principles of magic that most traditions refuse to teach openly.
-
-Unlocks Arcane Discipline: Heretic.</description>
+    <description>Record the first principles of magic that most traditions refuse to teach openly.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Heretic</li>
+    </customUnlockTexts>
     <baseCost>2000</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -130,9 +132,10 @@ Unlocks Arcane Discipline: Heretic.</description>
   <ResearchProjectDef>
     <defName>MFV_Elementalism</defName>
     <label>elementalism</label>
-    <description>Study the fundamental forces of nature and their magical manipulation.
-
-Unlocks Arcane Discipline: Elementalist.</description>
+    <description>Study the fundamental forces of nature and their magical manipulation.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Elementalist</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -152,9 +155,10 @@ Unlocks Arcane Discipline: Elementalist.</description>
   <ResearchProjectDef>
     <defName>MFV_Enchantment</defName>
     <label>enchantment</label>
-    <description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.
-
-Unlocks Arcane Discipline: Enchanter.</description>
+    <description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Enchanter</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -174,9 +178,10 @@ Unlocks Arcane Discipline: Enchanter.</description>
   <ResearchProjectDef>
     <defName>MFV_Summoning</defName>
     <label>summoning</label>
-    <description>Study the art of calling forth and commanding otherworldly entities.
-
-Unlocks Arcane Discipline: Summoner.</description>
+    <description>Study the art of calling forth and commanding otherworldly entities.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Summoner</li>
+    </customUnlockTexts>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -196,9 +201,10 @@ Unlocks Arcane Discipline: Summoner.</description>
   <ResearchProjectDef>
     <defName>MFV_Transformation</defName>
     <label>transformation</label>
-    <description>Study the art of changing one thing into another through magical means.
-
-Unlocks Arcane Discipline: Transmuter.</description>
+    <description>Study the art of changing one thing into another through magical means.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Transmuter</li>
+    </customUnlockTexts>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -218,9 +224,10 @@ Unlocks Arcane Discipline: Transmuter.</description>
   <ResearchProjectDef>
     <defName>MFV_Illusion</defName>
     <label>illusion</label>
-    <description>Study the art of creating deceptive images and sensory experiences through magical means.
-
-Unlocks Arcane Discipline: Illusionist.</description>
+    <description>Study the art of creating deceptive images and sensory experiences through magical means.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Illusionist</li>
+    </customUnlockTexts>
     <baseCost>1200</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -240,9 +247,10 @@ Unlocks Arcane Discipline: Illusionist.</description>
   <ResearchProjectDef>
     <defName>MFV_Vitalism</defName>
     <label>vitalism</label>
-    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.
-
-Unlocks Arcane Discipline: Vitalist.</description>
+    <description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Vitalist</li>
+    </customUnlockTexts>
     <baseCost>1100</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -277,9 +285,10 @@ Unlocks Arcane Discipline: Vitalist.</description>
   <ResearchProjectDef>
     <defName>MFV_Pyromancy</defName>
     <label>pyromancy</label>
-    <description>Study heat, combustion, and the deliberate shaping of magical flame.
-
-Unlocks Arcane Discipline: Pyromancer.</description>
+    <description>Study heat, combustion, and the deliberate shaping of magical flame.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Pyromancer</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -299,9 +308,10 @@ Unlocks Arcane Discipline: Pyromancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Aquamancy</defName>
     <label>aquamancy</label>
-    <description>Shape water into protective and hostile magic.
-
-Unlocks Arcane Discipline: Aquamancer.</description>
+    <description>Shape water into protective and hostile magic.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Aquamancer</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -321,9 +331,10 @@ Unlocks Arcane Discipline: Aquamancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Aeromancy</defName>
     <label>aeromancy</label>
-    <description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.
-
-Unlocks Arcane Discipline: Aeromancer.</description>
+    <description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Aeromancer</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -343,9 +354,10 @@ Unlocks Arcane Discipline: Aeromancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Geomancy</defName>
     <label>geomancy</label>
-    <description>Study stone, soil, metal, and the patient strength of the earth.
-
-Unlocks Arcane Discipline: Geomancer.</description>
+    <description>Study stone, soil, metal, and the patient strength of the earth.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Geomancer</li>
+    </customUnlockTexts>
     <baseCost>1000</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -371,6 +383,7 @@ Unlocks Arcane Discipline: Geomancer.</description>
     <tab>MFV_Arcane</tab>
     <requiredResearchBuilding>MFV_ArcaneResearchBench</requiredResearchBuilding>
     <prerequisites>
+      <li>MFV_Enchantment</li>
       <li>MFV_Elementalism</li>
       <li>MFV_Transformation</li>
       <li>MFV_Vitalism</li>
@@ -384,9 +397,10 @@ Unlocks Arcane Discipline: Geomancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Necromancy</defName>
     <label>necromancy</label>
-    <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.
-
-Unlocks Arcane Discipline: Necromancer.</description>
+    <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Necromancer</li>
+    </customUnlockTexts>
     <baseCost>1400</baseCost>
     <techLevel>Medieval</techLevel>
     <tab>MFV_Arcane</tab>
@@ -406,9 +420,10 @@ Unlocks Arcane Discipline: Necromancer.</description>
   <ResearchProjectDef>
     <defName>MFV_Fleshcraft</defName>
     <label>fleshcraft</label>
-    <description>Alter living tissue through invasive magic, trading stability for power and survival.
-
-Unlocks Arcane Discipline: Golemancer.</description>
+    <description>Alter living tissue through invasive magic, trading stability for power and survival.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Golemancer</li>
+    </customUnlockTexts>
     <baseCost>2600</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -430,6 +445,9 @@ Unlocks Arcane Discipline: Golemancer.</description>
     <defName>MFV_Soulcraft</defName>
     <label>soulcraft</label>
     <description>Bind, preserve, wound, and strengthen souls through precise and dangerous rites.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Animus Domini</li>
+    </customUnlockTexts>
     <baseCost>2400</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -438,6 +456,11 @@ Unlocks Arcane Discipline: Golemancer.</description>
       <li>MFV_Necromancy</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_AnimusDomini</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>9</researchViewX>
     <researchViewY>3.5</researchViewY>
   </ResearchProjectDef>
@@ -446,6 +469,9 @@ Unlocks Arcane Discipline: Golemancer.</description>
     <defName>MFV_PlanarMagic</defName>
     <label>planar magic</label>
     <description>Reach beyond local space into other planes, hostile dimensions, and distant thresholds.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Planar Mage</li>
+    </customUnlockTexts>
     <baseCost>2600</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -454,6 +480,11 @@ Unlocks Arcane Discipline: Golemancer.</description>
       <li>MFV_LeylineSensitivity</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_PlanarMage</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>9</researchViewX>
     <researchViewY>1.5</researchViewY>
   </ResearchProjectDef>
@@ -461,9 +492,10 @@ Unlocks Arcane Discipline: Golemancer.</description>
   <ResearchProjectDef>
     <defName>MFV_InfernalPact</defName>
     <label>infernal pact</label>
-    <description>Study binding bargains, sacrificial power, and the summoning of infernal allies.
-
-Unlocks Arcane Discipline: Warlock.</description>
+    <description>Study binding bargains, sacrificial power, and the summoning of infernal allies.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Warlock</li>
+    </customUnlockTexts>
     <baseCost>2800</baseCost>
     <techLevel>Industrial</techLevel>
     <tab>MFV_Arcane</tab>
@@ -485,6 +517,9 @@ Unlocks Arcane Discipline: Warlock.</description>
     <defName>MFV_GrandSorcery</defName>
     <label>grand sorcery</label>
     <description>Perform large rituals and endgame spells whose effects can reshape a whole colony.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Archmage</li>
+    </customUnlockTexts>
     <baseCost>3200</baseCost>
     <techLevel>Spacer</techLevel>
     <tab>MFV_Arcane</tab>
@@ -493,6 +528,11 @@ Unlocks Arcane Discipline: Warlock.</description>
       <li>MFV_ArcaneSecrets</li>
     </prerequisites>
     <requiredResearchBuilding>MFV_AdvancedArcaneResearchBench</requiredResearchBuilding>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.ArcaneDisciplineUnlockExtension">
+        <discipline>MFV_ArcaneDiscipline_Archmage</discipline>
+      </li>
+    </modExtensions>
     <researchViewX>11</researchViewX>
     <researchViewY>2.5</researchViewY>
   </ResearchProjectDef>
@@ -501,9 +541,10 @@ Unlocks Arcane Discipline: Warlock.</description>
   <ResearchProjectDef>
     <defName>MFV_Chronomancy</defName>
     <label>chronomancy</label>
-    <description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.
-
-Unlocks Arcane Discipline: Chronomancer.</description>
+    <description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.</description>
+    <customUnlockTexts>
+      <li>Arcane Discipline: Chronomancer</li>
+    </customUnlockTexts>
     <baseCost>3600</baseCost>
     <techLevel>Spacer</techLevel>
     <tab>MFV_Arcane</tab>

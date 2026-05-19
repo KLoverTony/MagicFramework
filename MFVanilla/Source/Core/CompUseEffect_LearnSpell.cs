@@ -111,6 +111,12 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
             return reason;
         }
 
+        if (MFVanillaMod.Settings?.IgnoreArcaneDisciplineRestrictions != true
+            && !ArcaneDisciplineUtility.CanPawnDisciplineLearnSpell(pawn, spellDef, out reason))
+        {
+            return reason;
+        }
+
         return true;
     }
 

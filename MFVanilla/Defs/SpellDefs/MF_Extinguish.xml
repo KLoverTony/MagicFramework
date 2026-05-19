@@ -28,7 +28,7 @@
     <learning>
       <canBeLearned>true</canBeLearned>
       <researchPrerequisites>
-        <li>MFV_Aquamancy</li>
+        <li>MFV_Elementalism</li>
       </researchPrerequisites>
       <requirements>
         <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />

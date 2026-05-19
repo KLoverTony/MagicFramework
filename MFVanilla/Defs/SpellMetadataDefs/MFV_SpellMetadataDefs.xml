@@ -317,6 +317,24 @@
     <displayOrder>160</displayOrder>
   </MagicFramework.Definitions.ArcaneDisciplineDef>
 
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_AnimusDomini</defName>
+    <label>animus domini</label>
+    <displayOrder>170</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_PlanarMage</defName>
+    <label>planar mage</label>
+    <displayOrder>180</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
+  <MagicFramework.Definitions.ArcaneDisciplineDef>
+    <defName>MFV_ArcaneDiscipline_Archmage</defName>
+    <label>archmage</label>
+    <displayOrder>190</displayOrder>
+  </MagicFramework.Definitions.ArcaneDisciplineDef>
+
   <!-- Tags -->
   <MagicFramework.Definitions.SpellTagDef>
     <defName>MF_Tag_Projectile</defName>

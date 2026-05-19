@@ -53,6 +53,7 @@ Recent public release:
 
 Completed current slice:
 - MF-044: Leyline Sensitivity now reveals a stable hidden leyline map, supports optional numeric inspection, boosts Arcane Gift pawn mana recovery near strong currents, and gives Arcane Forges a leyline resonance chance to improve enchanted weapon quality.
+- MF-061: Arcane Discipline specialization now gives research projects reward labels, lets Arcane Gift pawns embrace/advance disciplines through a marker ritual, shows discipline in the mana gizmo, optionally enforces discipline spell learning, and requires scroll scribes to know the spell being copied.
 
 Next release band - MFVanilla world layer:
 - MF-043: choose the next-release content pillar set and keep research cleanup decisions current
@@ -76,7 +77,6 @@ AeternusFaith release band:
 
 Consideration backlog:
 - MF-060: evaluate paintings as decoration and platinum as a trade good; do not implement until they have a clear economy or presentation role
-- MF-061: arcane discipline specialization; research projects now label discipline unlocks in descriptions, with future work to let Arcane Gift pawns embrace one discipline and show it near the mana bar.
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |

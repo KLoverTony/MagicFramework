@@ -9,7 +9,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -41,6 +41,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_AirBlast</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -87,6 +92,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ArcSeeker</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -133,6 +143,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_BlessingOfVigor</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -179,6 +194,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_BlinkStep</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -225,6 +245,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ChainLightning</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -271,6 +296,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_CreateFood</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -317,6 +347,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_DelayedBlastRune</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -363,6 +398,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Deluge</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -407,6 +447,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Disintegrate</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -453,6 +498,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_EarthCall</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -467,7 +517,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Aquamancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -499,6 +549,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Extinguish</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -545,6 +600,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Fireball</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -559,7 +619,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -591,6 +651,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Firebolt</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -637,6 +702,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_FlameField</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -683,6 +753,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ForceField</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -697,7 +772,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -729,6 +804,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ForcePull</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -743,7 +823,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Aeromancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -775,6 +855,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ForcePush</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -821,6 +906,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Freeze</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -867,6 +957,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Haste</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -913,6 +1008,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Heal</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -959,6 +1059,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ManaShield</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1005,6 +1110,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Might</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1051,6 +1161,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Regeneration</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1097,6 +1212,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_RepulsionWard</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1143,6 +1263,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_RescueRecall</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1187,6 +1312,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Resurrection</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1233,6 +1363,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_RuneTrap</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1247,7 +1382,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Geomancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1279,6 +1414,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Stoneskin</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1325,6 +1465,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_SummonDog</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1371,6 +1516,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_ThreatSpike</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1417,6 +1567,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Tornado</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1463,6 +1618,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Transposition</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1509,6 +1669,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_TriagePulse</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1555,6 +1720,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_WallOfFire</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1569,7 +1739,7 @@
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Tailor</effectWorking>
     <soundWorking>Recipe_Tailor</soundWorking>
-    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
+    <researchPrerequisite>MFV_Elementalism</researchPrerequisite>
     <ingredients>
       <li>
         <filter>
@@ -1601,6 +1771,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Warmth</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>
@@ -1647,6 +1822,11 @@
     </products>
     <workSkill>Crafting</workSkill>
     <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_WatersEmbrace</spell>
+      </li>
+    </modExtensions>
     <recipeUsers>
       <li>MFV_ScribingTable</li>
     </recipeUsers>

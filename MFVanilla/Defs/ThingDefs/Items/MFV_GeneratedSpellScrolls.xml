@@ -17,7 +17,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_AirBlast</spell>
         <requiredResearch>
-          <li>MFV_Aeromancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -253,7 +253,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_Extinguish</spell>
         <requiredResearch>
-          <li>MFV_Aquamancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -299,7 +299,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_Firebolt</spell>
         <requiredResearch>
-          <li>MFV_Pyromancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -368,7 +368,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_ForcePull</spell>
         <requiredResearch>
-          <li>MFV_Aeromancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -391,7 +391,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_ForcePush</spell>
         <requiredResearch>
-          <li>MFV_Aeromancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -650,7 +650,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_Stoneskin</spell>
         <requiredResearch>
-          <li>MFV_Geomancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />
@@ -811,7 +811,7 @@
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_Warmth</spell>
         <requiredResearch>
-          <li>MFV_Pyromancy</li>
+          <li>MFV_Elementalism</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />

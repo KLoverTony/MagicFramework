@@ -40,12 +40,18 @@ public sealed class MFVanillaMod : Mod
         /// </summary>
         public bool ShowLeylineStrengthNumbers = false;
 
+        /// <summary>
+        /// Whether pawns can learn spells without respecting Arcane Discipline specialization.
+        /// </summary>
+        public bool IgnoreArcaneDisciplineRestrictions = true;
+
         public override void ExposeData()
         {
             Scribe_Values.Look(ref DisableTechResearch, "disableTechResearch", true);
             Scribe_Values.Look(ref ShowTechDisabledWarning, "showTechDisabledWarning", true);
             Scribe_Values.Look(ref ShowDevModeSpellGizmos, "showDevModeSpellGizmos", false);
             Scribe_Values.Look(ref ShowLeylineStrengthNumbers, "showLeylineStrengthNumbers", false);
+            Scribe_Values.Look(ref IgnoreArcaneDisciplineRestrictions, "ignoreArcaneDisciplineRestrictions", true);
         }
     }
 
@@ -151,6 +157,21 @@ public sealed class MFVanillaMod : Mod
         listing.Label("MFV_ShowLeylineStrengthNumbersDescription".Translate());
         listing.Gap();
 
+        bool ignoreArcaneDisciplineRestrictions = Settings.IgnoreArcaneDisciplineRestrictions;
+        listing.CheckboxLabeled(
+            "MFV_IgnoreArcaneDisciplineRestrictions".Translate(),
+            ref ignoreArcaneDisciplineRestrictions,
+            "MFV_IgnoreArcaneDisciplineRestrictionsTooltip".Translate());
+
+        if (ignoreArcaneDisciplineRestrictions != Settings.IgnoreArcaneDisciplineRestrictions)
+        {
+            Settings.IgnoreArcaneDisciplineRestrictions = ignoreArcaneDisciplineRestrictions;
+            WriteSettings();
+        }
+
+        listing.Label("MFV_IgnoreArcaneDisciplineRestrictionsDescription".Translate());
+        listing.Gap();
+
         if (listing.ButtonText("MFV_ShowLatestMagicNotes".Translate()))
         {
             MagicFrameworkSplashUtility.ShowLatest();
@@ -164,6 +185,7 @@ public sealed class MFVanillaMod : Mod
             Settings.ShowTechDisabledWarning = true;
             Settings.ShowDevModeSpellGizmos = false;
             Settings.ShowLeylineStrengthNumbers = false;
+            Settings.IgnoreArcaneDisciplineRestrictions = true;
             MFVanillaPatcher.NotifySettingsChanged();
             WriteSettings();
         }
