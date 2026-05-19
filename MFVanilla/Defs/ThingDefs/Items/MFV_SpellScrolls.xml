@@ -19,7 +19,7 @@
     <tradeTags>
       <li>MFV_SpellScroll</li>
     </tradeTags>
-    <tradeability>Sellable</tradeability>
+    <tradeability>All</tradeability>
     <techLevel>Neolithic</techLevel>
     <statBases>
       <MaxHitPoints>60</MaxHitPoints>

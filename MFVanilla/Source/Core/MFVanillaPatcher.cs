@@ -90,6 +90,11 @@ public static class MFVanillaPatcher
             prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(WorkGiver_DoBill_JobOnThing_Prefix))
         );
 
+        harmony.Patch(
+            AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Postfix))
+        );
+
         _isPatched = true;
         Log.Message("[MFVanilla] Vanilla tech research suppression patches applied.");
     }
@@ -285,6 +290,73 @@ public static class MFVanillaPatcher
 
         __result = null;
         return false;
+    }
+
+    private static void PawnGenerator_GeneratePawn_Postfix(Pawn __result, PawnGenerationRequest request)
+    {
+        if (__result?.Faction?.def?.defName != "MFV_ElementalistTribe"
+            || Faction.OfPlayer == null
+            || !__result.Faction.HostileTo(Faction.OfPlayer)
+            || __result.RaceProps?.Humanlike != true
+            || Rand.Chance(0.8f))
+        {
+            return;
+        }
+
+        AssignElementalistAISpells(__result);
+    }
+
+    private static void AssignElementalistAISpells(Pawn pawn)
+    {
+        SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+        SpellAIManagerGameComponent aiManager = SpellAIManagerGameComponent.Instance;
+        if (runtime == null || aiManager == null)
+        {
+            return;
+        }
+
+        List<SpellAIEntry> pool = new()
+        {
+            Entry("MF_Firebolt", SpellAIIntent.Hostile),
+            Entry("MF_ForcePush", SpellAIIntent.Hostile),
+            Entry("MF_Heal", SpellAIIntent.HealAlly),
+            Entry("MF_Stoneskin", SpellAIIntent.BuffAlly),
+            Entry("MF_Might", SpellAIIntent.BuffAlly)
+        };
+
+        pool.RemoveAll(entry => entry?.spell == null);
+        if (pool.Count == 0)
+        {
+            return;
+        }
+
+        pool.Shuffle();
+        int spellCount = Math.Min(pool.Count, Rand.RangeInclusive(1, 3));
+        List<SpellAIEntry> selected = pool.Take(spellCount).ToList();
+        if (selected.Count == 0)
+        {
+            return;
+        }
+
+        runtime.SetArcaneGift(pawn, true);
+        runtime.SetCasterLevel(pawn, 3);
+        ArcaneDisciplineDef discipline = DefDatabase<ArcaneDisciplineDef>.GetNamedSilentFail("MFV_ArcaneDiscipline_Elementalist");
+        if (discipline != null)
+        {
+            runtime.SetArcaneDiscipline(pawn, discipline);
+        }
+
+        for (int i = 0; i < selected.Count; i++)
+        {
+            runtime.LearnSpell(pawn, selected[i].spell);
+        }
+
+        aiManager.RegisterPawn(pawn, selected);
+    }
+
+    private static SpellAIEntry Entry(string spellDefName, SpellAIIntent intent)
+    {
+        return new SpellAIEntry(DefDatabase<SpellDef>.GetNamedSilentFail(spellDefName), intent);
     }
 
     private static bool RequiresArcaneGiftWorker(Thing thing)

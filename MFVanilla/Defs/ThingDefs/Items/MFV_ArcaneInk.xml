@@ -24,7 +24,7 @@
       <Flammability>0.4</Flammability>
       <DeteriorationRate>1</DeteriorationRate>
     </statBases>
-    <tradeability>Sellable</tradeability>
+    <tradeability>All</tradeability>
   </ThingDef>
 
 </Defs>

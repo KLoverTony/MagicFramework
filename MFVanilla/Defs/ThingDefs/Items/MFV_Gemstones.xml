@@ -20,7 +20,7 @@
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
     </statBases>
-    <tradeability>Sellable</tradeability>
+    <tradeability>All</tradeability>
   </ThingDef>
 
   <ThingDef Name="MFV_GemstoneChunkBase" ParentName="MFV_GemstoneResourceBase" Abstract="True">

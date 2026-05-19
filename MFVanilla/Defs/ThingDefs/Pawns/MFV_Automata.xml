@@ -317,6 +317,109 @@
   </PawnKindDef>
 
   <ThingDef ParentName="BaseMechanoidWalker">
+    <defName>MFV_FleshGolem</defName>
+    <label>flesh golem</label>
+    <description>A stitched guardian animated by vital magic and crude command runes. It lumbers into melee, absorbs punishment, and knits torn flesh back together while the fight continues.</description>
+    <statBases>
+      <MarketValue>1100</MarketValue>
+      <MoveSpeed>2.65</MoveSpeed>
+      <ArmorRating_Blunt>0.20</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.26</ArmorRating_Sharp>
+      <ArmorRating_Heat>0.55</ArmorRating_Heat>
+      <PsychicSensitivity>0.15</PsychicSensitivity>
+      <ToxicResistance>0.80</ToxicResistance>
+      <ToxicEnvironmentResistance>0.65</ToxicEnvironmentResistance>
+    </statBases>
+    <tools>
+      <li>
+        <label>left heavy fist</label>
+        <labelNoLocation>heavy fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>18</power>
+        <cooldownTime>2.6</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>right heavy fist</label>
+        <labelNoLocation>heavy fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>18</power>
+        <cooldownTime>2.6</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+      <li>
+        <label>head</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>9</power>
+        <cooldownTime>2.8</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.2</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <body>Lancer</body>
+      <baseHealthScale>1.55</baseHealthScale>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MechanoidFullyFormed</def>
+          <minAge>0</minAge>
+          <soundWounded>Pawn_Mech_Scyther_Wounded</soundWounded>
+          <soundDeath>Pawn_Mech_Scyther_Death</soundDeath>
+          <soundCall>Pawn_Mech_Scyther_Call</soundCall>
+        </li>
+      </lifeStageAges>
+      <soundMeleeHitPawn>Pawn_Melee_MechanoidBash_HitPawn</soundMeleeHitPawn>
+      <soundMeleeHitBuilding>Pawn_Melee_MechanoidBash_HitBuilding</soundMeleeHitBuilding>
+      <soundMeleeMiss>Pawn_Melee_MechanoidBash_Miss</soundMeleeMiss>
+      <detritusLeavings />
+    </race>
+    <comps>
+      <li Class="MFVanilla.Core.CompProperties_FleshGolemRegeneration">
+        <intervalTicks>180</intervalTicks>
+        <healAmount>4</healAmount>
+        <statusHediffDef>MF_Regenerating</statusHediffDef>
+      </li>
+    </comps>
+    <butcherProducts Inherit="False">
+      <MFV_GemstoneDust>4</MFV_GemstoneDust>
+      <MedicineHerbal>2</MedicineHerbal>
+    </butcherProducts>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BaseMechanoidKind">
+    <defName>MFV_FleshGolem</defName>
+    <label>flesh golem</label>
+    <labelPlural>flesh golems</labelPlural>
+    <race>MFV_FleshGolem</race>
+    <combatPower>165</combatPower>
+    <lifeStages>
+      <li>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Automata/FleshGolem</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.65</drawSize>
+          <shadowData>
+            <volume>(0.45, 0.8, 0.45)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <weaponMoney>0~0</weaponMoney>
+    <defendPointRadius>0</defendPointRadius>
+    <weaponTags />
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+  <ThingDef ParentName="BaseMechanoidWalker">
     <defName>MFV_CrystalSentinel</defName>
     <label>crystal sentinel</label>
     <description>A narrow guardian automaton built around a charged crystal heart. Its polished focus sweeps a burning crystal beam across intruders before the sentinel advances.</description>

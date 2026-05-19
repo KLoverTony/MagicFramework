@@ -20,6 +20,12 @@ public static class DebugActions_ArcaneSites
         SpawnSiteNearCurrentMap("MFV_SealedVault", "sealed vault site", ArcaneCacheMissionUtility.SealedVaultThreatPoints);
     }
 
+    [DebugAction("MFVanilla - Arcane Sites", "Spawn Ruined Sanctum Site Near Current Map", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void SpawnRuinedSanctumSiteNearCurrentMap()
+    {
+        SpawnSiteNearCurrentMap("MFV_RuinedSanctum", "ruined sanctum site", ArcaneCacheMissionUtility.RuinedSanctumThreatPoints);
+    }
+
     [DebugAction("MFVanilla - Arcane Sites", "Offer Arcane Cache Mission", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
     public static void OfferArcaneCacheMission()
     {
@@ -60,6 +66,27 @@ public static class DebugActions_ArcaneSites
         }
 
         Messages.Message("Could not offer a sealed vault mission.", MessageTypeDefOf.RejectInput, false);
+    }
+
+    [DebugAction("MFVanilla - Arcane Sites", "Offer Ruined Sanctum Mission", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void OfferRuinedSanctumMission()
+    {
+        Map map = Find.CurrentMap;
+        if (map == null)
+        {
+            Messages.Message("No current map is available.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (ArcaneCacheMissionUtility.TryCreateRuinedSanctumMission(map, ArcaneCacheMissionUtility.RuinedSanctumThreatPoints, sendLetter: true, out Site site))
+        {
+            Find.WorldSelector.ClearSelection();
+            Find.WorldSelector.Select(site);
+            Messages.Message($"Offered ruined sanctum mission at tile {site.Tile}.", MessageTypeDefOf.PositiveEvent, false);
+            return;
+        }
+
+        Messages.Message("Could not offer a ruined sanctum mission.", MessageTypeDefOf.RejectInput, false);
     }
 
     [DebugAction("MFVanilla - Arcane Sites", "Spawn Arcane Cache Showcase Near Current Map", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]

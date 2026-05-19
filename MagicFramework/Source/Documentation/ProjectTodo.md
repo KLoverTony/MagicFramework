@@ -57,8 +57,8 @@ Completed current slice:
 - MF-046: Elemental spell expansion now covers Air Blast, Stoneskin, Extinguish, Deluge, Warmth, and sustained room-warming Heat, with scroll generation and research gates in place.
 
 Next release band - MFVanilla world layer:
-- MF-043: complete a small MFVanilla mission set, starting with normal in-game Arcane Cache generation, and keep research cleanup decisions current
-- MF-045: elemental cultures and themed traders if the world layer needs a stronger trade/faction identity
+- MF-043: release-polish the small MFVanilla mission set now that Arcane Cache, Sealed Vault, and Ruined Sanctum form an adequate next-release pillar
+- MF-045: plan one broad Elementalist tribe and themed traders for a later world-identity pass, rather than four thin elemental factions
 
 Following release band - school identity and advanced magic:
 - MF-051: mind control under Forbidden Lore
@@ -77,6 +77,7 @@ AeternusFaith release band:
 
 Consideration backlog:
 - MF-060: evaluate paintings as decoration and platinum as a trade good; do not implement until they have a clear economy or presentation role
+- MF-049B: defer a full connected-room arcane ruin generator to a future MFVanilla site release; ship MF-043 on the current authored/profile-driven mission sites first
 
 | ID | Priority | Complexity | Area | Task |
 | --- | --- | --- | --- | --- |
@@ -104,10 +105,11 @@ Consideration backlog:
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
-| MF-043 | P1 | L | MFVanilla | Complete a small next-release MFVanilla mission set, starting with normal in-game Arcane Cache generation. |
+| MF-043 | P1 | L | MFVanilla | Release-polish the small Arcane Cache, Sealed Vault, and Ruined Sanctum mission set. |
 | MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
+| MF-049B | P2 | XL | MFVanilla | Build a deterministic connected-room arcane ruin generator for future mission-site families. |
 | MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
-| MF-045 | P2 | L | MFVanilla | Add elemental tribes, themed traders, and later magic-capable hostile pawns. |
+| MF-045 | P2 | L | MFVanilla | Add one broad Elementalist tribe with themed traders, internal elemental roles, and later magic-capable hostile pawns. |
 | MF-047 | P2 | M | Equipment | Give first enchanted weapons unique MagicFramework-backed features. |
 | MF-051 | P2 | L | Forbidden Lore | Add mind-control magic as a dangerous forbidden school feature. |
 | MF-052 | P2 | L | Illusion | Add illusionary pawns under Illusion research. |
@@ -256,13 +258,15 @@ Success criteria:
 
 Goal: make the next MFVanilla release a small, playable mission set that turns existing arcane rewards, encounter maps, and construct defenders into normal in-game opportunities before final economy tuning.
 
+Release posture: adequate for the next MFVanilla release if focused smoke tests remain clean. Do not expand this slice into the larger connected-room generator, hazard ecosystem, faction sender system, or elemental tribe work before release.
+
 Selected pillar:
 - Arcane missions: complete a small set of world-map mission opportunities built around `MFV_ArcaneCache` first, then add two lightweight variants that reuse the same deterministic site generation, reward chest, and defender infrastructure.
 
 Mission set:
-- Arcane Cache: the first normal mission path for `MFV_ArcaneCache`; a compact treasure-cache site with construct defenders and an arcane treasure chest. This is currently implemented as a site/gen-step/debug-spawn slice, but still needs a real player-facing quest or incident path.
+- Arcane Cache: the first normal mission path for `MFV_ArcaneCache`; a compact treasure-cache site with construct defenders and an arcane treasure chest. - implemented with normal incident generation, timeout, letter, site/gen-step path, debug spawn/offer actions, threat-gated profile selection, and construct defenders
 - Sealed Vault: a higher-threat cache variant that favors `MFV_ArcaneCache_Sealed` or `MFV_ArcaneCache_DeepIronVault`, uses greater/grand chest rewards, and appears later or at higher storyteller points. - initial `MFV_SealedVault` mission now locks to `MFV_ArcaneCache_DeepIronVault`, uses the grand chest profile, and showcases the Deep Iron Golem as the vault guardian
-- Ruined Sanctum: a lower-to-mid threat exploration variant using the ruined/tower module pieces, lighter defenders, and side-room dressing or minor loot. It can initially share the `MFV_ArcaneCache` site part/profile machinery if separate site identity would add too much first-pass cost.
+- Ruined Sanctum: a lower-to-mid threat exploration variant using the ruined/tower module pieces, lighter defenders, and side-room dressing or minor loot. - initial `MFV_RuinedSanctum` mission now uses a larger dedicated profile with side rooms, heavy exterior ruins, broken wall gaps, stone golem-focused defenders, its own incident, and debug spawn/offer actions
 
 Non-pillar candidates for this release:
 - Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration. - first treasure chest pass shipped; this release should use them through missions rather than reopening the reward system broadly
@@ -290,6 +294,8 @@ Effort plan:
 3. Add mission tuning knobs: minimum days, threat-point bands, distance from colony, repeat cooldown, optional research/progression gate, and dev-mode spawn/log actions for the same path. - initial incident tuning uses earliest day 8, base chance 0.35, 18-day refire, 4-18 tile distance, 300+ threat points, and one-active-cache gating
 4. Split authored mission variants only where needed: normal cache, ruined sanctum, and sealed/deep vault can start as profile-driven variants before receiving separate site parts.
    - Sealed Vault now has its own site part, linked gen step, incident worker, incident def, 28-day expiry, 8-24 tile distance, earliest day 45, 45-day refire, and debug spawn/offer actions.
+   - Arcane site profiles now support weighted, threat-gated defender entries with per-kind caps, so automata count and type vary with game progress while keeping each generated site deterministic.
+   - Ruined Sanctum now has its own site part, linked gen step, incident worker, incident def, 22-day expiry, 5-20 tile distance, earliest day 22, 28-day refire, and reusable broken-wall generation for ruined profiles.
 5. Smoke test end to end: quest/incident generation, world site creation, caravan arrival, map generation, construct combat, chest opening, leaving the map, site cleanup, save/load, and repeat generation.
 6. Tune mission frequency and reward tier after several natural-generation tests, then update splash notes and completed-work notes.
 
@@ -300,6 +306,7 @@ Estimated effort:
 
 Sequencing note:
 - avoid deep balance work until the first natural mission path, reward tiering, repeat frequency, and site cleanup behavior are visible in normal play.
+- remaining MF-043 work should be polish and validation only: mission text, defender/reward tuning, site cleanup, save/load checks, and update notes for the release.
 
 ### MF-049 Arcane Encounter Maps And Mission Sites
 
@@ -384,6 +391,35 @@ Success criteria:
 - content authors can add or patch encounter profiles through XML
 - rewards, threats, and hazards scale with mission tier without replacing the normal production loop
 - the system can grow into elemental sites, cursed vaults, and faction/tribe encounters without a rewrite
+
+#### MF-049B Connected Arcane Ruin Generator
+
+Goal: future-release work to build a deterministic pseudo-random site generator that creates connected room networks for larger arcane ruins, sanctums, vaults, archives, shrines, and later mission families.
+
+Deferral note:
+- keep MF-043 scoped to the current authored/profile-driven mission set: Arcane Cache, Sealed Vault, and Ruined Sanctum
+- do not block the next MFVanilla mission release on a full room-graph generator
+- treat this as the larger successor to the current module/profile utility once the small mission set is stable in normal play
+
+Generator scope:
+- generate a room graph first, then place rooms and corridors with guaranteed connectivity, bounds checks, no accidental overlaps, and reachable entrances/reward rooms
+- support room roles such as entry hall, collapsed hall, side loot room, sealed vault, ritual chamber, archive, storage room, defender post, and boss chamber
+- populate by room role: floors, walls, doors, rubble, chunks, props, treasure anchors, sealed containers, beds/shelves/workbenches, ritual dressing, and defender positions
+- allocate defenders from a threat budget across the room graph so early sites have a few readable guardians and late sites can mix lesser automata with elite sentinels or boss constructs
+- derive all layout, material, population, loot-anchor, and defender variation from stable site identity/profile inputs rather than ambient `Rand`
+- expose XML/profile hooks for room count, room-size bands, role weights, corridor style, sealed-room chance, ruin damage, rubble density, loot tiers, defender tables, and boss-room eligibility
+- include dev diagnostics that report the seed, room graph, role assignment, selected profile, population passes, and unreachable-cell checks
+
+Implementation phases:
+1. Build the connected room-graph and placement pass with empty rooms/corridors only.
+2. Add role assignment and role-driven population for floors, doors, props, reward anchors, and sealed side rooms.
+3. Add ruin damage: broken walls, collapsed halls, rubble, chunks, exposed floors, and partially sealed rooms.
+4. Add threat-budgeted defender allocation by room role and site tier.
+5. Add profile hooks for multiple future site families without new C# for each variant.
+
+Out of first pass:
+- active magical hazards, trap tables, unstable leyline rooms, elemental room effects, and puzzle-like locked-room chains can layer onto this generator later
+- faction integration, magic-capable hostile pawns, and narrative quest chains should wait until the basic connected-site generator is proven
 
 ### MF-050 Arcane Constructs, Golems, And Automata
 
@@ -476,39 +512,43 @@ Success criteria:
 - future systems can query leyline strength without knowing generation internals
 - the overlay provides enough information to feel magical without overwhelming normal map play
 
-### MF-045 Elemental Tribes And Themed Traders
+### MF-045 Elementalist Tribe And Themed Traders
 
-Goal: add fire, earth, air, and water themed cultures that make elemental magic feel present in the world, first through traders and later through hostile magic pawns.
+Goal: add one broad Elementalist tribe that makes elemental magic feel present in the world, first through traders and later through hostile magic pawns.
 
 Design direction:
 - start with faction/trader/content identity before hostile caster AI
-- each elemental tribe should have a distinct trade profile, visual flavor, likely goods, and preferred magic school
-- hostile spellcasting should wait for authored AI spell metadata and a safe AI casting path
+- prefer one coherent Elementalist faction/tribe over four separate elemental factions for the first pass
+- express fire, earth, air, and water as internal roles, trader stock themes, apparel/visual accents, pawn kinds, settlement flavor, and later combat loadouts
+- four separate elemental tribes should remain a later expansion only if each can justify distinct behavior, economy, diplomacy, visuals, and magic identity
+- hostile spellcasting should use the deliberately narrow MF-036 first pass: rare hostile Elementalist casters, single-target spells only, curated loadouts, and normal validator/runtime execution
 
 Target behavior:
-- fire tribe traders favor pyromancy scrolls, rubies, heat/light infrastructure, and aggressive magic goods
-- earth tribe traders favor geomancy scrolls, emeralds, stone/gem materials, defensive goods, and construction-adjacent items
-- air tribe traders favor aeromancy scrolls, topaz, mobility/control goods, and arcane spire supplies
-- water tribe traders favor aquamancy scrolls, sapphires, cooling/protection goods, medicine-adjacent items, and extinguishing tools
-- factions can later produce hostile pawns with appropriate magic loadouts once AI casting exists
+- Elementalist caravans and traders carry a mixed but weighted stock of elemental scrolls, gemstones, exotic herbs, arcane reagents, and occasional magic utility goods
+- fire-themed roles favor pyromancy scrolls, rubies, heat/light infrastructure, and aggressive magic goods
+- earth-themed roles favor geomancy scrolls, emeralds, stone/gem materials, defensive goods, and construction-adjacent items
+- air-themed roles favor aeromancy scrolls, topaz, mobility/control goods, and arcane spire supplies
+- water-themed roles favor aquamancy scrolls, sapphires, cooling/protection goods, medicine-adjacent items, and extinguishing tools
+- the faction can produce rare hostile spell-capable pawns with appropriate curated magic loadouts; broader allied/neutral spell behavior remains deferred
 
 Implementation questions:
-- should these be four full factions, trader kinds attached to existing factions, or rare world pawns/caravans?
+- should the Elementalist tribe be a full faction, trader kinds attached to existing factions, or rare world pawns/caravans?
 - should they be neutral by default, mixed relations, or scenario/storyteller controlled?
-- should their identities be tribal, monastic, guild-like, cultic, or mixed by element?
+- should their identity be tribal, monastic, guild-like, cultic, or a loose confederation of elemental circles?
 - should they sell finished enchanted gear, only inputs, or occasional rare major items through treasure chests/rewards?
 
 First implementation pass:
-1. Define the faction/trader scope without AI casting.
-2. Add themed stock generators for elemental goods, scrolls, and gemstones.
-3. Add names/descriptions/backstory flavor sufficient for world presence.
+1. Define the single Elementalist faction/trader scope without AI casting. - initial `MFV_ElementalistTribe` faction added as a neutral tribal world presence using reliable vanilla tribal pawn groups
+2. Add stock generators for mixed elemental goods, scrolls, gemstones, and production inputs. - initial `MFV_Caravan_ElementalistCircle` trader added with elemental scrolls, gemstones, exotic herbs, arcane ink, papyrus, parchment, herbal medicine, and MFVanilla buy tags
+3. Add names/descriptions/backstory flavor sufficient for one recognizable world presence.
 4. Smoke test caravan/orbital/trader generation and buy/sell behavior.
-5. Defer hostile caster behavior to the AI casting task unless a very narrow scripted encounter is safer.
+5. Defer broad hostile caster behavior to MF-036, but allow the narrow first-pass Elementalist caster hook to prove the runtime path. - initial hostile Elementalist pawn generation now gives about one in five hostile humanlike pawns Arcane Gift, caster level 3, and 1-3 curated single-target spells from Firebolt, Force Push, Heal, Stoneskin, and Might
 
 Success criteria:
 - elemental magic appears in the world economy, not only player crafting
-- each tribe/trader has a recognizable trade identity
-- no hostile pawn depends on unimplemented AI spellcasting
+- the Elementalist tribe has a recognizable trade identity without requiring four separate factions
+- fire, earth, air, and water are visible as internal variety rather than separate thin factions
+- hostile spell-capable pawns remain rare, curated, and limited to the first safe single-target AI casting path
 - future AI caster loadouts have clear faction/theme homes
 
 ### MF-046 Elemental Spell Expansion
@@ -1148,10 +1188,10 @@ Design questions:
  - Should downed, fleeing, mental-state, drafted-equivalent, or lord-controlled pawns continue casting, cancel pending warmups, or revert to normal combat?
 
 Candidate first pass:
- - Add authored AI metadata with conservative defaults: `aiUsable`, use category, target preference, minimum/maximum range, friendly-fire policy, score weights, and optional raid generation weight.
- - Create a reusable `SpellAIUtility` that lists known castable spells, checks mana/cooldown/requirements, enumerates valid targets using the existing targeting rules, and scores spell-target pairs.
- - Start with self/ally buffs, direct hostile single-target damage/control, and simple summons. Defer walls, traps/runes, resurrection, long-lived fields, teleport swaps, displacement, chain spells, and large radius attacks until the scorer can reason about collateral risk.
- - Add a small hostile humanlike caster generation hook with settings and debug logging, then validate with one or two MFVanilla spells before opening the whole content set.
+ - Add authored AI metadata with conservative defaults: `aiUsable`, use category, target preference, minimum/maximum range, friendly-fire policy, score weights, and optional raid generation weight. - deferred in favor of generation-owned curated spell packages for the first pass
+ - Create a reusable `SpellAIUtility` that lists known castable spells, checks mana/cooldown/requirements, enumerates valid targets using the existing targeting rules, and scores spell-target pairs. - initial `SpellAIManagerGameComponent` added: registered pawns keep curated spell/intent entries, check known available spells first, gather small priority-ordered target lists by intent, validate spell-target pairs with the existing validator, score validated options against intent-specific cast thresholds with per-pawn hesitation bias, and cast through `SpellCastWarmupUtility.StartOrExecute`
+ - Start with self/ally buffs, direct hostile single-target damage/control, and simple summons. Defer walls, traps/runes, resurrection, long-lived fields, teleport swaps, displacement, chain spells, and large radius attacks until the scorer can reason about collateral risk. - first pass includes hostile, heal-ally, and buff-ally intents only; summons and all area/cell/multi-target behavior remain deferred
+ - Add a small hostile humanlike caster generation hook with settings and debug logging, then validate with one or two MFVanilla spells before opening the whole content set. - initial MFVanilla hook assigns about 20% of hostile `MFV_ElementalistTribe` humanlike pawns 1-3 curated spells from `MF_Firebolt`, `MF_ForcePush`, `MF_Heal`, `MF_Stoneskin`, and `MF_Might`
 
 
 ### MF-040 Splash screen

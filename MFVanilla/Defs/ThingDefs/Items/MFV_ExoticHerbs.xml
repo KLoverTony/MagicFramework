@@ -25,7 +25,7 @@
       <DeteriorationRate>6</DeteriorationRate>
     </statBases>
     <tickerType>Rare</tickerType>
-    <tradeability>Sellable</tradeability>
+    <tradeability>All</tradeability>
     <healthAffectsPrice>false</healthAffectsPrice>
     <comps>
       <li Class="CompProperties_Rottable">

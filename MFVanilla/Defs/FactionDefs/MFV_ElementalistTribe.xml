@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingSetMakerDef>
+    <defName>MFV_ElementalistRaidLootMaker</defName>
+    <root Class="ThingSetMaker_MarketValue">
+      <fixedParams>
+        <filter>
+          <thingDefs>
+            <li>Silver</li>
+            <li>Jade</li>
+            <li>MedicineHerbal</li>
+            <li>Pemmican</li>
+            <li>MFV_ExoticHerbs</li>
+            <li>MFV_GemstoneDust</li>
+            <li>MFV_RawRubyPiece</li>
+            <li>MFV_RawSapphirePiece</li>
+            <li>MFV_RawEmeraldPiece</li>
+            <li>MFV_RawTopazPiece</li>
+          </thingDefs>
+        </filter>
+      </fixedParams>
+    </root>
+  </ThingSetMakerDef>
+
+  <FactionDef ParentName="TribeBase">
+    <defName>MFV_ElementalistTribe</defName>
+    <label>elementalist tribe</label>
+    <description>An old confederation of clans, circles, and shrine-keepers who treat fire, water, earth, and air as the four living obligations of settlement life. They travel between seasonal camps, trade arcane reagents and elemental scrolls, and preserve practical magic through oral schools rather than formal academies.\n\nThey are not a single-element cult. Their strongest circles specialize, but the tribe as a whole values balance: fire for warmth and courage, water for mercy and survival, earth for shelter and memory, and air for motion and warning.</description>
+    <pawnSingular>elementalist</pawnSingular>
+    <pawnsPlural>elementalists</pawnsPlural>
+    <leaderTitle>circle elder</leaderTitle>
+    <factionIconPath>World/WorldObjects/Expanding/Village</factionIconPath>
+    <settlementTexturePath>World/WorldObjects/TribalSettlement</settlementTexturePath>
+    <colorSpectrum>
+      <li>(0.74, 0.18, 0.08)</li>
+      <li>(0.08, 0.32, 0.82)</li>
+      <li>(0.12, 0.55, 0.22)</li>
+      <li>(0.95, 0.66, 0.16)</li>
+    </colorSpectrum>
+    <caravanTraderKinds>
+      <li>MFV_Caravan_ElementalistCircle</li>
+      <li>Caravan_Neolithic_ShamanMerchant</li>
+      <li>Caravan_Neolithic_BulkGoods</li>
+    </caravanTraderKinds>
+    <visitorTraderKinds>
+      <li>Visitor_Neolithic_Standard</li>
+    </visitorTraderKinds>
+    <baseTraderKinds>
+      <li>Base_Neolithic_Standard</li>
+    </baseTraderKinds>
+    <raidLootMaker>MFV_ElementalistRaidLootMaker</raidLootMaker>
+    <disallowedMemes>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Supremacist</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Transhumanist</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Nudism</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Raider</li>
+      <li MayRequire="Ludeon.RimWorld.Ideology">Blindsight</li>
+    </disallowedMemes>
+    <maxConfigurableAtWorldCreation>9999</maxConfigurableAtWorldCreation>
+    <configurationListOrderPriority>35</configurationListOrderPriority>
+  </FactionDef>
+
+</Defs>

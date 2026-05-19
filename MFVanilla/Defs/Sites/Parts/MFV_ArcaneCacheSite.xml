@@ -25,9 +25,34 @@
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
       <li>MFV_ClayAutomaton</li>
+      <li>MFV_FleshGolem</li>
       <li>MFV_RuneSlasherAutomaton</li>
       <li>MFV_CrystalSentinel</li>
     </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_ClayAutomaton</pawnKind>
+        <weight>5</weight>
+        <minThreatPoints>0</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneSlasherAutomaton</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>250</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_FleshGolem</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>400</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_CrystalSentinel</pawnKind>
+        <weight>1</weight>
+        <minThreatPoints>550</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+    </defenderEntries>
     <dressing>
       <li>
         <thingDef>MFV_MagicTorchLamp</thingDef>
@@ -80,10 +105,40 @@
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
       <li>MFV_ClayAutomaton</li>
+      <li>MFV_FleshGolem</li>
       <li>MFV_RuneSlasherAutomaton</li>
       <li>MFV_CrystalSentinel</li>
       <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_ClayAutomaton</pawnKind>
+        <weight>4</weight>
+        <minThreatPoints>0</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneSlasherAutomaton</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>250</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_FleshGolem</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>400</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_CrystalSentinel</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>450</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneBallistaConstruct</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>650</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+    </defenderEntries>
     <dressing>
       <li>
         <thingDef>MFV_MagicTorchLamp</thingDef>
@@ -163,6 +218,31 @@
       <li>MFV_CrystalSentinel</li>
       <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_RuneSlasherAutomaton</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>650</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_CrystalSentinel</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>700</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneBallistaConstruct</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>850</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_DeepIronGolem</pawnKind>
+        <weight>0.35</weight>
+        <minThreatPoints>1400</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+    </defenderEntries>
     <dressing>
       <li>
         <thingDef>MFV_MagicTorchLamp</thingDef>
@@ -204,9 +284,40 @@
     <defenderCount>3</defenderCount>
     <defenderPawnKinds>
       <li>MFV_ClayAutomaton</li>
+      <li>MFV_FleshGolem</li>
       <li>MFV_RuneSlasherAutomaton</li>
       <li>MFV_RuneBallistaConstruct</li>
     </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_ClayAutomaton</pawnKind>
+        <weight>4</weight>
+        <minThreatPoints>0</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneSlasherAutomaton</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>350</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_FleshGolem</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>450</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneBallistaConstruct</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>500</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_CrystalSentinel</pawnKind>
+        <weight>1</weight>
+        <minThreatPoints>800</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+    </defenderEntries>
     <dressing>
       <li>
         <thingDef>MFV_MagicTorchLamp</thingDef>
@@ -250,6 +361,111 @@
   </MFVanilla.Core.ArcaneSiteProfileDef>
 
   <MFVanilla.Core.ArcaneSiteProfileDef>
+    <defName>MFV_RuinedSanctum_Default</defName>
+    <label>ruined arcane sanctum</label>
+    <roomWidth>17</roomWidth>
+    <roomHeight>17</roomHeight>
+    <layoutShape>Circle</layoutShape>
+    <floorDef>TileSandstone</floorDef>
+    <wallStuff>BlocksSandstone</wallStuff>
+    <wallStuffOptions>
+      <li>BlocksSandstone</li>
+      <li>BlocksGranite</li>
+      <li>BlocksLimestone</li>
+      <li>BlocksSlate</li>
+    </wallStuffOptions>
+    <towerWallStuffOptions>
+      <li>BlocksSandstone</li>
+      <li>BlocksLimestone</li>
+    </towerWallStuffOptions>
+    <doorDef>Door</doorDef>
+    <chestThingDef>MFV_ArcaneTreasureChest</chestThingDef>
+    <defenderCount>4</defenderCount>
+    <maxDefenderCount>6</maxDefenderCount>
+    <defenderPawnKinds>
+      <li>MFV_ClayAutomaton</li>
+      <li>MFV_FleshGolem</li>
+      <li>MFV_RuneBallistaConstruct</li>
+      <li>MFV_RuneSlasherAutomaton</li>
+    </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_ClayAutomaton</pawnKind>
+        <weight>4</weight>
+        <minThreatPoints>0</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneBallistaConstruct</pawnKind>
+        <weight>4</weight>
+        <minThreatPoints>500</minThreatPoints>
+        <maxCount>3</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_FleshGolem</pawnKind>
+        <weight>3</weight>
+        <minThreatPoints>550</minThreatPoints>
+        <maxCount>2</maxCount>
+      </li>
+      <li>
+        <pawnKind>MFV_RuneSlasherAutomaton</pawnKind>
+        <weight>2</weight>
+        <minThreatPoints>550</minThreatPoints>
+      </li>
+      <li>
+        <pawnKind>MFV_CrystalSentinel</pawnKind>
+        <weight>1</weight>
+        <minThreatPoints>900</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+    </defenderEntries>
+    <dressing>
+      <li>
+        <thingDef>MFV_MagicTorchLamp</thingDef>
+        <offsetX>5</offsetX>
+        <offsetZ>5</offsetZ>
+      </li>
+      <li>
+        <thingDef>MFV_ArcaneSpire</thingDef>
+        <offsetX>11</offsetX>
+        <offsetZ>11</offsetZ>
+      </li>
+    </dressing>
+    <roomModules>
+      <li>
+        <axis>South</axis>
+        <kind>Antechamber</kind>
+        <width>11</width>
+        <depth>6</depth>
+      </li>
+      <li>
+        <axis>North</axis>
+        <kind>Storage</kind>
+        <width>9</width>
+        <depth>6</depth>
+      </li>
+      <li>
+        <axis>East</axis>
+        <kind>Bedroom</kind>
+        <width>7</width>
+        <depth>7</depth>
+        <distanceFromTower>1</distanceFromTower>
+      </li>
+      <li>
+        <axis>West</axis>
+        <kind>ServantsQuarters</kind>
+        <width>9</width>
+        <depth>6</depth>
+        <distanceFromTower>1</distanceFromTower>
+      </li>
+    </roomModules>
+    <addEntryPath>true</addEntryPath>
+    <entryPathLength>7</entryPathLength>
+    <addExteriorRuin>true</addExteriorRuin>
+    <exteriorRuinCount>22</exteriorRuinCount>
+    <brokenWallCount>18</brokenWallCount>
+  </MFVanilla.Core.ArcaneSiteProfileDef>
+
+  <MFVanilla.Core.ArcaneSiteProfileDef>
     <defName>MFV_ArcaneCache_DeepIronVault</defName>
     <label>deep iron vault</label>
     <roomWidth>15</roomWidth>
@@ -272,6 +488,14 @@
     <defenderPawnKinds>
       <li>MFV_DeepIronGolem</li>
     </defenderPawnKinds>
+    <defenderEntries>
+      <li>
+        <pawnKind>MFV_DeepIronGolem</pawnKind>
+        <weight>1</weight>
+        <minThreatPoints>0</minThreatPoints>
+        <maxCount>1</maxCount>
+      </li>
+    </defenderEntries>
     <dressing>
       <li>
         <thingDef>MFV_MagicTorchLamp</thingDef>
@@ -346,6 +570,25 @@
   </SitePartDef>
 
   <SitePartDef>
+    <defName>MFV_RuinedSanctum</defName>
+    <label>ruined arcane sanctum</label>
+    <description>A collapsed arcane sanctum with broken halls, sealed rooms, and stone guardians.</description>
+    <workerClass>MFVanilla.Core.SitePartWorker_ArcaneCache</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>A ruined arcane sanctum sprawls ahead. Most of its walls are broken, but a few sealed chambers remain guarded.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <wantsThreatPoints>true</wantsThreatPoints>
+    <minThreatPoints>500</minThreatPoints>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MFV_ArcaneCache</li>
+      <li>MFV_RuinedSanctum</li>
+    </tags>
+  </SitePartDef>
+
+  <SitePartDef>
     <defName>MFV_ArcaneCache_Showcase</defName>
     <label>arcane cache showcase</label>
     <description>A debug-only oversized arcane cache that exposes all current modular site pieces.</description>
@@ -401,6 +644,15 @@
     <order>420</order>
     <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
       <profile>MFV_ArcaneCache_DeepIronVault</profile>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>MFV_RuinedSanctum</defName>
+    <linkWithSite>MFV_RuinedSanctum</linkWithSite>
+    <order>420</order>
+    <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
+      <profile>MFV_RuinedSanctum_Default</profile>
     </genStep>
   </GenStepDef>
 

@@ -17,6 +17,21 @@
   </IncidentDef>
 
   <IncidentDef>
+    <defName>MFV_RuinedSanctumMission</defName>
+    <label>ruined arcane sanctum discovered</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>MFVanilla.Core.IncidentWorker_RuinedSanctumMission</workerClass>
+    <baseChance>0.18</baseChance>
+    <earliestDay>22</earliestDay>
+    <minRefireDays>28</minRefireDays>
+    <letterDef>PositiveEvent</letterDef>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+
+  <IncidentDef>
     <defName>MFV_SealedVaultMission</defName>
     <label>sealed arcane vault discovered</label>
     <category>Misc</category>

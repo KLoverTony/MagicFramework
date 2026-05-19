@@ -43,18 +43,38 @@ public sealed class IncidentWorker_SealedVaultMission : IncidentWorker
     }
 }
 
+public sealed class IncidentWorker_RuinedSanctumMission : IncidentWorker
+{
+    protected override bool CanFireNowSub(IncidentParms parms)
+    {
+        return ArcaneCacheMissionUtility.CanCreateRuinedSanctumMission(parms?.target as Map);
+    }
+
+    protected override bool TryExecuteWorker(IncidentParms parms)
+    {
+        Map map = parms?.target as Map;
+        float threatPoints = parms?.points > 0f ? parms.points : ArcaneCacheMissionUtility.RuinedSanctumThreatPoints;
+        return ArcaneCacheMissionUtility.TryCreateRuinedSanctumMission(map, threatPoints, sendLetter: true, out _);
+    }
+}
+
 public static class ArcaneCacheMissionUtility
 {
     public const float DefaultThreatPoints = 300f;
     public const float SealedVaultThreatPoints = 1200f;
+    public const float RuinedSanctumThreatPoints = 600f;
     public const string ArcaneCacheSitePartDefName = "MFV_ArcaneCache";
     public const string SealedVaultSitePartDefName = "MFV_SealedVault";
+    public const string RuinedSanctumSitePartDefName = "MFV_RuinedSanctum";
     private const int MinSiteDistance = 4;
     private const int MaxSiteDistance = 18;
     private const int MinVaultDistance = 8;
     private const int MaxVaultDistance = 24;
+    private const int MinSanctumDistance = 5;
+    private const int MaxSanctumDistance = 20;
     private const int TimeoutTicks = 18 * GenDate.TicksPerDay;
     private const int VaultTimeoutTicks = 28 * GenDate.TicksPerDay;
+    private const int SanctumTimeoutTicks = 22 * GenDate.TicksPerDay;
 
     public static bool CanCreateArcaneCacheMission(Map map)
     {
@@ -64,6 +84,11 @@ public static class ArcaneCacheMissionUtility
     public static bool CanCreateSealedVaultMission(Map map)
     {
         return CanCreateMissionSite(map, SealedVaultSitePartDefName, MinVaultDistance, MaxVaultDistance);
+    }
+
+    public static bool CanCreateRuinedSanctumMission(Map map)
+    {
+        return CanCreateMissionSite(map, RuinedSanctumSitePartDefName, MinSanctumDistance, MaxSanctumDistance);
     }
 
     public static bool TryCreateArcaneCacheMission(Map map, float threatPoints, bool sendLetter, out Site site)
@@ -107,6 +132,27 @@ public static class ArcaneCacheMissionUtility
             "Sealed arcane vault discovered",
             letterText,
             "sealed vault",
+            out site);
+    }
+
+    public static bool TryCreateRuinedSanctumMission(Map map, float threatPoints, bool sendLetter, out Site site)
+    {
+        string letterText =
+            "A half-buried arcane sanctum has been located nearby. Most of its walls have fallen open to the weather, but a few sealed chambers still appear intact.\n\n" +
+            "Stone guardians and lesser automata are stirring among the ruins. There may still be recoverable arcane treasure inside.";
+
+        return TryCreateMissionSite(
+            map,
+            RuinedSanctumSitePartDefName,
+            threatPoints,
+            RuinedSanctumThreatPoints,
+            MinSanctumDistance,
+            MaxSanctumDistance,
+            SanctumTimeoutTicks,
+            sendLetter,
+            "Ruined arcane sanctum discovered",
+            letterText,
+            "ruined sanctum",
             out site);
     }
 
@@ -327,12 +373,14 @@ public sealed class ArcaneSiteProfileDef : Def
     public int defenderCount = 3;
     public int maxDefenderCount = -1;
     public List<PawnKindDef> defenderPawnKinds;
+    public List<ArcaneSiteDefenderEntryDef> defenderEntries;
     public List<ArcaneSiteDressingDef> dressing;
     public List<ArcaneSiteRoomModuleDef> roomModules;
     public bool addEntryPath;
     public int entryPathLength = 6;
     public bool addExteriorRuin;
     public int exteriorRuinCount = 10;
+    public int brokenWallCount;
 }
 
 public enum ArcaneSiteLayoutShape
@@ -363,6 +411,15 @@ public sealed class ArcaneSiteProfileEntryDef
     public float weight = 1f;
     public float minThreatPoints;
     public float maxThreatPoints = float.MaxValue;
+}
+
+public sealed class ArcaneSiteDefenderEntryDef
+{
+    public PawnKindDef pawnKind;
+    public float weight = 1f;
+    public float minThreatPoints;
+    public float maxThreatPoints = float.MaxValue;
+    public int maxCount = -1;
 }
 
 public enum ArcaneSiteAxis
@@ -414,8 +471,9 @@ public sealed class GenStep_ArcaneCache : GenStep
         BuildCacheRoom(map, room, resolvedProfile, towerWallStuff);
         List<CellRect> moduleRooms = BuildRoomModules(map, room, resolvedProfile, outerWallStuff);
         BuildExteriorModules(map, room, resolvedProfile, outerWallStuff);
+        BreakRuinWalls(map, room, moduleRooms, resolvedProfile, siteSeed);
         Thing chest = SpawnCacheChest(map, room.CenterCell, resolvedProfile);
-        List<Pawn> defenders = SpawnDefenders(map, room, resolvedDefenderCount, resolvedProfile);
+        List<Pawn> defenders = SpawnDefenders(map, room, resolvedDefenderCount, resolvedProfile, threatPoints, siteSeed);
         LogDevGeneration(map, parms, resolvedProfile, siteSeed, room, moduleRooms, chest, defenders);
     }
 
@@ -783,6 +841,64 @@ public sealed class GenStep_ArcaneCache : GenStep
         }
     }
 
+    private static void BreakRuinWalls(Map map, CellRect mainRoom, List<CellRect> moduleRooms, ArcaneSiteProfileDef profile, int siteSeed)
+    {
+        int count = Math.Max(0, profile.brokenWallCount);
+        if (count == 0)
+        {
+            return;
+        }
+
+        List<IntVec3> wallCells = new();
+        AddBreakableWallCells(map, mainRoom, profile.layoutShape, wallCells);
+        if (!moduleRooms.NullOrEmpty())
+        {
+            for (int i = 0; i < moduleRooms.Count; i++)
+            {
+                AddBreakableWallCells(map, moduleRooms[i], ArcaneSiteLayoutShape.Rectangle, wallCells);
+            }
+        }
+
+        if (wallCells.Count == 0)
+        {
+            return;
+        }
+
+        ThingDef chunkDef = DefDatabase<ThingDef>.GetNamedSilentFail("ChunkSandstone");
+        for (int i = 0; i < count && wallCells.Count > 0; i++)
+        {
+            int index = StableIndex(siteSeed, (profile.shortHash * 397) ^ (i * 104729), wallCells.Count);
+            IntVec3 cell = wallCells[index];
+            wallCells.RemoveAt(index);
+            ClearWallAt(map, cell);
+            if (chunkDef != null && cell.InBounds(map) && cell.Standable(map))
+            {
+                GenSpawn.Spawn(ThingMaker.MakeThing(chunkDef), cell, map);
+            }
+        }
+    }
+
+    private static void AddBreakableWallCells(Map map, CellRect room, ArcaneSiteLayoutShape layoutShape, List<IntVec3> wallCells)
+    {
+        foreach (IntVec3 cell in room.Cells)
+        {
+            if (!cell.InBounds(map) || !IsWallCell(room, cell, layoutShape))
+            {
+                continue;
+            }
+
+            List<Thing> things = cell.GetThingList(map);
+            for (int i = 0; i < things.Count; i++)
+            {
+                if (things[i]?.def == ThingDefOf.Wall)
+                {
+                    wallCells.Add(cell);
+                    break;
+                }
+            }
+        }
+    }
+
     private static IntVec3 ExteriorRuinCell(CellRect towerRoom, int index)
     {
         int ring = 3 + (index % 4);
@@ -928,10 +1044,75 @@ public sealed class GenStep_ArcaneCache : GenStep
         return count;
     }
 
-    private static List<Pawn> SpawnDefenders(Map map, CellRect room, int count, ArcaneSiteProfileDef profile)
+    private static List<Pawn> SpawnDefenders(Map map, CellRect room, int count, ArcaneSiteProfileDef profile, float threatPoints, int siteSeed)
     {
         List<Pawn> spawned = new();
         Faction faction = Faction.OfMechanoids;
+
+        List<IntVec3> spawnCells = CandidateDefenderCells(room, map, profile.layoutShape);
+        Dictionary<PawnKindDef, int> spawnedByKind = new();
+        for (int i = 0; i < count; i++)
+        {
+            PawnKindDef pawnKindDef = ResolveDefenderPawnKind(profile, threatPoints, siteSeed, i, spawnedByKind);
+            if (pawnKindDef == null || spawnCells.Count == 0)
+            {
+                continue;
+            }
+
+            IntVec3 cell = spawnCells[i % spawnCells.Count];
+            Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawnKindDef, faction));
+            spawned.Add((Pawn)GenSpawn.Spawn(pawn, cell, map));
+            spawnedByKind[pawnKindDef] = spawnedByKind.TryGetValue(pawnKindDef, out int currentCount) ? currentCount + 1 : 1;
+        }
+
+        return spawned;
+    }
+
+    private static PawnKindDef ResolveDefenderPawnKind(
+        ArcaneSiteProfileDef profile,
+        float threatPoints,
+        int siteSeed,
+        int slot,
+        Dictionary<PawnKindDef, int> spawnedByKind)
+    {
+        if (!profile.defenderEntries.NullOrEmpty())
+        {
+            List<ArcaneSiteDefenderEntryDef> eligible = new();
+            float totalWeight = 0f;
+            for (int i = 0; i < profile.defenderEntries.Count; i++)
+            {
+                ArcaneSiteDefenderEntryDef entry = profile.defenderEntries[i];
+                if (entry?.pawnKind == null || entry.weight <= 0f || threatPoints < entry.minThreatPoints || threatPoints > entry.maxThreatPoints)
+                {
+                    continue;
+                }
+
+                if (entry.maxCount > 0 && spawnedByKind.TryGetValue(entry.pawnKind, out int spawnedCount) && spawnedCount >= entry.maxCount)
+                {
+                    continue;
+                }
+
+                eligible.Add(entry);
+                totalWeight += entry.weight;
+            }
+
+            if (eligible.Count > 0 && totalWeight > 0f)
+            {
+                float pick = StableRange(siteSeed, (profile.shortHash * 397) ^ (slot * 7919), totalWeight);
+                float cursor = 0f;
+                for (int i = 0; i < eligible.Count; i++)
+                {
+                    cursor += eligible[i].weight;
+                    if (pick <= cursor)
+                    {
+                        return eligible[i].pawnKind;
+                    }
+                }
+
+                return eligible[eligible.Count - 1].pawnKind;
+            }
+        }
+
         List<PawnKindDef> candidates = profile.defenderPawnKinds;
         if (candidates.NullOrEmpty())
         {
@@ -943,21 +1124,7 @@ public sealed class GenStep_ArcaneCache : GenStep
             };
         }
 
-        List<IntVec3> spawnCells = CandidateDefenderCells(room, map, profile.layoutShape);
-        for (int i = 0; i < count; i++)
-        {
-            PawnKindDef pawnKindDef = candidates[i % candidates.Count];
-            if (pawnKindDef == null || spawnCells.Count == 0)
-            {
-                continue;
-            }
-
-            IntVec3 cell = spawnCells[i % spawnCells.Count];
-            Pawn pawn = PawnGenerator.GeneratePawn(new PawnGenerationRequest(pawnKindDef, faction));
-            spawned.Add((Pawn)GenSpawn.Spawn(pawn, cell, map));
-        }
-
-        return spawned;
+        return candidates[StableIndex(siteSeed, (profile.shortHash * 397) ^ slot, candidates.Count)];
     }
 
     private static List<IntVec3> CandidateDefenderCells(CellRect room, Map map, ArcaneSiteLayoutShape layoutShape)
