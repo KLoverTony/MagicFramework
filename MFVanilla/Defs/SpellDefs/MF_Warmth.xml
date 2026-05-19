@@ -3,10 +3,10 @@
   <MagicFramework.Definitions.SpellDef>
     <defName>MF_Warmth</defName>
     <label>warmth</label>
-    <description>Maintains a gentle warming aura around an allied pawn, protecting them and nearby allies from cold without making them tolerate heat better.</description>
+    <description>Maintains a gentle warming aura around an allied pawn, keeping them and nearby allies comfortable in cold weather without making them tolerate heat better or warming the room.</description>
     <range>16</range>
     <castTimeTicks>30</castTimeTicks>
-    <gizmoIconPath>UI/Gizmos/Spells/MF_FlameField</gizmoIconPath>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Warmth</gizmoIconPath>
 
     <meta>
       <tier>1</tier>
@@ -136,7 +136,7 @@
                 </targetQuery>
                 <actions>
                   <li Class="MagicFramework.Definitions.ApplyStatusEffectActionDef">
-                    <debugLabel>Warmth shared cold protection</debugLabel>
+                    <debugLabel>Warmth shared comfort protection</debugLabel>
                     <statusEffectDef>MFV_Status_WarmthAura</statusEffectDef>
                     <targetSource>CurrentTarget</targetSource>
                     <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>

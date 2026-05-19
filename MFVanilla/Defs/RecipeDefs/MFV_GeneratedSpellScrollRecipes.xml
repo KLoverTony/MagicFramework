@@ -1019,6 +1019,57 @@
     <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Heat</defName>
+    <label>scribe scroll (heat)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast heat.</description>
+    <jobString>Scribing scroll (heat).</jobString>
+    <workAmount>900</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Pyromancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Heat>1</MFV_SpellScroll_MF_Heat>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Heat</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ManaShield</defName>
     <label>scribe scroll (mana shield)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast mana shield.</description>

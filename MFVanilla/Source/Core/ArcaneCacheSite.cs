@@ -3,12 +3,313 @@ using System.Collections.Generic;
 using System.Text;
 using RimWorld;
 using RimWorld.Planet;
+using UnityEngine;
 using Verse;
 
 namespace MFVanilla.Core;
 
 public sealed class SitePartWorker_ArcaneCache : SitePartWorker
 {
+}
+
+public sealed class IncidentWorker_ArcaneCacheMission : IncidentWorker
+{
+    protected override bool CanFireNowSub(IncidentParms parms)
+    {
+        return ArcaneCacheMissionUtility.CanCreateArcaneCacheMission(parms?.target as Map)
+            && !ArcaneCacheMissionUtility.HasActiveMissionSite(ArcaneCacheMissionUtility.ArcaneCacheSitePartDefName);
+    }
+
+    protected override bool TryExecuteWorker(IncidentParms parms)
+    {
+        Map map = parms?.target as Map;
+        float threatPoints = parms?.points > 0f ? parms.points : ArcaneCacheMissionUtility.DefaultThreatPoints;
+        return ArcaneCacheMissionUtility.TryCreateArcaneCacheMission(map, threatPoints, sendLetter: true, out _);
+    }
+}
+
+public sealed class IncidentWorker_SealedVaultMission : IncidentWorker
+{
+    protected override bool CanFireNowSub(IncidentParms parms)
+    {
+        return ArcaneCacheMissionUtility.CanCreateSealedVaultMission(parms?.target as Map);
+    }
+
+    protected override bool TryExecuteWorker(IncidentParms parms)
+    {
+        Map map = parms?.target as Map;
+        float threatPoints = parms?.points > 0f ? parms.points : ArcaneCacheMissionUtility.SealedVaultThreatPoints;
+        return ArcaneCacheMissionUtility.TryCreateSealedVaultMission(map, threatPoints, sendLetter: true, out _);
+    }
+}
+
+public static class ArcaneCacheMissionUtility
+{
+    public const float DefaultThreatPoints = 300f;
+    public const float SealedVaultThreatPoints = 1200f;
+    public const string ArcaneCacheSitePartDefName = "MFV_ArcaneCache";
+    public const string SealedVaultSitePartDefName = "MFV_SealedVault";
+    private const int MinSiteDistance = 4;
+    private const int MaxSiteDistance = 18;
+    private const int MinVaultDistance = 8;
+    private const int MaxVaultDistance = 24;
+    private const int TimeoutTicks = 18 * GenDate.TicksPerDay;
+    private const int VaultTimeoutTicks = 28 * GenDate.TicksPerDay;
+
+    public static bool CanCreateArcaneCacheMission(Map map)
+    {
+        return CanCreateMissionSite(map, ArcaneCacheSitePartDefName, MinSiteDistance, MaxSiteDistance);
+    }
+
+    public static bool CanCreateSealedVaultMission(Map map)
+    {
+        return CanCreateMissionSite(map, SealedVaultSitePartDefName, MinVaultDistance, MaxVaultDistance);
+    }
+
+    public static bool TryCreateArcaneCacheMission(Map map, float threatPoints, bool sendLetter, out Site site)
+    {
+        string letterText =
+            "Your scouts have traced a faint magical signature to an old arcane cache nearby.\n\n" +
+            "The cache appears to contain a sealed arcane treasure chest, but dormant defense constructs still guard the site. " +
+            "Form a caravan and investigate before another traveler claims it.";
+
+        return TryCreateMissionSite(
+            map,
+            ArcaneCacheSitePartDefName,
+            threatPoints,
+            DefaultThreatPoints,
+            MinSiteDistance,
+            MaxSiteDistance,
+            TimeoutTicks,
+            sendLetter,
+            "Arcane cache discovered",
+            letterText,
+            "arcane cache",
+            out site);
+    }
+
+    public static bool TryCreateSealedVaultMission(Map map, float threatPoints, bool sendLetter, out Site site)
+    {
+        string letterText =
+            "A sealed arcane vault has surfaced nearby after its outer wards collapsed.\n\n" +
+            "The vault is likely to contain a grand arcane treasure chest, but old guardian constructs still hold the inner chamber. " +
+            "Reports mention a massive deep-iron sentinel at the vault heart.";
+
+        return TryCreateMissionSite(
+            map,
+            SealedVaultSitePartDefName,
+            threatPoints,
+            SealedVaultThreatPoints,
+            MinVaultDistance,
+            MaxVaultDistance,
+            VaultTimeoutTicks,
+            sendLetter,
+            "Sealed arcane vault discovered",
+            letterText,
+            "sealed vault",
+            out site);
+    }
+
+    private static bool CanCreateMissionSite(Map map, string sitePartDefName, int minDistance, int maxDistance)
+    {
+        if (map == null || map.Tile < 0)
+        {
+            return false;
+        }
+
+        SitePartDef sitePartDef = DefDatabase<SitePartDef>.GetNamedSilentFail(sitePartDefName);
+        if (sitePartDef == null || HasActiveMissionSite(sitePartDefName))
+        {
+            return false;
+        }
+
+        return TileFinder.TryFindNewSiteTile(out _, map.Tile, minDistance, maxDistance);
+    }
+
+    private static bool TryCreateMissionSite(
+        Map map,
+        string sitePartDefName,
+        float threatPoints,
+        float defaultThreatPoints,
+        int minDistance,
+        int maxDistance,
+        int timeoutTicks,
+        bool sendLetter,
+        string letterLabel,
+        string letterText,
+        string logLabel,
+        out Site site)
+    {
+        site = null;
+        if (map == null)
+        {
+            return false;
+        }
+
+        SitePartDef sitePartDef = DefDatabase<SitePartDef>.GetNamedSilentFail(sitePartDefName);
+        if (sitePartDef == null)
+        {
+            Log.Warning($"[MFVanilla] Could not create a {logLabel} mission because {sitePartDefName} SitePartDef was not found.");
+            return false;
+        }
+
+        if (HasActiveMissionSite(sitePartDefName))
+        {
+            return false;
+        }
+
+        if (!TileFinder.TryFindNewSiteTile(out PlanetTile tile, map.Tile, minDistance, maxDistance))
+        {
+            return false;
+        }
+
+        float resolvedThreatPoints = Mathf.Max(sitePartDef.minThreatPoints, threatPoints, defaultThreatPoints);
+        site = SiteMaker.MakeSite(sitePartDef, tile, null, ifHostileThenMustRemainHostile: true, threatPoints: resolvedThreatPoints);
+        if (site == null || site.parts.NullOrEmpty())
+        {
+            return false;
+        }
+
+        Find.WorldObjects.Add(site);
+        Current.Game?.GetComponent<WorldComponent_ArcaneCacheMissions>()?.RegisterMissionSite(site, timeoutTicks);
+
+        if (sendLetter)
+        {
+            SendMissionLetter(site, letterLabel, letterText);
+        }
+
+        if (Prefs.DevMode)
+        {
+            Log.Message($"[MFVanilla] Created {logLabel} mission: tile={tile}, threatPoints={resolvedThreatPoints}, timeoutTicks={timeoutTicks}.");
+        }
+
+        return true;
+    }
+
+    public static bool HasActiveMissionSite(string sitePartDefName)
+    {
+        List<WorldObject> worldObjects = Find.WorldObjects?.AllWorldObjects;
+        if (worldObjects == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < worldObjects.Count; i++)
+        {
+            if (worldObjects[i] is not Site site || site.parts.NullOrEmpty())
+            {
+                continue;
+            }
+
+            for (int j = 0; j < site.parts.Count; j++)
+            {
+                if (site.parts[j]?.def?.defName == sitePartDefName)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static void SendMissionLetter(Site site, string label, string text)
+    {
+        Find.LetterStack.ReceiveLetter(label, text, LetterDefOf.PositiveEvent, new LookTargets(site));
+    }
+}
+
+public sealed class WorldComponent_ArcaneCacheMissions : GameComponent
+{
+    private Dictionary<int, int> missionExpiryTicks = new();
+
+    public WorldComponent_ArcaneCacheMissions(Game game)
+    {
+    }
+
+    public override void GameComponentTick()
+    {
+        if (Find.TickManager.TicksGame % 2500 != 0)
+        {
+            return;
+        }
+
+        CleanupExpiredMissionSites();
+    }
+
+    public override void ExposeData()
+    {
+        Scribe_Collections.Look(ref missionExpiryTicks, "missionExpiryTicks", LookMode.Value, LookMode.Value);
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        {
+            missionExpiryTicks ??= new Dictionary<int, int>();
+        }
+    }
+
+    public void RegisterMissionSite(Site site, int timeoutTicks)
+    {
+        if (site == null)
+        {
+            return;
+        }
+
+        missionExpiryTicks[site.ID] = Find.TickManager.TicksGame + Math.Max(GenDate.TicksPerDay, timeoutTicks);
+    }
+
+    private void CleanupExpiredMissionSites()
+    {
+        if (missionExpiryTicks.NullOrEmpty())
+        {
+            return;
+        }
+
+        List<int> resolvedIds = new();
+        foreach (KeyValuePair<int, int> entry in missionExpiryTicks)
+        {
+            Site site = FindArcaneCacheMissionSite(entry.Key);
+            if (site == null || site.HasMap)
+            {
+                resolvedIds.Add(entry.Key);
+                continue;
+            }
+
+            if (Find.TickManager.TicksGame < entry.Value)
+            {
+                continue;
+            }
+
+            resolvedIds.Add(entry.Key);
+            Find.WorldObjects.Remove(site);
+            Find.LetterStack.ReceiveLetter(
+                "Arcane cache lost",
+                "The magical trace leading to an arcane cache has faded. The site can no longer be located.",
+                LetterDefOf.NeutralEvent);
+        }
+
+        for (int i = 0; i < resolvedIds.Count; i++)
+        {
+            missionExpiryTicks.Remove(resolvedIds[i]);
+        }
+    }
+
+    private static Site FindArcaneCacheMissionSite(int siteId)
+    {
+        List<WorldObject> worldObjects = Find.WorldObjects?.AllWorldObjects;
+        if (worldObjects == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < worldObjects.Count; i++)
+        {
+            if (worldObjects[i] is Site site && site.ID == siteId)
+            {
+                return site;
+            }
+        }
+
+        return null;
+    }
 }
 
 public sealed class ArcaneSiteProfileDef : Def

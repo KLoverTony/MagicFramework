@@ -14,13 +14,61 @@ public static class DebugActions_ArcaneSites
         SpawnSiteNearCurrentMap("MFV_ArcaneCache", "arcane cache site");
     }
 
+    [DebugAction("MFVanilla - Arcane Sites", "Spawn Sealed Vault Site Near Current Map", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void SpawnSealedVaultSiteNearCurrentMap()
+    {
+        SpawnSiteNearCurrentMap("MFV_SealedVault", "sealed vault site", ArcaneCacheMissionUtility.SealedVaultThreatPoints);
+    }
+
+    [DebugAction("MFVanilla - Arcane Sites", "Offer Arcane Cache Mission", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void OfferArcaneCacheMission()
+    {
+        Map map = Find.CurrentMap;
+        if (map == null)
+        {
+            Messages.Message("No current map is available.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (ArcaneCacheMissionUtility.TryCreateArcaneCacheMission(map, ArcaneCacheMissionUtility.DefaultThreatPoints, sendLetter: true, out Site site))
+        {
+            Find.WorldSelector.ClearSelection();
+            Find.WorldSelector.Select(site);
+            Messages.Message($"Offered arcane cache mission at tile {site.Tile}.", MessageTypeDefOf.PositiveEvent, false);
+            return;
+        }
+
+        Messages.Message("Could not offer an arcane cache mission.", MessageTypeDefOf.RejectInput, false);
+    }
+
+    [DebugAction("MFVanilla - Arcane Sites", "Offer Sealed Vault Mission", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
+    public static void OfferSealedVaultMission()
+    {
+        Map map = Find.CurrentMap;
+        if (map == null)
+        {
+            Messages.Message("No current map is available.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (ArcaneCacheMissionUtility.TryCreateSealedVaultMission(map, ArcaneCacheMissionUtility.SealedVaultThreatPoints, sendLetter: true, out Site site))
+        {
+            Find.WorldSelector.ClearSelection();
+            Find.WorldSelector.Select(site);
+            Messages.Message($"Offered sealed vault mission at tile {site.Tile}.", MessageTypeDefOf.PositiveEvent, false);
+            return;
+        }
+
+        Messages.Message("Could not offer a sealed vault mission.", MessageTypeDefOf.RejectInput, false);
+    }
+
     [DebugAction("MFVanilla - Arcane Sites", "Spawn Arcane Cache Showcase Near Current Map", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]
     public static void SpawnArcaneCacheShowcaseNearCurrentMap()
     {
         SpawnSiteNearCurrentMap("MFV_ArcaneCache_Showcase", "arcane cache showcase");
     }
 
-    private static void SpawnSiteNearCurrentMap(string sitePartDefName, string label)
+    private static void SpawnSiteNearCurrentMap(string sitePartDefName, string label, float threatPoints = ArcaneCacheMissionUtility.DefaultThreatPoints)
     {
         Map map = Find.CurrentMap;
         if (map == null)
@@ -42,7 +90,7 @@ public static class DebugActions_ArcaneSites
             return;
         }
 
-        Site site = SiteMaker.MakeSite(sitePartDef, tile, null, ifHostileThenMustRemainHostile: true, threatPoints: 300f);
+        Site site = SiteMaker.MakeSite(sitePartDef, tile, null, ifHostileThenMustRemainHostile: true, threatPoints: threatPoints);
         if (site == null || site.parts.NullOrEmpty())
         {
             Messages.Message($"Failed to create an {label} with a valid site part.", MessageTypeDefOf.RejectInput, false);

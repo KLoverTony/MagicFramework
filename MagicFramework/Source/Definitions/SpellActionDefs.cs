@@ -52,6 +52,20 @@ public sealed class ProceduralFXActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Pushes heat into the room at a chosen spell location.
+/// </summary>
+public sealed class TemperaturePushActionDef : SpellActionDef
+{
+    public SpellEffectLocationSource locationSource = SpellEffectLocationSource.CurrentCell;
+    public float heatEnergy = 8f;
+    public ScalableFloatDef scalableHeatEnergy;
+    public float outdoorHeatFactor = 0.2f;
+    public bool requireRoofedRoom;
+
+    public override SpellActionWorker CreateWorker() => new TemperaturePushActionWorker();
+}
+
+/// <summary>
 /// Schedules child actions to occur after a delay.
 /// </summary>
 public sealed class DelayActionDef : SpellActionDef

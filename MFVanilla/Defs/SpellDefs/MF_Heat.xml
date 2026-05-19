@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Heat</defName>
+    <label>heat</label>
+    <description>Maintains a warming field around a target cell, steadily pushing heat into the room like a magical heater while the caster sustains the spell.</description>
+    <range>18</range>
+    <castTimeTicks>45</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_FlameField</gizmoIconPath>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Fire</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Pyromancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Channelled</li>
+        <li>MF_Tag_WeatherSensitive</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Pyromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>2</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Radius</li>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+      <radius>3.5</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Heat</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Heat cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Heat</debugLabel>
+        <amount>12</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Heat cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Heat sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Heat cast effect</debugLabel>
+            <effectDef>Vaporize_Heatwave</effectDef>
+            <locationSource>CurrentCell</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Heat sustained warming field</debugLabel>
+            <markerThingDef>MF_FlameFieldMarker</markerThingDef>
+            <zoneRadius>3.5</zoneRadius>
+            <pulseIntervalTicks>120</pulseIntervalTicks>
+            <ambientEffectDef>Vaporize_Heatwave</ambientEffectDef>
+            <visualPulseIntervalTicks>240</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>1800</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>1800</baseValue>
+              <perPower>60</perPower>
+              <max>3000</max>
+            </scalableDurationTicks>
+            <failsafeDurationTicks>1980</failsafeDurationTicks>
+            <pulseAtCenter>true</pulseAtCenter>
+            <requiresConcentration>true</requiresConcentration>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenCasterStunned>true</breakWhenCasterStunned>
+            <breakWhenCasterMentalState>true</breakWhenCasterMentalState>
+            <sustainedManaCost>3</sustainedManaCost>
+            <sustainedManaCostIntervalTicks>300</sustainedManaCostIntervalTicks>
+            <pawnAffinity>All</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <maintenance>
+              <profiles>
+                <li>CasterConscious</li>
+              </profiles>
+            </maintenance>
+            <onPulseActions>
+              <li Class="MagicFramework.Definitions.TemperaturePushActionDef">
+                <debugLabel>Heat room warming pulse</debugLabel>
+                <locationSource>CurrentCell</locationSource>
+                <heatEnergy>14</heatEnergy>
+                <scalableHeatEnergy>
+                  <baseValue>14</baseValue>
+                  <perPower>0.5</perPower>
+                  <max>22</max>
+                </scalableHeatEnergy>
+                <outdoorHeatFactor>0.15</outdoorHeatFactor>
+              </li>
+            </onPulseActions>
+            <onBreakActions>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Heat break effect</debugLabel>
+                <effectDef>DustPuff</effectDef>
+                <locationSource>CurrentCell</locationSource>
+                <attachToTarget>false</attachToTarget>
+              </li>
+            </onBreakActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

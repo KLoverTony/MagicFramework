@@ -167,6 +167,57 @@ public sealed class ProceduralFXActionWorker : SpellActionWorker
     }
 }
 
+public sealed class TemperaturePushActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        TemperaturePushActionDef heatDef = actionDef as TemperaturePushActionDef;
+        if (heatDef == null || context?.map == null)
+        {
+            return;
+        }
+
+        IntVec3 cell = ResolveCell(context, heatDef.locationSource);
+        if (!cell.IsValid || !cell.InBounds(context.map))
+        {
+            Log.Warning("[MagicFramework] TemperaturePushActionWorker skipped because the target cell was invalid.");
+            return;
+        }
+
+        Room room = cell.GetRoom(context.map);
+        if (heatDef.requireRoofedRoom && (room == null || room.PsychologicallyOutdoors))
+        {
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Temperature push at {cell} skipped because it was not in a roofed room.");
+            return;
+        }
+
+        float heatEnergy = SpellPowerUtility.ResolveScalableFloat(context, heatDef.heatEnergy, heatDef.scalableHeatEnergy);
+        if (room == null || room.PsychologicallyOutdoors)
+        {
+            heatEnergy *= Mathf.Clamp01(heatDef.outdoorHeatFactor);
+        }
+
+        if (Mathf.Abs(heatEnergy) <= 0.001f)
+        {
+            return;
+        }
+
+        GenTemperature.PushHeat(cell, context.map, heatEnergy);
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Pushed {heatEnergy:0.##} heat energy at {cell}.");
+    }
+
+    private static IntVec3 ResolveCell(SpellContext context, SpellEffectLocationSource locationSource)
+    {
+        return locationSource switch
+        {
+            SpellEffectLocationSource.CurrentTarget => context.currentTarget.Cell,
+            SpellEffectLocationSource.InitialTarget => context.initialTarget.Cell,
+            SpellEffectLocationSource.Caster => context.caster?.Position ?? IntVec3.Invalid,
+            _ => context.currentCell
+        };
+    }
+}
+
 public sealed class DelayActionWorker : SpellActionWorker
 {
     private readonly SpellScheduler scheduler = new();

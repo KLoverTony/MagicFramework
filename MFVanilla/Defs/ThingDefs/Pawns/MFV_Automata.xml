@@ -3,23 +3,88 @@
 
   <ThingDef ParentName="Gun_ChargeLance">
     <defName>MFV_Gun_CrystalLance</defName>
-    <label>crystal lance</label>
-    <description>A focused crystal emitter grown into the frame of an arcane sentinel. It releases a hard, piercing bolt of stored aetheric force.</description>
+    <label>crystal graser</label>
+    <description>A faceted crystal emitter grown into the frame of an arcane sentinel. It releases a sweeping, high-energy beam that burns through armor and shield fields.</description>
     <tradeability>None</tradeability>
     <destroyOnDrop>true</destroyOnDrop>
     <graphicData>
       <texPath>Things/Item/Equipment/WeaponRanged/ChargeLance</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
+    <statBases>
+      <MarketValue>1400</MarketValue>
+      <Mass>4</Mass>
+      <AccuracyTouch>0.60</AccuracyTouch>
+      <AccuracyShort>0.72</AccuracyShort>
+      <AccuracyMedium>0.68</AccuracyMedium>
+      <AccuracyLong>0.55</AccuracyLong>
+      <RangedWeapon_Cooldown>1.9</RangedWeapon_Cooldown>
+    </statBases>
     <weaponTags Inherit="False">
       <li>MFV_CrystalSentinelWeapon</li>
     </weaponTags>
+    <verbs Inherit="False">
+      <li>
+        <verbClass>Verb_ShootBeam</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <warmupTime>1.15</warmupTime>
+        <range>24.9</range>
+        <minRange>3.9</minRange>
+        <beamFullWidthRange>6.9</beamFullWidthRange>
+        <burstShotCount>5</burstShotCount>
+        <showBurstShotStats>false</showBurstShotStats>
+        <beamWidth>5.2</beamWidth>
+        <ticksBetweenBurstShots>22</ticksBetweenBurstShots>
+        <beamDamageDef>Beam</beamDamageDef>
+        <soundCastTail>GunTail_Medium</soundCastTail>
+        <muzzleFlashScale>7</muzzleFlashScale>
+        <soundCastBeam>OrbitalBeamSubtle</soundCastBeam>
+        <beamFleckChancePerTick>0.26</beamFleckChancePerTick>
+        <beamMaxDeviation>1.25</beamMaxDeviation>
+        <beamCurvature>0.55</beamCurvature>
+        <beamMoteDef>MFV_Mote_CrystalGraserBeam</beamMoteDef>
+        <beamChanceToStartFire>0.25</beamChanceToStartFire>
+        <beamChanceToAttachFire>0.20</beamChanceToAttachFire>
+        <beamFireSizeRange>0.25~0.45</beamFireSizeRange>
+        <beamLineFleckDef>Fleck_BeamSpark</beamLineFleckDef>
+        <beamStartOffset>0.65</beamStartOffset>
+        <beamLineFleckChanceCurve>
+          <points>
+            <li>(0, 0)</li>
+            <li>(0.65, 0.3)</li>
+            <li>(1, 0.6)</li>
+          </points>
+        </beamLineFleckChanceCurve>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="MoteBase">
+    <defName>MFV_Mote_CrystalGraserBeam</defName>
+    <thingClass>MoteDualAttached</thingClass>
+    <altitudeLayer>MoteOverhead</altitudeLayer>
+    <drawOffscreen>true</drawOffscreen>
+    <mote>
+      <fadeInTime>0.16</fadeInTime>
+      <fadeOutTime>0.25</fadeOutTime>
+      <solidTime>999999</solidTime>
+      <needsMaintenance>true</needsMaintenance>
+      <rotateTowardsTarget>true</rotateTowardsTarget>
+      <scaleToConnectTargets>true</scaleToConnectTargets>
+      <fadeOutUnmaintained>true</fadeOutUnmaintained>
+    </mote>
+    <graphicData>
+      <texPath>Things/Mote/PowerBeam</texPath>
+      <graphicClass>Graphic_MoteWithAgeSecs</graphicClass>
+      <shaderType>MoteBeam</shaderType>
+      <color>(0.45,0.95,1.0,0.85)</color>
+    </graphicData>
   </ThingDef>
 
   <ThingDef ParentName="NeedleGunBase">
     <defName>MFV_Gun_RuneBallista</defName>
-    <label>rune ballista</label>
-    <description>A rune-cut projectile focus fixed into a heavy construct frame. It casts narrow force-bolts over long distances with unnerving precision.</description>
+    <label>stone hurling core</label>
+    <description>A geomantic core fixed into a stone golem's frame. Before each shot, it tears chunks from the ground and hurls one as a crushing boulder.</description>
     <tradeability>None</tradeability>
     <destroyOnDrop>true</destroyOnDrop>
     <graphicData>
@@ -29,6 +94,36 @@
     <weaponTags Inherit="False">
       <li>MFV_RuneBallistaWeapon</li>
     </weaponTags>
+    <verbs Inherit="False">
+      <li>
+        <verbClass>MFVanilla.Core.Verb_StoneGolemBoulder</verbClass>
+        <hasStandardCommand>true</hasStandardCommand>
+        <defaultProjectile>MFV_Projectile_StoneGolemBoulder</defaultProjectile>
+        <warmupTime>2.8</warmupTime>
+        <range>32.9</range>
+        <soundCast>Stone_Drop</soundCast>
+        <soundCastTail>GunTail_Heavy</soundCastTail>
+        <muzzleFlashScale>6</muzzleFlashScale>
+      </li>
+    </verbs>
+  </ThingDef>
+
+  <ThingDef ParentName="BaseBullet">
+    <defName>MFV_Projectile_StoneGolemBoulder</defName>
+    <label>hurled boulder</label>
+    <graphicData>
+      <texPath>Things/Item/Chunk/ChunkStone</texPath>
+      <graphicClass>Graphic_Random</graphicClass>
+      <drawSize>1.05</drawSize>
+      <color>(116,111,103)</color>
+    </graphicData>
+    <projectile>
+      <damageDef>Blunt</damageDef>
+      <damageAmountBase>22</damageAmountBase>
+      <armorPenetrationBase>0.24</armorPenetrationBase>
+      <stoppingPower>2.4</stoppingPower>
+      <speed>42</speed>
+    </projectile>
   </ThingDef>
 
   <ThingDef ParentName="BaseMechanoidWalker">
@@ -224,7 +319,7 @@
   <ThingDef ParentName="BaseMechanoidWalker">
     <defName>MFV_CrystalSentinel</defName>
     <label>crystal sentinel</label>
-    <description>A narrow guardian automaton built around a charged crystal heart. Its polished focus can lance a target from across a chamber before the sentinel advances.</description>
+    <description>A narrow guardian automaton built around a charged crystal heart. Its polished focus sweeps a burning crystal beam across intruders before the sentinel advances.</description>
     <statBases>
       <MarketValue>1050</MarketValue>
       <MoveSpeed>3.0</MoveSpeed>
@@ -315,15 +410,15 @@
 
   <ThingDef ParentName="BaseMechanoidWalker">
     <defName>MFV_RuneBallistaConstruct</defName>
-    <label>rune-ballista construct</label>
-    <description>A heavy, many-legged construct designed to hold a corridor or vault approach. Its rune-ballista fires slow, precise force-bolts that make open ground dangerous.</description>
+    <label>stone golem</label>
+    <description>A heavy stone guardian designed to hold a corridor or vault approach. It digs chunks from the ground around itself, then hurls the raised stone with crushing force.</description>
     <statBases>
       <MarketValue>900</MarketValue>
-      <MoveSpeed>2.1</MoveSpeed>
-      <ArmorRating_Blunt>0.22</ArmorRating_Blunt>
-      <ArmorRating_Sharp>0.42</ArmorRating_Sharp>
+      <MoveSpeed>2.0</MoveSpeed>
+      <ArmorRating_Blunt>0.34</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.44</ArmorRating_Sharp>
       <ArmorRating_Heat>1.60</ArmorRating_Heat>
-      <PsychicSensitivity>0.40</PsychicSensitivity>
+      <PsychicSensitivity>0.30</PsychicSensitivity>
     </statBases>
     <tools>
       <li>
@@ -382,16 +477,17 @@
 
   <PawnKindDef ParentName="BaseMechanoidKind">
     <defName>MFV_RuneBallistaConstruct</defName>
-    <label>rune-ballista construct</label>
-    <labelPlural>rune-ballista constructs</labelPlural>
+    <label>stone golem</label>
+    <labelPlural>stone golems</labelPlural>
     <race>MFV_RuneBallistaConstruct</race>
-    <combatPower>115</combatPower>
+    <combatPower>145</combatPower>
     <lifeStages>
       <li>
         <bodyGraphicData>
           <texPath>Things/Pawn/Automata/RuneBallistaConstruct</texPath>
           <graphicClass>Graphic_Multi</graphicClass>
           <drawSize>2.25</drawSize>
+          <color>(116,111,103)</color>
           <shadowData>
             <volume>(0.4, 0.8, 0.4)</volume>
           </shadowData>

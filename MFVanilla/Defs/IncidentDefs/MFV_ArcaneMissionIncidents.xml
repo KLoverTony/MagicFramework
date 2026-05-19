@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <IncidentDef>
+    <defName>MFV_ArcaneCacheMission</defName>
+    <label>arcane cache discovered</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>MFVanilla.Core.IncidentWorker_ArcaneCacheMission</workerClass>
+    <baseChance>0.35</baseChance>
+    <earliestDay>8</earliestDay>
+    <minRefireDays>18</minRefireDays>
+    <letterDef>PositiveEvent</letterDef>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+
+  <IncidentDef>
+    <defName>MFV_SealedVaultMission</defName>
+    <label>sealed arcane vault discovered</label>
+    <category>Misc</category>
+    <targetTags>
+      <li>Map_PlayerHome</li>
+    </targetTags>
+    <workerClass>MFVanilla.Core.IncidentWorker_SealedVaultMission</workerClass>
+    <baseChance>0.08</baseChance>
+    <earliestDay>45</earliestDay>
+    <minRefireDays>45</minRefireDays>
+    <letterDef>PositiveEvent</letterDef>
+    <canOccurOnAllPlanetLayers>true</canOccurOnAllPlanetLayers>
+  </IncidentDef>
+
+</Defs>

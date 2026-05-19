@@ -468,6 +468,9 @@ public static class SpellDescriptionUtility
             case ExplosionActionDef explosion:
                 lines.Add("Creates a " + FormatNumber(explosion.radius) + "-cell " + ColorizeDamageLabel(ResolveDefLabel<DamageDef>(explosion.damageDef, "damage")) + " explosion for " + FormatNumber(explosion.damageAmount) + " damage.");
                 break;
+            case TemperaturePushActionDef temperature:
+                lines.Add("Pushes " + FormatNumber(temperature.heatEnergy) + " heat into the target room.");
+                break;
             case ApplyHediffActionDef hediff:
                 lines.Add("Applies " + ResolveDefLabel<HediffDef>(hediff.hediffDef, "a status effect") + DescribeDuration(hediff.durationTicks, hediff.removeAfterDuration) + ".");
                 break;

@@ -327,6 +327,25 @@
   </SitePartDef>
 
   <SitePartDef>
+    <defName>MFV_SealedVault</defName>
+    <label>sealed arcane vault</label>
+    <description>A heavily warded arcane vault guarded by a deep-iron sentinel.</description>
+    <workerClass>MFVanilla.Core.SitePartWorker_ArcaneCache</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>A sealed arcane vault lies ahead. A deep-iron guardian waits near the vault heart.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <wantsThreatPoints>true</wantsThreatPoints>
+    <minThreatPoints>1200</minThreatPoints>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MFV_ArcaneCache</li>
+      <li>MFV_SealedVault</li>
+    </tags>
+  </SitePartDef>
+
+  <SitePartDef>
     <defName>MFV_ArcaneCache_Showcase</defName>
     <label>arcane cache showcase</label>
     <description>A debug-only oversized arcane cache that exposes all current modular site pieces.</description>
@@ -373,6 +392,15 @@
           <minThreatPoints>1200</minThreatPoints>
         </li>
       </profileEntries>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>MFV_SealedVault</defName>
+    <linkWithSite>MFV_SealedVault</linkWithSite>
+    <order>420</order>
+    <genStep Class="MFVanilla.Core.GenStep_ArcaneCache">
+      <profile>MFV_ArcaneCache_DeepIronVault</profile>
     </genStep>
   </GenStepDef>
 

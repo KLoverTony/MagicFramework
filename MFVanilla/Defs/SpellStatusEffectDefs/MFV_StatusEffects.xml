@@ -358,7 +358,7 @@
   <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_Warmth</defName>
     <label>warmth</label>
-    <description>A maintained warming aura is protecting this pawn from cold.</description>
+    <description>A maintained warming aura is keeping this pawn comfortable in cold conditions without increasing heat tolerance.</description>
     <categories>
       <li>buff</li>
       <li>fire</li>
@@ -368,7 +368,7 @@
     <statusCue>
       <hediffDef>MF_GenericSpellStatusCue</hediffDef>
       <label>Warmth</label>
-      <description>A maintained warming aura is protecting this pawn from cold.</description>
+      <description>A maintained warming aura is keeping this pawn comfortable in cold conditions without increasing heat tolerance.</description>
       <severity>0.01</severity>
       <removeOnExpire>true</removeOnExpire>
     </statusCue>
@@ -383,7 +383,7 @@
   <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_WarmthAura</defName>
     <label>warming aura</label>
-    <description>A nearby warming aura is protecting this pawn from cold.</description>
+    <description>A nearby warming aura is keeping this pawn comfortable in cold conditions without increasing heat tolerance.</description>
     <categories>
       <li>buff</li>
       <li>fire</li>
@@ -394,14 +394,14 @@
     <statusCue>
       <hediffDef>MF_GenericSpellStatusCue</hediffDef>
       <label>Warming aura</label>
-      <description>A nearby warming aura is protecting this pawn from cold.</description>
+      <description>A nearby warming aura is keeping this pawn comfortable in cold conditions without increasing heat tolerance.</description>
       <severity>0.01</severity>
       <removeOnExpire>true</removeOnExpire>
     </statusCue>
     <statModifiers>
       <li>
         <statDef>ComfyTemperatureMin</statDef>
-        <offset>-25</offset>
+        <offset>-35</offset>
       </li>
     </statModifiers>
   </MagicFramework.Definitions.SpellStatusEffectDef>

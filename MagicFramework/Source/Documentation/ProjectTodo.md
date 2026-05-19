@@ -54,10 +54,10 @@ Recent public release:
 Completed current slice:
 - MF-044: Leyline Sensitivity now reveals a stable hidden leyline map, supports optional numeric inspection, boosts Arcane Gift pawn mana recovery near strong currents, and gives Arcane Forges a leyline resonance chance to improve enchanted weapon quality.
 - MF-061: Arcane Discipline specialization now gives research projects reward labels, lets Arcane Gift pawns embrace/advance disciplines through a marker ritual, shows discipline in the mana gizmo, optionally enforces discipline spell learning, and requires scroll scribes to know the spell being copied.
+- MF-046: Elemental spell expansion now covers Air Blast, Stoneskin, Extinguish, Deluge, Warmth, and sustained room-warming Heat, with scroll generation and research gates in place.
 
 Next release band - MFVanilla world layer:
-- MF-043: choose the next-release content pillar set and keep research cleanup decisions current
-- MF-046: low-risk elemental spell expansion, prioritizing Deluge, Extinguish, Stoneskin, Air Blast, Heat, and Warmth before larger pathing/summon ideas
+- MF-043: complete a small MFVanilla mission set, starting with normal in-game Arcane Cache generation, and keep research cleanup decisions current
 - MF-045: elemental cultures and themed traders if the world layer needs a stronger trade/faction identity
 
 Following release band - school identity and advanced magic:
@@ -104,11 +104,10 @@ Consideration backlog:
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
 | MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
-| MF-043 | P1 | M | MFVanilla | Plan the next-release MFVanilla content pillar set before final tuning. |
+| MF-043 | P1 | L | MFVanilla | Complete a small next-release MFVanilla mission set, starting with normal in-game Arcane Cache generation. |
 | MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
 | MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
 | MF-045 | P2 | L | MFVanilla | Add elemental tribes, themed traders, and later magic-capable hostile pawns. |
-| MF-046 | P2 | M | MFVanilla | Expand thin elemental schools with new spells and utility effects. |
 | MF-047 | P2 | M | Equipment | Give first enchanted weapons unique MagicFramework-backed features. |
 | MF-051 | P2 | L | Forbidden Lore | Add mind-control magic as a dangerous forbidden school feature. |
 | MF-052 | P2 | L | Illusion | Add illusionary pawns under Illusion research. |
@@ -255,17 +254,24 @@ Success criteria:
 
 ### MF-043 MFVanilla Next-Release Content Pillars
 
-Goal: define the full content shape for the next MFVanilla release before final tuning.
+Goal: make the next MFVanilla release a small, playable mission set that turns existing arcane rewards, encounter maps, and construct defenders into normal in-game opportunities before final economy tuning.
 
-Candidate pillars:
-- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration. - first treasure chest pass shipped; future work should broaden reward sources, higher-tier artifacts, and special-site integration
-- Arcane encounter maps: high-quality mission sites such as arcane caches, ruined sanctums, sealed vaults, leyline ruptures, elemental shrines, and cursed archives.
-- Elemental school completion: fill thin schools, especially water, while adding spells that use existing primitives where possible.
-- Leyline gameplay: make Leyline Sensitivity reveal or use a static per-map leyline map, then later connect nodes to mana, buildings, rituals, or incidents.
-- Elemental cultures: fire, earth, air, and water tribes with themed traders first, and hostile magic pawns later once AI casting exists.
-- Enchanted weapon identity: give each current Arcane Forge weapon a unique special feature rather than only adjusted damage.
-- Arcane material economy: reduce or replace plasteel/component dependency on magical production where a pre-industrial magic economy makes more sense.
-- Advanced school identity: add scoped features for Forbidden Lore, Illusion, Necromancy, Fleshcraft, Planar Magic, Grand Sorcery, Chronomancy, and Soulcraft as separate release-band tasks.
+Selected pillar:
+- Arcane missions: complete a small set of world-map mission opportunities built around `MFV_ArcaneCache` first, then add two lightweight variants that reuse the same deterministic site generation, reward chest, and defender infrastructure.
+
+Mission set:
+- Arcane Cache: the first normal mission path for `MFV_ArcaneCache`; a compact treasure-cache site with construct defenders and an arcane treasure chest. This is currently implemented as a site/gen-step/debug-spawn slice, but still needs a real player-facing quest or incident path.
+- Sealed Vault: a higher-threat cache variant that favors `MFV_ArcaneCache_Sealed` or `MFV_ArcaneCache_DeepIronVault`, uses greater/grand chest rewards, and appears later or at higher storyteller points. - initial `MFV_SealedVault` mission now locks to `MFV_ArcaneCache_DeepIronVault`, uses the grand chest profile, and showcases the Deep Iron Golem as the vault guardian
+- Ruined Sanctum: a lower-to-mid threat exploration variant using the ruined/tower module pieces, lighter defenders, and side-room dressing or minor loot. It can initially share the `MFV_ArcaneCache` site part/profile machinery if separate site identity would add too much first-pass cost.
+
+Non-pillar candidates for this release:
+- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration. - first treasure chest pass shipped; this release should use them through missions rather than reopening the reward system broadly
+- Elemental school completion: mostly complete for the current pass; add only mission-adjacent spell/content fixes if testing exposes a gap
+- Leyline gameplay: keep current Leyline Sensitivity work as a support feature; defer leyline mission sites until the first mission generator is player-facing
+- Elemental cultures: defer tribes/traders unless mission generation needs a source faction or narrative sender
+- Enchanted weapon identity: defer unique weapon mechanics unless mission rewards need a small tuning pass
+- Arcane material economy: defer broad material-cost changes until mission reward pacing is visible
+- Advanced school identity: keep as separate release-band tasks after the world-layer mission loop is proven
 
 Candidate spells:
 - Air: Air Blast, Fly.
@@ -278,15 +284,22 @@ Research audit:
 - decide whether each should receive content in this release, move to a later release, or be removed/hidden until useful
 - ensure research names imply real player-facing outcomes rather than only future intent
 
-Task plan:
-1. Inventory current MFVanilla unlocks by research project: spells, benches, recipes, buildings, items, traders, and settings-visible behavior.
-2. Mark empty or weak projects, especially Leyline Sensitivity and advanced school nodes, with a proposed content role or removal/defer decision.
-3. Pick the next-release pillar set from leylines, elemental spell expansion, elemental cultures, and advanced-school identity work.
-4. Identify which pillar items need new MagicFramework code versus XML/content-only work.
-5. Reorder tuning tasks after content scope is known.
+Effort plan:
+1. Confirm vanilla-friendly mission entry point: choose quest script, incident, or storyteller-driven site opportunity for spawning `MFV_ArcaneCache` in normal gameplay.
+2. Implement the first player-facing Arcane Cache mission path using the existing `SiteMaker`/`SitePartDef`/`GenStepDef` flow; include timeout, threat points, arrival text, and reward extraction expectations. - initial storyteller incident worker now creates `MFV_ArcaneCache` sites, sends a player-facing letter, registers an 18-day expiry, and exposes a debug action for the same mission path
+3. Add mission tuning knobs: minimum days, threat-point bands, distance from colony, repeat cooldown, optional research/progression gate, and dev-mode spawn/log actions for the same path. - initial incident tuning uses earliest day 8, base chance 0.35, 18-day refire, 4-18 tile distance, 300+ threat points, and one-active-cache gating
+4. Split authored mission variants only where needed: normal cache, ruined sanctum, and sealed/deep vault can start as profile-driven variants before receiving separate site parts.
+   - Sealed Vault now has its own site part, linked gen step, incident worker, incident def, 28-day expiry, 8-24 tile distance, earliest day 45, 45-day refire, and debug spawn/offer actions.
+5. Smoke test end to end: quest/incident generation, world site creation, caravan arrival, map generation, construct combat, chest opening, leaving the map, site cleanup, save/load, and repeat generation.
+6. Tune mission frequency and reward tier after several natural-generation tests, then update splash notes and completed-work notes.
+
+Estimated effort:
+- Arcane Cache normal mission generation: `M`. The site already exists, but the natural quest/incident path, tuning gates, and cleanup validation need implementation and in-game testing.
+- Small three-mission set: `L`. Most map generation can be reused, but player-facing scheduling, variant identity, reward/threat tuning, and smoke testing across multiple site profiles raise the effort.
+- Broader mission ecosystem with unique hazards, leyline sites, elemental shrines, cursed archives, and faction senders: `XL`; explicitly deferred until the small set works.
 
 Sequencing note:
-- avoid deep balance work until spell additions, leyline hooks, advanced-school features, and any material-cost philosophy changes have settled enough to see the full economy.
+- avoid deep balance work until the first natural mission path, reward tiering, repeat frequency, and site cleanup behavior are visible in normal play.
 
 ### MF-049 Arcane Encounter Maps And Mission Sites
 
@@ -505,8 +518,8 @@ Goal: fill thin elemental schools and add high-value utility spells that make MF
 Priority spell candidates:
 - Air Blast: implemented in wave 1 as blunt damage plus scalable knockback; upgraded in phase 2 to a cone spell backed by reusable cone target queries.
 - Fly: mobility/terrain bypass fantasy; likely needs careful framework and pathing design before implementation.
-- Heat: targeted warming, heat damage, or room-temperature utility depending on design.
-- Warmth: implemented in phase 2 as a maintained Pyromancy aura that protects the target and nearby allies from cold without improving heat tolerance.
+- Heat: implemented as a sustained Pyromancy utility spell that warms an area like a magical heater.
+- Warmth: implemented in phase 2 as a maintained Pyromancy aura that keeps the target and nearby allies comfortable in cold conditions without improving heat tolerance or warming rooms.
 - Summon Golem: earth summon, likely requiring summon/spawn expansion and a pawn kind.
 - Earthy Grave: earth control spell; possible immobilize, bury, down, slow, or terrain hazard.
 - Stoneskin: implemented in wave 1 as a defensive earth status with armor offsets and movement penalty.
@@ -544,10 +557,17 @@ Cone targeting follow-up:
 
 Warmth follow-up:
 1. Completed: added `MF_Warmth` as a learnable Pyromancy utility spell.
-2. Completed: authored maintained `MFV_Status_Warmth` cold protection for the target using `ComfyTemperatureMin`.
-3. Completed: authored pulsed `MFV_Status_WarmthAura` for nearby allies in a 4-cell radius.
+2. Completed: authored maintained `MFV_Status_Warmth` comfort protection for the target using only `ComfyTemperatureMin`.
+3. Completed: authored pulsed `MFV_Status_WarmthAura` with matching comfort protection for nearby allies in a 4-cell radius.
 4. Completed: generated scroll and scribing recipe coverage.
 5. Future polish: dedicated Warmth icon/visuals and possible shared temperature-aura tuning after in-game testing.
+
+Heat follow-up:
+1. Completed: added `TemperaturePushActionDef` as a reusable framework action that pushes heat into a room at an authored spell location.
+2. Completed: redesigned `MF_Heat` as a learnable sustained Pyromancy utility spell gated behind Pyromancy research.
+3. Completed: authored Heat as a maintained area warming field with upkeep mana, concentration break handling, and pulsed heat output.
+4. Completed: generated scroll and scribing recipe coverage.
+5. Future polish: dedicated Heat icon/visuals and balance tuning after in-game room-temperature testing.
 
 Success criteria:
 - water and earth no longer feel obviously thin
