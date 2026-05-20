@@ -50,6 +50,37 @@ document.addEventListener('DOMContentLoaded', () => {
         MFV_Status_WaterboundSlow: 'MF_Waterbound'
     };
 
+    const formDefaults = {
+        delivery: 'instant',
+        targetShape: 'Single',
+        primaryTargetType: 'PawnOrThing',
+        pawnAffinity: 'All',
+        targetRadius: 3.9,
+        lineLength: 12,
+        coneAngleDegrees: 60,
+        wallLength: 7,
+        maxChains: 5,
+        includePawns: true,
+        includeBuildings: false,
+        includeItems: false,
+        allowSelfTarget: false,
+        useCasterAsTarget: false,
+        requireLineOfSight: false,
+        requireStandableCell: false,
+        requireWalkableCell: false,
+        requireWaterCell: false,
+        requireResurrectableCorpse: false,
+        durationTicks: 600,
+        zoneMarkerDef: 'MF_FlameFieldMarker',
+        pulseIntervalTicks: 60,
+        researchPrerequisite: '',
+        minimumCasterLevel: 0,
+        casterLevelFactor: 1,
+        canBeLearned: true,
+        requireArcaneGift: true,
+        appendSpellSummary: true
+    };
+
     const payloadTypes = {
         damage: {
             title: 'Damage',
@@ -144,6 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pawnAffinity: 'All',
                 includeBuildings: true,
                 includeItems: true,
+                scaledAttributes: ['Damage', 'Radius', 'Cooldown'],
                 payloads: [
                     { type: 'damage', amount: 10, damageDef: 'Flame' }
                 ],
@@ -207,6 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetShape: 'Radius',
                 primaryTargetType: 'Cell',
                 pawnAffinity: 'Foe',
+                scaledAttributes: ['Damage', 'Radius', 'Duration'],
                 payloads: [
                     { type: 'damage', amount: 8, damageDef: 'Flame' }
                 ],
@@ -231,6 +264,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 targetShape: 'Single',
                 primaryTargetType: 'Cell',
                 pawnAffinity: 'Ally',
+                requireWalkableCell: true,
+                scaledAttributes: ['Duration', 'Cooldown'],
                 payloads: [
                     { type: 'summon', pawnKindDef: 'Husky', durationTicks: 2500 }
                 ],
@@ -273,6 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 primaryTargetType: 'Pawn',
                 pawnAffinity: 'Ally',
                 allowSelfTarget: true,
+                scaledAttributes: ['Duration', 'Cooldown'],
                 payloads: [
                     { type: 'status', statusEffectDef: 'MFV_Status_Might', durationTicks: -1 }
                 ],
@@ -281,6 +317,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 cooldownTicks: 360,
                 range: 12,
                 castTimeTicks: 30
+            }
+        },
+        forcefield: {
+            title: 'Force Field',
+            tag: 'Defense',
+            hint: 'Maintains a protective force field on an allied pawn with break rules.',
+            values: {
+                label: 'mana shield',
+                description: 'Wraps an allied pawn in a protective field that blunts incoming damage.',
+                delivery: 'forcefield',
+                targetShape: 'Single',
+                primaryTargetType: 'Pawn',
+                pawnAffinity: 'Ally',
+                allowSelfTarget: true,
+                payloads: [],
+                durationTicks: 1800,
+                manaCost: 25,
+                cooldownTicks: 600,
+                range: 12,
+                castTimeTicks: 45,
+                scaledAttributes: ['Duration', 'Cooldown']
             }
         }
     };
@@ -322,8 +379,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyPattern(patternKey) {
         selectedPattern = patternKey;
         const pattern = patterns[patternKey];
+        Object.entries(formDefaults).forEach(([id, value]) => {
+            if (id !== 'scaledAttributes') setVal(id, value, false);
+        });
+        setScaledAttributes(pattern.values.scaledAttributes || defaultScaledAttributesForPattern(patternKey));
         Object.entries(pattern.values).forEach(([id, value]) => {
-            if (id !== 'payloads') setVal(id, value);
+            if (id !== 'payloads' && id !== 'scaledAttributes') setVal(id, value);
         });
         currentPayloads = clonePayloads(pattern.values.payloads || [{ type: 'damage', amount: 10, damageDef: 'Blunt' }]);
         renderPayloadStack();
@@ -332,6 +393,20 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.toggle('active', button.dataset.pattern === patternKey);
         });
         updatePreview();
+    }
+
+    function defaultScaledAttributesForPattern(patternKey) {
+        if (['heal', 'buff', 'sustained'].includes(patternKey)) return ['Healing', 'Duration', 'Cooldown'];
+        if (patternKey === 'persistentZone') return ['Damage', 'Radius', 'Duration'];
+        if (patternKey === 'summon') return ['Duration', 'Cooldown'];
+        return ['Damage', 'Cooldown'];
+    }
+
+    function setScaledAttributes(values) {
+        const selected = new Set(values || []);
+        document.querySelectorAll('.scaled-attribute').forEach(input => {
+            input.checked = selected.has(input.value);
+        });
     }
 
     function clonePayloads(payloads) {
@@ -553,12 +628,21 @@ document.addEventListener('DOMContentLoaded', () => {
             primaryTargetType: getVal('primaryTargetType'),
             pawnAffinity: getVal('pawnAffinity'),
             targetRadius: getVal('targetRadius'),
+            lineLength: getVal('lineLength'),
+            coneAngleDegrees: getVal('coneAngleDegrees'),
+            wallLength: getVal('wallLength'),
+            maxChains: getVal('maxChains'),
             projectileDef: getVal('projectileDef'),
             includePawns: getVal('includePawns'),
             includeBuildings: getVal('includeBuildings'),
             includeItems: getVal('includeItems'),
             allowSelfTarget: getVal('allowSelfTarget'),
+            useCasterAsTarget: getVal('useCasterAsTarget'),
             requireLineOfSight: getVal('requireLineOfSight'),
+            requireStandableCell: getVal('requireStandableCell'),
+            requireWalkableCell: getVal('requireWalkableCell'),
+            requireWaterCell: getVal('requireWaterCell'),
+            requireResurrectableCorpse: getVal('requireResurrectableCorpse'),
             durationTicks: getVal('durationTicks'),
             zoneMarkerDef: getVal('zoneMarkerDef'),
             pulseIntervalTicks: getVal('pulseIntervalTicks'),
@@ -567,6 +651,13 @@ document.addEventListener('DOMContentLoaded', () => {
             soundDef: getVal('soundDef'),
             manaCost: getVal('manaCost'),
             cooldownTicks: getVal('cooldownTicks'),
+            researchPrerequisite: getVal('researchPrerequisite'),
+            minimumCasterLevel: getVal('minimumCasterLevel'),
+            casterLevelFactor: getVal('casterLevelFactor'),
+            canBeLearned: getVal('canBeLearned'),
+            requireArcaneGift: getVal('requireArcaneGift'),
+            appendSpellSummary: getVal('appendSpellSummary'),
+            scaledAttributes: Array.from(document.querySelectorAll('.scaled-attribute:checked')).map(input => input.value),
             payloads: currentPayloads.map(({ id, ...payload }) => Object.fromEntries(
                 Object.entries(payload).filter(([key]) => !key.startsWith('__custom_'))
             ))
@@ -584,12 +675,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateFieldVisibility(state) {
         const showProjectile = state.delivery === 'projectile';
         const showRadius = state.targetShape === 'Radius' || state.delivery === 'area' || state.delivery === 'persistent';
+        const showLine = state.targetShape === 'Line' || state.targetShape === 'Cone';
+        const showCone = state.targetShape === 'Cone';
+        const showWall = state.targetShape === 'Wall';
+        const showChain = state.targetShape === 'Chain';
         const showZone = state.delivery === 'persistent';
+        const showDuration = ['persistent', 'sustained', 'forcefield'].includes(state.delivery);
         const showImpactFx = ['projectile', 'area', 'persistent'].includes(state.delivery);
 
         setGroupAvailable('targetRadius', showRadius, 'Radius is only used by radius, burst, and persistent-zone targeting.');
+        setGroupAvailable('lineLength', showLine, 'Line Length is only used by Line and Cone targeting.');
+        setGroupAvailable('coneAngleDegrees', showCone, 'Cone Angle is only used by Cone targeting.');
+        setGroupAvailable('wallLength', showWall, 'Wall Length is only used by Wall targeting.');
+        setGroupAvailable('maxChains', showChain, 'Max Chains is only used by Chain targeting.');
         setGroupAvailable('projectileDef', showProjectile, 'Projectile defs are only used when delivery is Projectile.');
-        setGroupAvailable('durationTicks', showZone || state.delivery === 'sustained', 'Effect Duration is used by persistent zones and sustained links. Payload-specific durations live inside payload cards.');
+        setGroupAvailable('durationTicks', showDuration, 'Effect Duration is used by persistent zones, sustained links, and force fields. Payload-specific durations live inside payload cards.');
         setGroupAvailable('zoneMarkerDef', showZone, 'Zone Marker Def is only used by Persistent Zone delivery.');
         setGroupAvailable('pulseIntervalTicks', showZone, 'Pulse Interval is only used by Persistent Zone delivery.');
         setGroupAvailable('impactEffectDef', showImpactFx, 'Impact effects are used by projectile, area burst, and persistent zone patterns.');
@@ -607,6 +707,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function payloadDisabledReason(type, state) {
+        if (state.delivery === 'forcefield') {
+            return 'Force Field authors ApplyForceFieldActionDef directly; payload stacks are not used for this pattern.';
+        }
+
         if (state.delivery === 'sustained' && type !== 'status') {
             return 'Sustained Link currently authors one maintained status payload; use Instant or Projectile for mixed payload stacks.';
         }
@@ -654,7 +758,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="summary-section">
                 <h3>Targeting</h3>
                 <p>${escapeHtml(state.targetShape)} ${escapeHtml(state.primaryTargetType)} within <strong>${escapeHtml(state.range)}</strong> cells. Pawn affinity: <strong>${escapeHtml(state.pawnAffinity)}</strong>.</p>
-                <p class="muted">${state.requireLineOfSight ? 'Requires line of sight.' : 'Ignores line of sight.'} ${state.allowSelfTarget ? 'Self targeting is allowed.' : 'Self targeting is blocked.'}</p>
+                <p class="muted">${state.requireLineOfSight ? 'Requires line of sight.' : 'Ignores line of sight.'} ${state.useCasterAsTarget ? 'Uses caster as the target.' : (state.allowSelfTarget ? 'Self targeting is allowed.' : 'Self targeting is blocked.')} ${cellGateSummary(state)}</p>
             </div>
             <div class="summary-section">
                 <h3>Action Tree</h3>
@@ -663,8 +767,27 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="summary-section">
                 <h3>Cost</h3>
                 <p><strong>${escapeHtml(state.manaCost)}</strong> mana, <strong>${escapeHtml(state.cooldownTicks)}</strong> tick cooldown, <strong>${escapeHtml(state.castTimeTicks)}</strong> tick cast time.</p>
+                <p class="muted">${learningSummary(state)} ${state.scaledAttributes.length ? `Scales: ${escapeHtml(state.scaledAttributes.join(', '))}.` : 'No lightweight scaling selected.'}</p>
             </div>
         `;
+    }
+
+    function cellGateSummary(state) {
+        const gates = [];
+        if (state.requireStandableCell) gates.push('standable');
+        if (state.requireWalkableCell) gates.push('walkable');
+        if (state.requireWaterCell) gates.push('water');
+        if (state.requireResurrectableCorpse) gates.push('resurrectable corpse');
+        return gates.length ? `Requires ${gates.join(', ')} targeting.` : '';
+    }
+
+    function learningSummary(state) {
+        if (!state.canBeLearned) return 'Not learnable by normal spell learning.';
+        const gates = [];
+        if (state.requireArcaneGift) gates.push('Arcane Gift');
+        if (Number(state.minimumCasterLevel) > 0) gates.push(`caster level ${state.minimumCasterLevel}`);
+        if (state.researchPrerequisite) gates.push(state.researchPrerequisite);
+        return gates.length ? `Learning gates: ${escapeHtml(gates.join(', '))}.` : 'No learning gates.';
     }
 
     function describeFlow(state) {
@@ -699,6 +822,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 `Apply sustained payload: ${sustainedPayload}.`
             ];
         }
+        if (state.delivery === 'forcefield') {
+            return [
+                `Apply a force field to the current target for up to <strong>${escapeHtml(state.durationTicks)}</strong> ticks.`,
+                `Break when the caster is downed${state.requireLineOfSight ? ', line of sight is lost,' : ''} or the target leaves <strong>${escapeHtml(state.range)}</strong> cells.`,
+                `Use field impact and sustain visuals from the framework defaults.`
+            ];
+        }
         return [
             `Play effect <strong>${escapeHtml(state.castEffectDef)}</strong>.`,
             `Apply payload directly to the current target: ${payload}.`
@@ -713,15 +843,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function buildXml(state) {
+        const description = buildDescription(state);
         return `<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
   <MagicFramework.Definitions.SpellDef>
     <defName>${xml(state.defName)}</defName>
     <label>${xml(state.label)}</label>
-    <description>${xml(state.description)}</description>
+    <description>${xml(description)}</description>
     <range>${xml(state.range)}</range>
     <castTimeTicks>${xml(state.castTimeTicks)}</castTimeTicks>
     <gizmoIconPath>${xml(state.gizmoIconPath)}</gizmoIconPath>
+
+${buildLearningXml(state)}
+${buildPowerXml(state)}
 
     <targeting>
       <shape>${xml(state.targetShape)}</shape>
@@ -731,8 +865,13 @@ document.addEventListener('DOMContentLoaded', () => {
       <includeBuildings>${state.includeBuildings}</includeBuildings>
       <includeItems>${state.includeItems}</includeItems>
       <allowSelfTarget>${state.allowSelfTarget}</allowSelfTarget>
+      <useCasterAsTarget>${state.useCasterAsTarget}</useCasterAsTarget>
       <requireLineOfSight>${state.requireLineOfSight}</requireLineOfSight>
-      <range>${xml(state.range)}</range>${state.targetShape === 'Radius' ? `\n      <radius>${xml(state.targetRadius)}</radius>` : ''}
+      <requireStandableCell>${state.requireStandableCell}</requireStandableCell>
+      <requireWalkableCell>${state.requireWalkableCell}</requireWalkableCell>
+      <requireWaterCell>${state.requireWaterCell}</requireWaterCell>
+      <requireResurrectableCorpse>${state.requireResurrectableCorpse}</requireResurrectableCorpse>
+      <range>${xml(state.range)}</range>${targetShapeXml(state)}
     </targeting>
 
     <requirements>
@@ -761,6 +900,63 @@ document.addEventListener('DOMContentLoaded', () => {
     </actions>
   </MagicFramework.Definitions.SpellDef>
 </Defs>`;
+    }
+
+    function buildDescription(state) {
+        const description = state.description || '';
+        if (!state.appendSpellSummary || description.includes('{MF:SpellSummary}')) {
+            return description;
+        }
+        return `${description}\n\n{MF:SpellSummary}`;
+    }
+
+    function buildLearningXml(state) {
+        if (!state.canBeLearned) {
+            return `    <learning>
+      <canBeLearned>false</canBeLearned>
+    </learning>`;
+        }
+
+        const requirements = [];
+        if (state.requireArcaneGift) {
+            requirements.push('      <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />');
+        }
+        if (Number(state.minimumCasterLevel) > 0) {
+            requirements.push(`      <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+        <minimumLevel>${xml(state.minimumCasterLevel)}</minimumLevel>
+      </li>`);
+        }
+
+        return `    <learning>
+      <canBeLearned>${state.canBeLearned}</canBeLearned>${state.researchPrerequisite ? `
+      <researchPrerequisites>
+        <li>${xml(state.researchPrerequisite)}</li>
+      </researchPrerequisites>` : ''}${requirements.length ? `
+      <requirements>
+${requirements.join('\n')}
+      </requirements>` : ''}
+    </learning>`;
+    }
+
+    function buildPowerXml(state) {
+        if (!state.scaledAttributes.length && Number(state.casterLevelFactor) <= 0) {
+            return '';
+        }
+        return `    <power>
+      <casterLevelFactor>${xml(state.casterLevelFactor)}</casterLevelFactor>${state.scaledAttributes.length ? `
+      <scaledAttributes>
+${state.scaledAttributes.map(attribute => `        <li>${xml(attribute)}</li>`).join('\n')}
+      </scaledAttributes>` : ''}
+    </power>`;
+    }
+
+    function targetShapeXml(state) {
+        if (state.targetShape === 'Radius') return `\n      <radius>${xml(state.targetRadius)}</radius>`;
+        if (state.targetShape === 'Line') return `\n      <lineLength>${xml(state.lineLength)}</lineLength>`;
+        if (state.targetShape === 'Cone') return `\n      <lineLength>${xml(state.lineLength)}</lineLength>\n      <coneAngleDegrees>${xml(state.coneAngleDegrees)}</coneAngleDegrees>`;
+        if (state.targetShape === 'Wall') return `\n      <wallLength>${xml(state.wallLength)}</wallLength>`;
+        if (state.targetShape === 'Chain') return `\n      <maxChains>${xml(state.maxChains)}</maxChains>`;
+        return '';
     }
 
     function buildActionsXml(state, level) {
@@ -849,6 +1045,20 @@ ${payloadsXml(state.payloads, state, level + 3)}
         <breakWhenCasterDowned>true</breakWhenCasterDowned>
         <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
         <breakWhenLineOfSightLost>${state.requireLineOfSight}</breakWhenLineOfSightLost>
+      </li>`;
+        }
+
+        if (state.delivery === 'forcefield') {
+            return `
+      <li Class="MagicFramework.Definitions.ApplyForceFieldActionDef">
+        <debugLabel>${xml(cap(state.label))} force field</debugLabel>
+        <targetSource>CurrentTarget</targetSource>
+        <maxDurationTicks>${xml(state.durationTicks)}</maxDurationTicks>
+        <maxRange>${xml(state.range)}</maxRange>
+        <breakWhenCasterDowned>true</breakWhenCasterDowned>
+        <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+        <breakWhenLineOfSightLost>${state.requireLineOfSight}</breakWhenLineOfSightLost>
+        <damageFactor>0.5</damageFactor>
       </li>`;
         }
 

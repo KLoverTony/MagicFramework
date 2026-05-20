@@ -33,6 +33,7 @@ Current release hygiene checklist:
 - Run clean builds for changed assemblies before copying to the local RimWorld mod folders.
 - Smoke test the first-party validation spells that cover the stable authoring surface: projectile, explosion, heal, regeneration, chain, teleport/displacement, maintained shield, sustained stat buff, area aura, terrain patch, summon, rune/trap, and generated spell details.
 - Smoke test MFVanilla progression after production-tree changes: research gates, workbenches, Arcane Ink, parchment/papyrus, gemstones, generated scroll recipes, scroll learning, spell details, and settings.
+- Smoke test Elementalist caravan/trader generation and buy/sell behavior after the MF-045 first pass.
 - Smoke test AeternusFaith before release: ideology load, ritual circles/rooms, lecterns, skeleton rite, ossuary rite, spectre rite, undead cleanup, save/load, and small-screen ritual dialogs.
 - Capture any remaining known issues as post-release notes unless they affect startup, save/load, cleanup, or first-party usability.
 - Update modversion label in about.xml files commensurate with developmental progress.
@@ -48,17 +49,23 @@ Release gate for every band:
 - XML load check and focused in-game smoke tests for changed systems
 - known issues moved into post-release notes unless they affect startup, save/load, cleanup, or basic usability
 
-Recent public release:
+Current release candidate:
+- MFVanilla 0.8 / MagicFramework 1.3: MFVanilla world-layer mission release with Arcane Cache, Ruined Sanctum, and Sealed Vault opportunities; Leyline Sensitivity gameplay; Arcane Discipline rituals; elemental spell expansion; deterministic site generation; and updated splash notes.
+
+Previous public release:
 - MFVanilla 0.7 / MagicFramework 1.2: production loop, Arcane Forge first weapon set, enchanted weapon identities, arcane treasure chests, arcane cache sites, automata/construct defenders, and updated splash notes.
 
 Completed current slice:
 - MF-044: Leyline Sensitivity now reveals a stable hidden leyline map, supports optional numeric inspection, boosts Arcane Gift pawn mana recovery near strong currents, and gives Arcane Forges a leyline resonance chance to improve enchanted weapon quality.
 - MF-061: Arcane Discipline specialization now gives research projects reward labels, lets Arcane Gift pawns embrace/advance disciplines through a marker ritual, shows discipline in the mana gizmo, optionally enforces discipline spell learning, and requires scroll scribes to know the spell being copied.
 - MF-046: Elemental spell expansion now covers Air Blast, Stoneskin, Extinguish, Deluge, Warmth, and sustained room-warming Heat, with scroll generation and research gates in place.
+- MF-045: Elementalist tribe first pass now adds one broad faction, an Elementalist caravan trader, mixed elemental trade stock, faction flavor, rare hostile spell-capable pawns, and visually readable themed caster garb.
 
 Next release band - MFVanilla world layer:
-- MF-043: release-polish the small MFVanilla mission set now that Arcane Cache, Sealed Vault, and Ruined Sanctum form an adequate next-release pillar
-- MF-045: plan one broad Elementalist tribe and themed traders for a later world-identity pass, rather than four thin elemental factions
+- MF-043 is the release target: smoke test and tune the implemented Arcane Cache, Ruined Sanctum, and Sealed Vault incident/site loop.
+- MF-050 is supporting polish: verify automata and Deep Iron Golem site combat, textures, drops, and readable construct identity.
+- MF-041 and MF-047 are supporting polish only if they affect mission rewards or release presentation: weapon textures, inspect text, special-feature smoke tests, and balance.
+- Completed support systems in this band need validation rather than expansion: MF-044 leylines, MF-045 Elementalist traders, MF-046 elemental spells, and MF-061 Arcane Discipline.
 
 Following release band - school identity and advanced magic:
 - MF-051: mind control under Forbidden Lore
@@ -92,7 +99,7 @@ Consideration backlog:
 | MF-010 | P2 | M | Buffs | Add richer buff/debuff primitives where content proves repeated authoring pain. |
 | MF-014 | P2 | M | Summons | Extend summon/spawn primitives beyond temporary trained creatures. |
 | MF-016 | P2 | S | UI | Polish generated spell details and active modifier presentation. |
-| MF-031 | P2 | L | Docs | Write a full MagicFramework spell design guide from the released surface. |
+| MF-031 | P2 | L | Docs | Expand the drafted MagicFramework spell design guide into full tutorial/reference coverage. |
 | MF-021 | P3 | L | AeternusFaith | Add pseudo-relationship memory for raised undead. |
 | MF-012 | P3 | L | Chains | Generalize delayed branching chain support. |
 | MF-023 | P3 | L | AeternusFaith | Build custom wall atlas and auto-joining support. |
@@ -104,13 +111,12 @@ Consideration backlog:
 | MF-030 | P3 | M | World state | Consider persistent world-object representations for more spells. |
 | MF-032 | P3 | S | Compatibility | Gate mechanisms that would not be supported in multiplayer mods. |
 | MF-036 | P3 | L | AI | Review spells and evaluate if the hostile pawn AI can be empowered to use magic spells they have available. |
-| MF-041 | P1 | M | MFVanilla | Finish and release-tune the Arcane Forge production item. |
-| MF-043 | P1 | L | MFVanilla | Release-polish the small Arcane Cache, Sealed Vault, and Ruined Sanctum mission set. |
-| MF-049 | P1 | XL | MFVanilla | Build arcane encounter maps and mission sites as a high-quality content pillar. |
+| MF-041 | P1 | S | MFVanilla | Decide whether the first Arcane Forge weapon set needs custom textures before release. |
+| MF-043 | P1 | L | MFVanilla | Smoke test and release-polish the Arcane Cache, Sealed Vault, and Ruined Sanctum mission set. |
+| MF-049 | P2 | XL | MFVanilla | Extend arcane encounter maps beyond the current three-site release pillar. |
 | MF-049B | P2 | XL | MFVanilla | Build a deterministic connected-room arcane ruin generator for future mission-site families. |
-| MF-050 | P1 | L | MFVanilla | Create arcane construct enemies by rebranding mechanoid combat roles as golems and automata. |
-| MF-045 | P2 | L | MFVanilla | Add one broad Elementalist tribe with themed traders, internal elemental roles, and later magic-capable hostile pawns. |
-| MF-047 | P2 | M | Equipment | Give first enchanted weapons unique MagicFramework-backed features. |
+| MF-050 | P1 | M | MFVanilla | Release-polish arcane construct enemies, especially textures, site testing, and tuning. |
+| MF-047 | P2 | S | Equipment | Polish and smoke test first enchanted weapon special features, including inspect text, art details, and balance. |
 | MF-051 | P2 | L | Forbidden Lore | Add mind-control magic as a dangerous forbidden school feature. |
 | MF-052 | P2 | L | Illusion | Add illusionary pawns under Illusion research. |
 | MF-053 | P2 | L | Necromancy | Add undead pawns under Necromancy research. |
@@ -121,7 +127,6 @@ Consideration backlog:
 | MF-058 | P2 | XL | Soulcraft | Add lichdom under Soulcraft research. |
 | MF-059 | P2 | M | AeternusFaith | Add decorative and religious statues. |
 | MF-060 | P3 | S | Content | Consider paintings as decoration and platinum as a trade good. |
-| MF-061 | P2 | L | MFVanilla | Add optional Arcane Discipline specialization for Arcane Gift pawns, including research-tree unlock labels, an embrace ritual, spell eligibility gating, settings support, and pawn mana-bar display text. |
 
 ## P1 Release And Content Priorities
 
@@ -181,11 +186,13 @@ Status:
 - Partially superseded by follow-up tasks. Arcane treasure chests were promoted into MF-042 and are complete for the current release pass.
 - Arcane Forge first-edition weapon work is tracked by MF-041.
 - Encounter maps and construct enemies are tracked by MF-049 and MF-050.
+- Current cleanup pass removed completed MF-045, MF-046, and MF-061 work from the active index; their remaining concerns are now release hygiene or future follow-up tasks.
 - This item remains open as a planning and cleanup bucket, especially for research nodes and stale documentation that no longer match live content.
 
 Next-release content direction:
 - Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
-- Treat elemental tribes, leyline maps, school expansion, and special enchanted weapon behavior as major candidate pillars for upcoming releases, depending on implementation scope.
+- Treat completed elemental tribes, leyline maps, and school expansion as release-polish surfaces unless testing exposes concrete follow-up tasks.
+- Treat special enchanted weapon behavior as mostly implemented first-pass content; remaining work should focus on inspect text, smoke testing, art details, and balance.
 - Audit research fields with no current application. Either attach real content to them or remove/hide them until they have a purpose.
 - Reconsider plasteel/component costs on arcane benches and infrastructure after the content set is known. Prefer magical, pre-industrial, or trade-economy materials where they preserve meaningful scarcity.
 - Bring `Mods/MFVanilla/Documentation/ModPlan.md` back in sync with live XML before treating it as authoritative; it still references removed or renamed research nodes such as old runic/infrastructure planning.
@@ -258,7 +265,13 @@ Success criteria:
 
 Goal: make the next MFVanilla release a small, playable mission set that turns existing arcane rewards, encounter maps, and construct defenders into normal in-game opportunities before final economy tuning.
 
-Release posture: adequate for the next MFVanilla release if focused smoke tests remain clean. Do not expand this slice into the larger connected-room generator, hazard ecosystem, faction sender system, or elemental tribe work before release.
+Release posture: implementation-complete enough for the next MFVanilla release if focused smoke tests remain clean. Do not expand this slice into the larger connected-room generator, hazard ecosystem, faction sender system, or elemental tribe work before release.
+
+Current band target:
+- Prove the implemented natural incidents create usable world sites at appropriate campaign timings.
+- Smoke test Arcane Cache, Ruined Sanctum, and Sealed Vault end to end: incident letter, world site creation, caravan travel, map generation, construct combat, chest reward, leaving the map, expiry/site cleanup, save/load, and repeat generation.
+- Tune only release-facing values: base chance, earliest day, refire days, distance bands, threat points, defender mix, reward tier, mission text, and splash/update notes.
+- Treat new site families, connected-room generation, active hazards, faction senders, leyline sites, elemental shrines, and cursed archives as later MF-049/MF-049B work.
 
 Selected pillar:
 - Arcane missions: complete a small set of world-map mission opportunities built around `MFV_ArcaneCache` first, then add two lightweight variants that reuse the same deterministic site generation, reward chest, and defender infrastructure.
@@ -268,55 +281,45 @@ Mission set:
 - Sealed Vault: a higher-threat cache variant that favors `MFV_ArcaneCache_Sealed` or `MFV_ArcaneCache_DeepIronVault`, uses greater/grand chest rewards, and appears later or at higher storyteller points. - initial `MFV_SealedVault` mission now locks to `MFV_ArcaneCache_DeepIronVault`, uses the grand chest profile, and showcases the Deep Iron Golem as the vault guardian
 - Ruined Sanctum: a lower-to-mid threat exploration variant using the ruined/tower module pieces, lighter defenders, and side-room dressing or minor loot. - initial `MFV_RuinedSanctum` mission now uses a larger dedicated profile with side rooms, heavy exterior ruins, broken wall gaps, stone golem-focused defenders, its own incident, and debug spawn/offer actions
 
-Non-pillar candidates for this release:
-- Arcane loot and rewards: treasure chests, rare finds, quest rewards, and loot table integration. - first treasure chest pass shipped; this release should use them through missions rather than reopening the reward system broadly
-- Elemental school completion: mostly complete for the current pass; add only mission-adjacent spell/content fixes if testing exposes a gap
-- Leyline gameplay: keep current Leyline Sensitivity work as a support feature; defer leyline mission sites until the first mission generator is player-facing
-- Elemental cultures: defer tribes/traders unless mission generation needs a source faction or narrative sender
-- Enchanted weapon identity: defer unique weapon mechanics unless mission rewards need a small tuning pass
-- Arcane material economy: defer broad material-cost changes until mission reward pacing is visible
-- Advanced school identity: keep as separate release-band tasks after the world-layer mission loop is proven
-
-Candidate spells:
-- Air: Air Blast, Fly.
-- Fire/heat: Heat, Warmth.
-- Earth: Summon Golem, Earthy Grave, Stoneskin.
-- Water: Deluge, Extinguish.
-
-Research audit:
-- identify research projects with no current unlocks or gameplay effect
-- decide whether each should receive content in this release, move to a later release, or be removed/hidden until useful
-- ensure research names imply real player-facing outcomes rather than only future intent
+Out of scope for this band:
+- Arcane loot/reward system expansion; the current arcane treasure chest pass should be validated through missions rather than reopened broadly.
+- New elemental school spells; MF-046 is complete for this release and future ideas such as Fly, Summon Golem, and Earthy Grave should become later school-identity tasks.
+- New leyline mission sites or leyline incident hooks; MF-044 should only be smoke tested as a support feature.
+- New Elementalist faction behavior; MF-045 only needs trader/caravan smoke testing unless testing exposes a release blocker.
+- New enchanted weapon mechanics; MF-047 should stay to inspect text, art details, weapon-special validation, and balance.
+- Broad research-tree redesign; only fix misleading or broken unlocks that affect this release.
 
 Effort plan:
-1. Confirm vanilla-friendly mission entry point: choose quest script, incident, or storyteller-driven site opportunity for spawning `MFV_ArcaneCache` in normal gameplay.
+1. Confirm vanilla-friendly mission entry point: choose quest script, incident, or storyteller-driven site opportunity for spawning `MFV_ArcaneCache` in normal gameplay. - done through natural `IncidentDef`/`IncidentWorker` mission entries for Arcane Cache, Ruined Sanctum, and Sealed Vault
 2. Implement the first player-facing Arcane Cache mission path using the existing `SiteMaker`/`SitePartDef`/`GenStepDef` flow; include timeout, threat points, arrival text, and reward extraction expectations. - initial storyteller incident worker now creates `MFV_ArcaneCache` sites, sends a player-facing letter, registers an 18-day expiry, and exposes a debug action for the same mission path
 3. Add mission tuning knobs: minimum days, threat-point bands, distance from colony, repeat cooldown, optional research/progression gate, and dev-mode spawn/log actions for the same path. - initial incident tuning uses earliest day 8, base chance 0.35, 18-day refire, 4-18 tile distance, 300+ threat points, and one-active-cache gating
 4. Split authored mission variants only where needed: normal cache, ruined sanctum, and sealed/deep vault can start as profile-driven variants before receiving separate site parts.
    - Sealed Vault now has its own site part, linked gen step, incident worker, incident def, 28-day expiry, 8-24 tile distance, earliest day 45, 45-day refire, and debug spawn/offer actions.
    - Arcane site profiles now support weighted, threat-gated defender entries with per-kind caps, so automata count and type vary with game progress while keeping each generated site deterministic.
    - Ruined Sanctum now has its own site part, linked gen step, incident worker, incident def, 22-day expiry, 5-20 tile distance, earliest day 22, 28-day refire, and reusable broken-wall generation for ruined profiles.
-5. Smoke test end to end: quest/incident generation, world site creation, caravan arrival, map generation, construct combat, chest opening, leaving the map, site cleanup, save/load, and repeat generation.
+5. Smoke test end to end: incident generation, world site creation, caravan arrival, map generation, construct combat, chest opening, leaving the map, site cleanup, save/load, and repeat generation.
 6. Tune mission frequency and reward tier after several natural-generation tests, then update splash notes and completed-work notes.
 
 Estimated effort:
-- Arcane Cache normal mission generation: `M`. The site already exists, but the natural quest/incident path, tuning gates, and cleanup validation need implementation and in-game testing.
-- Small three-mission set: `L`. Most map generation can be reused, but player-facing scheduling, variant identity, reward/threat tuning, and smoke testing across multiple site profiles raise the effort.
-- Broader mission ecosystem with unique hazards, leyline sites, elemental shrines, cursed archives, and faction senders: `XL`; explicitly deferred until the small set works.
+- Arcane Cache natural mission path: implemented; remaining effort is smoke testing, frequency tuning, reward/threat tuning, and cleanup validation.
+- Small three-mission set: current release target. The map generation and incident entries exist; player-facing scheduling, variant identity, reward/threat tuning, and smoke testing across multiple site profiles are the remaining risk.
+- Broader mission ecosystem with unique hazards, leyline sites, elemental shrines, cursed archives, and faction senders: `XL`; explicitly deferred to MF-049/MF-049B after the small set ships.
 
 Sequencing note:
-- avoid deep balance work until the first natural mission path, reward tiering, repeat frequency, and site cleanup behavior are visible in normal play.
+- avoid deep balance work until natural mission frequency, reward tiering, repeat frequency, and site cleanup behavior are visible in normal play.
 - remaining MF-043 work should be polish and validation only: mission text, defender/reward tuning, site cleanup, save/load checks, and update notes for the release.
 
 ### MF-049 Arcane Encounter Maps And Mission Sites
 
 Goal: build pseudo-random arcane-themed mission maps as a high-quality MFVanilla content pillar, not just generic item stashes with magic loot.
 
+Status: the current three-site release pillar is tracked by MF-043. Keep MF-049 as the broader follow-up bucket for new site families, hazards, elemental shrines, leyline sites, cursed archives, and richer authored profiles after the Arcane Cache/Ruined Sanctum/Sealed Vault release is stable.
+
 Feature vision:
 - create world sites and mission maps that feel like magical places: arcane caches, ruined sanctums, sealed vaults, leyline ruptures, elemental shrines, cursed archives, and later faction/tribe-themed ritual sites
 - use deterministic site/map seeds so layout, loot, curse/trap outcomes, and major encounter choices are stable across save/load and multiplayer-friendly
 - make treasure chests one reward anchor inside the larger encounter, rather than the entire encounter
-- use vanilla mechanoids as the temporary standard site enemy so the first mission slice can rely on proven RimWorld threat behavior
+- keep early vanilla-mechanoid validation as a historical fallback only; current release-facing sites should present MFVanilla construct identities
 - support authored XML profiles for layout themes, loot tables, hazard/trap tables, prop sets, and future defender sets
 
 Vertical slice: Arcane Cache Site:
@@ -337,7 +340,7 @@ Content layers:
 - rewards: arcane treasure chests, scrolls, gemstones, enchanted weapons, silver/gold, and future artifacts
 - props: broken arcane spires, inert forge fragments, glyph floors, arcane torches, ritual stones, ruined benches, leyline markers, sealed containers
 - hazards: curse traps, fire/ice/lightning fields, dormant runes, unstable mana nodes, trapped doors/chests
-- defenders: vanilla mechanoid/site threats first; later rebranded arcane constructs, elemental guardians, golems, summoned creatures, or magic-capable hostile pawns once AI casting exists
+- defenders: current release sites use MFVanilla automata and the Deep Iron Golem; later site families can add elemental guardians, summoned creatures, or magic-capable hostile pawns when those systems have enough support
 - deferred themes: leftover magic misfires and malfunctioning arcane spires that jolt nearby pawns fit a later war-torn/unstable magic site theme, not the first treasure-cache encounter
 
 Implementation phases:
@@ -346,9 +349,9 @@ Implementation phases:
 3. Add deterministic generation diagnostics in dev mode so a site can report its seed/profile/chest ID. - dev-mode generation log now reports profile, tile, threat points, room, chest def/location, chest ID, and spawned defenders
 4. Add reliable dev/test spawning for arcane cache sites. - `MFVanilla - Arcane Sites` debug actions now spawn a proper `SiteMaker` arcane cache near the current map and can remove bare empty sites left by generic dev spawning
 5. Expand into Arcane Ruin Generator: multiple rooms, themed dressing, side loot, and optional hazards. - initial profile-driven circular tower layout support added; default arcane cache now uses a round wizard-tower chamber footprint, deterministic stone wall variation, a real door, and less crowded torch/spire dressing; smoke test confirmed clear torches and marble wall generation
-6. Add curse/trap integration using XML-authored trap tables or MagicFramework action lists.
-7. Add themed variants: fire shrine, flooded vault, earth-buried sanctum, wind-swept ruin, leyline node, cursed archive.
-8. Integrate higher-tier sites with quest points/game stage and future elemental tribes or magic AI when those systems exist.
+6. Add curse/trap integration using XML-authored trap tables or MagicFramework action lists. - deferred beyond the current three-site release
+7. Add themed variants: fire shrine, flooded vault, earth-buried sanctum, wind-swept ruin, leyline node, cursed archive. - deferred beyond the current three-site release
+8. Integrate higher-tier sites with quest points/game stage and future elemental tribes or magic AI when those systems exist. - keep out of the current release band unless needed for bug fixing
 
 #### MF-049A Arcane Site Generation Utility
 
@@ -381,9 +384,9 @@ Current first consumer:
 - Debug actions can spawn either the normal arcane cache or the showcase cache through the safe `SiteMaker` path.
 
 Enemy bridge:
-- use existing mechanoid defenders for the first Arcane Cache Site implementation so combat, pathing, down/death behavior, threat scaling, and site integration are known-good
-- avoid globally replacing vanilla mechanoids; the temporary use should be local to arcane mission construction
-- migrate the fantasy-facing enemy identity to MF-050 Arcane Constructs once the mission loop works
+- historical bridge used vanilla mechanoid defenders for early Arcane Cache validation so combat, pathing, down/death behavior, threat scaling, and site integration were known-good
+- current release sites should use the MF-050 automata/construct family instead of vanilla mechanoid identities
+- keep any remaining vanilla-mech fallback local to arcane mission construction; do not globally replace vanilla mechanoids
 
 Success criteria:
 - the first arcane site feels like a real mission location, not a chest spawned in a field
@@ -425,6 +428,8 @@ Out of first pass:
 
 Goal: create a fantasy-facing enemy family for MFVanilla by reusing proven mechanoid combat roles as golems, automata, sentinels, and arcane constructs.
 
+Status: first release set is implemented enough to support MF-043. Current-band work is texture/art verification, site combat smoke testing, drops, tuning, and readability; elemental variants and deeper MagicFramework interactions should wait.
+
 Rationale:
 - mechanoid mechanics already provide hostile AI, combat behavior, site/raid integration, threat scaling, pathing, death handling, and save/load stability
 - rebranding selected mechanoid roles removes tech-themed enemies from fantasy arcane missions without requiring custom magic AI immediately
@@ -460,7 +465,7 @@ Deep Iron Golem capstone direction:
 Implementation phases:
 1. Use vanilla mechanoid defenders temporarily in MF-049 Arcane Cache Site maps. - done for the first site-generator validation pass
 2. Add one or two first construct pawn kinds with fantasy labels/descriptions and borrowed mechanoid behavior/stats. - expanded release minimum to four first-pass automata: Clay Automaton, Rune-Slasher Automaton, Crystal Sentinel, and Rune-Ballista Construct
-3. Add initial textures or recolors so constructs are visually distinct from mechs. - pending art pass; current defs expect `Things/Pawn/Automata/ClayAutomaton`, `RuneSlasherAutomaton`, `CrystalSentinel`, and `RuneBallistaConstruct`
+3. Add initial textures or recolors so constructs are visually distinct from mechs. - initial automata and golem textures are present; remaining work is in-game art verification, scale/readability checks, and release tuning
 4. Use constructs as arcane site defenders once smoke tested. - initial arcane cache profiles now use MFVanilla automata instead of vanilla scythers/lancers/pikemen
 5. Add construct-specific drops, such as gemstone dust, arcane fragments, jade, plasteel replacement candidates, or future construct cores. - initial gemstone dust and jade butcher products added for the first pass
 6. Tune automata around slow construct identity: clay should be kiteable, rune-slasher should be the only semi-mobile pressure unit, and ranged constructs should feel like position-holding sentries. - initial speed reduction pass added
@@ -516,6 +521,8 @@ Success criteria:
 
 Goal: add one broad Elementalist tribe that makes elemental magic feel present in the world, first through traders and later through hostile magic pawns.
 
+Status: first implementation pass complete. Keep only caravan/trader buy-sell smoke testing in release hygiene; broader role-specific trader variants, bespoke pawn kinds, and richer allied/neutral behavior should become new follow-up tasks if they prove worthwhile.
+
 Design direction:
 - start with faction/trader/content identity before hostile caster AI
 - prefer one coherent Elementalist faction/tribe over four separate elemental factions for the first pass
@@ -540,9 +547,10 @@ Implementation questions:
 First implementation pass:
 1. Define the single Elementalist faction/trader scope without AI casting. - initial `MFV_ElementalistTribe` faction added as a neutral tribal world presence using reliable vanilla tribal pawn groups
 2. Add stock generators for mixed elemental goods, scrolls, gemstones, and production inputs. - initial `MFV_Caravan_ElementalistCircle` trader added with elemental scrolls, gemstones, exotic herbs, arcane ink, papyrus, parchment, herbal medicine, and MFVanilla buy tags
-3. Add names/descriptions/backstory flavor sufficient for one recognizable world presence.
-4. Smoke test caravan/orbital/trader generation and buy/sell behavior.
+3. Add names/descriptions/backstory flavor sufficient for one recognizable world presence. - done through Elementalist faction labels, leader title, settlement flavor, four-element description, and color spectrum
+4. Smoke test caravan/trader generation and buy/sell behavior. - remaining release hygiene item
 5. Defer broad hostile caster behavior to MF-036, but allow the narrow first-pass Elementalist caster hook to prove the runtime path. - initial hostile Elementalist pawn generation now gives about one in five hostile humanlike pawns Arcane Gift, caster level 3, and 1-3 curated single-target spells from Firebolt, Force Push, Heal, Stoneskin, and Might
+6. Make hostile casters visually readable. - initial caster package now gives Elementalist AI pawns the broad Elementalist discipline, adds/dyes a robe or visible apparel, and colors it by the selected spell theme: fire, water, earth, or air
 
 Success criteria:
 - elemental magic appears in the world economy, not only player crafting
@@ -554,6 +562,8 @@ Success criteria:
 ### MF-046 Elemental Spell Expansion
 
 Goal: fill thin elemental schools and add high-value utility spells that make MFVanilla feel less like a validation pack.
+
+Status: complete for the current release slice. Remaining large ideas such as Fly, Summon Golem, and Earthy Grave should be opened as separate school-identity tasks rather than keeping MF-046 active indefinitely.
 
 Priority spell candidates:
 - Air Blast: implemented in wave 1 as blunt damage plus scalable knockback; upgraded in phase 2 to a cone spell backed by reusable cone target queries.
@@ -618,6 +628,8 @@ Success criteria:
 ### MF-047 Enchanted Weapon Special Features
 
 Goal: give the first Arcane Forge weapons unique identities backed by MagicFramework mechanics where practical.
+
+Status: mostly implemented for the first weapon set. Active work is polish and validation: inspect strings/tooltips, in-game smoke tests, art details, damage-resistance checks, and balance.
 
 Current weapon set:
 - Flaming Longsword
@@ -781,14 +793,22 @@ Goal: add lichdom under Soulcraft as a major advanced transformation with strong
 
 Design direction:
 - treat lichdom as a capstone character transformation, not just a buff
-- likely needs a soul anchor, phylactery-like object, altered needs/health, social consequences, and special death/reform rules
+- base the lich body on a custom mechanoid-like pawn so it inherits the desired immunities, needs behavior, and tireless body traits while presenting as an arcane undead entity
+- unlock lichdom from `MFV_Soulcraft`; later tuning can decide whether it also requires an Animus Domini discipline, Forbidden Lore, Necromancy mastery, or rare reagents
+- require the player to construct a high-level phylactery building before transformation; this object becomes the pawn-specific soul anchor and should be expensive, vulnerable, and meaningful to defend
+- start transformation through a building ritual: a selected player pawn performs the rite, the mortal body is destroyed or consumed, and a player-controlled lich pawn is spawned in its place
+- store the original pawn identity in the phylactery, preserving enough pawn data to keep name, backstory-facing identity, learned magic, discipline, relationships, and resurrection/reform ownership coherent
+- when the lich body is destroyed, the phylactery should enter a charging state; after several days, it can regenerate the lich using an available humanoid corpse as the vessel
+- decide whether regeneration consumes any humanoid corpse, requires a fresh/intact corpse, preserves corpse identity consequences, or creates faction/social penalties for using colonist or prisoner remains
+- phylactery loss should be a true failure state: if the phylactery is destroyed while the lich body is absent or reforming, the anchored pawn should be permanently lost or require an extreme recovery path
 - avoid implementing until undead, resurrection, and persistent pawn state patterns are stable enough to support it
 - player feedback, save/load, death cleanup, and exploit prevention are all release-critical
 
 First implementation pass:
-1. Scope the minimum viable lich: transformation status only, phylactery behavior, or full death/reform loop.
-2. Identify required framework hooks before content authoring.
-3. Prototype behind dev/test access before exposing through Soulcraft research.
+1. Build the minimum viable content shell: lich `ThingDef`/`PawnKindDef`, phylactery `ThingDef`, job def, ritual comp, and dev/test command access.
+2. Implement one-way transformation from a player pawn into the lich body, including transfer of MagicFramework runtime state and phylactery identity storage.
+3. Add the death/reform loop: detect lich body death, charge the phylactery for several days, validate an available humanoid corpse, consume it, and respawn the same lich identity.
+4. Smoke test save/load, destroyed phylactery cases, missing corpse cases, hostile corpse/faction cases, map transfer, caravan/world-pawn references, relationship/name continuity, magic runtime state, and exploit paths.
 
 ### MF-059 AeternusFaith Decorative And Religious Statues
 
@@ -1189,31 +1209,9 @@ Design questions:
 
 Candidate first pass:
  - Add authored AI metadata with conservative defaults: `aiUsable`, use category, target preference, minimum/maximum range, friendly-fire policy, score weights, and optional raid generation weight. - deferred in favor of generation-owned curated spell packages for the first pass
- - Create a reusable `SpellAIUtility` that lists known castable spells, checks mana/cooldown/requirements, enumerates valid targets using the existing targeting rules, and scores spell-target pairs. - initial `SpellAIManagerGameComponent` added: registered pawns keep curated spell/intent entries, check known available spells first, gather small priority-ordered target lists by intent, validate spell-target pairs with the existing validator, score validated options against intent-specific cast thresholds with per-pawn hesitation bias, and cast through `SpellCastWarmupUtility.StartOrExecute`
+ - Create a reusable `SpellAIUtility` that lists known castable spells, checks mana/cooldown/requirements, enumerates valid targets using the existing targeting rules, and scores spell-target pairs. - initial `SpellAIManagerGameComponent` added: registered pawns keep curated spell/intent entries, check known available spells first, gather small priority-ordered target lists by intent, validate spell-target pairs with the existing validator, score validated options against intent-specific cast thresholds with per-pawn hesitation bias, gate support spells behind actual combat engagement, and cast through `SpellCastWarmupUtility.StartOrExecute`
  - Start with self/ally buffs, direct hostile single-target damage/control, and simple summons. Defer walls, traps/runes, resurrection, long-lived fields, teleport swaps, displacement, chain spells, and large radius attacks until the scorer can reason about collateral risk. - first pass includes hostile, heal-ally, and buff-ally intents only; summons and all area/cell/multi-target behavior remain deferred
  - Add a small hostile humanlike caster generation hook with settings and debug logging, then validate with one or two MFVanilla spells before opening the whole content set. - initial MFVanilla hook assigns about 20% of hostile `MFV_ElementalistTribe` humanlike pawns 1-3 curated spells from `MF_Firebolt`, `MF_ForcePush`, `MF_Heal`, `MF_Stoneskin`, and `MF_Might`
-
-
-### MF-040 Splash screen
-
-Goal: Introduce a first launch splash screen and include important notes
-
-Current state:
- - MagicFramework now provides `SplashNoteDef` as a small XML-authored note surface for framework and dependent mod notes.
- - Splash notes can point at a mod package ID and display the current `About/About.xml` `modVersion` next to the mod name.
- - MagicFramework now shows a combined notes dialog from both startup and saved-game lifecycle checks when the active note set has not been seen.
- - The seen state is saved in `MagicFrameworkSettings` as a combined note key, so new or changed dependent-mod notes can trigger the dialog without repeatedly showing old notes.
- - MagicFramework and MFVanilla both provide player-facing splash notes with important settings notes, recent accomplishments, and planned-feature teasers.
- - MagicFramework and MFVanilla settings both include a button to re-show the latest magic notes.
- - MagicFramework and MFVanilla build successfully after the first pass.
-
-Target coverage: 
- - Inform players about mod settings to enable/disable tech themed vanilla research. - done for MFVanilla
- - Consider other important details (to be determined). - initial framework, settings, and production-chain notes added
- - host in Magic Framework to provide a utility for dependent mods. - done
- - if possible, allow the utility to absorb details from any dependent mod and present it in one splashscreen instead of multiple. - done through `SplashNoteDef`
- - place a mod settings button in each dependent mod to re-show the latest notes. - done for MagicFramework and MFVanilla
- - this should be used for major changes and version info. - initial version-key support added
 
 ### MF-041 Arcane forge
 

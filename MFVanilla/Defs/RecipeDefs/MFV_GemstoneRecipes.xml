@@ -96,7 +96,7 @@
     <label>cut gemstone</label>
     <description>Cut and polish a raw gemstone piece into a finished gemstone, collecting more usable gemstone dust when more of the stone is ground away.</description>
     <jobString>Cutting gemstone.</jobString>
-    <workAmount>360</workAmount>
+    <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
     <effectWorking>Sculpt</effectWorking>
     <soundWorking>Recipe_Machining</soundWorking>

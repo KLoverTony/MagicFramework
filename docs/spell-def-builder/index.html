@@ -49,6 +49,11 @@
                             <strong>SpellDef Anatomy</strong>
                             <small>Top-level fields and what they control.</small>
                         </a>
+                        <a href="../spell-design-guide/index.html#quick-reference">
+                            <span>Quickref</span>
+                            <strong>Parameters</strong>
+                            <small>Valid values for targeting, actions, scaling, and lifecycle.</small>
+                        </a>
                     </div>
                 </section>
 
@@ -107,6 +112,7 @@
                                 <option value="area">Area Burst</option>
                                 <option value="persistent">Persistent Zone</option>
                                 <option value="sustained">Sustained Link</option>
+                                <option value="forcefield">Force Field</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -115,7 +121,9 @@
                                 <option value="Single">Single</option>
                                 <option value="Radius">Radius</option>
                                 <option value="Line">Line</option>
+                                <option value="Cone">Cone</option>
                                 <option value="Wall">Wall</option>
+                                <option value="Chain">Chain</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -143,6 +151,24 @@
                             <input type="number" id="targetRadius" value="3.9" min="0" step="0.1">
                         </div>
                         <div class="form-group">
+                            <label for="lineLength">Line Length</label>
+                            <input type="number" id="lineLength" value="12" min="0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="coneAngleDegrees">Cone Angle</label>
+                            <input type="number" id="coneAngleDegrees" value="60" min="1" max="360" step="1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="wallLength">Wall Length</label>
+                            <input type="number" id="wallLength" value="7" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxChains">Max Chains</label>
+                            <input type="number" id="maxChains" value="5" min="0" step="1">
+                        </div>
+                        <div class="form-group">
                             <label for="projectileDef">Projectile Def</label>
                             <input type="text" id="projectileDef" value="MF_FireboltProjectile">
                         </div>
@@ -152,7 +178,12 @@
                         <label><input type="checkbox" id="includeBuildings"> Buildings</label>
                         <label><input type="checkbox" id="includeItems"> Items</label>
                         <label><input type="checkbox" id="allowSelfTarget"> Self target</label>
+                        <label><input type="checkbox" id="useCasterAsTarget"> Use caster as target</label>
                         <label><input type="checkbox" id="requireLineOfSight" checked> Line of sight</label>
+                        <label><input type="checkbox" id="requireStandableCell"> Standable cell</label>
+                        <label><input type="checkbox" id="requireWalkableCell"> Walkable cell</label>
+                        <label><input type="checkbox" id="requireWaterCell"> Water cell</label>
+                        <label><input type="checkbox" id="requireResurrectableCorpse"> Resurrectable corpse</label>
                     </div>
                 </section>
 
@@ -169,6 +200,7 @@
                         <button type="button" class="payload-add" data-payload-type="knockback">Knockback</button>
                         <button type="button" class="payload-add" data-payload-type="heal">Healing</button>
                         <button type="button" class="payload-add" data-payload-type="status">Status</button>
+                        <button type="button" class="payload-add" data-payload-type="hediff">Hediff</button>
                         <button type="button" class="payload-add" data-payload-type="summon">Summon</button>
                     </div>
                     <div id="payloadStack" class="payload-stack"></div>
@@ -219,6 +251,40 @@
                             <label for="cooldownTicks">Cooldown</label>
                             <input type="number" id="cooldownTicks" value="90" min="0" step="1">
                         </div>
+                    </div>
+                </section>
+
+                <section class="builder-section compact">
+                    <div class="section-title">
+                        <span class="section-number">6</span>
+                        <div>
+                            <h2>Learning And Scaling</h2>
+                            <p>Optional gates and lightweight power scaling used by the generated XML.</p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="researchPrerequisite">Research Prerequisite</label>
+                            <input type="text" id="researchPrerequisite" value="" placeholder="MFV_Pyromancy">
+                        </div>
+                        <div class="form-group">
+                            <label for="minimumCasterLevel">Minimum Caster Level</label>
+                            <input type="number" id="minimumCasterLevel" value="0" min="0" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="casterLevelFactor">Caster Level Factor</label>
+                            <input type="number" id="casterLevelFactor" value="1" min="0" step="0.1">
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="canBeLearned" checked> Can be learned</label>
+                        <label><input type="checkbox" id="requireArcaneGift" checked> Require Arcane Gift</label>
+                        <label><input type="checkbox" id="appendSpellSummary" checked> Add {MF:SpellSummary}</label>
+                        <label><input type="checkbox" class="scaled-attribute" value="Damage" checked> Scale damage</label>
+                        <label><input type="checkbox" class="scaled-attribute" value="Healing"> Scale healing</label>
+                        <label><input type="checkbox" class="scaled-attribute" value="Radius"> Scale radius</label>
+                        <label><input type="checkbox" class="scaled-attribute" value="Duration"> Scale duration</label>
+                        <label><input type="checkbox" class="scaled-attribute" value="Cooldown" checked> Scale cooldown</label>
                     </div>
                 </section>
             </form>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace MFVanilla.Core;
@@ -8,7 +9,7 @@ public sealed class Verb_StoneGolemBoulder : Verb_Shoot
 {
     private const int ChunksToRaise = 3;
     private const float ChunkRaiseRadius = 2.8f;
-    private const float AmmoSearchRadius = 4.5f;
+    private const float AmmoSearchRadius = 2.8f;
     private const string FallbackChunkDefName = "ChunkSandstone";
 
     private static readonly string[] ChunkDefNames =
@@ -28,8 +29,14 @@ public sealed class Verb_StoneGolemBoulder : Verb_Shoot
             return base.TryCastShot();
         }
 
-        RaiseStoneChunks(caster.Position, map);
-        ConsumeNearestChunk(caster.Position, map);
+        Thing ammoChunk = FindNearestChunk(caster.Position, map, AmmoSearchRadius);
+        if (ammoChunk == null)
+        {
+            RaiseStoneChunks(caster.Position, map);
+            return true;
+        }
+
+        ammoChunk.Destroy();
         return base.TryCastShot();
     }
 
@@ -69,11 +76,11 @@ public sealed class Verb_StoneGolemBoulder : Verb_Shoot
         }
     }
 
-    private static void ConsumeNearestChunk(IntVec3 center, Map map)
+    private static Thing FindNearestChunk(IntVec3 center, Map map, float radius)
     {
         Thing nearest = null;
         float nearestDistance = float.MaxValue;
-        foreach (Thing thing in GenRadial.RadialDistinctThingsAround(center, map, AmmoSearchRadius, true))
+        foreach (Thing thing in GenRadial.RadialDistinctThingsAround(center, map, radius, true))
         {
             if (!IsStoneChunk(thing))
             {
@@ -88,7 +95,7 @@ public sealed class Verb_StoneGolemBoulder : Verb_Shoot
             }
         }
 
-        nearest?.Destroy();
+        return nearest;
     }
 
     private static ThingDef ChunkDefForIndex(int index)
@@ -113,6 +120,7 @@ public sealed class Verb_StoneGolemBoulder : Verb_Shoot
             }
         }
 
-        return false;
+        return thing.def.IsWithinCategory(ThingCategoryDefOf.StoneChunks)
+            || thing.def.defName?.StartsWith("Chunk") == true;
     }
 }

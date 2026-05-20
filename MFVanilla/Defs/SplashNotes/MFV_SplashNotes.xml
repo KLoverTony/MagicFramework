@@ -5,19 +5,23 @@
     <label>MF Vanilla</label>
     <modName>MF Vanilla</modName>
     <packageId>oracle.mfvanilla</packageId>
-    <versionKey>MFVanilla-0.7.0</versionKey>
+    <versionKey>MFVanilla-0.8.0</versionKey>
     <order>100</order>
     <notes>
       <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, arcane sites, and magical discoveries instead of the standard industrial path.</li>
       <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
-      <li>The magic economy is now much more complete: grow herbs, prepare papyrus or parchment, grind gemstone dust, brew arcane ink, scribe scrolls, cut gems, craft elemental foci, and build toward advanced enchantment.</li>
+      <li>MF Vanilla 0.8 expands the world layer with natural arcane mission opportunities, including Arcane Cache, Ruined Sanctum, and Sealed Vault sites.</li>
+      <li>Arcane sites now use deterministic profile-driven layouts, reward chests, themed rooms, exterior ruins, mission letters, timeouts, and construct guardians.</li>
+      <li>Leyline Sensitivity now reveals a hidden leyline map, can show optional strength numbers, improves mana recovery near strong currents, and can empower Arcane Forge work near resonant currents.</li>
+      <li>Gifted pawns can now embrace Arcane Disciplines through a marker ritual, and discipline restrictions can guide spell learning for colonies that want specialization.</li>
+      <li>The elemental spell set has grown with Air Blast, Stoneskin, Extinguish, Deluge, Warmth, and sustained Heat, with scroll generation and research gates in place.</li>
+      <li>The magic economy remains fully playable: grow herbs, prepare papyrus or parchment, grind gemstone dust, brew arcane ink, scribe scrolls, cut gems, craft elemental foci, and build toward advanced enchantment.</li>
       <li>Gifted pawns grow as spellcasters through arcane research, scribing, alchemy, and enchantment work, unlocking higher-level spells through play instead of dev tools.</li>
-      <li>Arcane treasure chests now appear as magical reward caches, packed with scrolls, gems, silver, gold, enchanted prizes, rare materials, and other discoveries.</li>
-      <li>New arcane cache sites create compact magical mission maps with deterministic layouts, reward chests, themed dressing, and construct guardians.</li>
+      <li>Arcane treasure chests appear as magical reward caches, packed with scrolls, gems, silver, gold, enchanted prizes, rare materials, and other discoveries.</li>
       <li>The Arcane Forge is ready for ambitious colonies, letting skilled enchanters transform quality weapons into elemental arms powered by linked arcane spires.</li>
       <li>Enchanted weapons now have clearer identities: Zephyr Spear, Flaming Longsword, Tidebreaker Mace, and Stonefall Mace provide a mix of activated powers, passive protections, melee triggers, and elemental flavor.</li>
       <li>Arcane constructs and automata now guard higher-value sites, including clay automata, rune-slashers, crystal sentinels, rune-ballista constructs, and the rare Deep Iron Golem.</li>
-      <li>Stay tuned: future updates are planned to add leyline gameplay, elemental cultures, expanded elemental schools, deeper arcane sites, and more magical world events.</li>
+      <li>Stay tuned: future updates are planned to add elemental cultures, advanced school identities, deeper arcane sites, and more magical world events.</li>
       <li>You can reopen the latest notes from the MF Vanilla settings page.</li>
     </notes>
   </MagicFramework.Core.SplashNoteDef>

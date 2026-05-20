@@ -5,6 +5,7 @@ using System.Linq;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
 using RimWorld;
+using UnityEngine;
 using Verse;
 using Verse.AI;
 
@@ -351,12 +352,127 @@ public static class MFVanillaPatcher
             runtime.LearnSpell(pawn, selected[i].spell);
         }
 
+        ApplyElementalistCasterGarb(pawn, selected);
         aiManager.RegisterPawn(pawn, selected);
     }
 
     private static SpellAIEntry Entry(string spellDefName, SpellAIIntent intent)
     {
         return new SpellAIEntry(DefDatabase<SpellDef>.GetNamedSilentFail(spellDefName), intent);
+    }
+
+    private static void ApplyElementalistCasterGarb(Pawn pawn, List<SpellAIEntry> selected)
+    {
+        if (pawn?.apparel == null || selected == null || selected.Count == 0)
+        {
+            return;
+        }
+
+        ElementalCasterRole role = DetermineElementalCasterRole(selected);
+        Color color = ElementalCasterColor(role);
+        Apparel apparel = EnsureElementalistCasterRobe(pawn) ?? BestElementalistCasterApparel(pawn);
+        if (apparel == null)
+        {
+            return;
+        }
+
+        if (apparel.TryGetComp<CompColorable>() != null)
+        {
+            apparel.DesiredColor = color;
+        }
+        else
+        {
+            apparel.SetColor(color, reportFailure: false);
+        }
+    }
+
+    private static ElementalCasterRole DetermineElementalCasterRole(List<SpellAIEntry> selected)
+    {
+        for (int i = 0; i < selected.Count; i++)
+        {
+            string defName = selected[i]?.spell?.defName;
+            if (defName == "MF_Firebolt")
+            {
+                return ElementalCasterRole.Fire;
+            }
+
+            if (defName == "MF_ForcePush")
+            {
+                return ElementalCasterRole.Air;
+            }
+
+            if (defName == "MF_Heal")
+            {
+                return ElementalCasterRole.Water;
+            }
+
+            if (defName == "MF_Stoneskin" || defName == "MF_Might")
+            {
+                return ElementalCasterRole.Earth;
+            }
+        }
+
+        return ElementalCasterRole.Earth;
+    }
+
+    private static Color ElementalCasterColor(ElementalCasterRole role)
+    {
+        return role switch
+        {
+            ElementalCasterRole.Fire => new Color(0.78f, 0.18f, 0.06f),
+            ElementalCasterRole.Water => new Color(0.08f, 0.36f, 0.78f),
+            ElementalCasterRole.Earth => new Color(0.2f, 0.46f, 0.18f),
+            ElementalCasterRole.Air => new Color(0.86f, 0.78f, 0.34f),
+            _ => Color.white
+        };
+    }
+
+    private static Apparel EnsureElementalistCasterRobe(Pawn pawn)
+    {
+        Apparel existingRobe = pawn.apparel.WornApparel.FirstOrDefault(apparel => apparel?.def?.defName == "Apparel_Robe");
+        if (existingRobe != null)
+        {
+            return existingRobe;
+        }
+
+        ThingDef robeDef = DefDatabase<ThingDef>.GetNamedSilentFail("Apparel_Robe");
+        if (robeDef == null)
+        {
+            return null;
+        }
+
+        ThingDef stuff = GenStuff.DefaultStuffFor(robeDef);
+        if (stuff == null)
+        {
+            return null;
+        }
+
+        Apparel robe = ThingMaker.MakeThing(robeDef, stuff) as Apparel;
+        if (robe == null || !ApparelUtility.HasPartsToWear(pawn, robeDef))
+        {
+            return null;
+        }
+
+        pawn.apparel.Wear(robe, dropReplacedApparel: false, locked: false);
+        return robe;
+    }
+
+    private static Apparel BestElementalistCasterApparel(Pawn pawn)
+    {
+        return pawn.apparel.WornApparel
+            .Where(apparel => apparel != null)
+            .OrderByDescending(apparel => apparel.def.defName == "Apparel_Robe")
+            .ThenByDescending(apparel => apparel.def.apparel?.layers?.Contains(ApparelLayerDefOf.Shell) == true)
+            .ThenByDescending(apparel => apparel.def.apparel?.bodyPartGroups?.Contains(BodyPartGroupDefOf.Torso) == true)
+            .FirstOrDefault();
+    }
+
+    private enum ElementalCasterRole
+    {
+        Fire,
+        Water,
+        Earth,
+        Air
     }
 
     private static bool RequiresArcaneGiftWorker(Thing thing)

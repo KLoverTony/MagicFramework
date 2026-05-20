@@ -8,7 +8,9 @@ This mod adds vanilla content extensions for Magic Framework, including an arcan
 - The standard arcane research bench is available without research; the advanced bench is unlocked by `MFV_ArcaneSecrets` and required by late research.
 - Vanilla tech suppression is implemented as Harmony patches over research visibility/startability rather than by deleting defs.
 - Pawns can gain the `MFV_ArcaneGift` trait after sustained research work at arcane benches, with higher awakening odds at the advanced bench.
-- Spell scroll items currently teach `MF_Firebolt`, `MF_Fireball`, and `MF_Heal` after the pawn has Arcane Gift and the required research.
+- Generated spell scroll items and recipes cover the current MFVanilla spell library, with learning gated by Arcane Gift and each spell's research prerequisites.
+- Gemstone chunks, raw pieces, cut gems, dust byproducts, lapidary recipes, and related trader inventory are implemented.
+- Arcane treasure chests, automata defenders, and the current Arcane Cache / Ruined Sanctum / Sealed Vault mission site set are implemented for release smoke testing.
 - Validation spell content and matching gizmo icons currently live in this mod under `Defs/SpellDefs` and `Textures/UI/Gizmos/Spells`.
 
 ## Folder Structure
@@ -20,7 +22,10 @@ MFVanilla/
 |   |-- Preview.png        # Mod preview image
 |   `-- ModIcon.png        # Mod icon
 |-- Defs/
+|   |-- IncidentDefs/         # Arcane mission incidents
+|   |-- RecipeDefs/           # Arcane crafting, gemstones, scroll recipes
 |   |-- ResearchProjectDefs/   # Custom research projects
+|   |-- Sites/                # Arcane mission site parts, profiles, and gen steps
 |   |-- ThingDefs/
 |   |   |-- Items/             # Magic items and equipment
 |   |   `-- Buildings/         # Magic structures and stations
@@ -163,8 +168,10 @@ Implementation notes:
 - Do not add texture paths until the matching files exist under `Textures`.
 - The standard arcane research bench is available without research. The advanced arcane research bench is unlocked by `MFV_ArcaneSecrets`.
 - `MFV_AlchemyTable` is a production work table unlocked by `MFV_Alchemy` and uses `Things/Building/Production/AlchemyTable`.
-- Implemented first-pass spell scrolls reuse safe vanilla schematic graphics and teach specific MagicFramework spells through `CompUseEffect_LearnSpell`.
-- Next item work should add recipes/traders/loot sources for scroll acquisition, then expand scroll coverage by school.
+- Generated spell scrolls reuse `MFV_SpellScrollBase`, teach MagicFramework spells through `CompUseEffect_LearnSpell`, and are generated from current spell learning metadata.
+- Scroll acquisition now has generated recipes and trader hooks; future work should tune economy and add curated loot placement rather than reopen the basic acquisition path.
+- Gemstone cutting creates common, fine, or exquisite cut gems plus dust byproduct. Lower-quality cuts produce more dust, giving failed precision some crafting value.
+- Arcane treasure chests are now the shared mission reward container for cache-style sites.
 
 ### 3. Spell Extensions
 
@@ -194,7 +201,32 @@ Implementation notes:
 - For early content, prefer existing vanilla pawn kinds or simple animal summons before custom races.
 - Humanlike summoned pawn kinds require humanlike-specific fields such as initial will/resistance ranges.
 
-### 5. Research Suppression
+### 5. Arcane Mission Sites
+
+Current implementation:
+- Three player-facing mission incidents exist: `MFV_ArcaneCacheMission`, `MFV_RuinedSanctumMission`, and `MFV_SealedVaultMission`.
+- Each mission creates a world `Site` through `SiteMaker`, sends a player letter, registers an expiry timer, and blocks duplicate active sites of the same type.
+- `GenStep_ArcaneCache` is now a reusable profile-driven generator for arcane cache, ruined sanctum, and sealed vault layouts.
+- Site profiles live in `Defs/Sites/Parts/MFV_ArcaneCacheSite.xml` and control room shape, wall materials, chest tier, defenders, dressing, side rooms, entry paths, exterior ruins, and broken walls.
+- Current defenders use MFVanilla construct identities: clay automata, rune slashers, rune ballistae, crystal sentinels, flesh golems, and the Deep Iron Golem.
+
+Current mission tuning:
+
+| Mission | Earliest day | Refire | Distance | Timeout | Threat floor |
+|---------|--------------|--------|----------|---------|--------------|
+| Arcane Cache | 8 | 18 days | 4-18 tiles | 18 days | 250 |
+| Ruined Sanctum | 22 | 28 days | 5-20 tiles | 22 days | 500 |
+| Sealed Vault | 45 | 45 days | 8-24 tiles | 28 days | 1200 |
+
+Design rules:
+- Keep the first release to Arcane Cache, Ruined Sanctum, and Sealed Vault.
+- Prefer deterministic, profile-authored variation over ad hoc generation branches.
+- Keep active hazards, leyline sites, elemental shrines, cursed archives, and connected-room ruin generation in the MF-049/MF-049B follow-up bucket.
+- Validate the real incident/mission path, not only direct debug-spawned sites.
+
+See [ArcaneSites.md](ArcaneSites.md) for the current site profile reference and validation checklist.
+
+### 6. Research Suppression
 
 Current implementation:
 - MFVanilla has a mod setting to suppress vanilla technology research.
@@ -219,14 +251,19 @@ Design rules:
    - Add spell-school research.
    - Expand the migrated validation spells into balanced content per school using existing MagicFramework primitives.
    - Add simple valid item unlocks only after matching textures or safe vanilla graphics are chosen.
-   - Add more scroll defs and connect them to school research.
+   - Generated scroll defs and recipes now cover current spell learning metadata; remaining work is balance and acquisition tuning.
 
 3. Phase 3: Advanced and forbidden content - partially scaffolded
    - Add advanced research gates.
    - Prototype forbidden branch consequences.
    - Balance costs, unlock pacing, and storyteller impact.
 
-4. Phase 4: Polish
+4. Phase 4: World-layer mission release - in progress
+   - Smoke test Arcane Cache, Ruined Sanctum, and Sealed Vault from natural incidents and debug offer actions.
+   - Tune threat, reward, expiry, frequency, and mission text.
+   - Validate automata and Deep Iron Golem site combat across save/load.
+
+5. Phase 5: Polish
    - Add textures and icons.
    - Add localization.
    - Add authoring notes for future MFVanilla content packs.

@@ -590,7 +590,6 @@
           <texPath>Things/Pawn/Automata/RuneBallistaConstruct</texPath>
           <graphicClass>Graphic_Multi</graphicClass>
           <drawSize>2.25</drawSize>
-          <color>(116,111,103)</color>
           <shadowData>
             <volume>(0.4, 0.8, 0.4)</volume>
           </shadowData>

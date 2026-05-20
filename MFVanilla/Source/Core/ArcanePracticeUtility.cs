@@ -9,8 +9,8 @@ namespace MFVanilla.Core;
 
 public static class ArcanePracticeUtility
 {
-    private const float BasicResearchExperiencePerTick = 0.12f;
-    private const float AdvancedResearchExperiencePerTick = 0.16f;
+    private const float BasicResearchExperiencePerTick = 0.04f;
+    private const float AdvancedResearchExperiencePerTick = 0.06f;
     private const float ProductionExperiencePerWork = 0.08f;
     private const float MinimumProductionExperience = 25f;
     private const float MaximumProductionExperience = 500f;

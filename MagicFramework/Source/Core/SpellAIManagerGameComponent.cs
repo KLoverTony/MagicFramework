@@ -157,6 +157,11 @@ public sealed class SpellAIManagerGameComponent : GameComponent
         for (int i = 0; i < availableEntries.Count; i++)
         {
             SpellAIEntry entry = availableEntries[i];
+            if (entry.intent != SpellAIIntent.Hostile && !IsCombatEngaged(pawn))
+            {
+                continue;
+            }
+
             if (TryFindTarget(pawn, entry, out LocalTargetInfo target, out float score)
                 && score >= CastThreshold(entry.intent, state.castBias))
             {
@@ -286,7 +291,7 @@ public sealed class SpellAIManagerGameComponent : GameComponent
 
     private static float ScoreHostileCandidate(Pawn caster, Pawn target, float distanceScore)
     {
-        float currentTargetScore = target == caster.CurJob?.targetA.Thing as Pawn ? 0.25f : 0f;
+        float currentTargetScore = target == CurrentHostileJobTarget(caster) ? 0.25f : 0f;
         float downedRiskScore = Mathf.Clamp01(1f - (target.health?.summaryHealth?.SummaryHealthPercent ?? 1f)) * 0.2f;
         float combatTargetScore = IsThreatened(caster) ? 0.1f : 0f;
         return Mathf.Clamp01(0.3f + currentTargetScore + downedRiskScore + combatTargetScore + distanceScore * 0.25f);
@@ -303,7 +308,7 @@ public sealed class SpellAIManagerGameComponent : GameComponent
     {
         float selfScore = target == caster ? 0.2f : 0f;
         float threatenedScore = IsThreatened(target) ? 0.45f : 0f;
-        float meleeScore = (target.equipment?.Primary == null || target.equipment.Primary.def.IsMeleeWeapon) ? 0.15f : 0f;
+        float meleeScore = IsMeleeCombatant(target) ? 0.15f : 0f;
         return Mathf.Clamp01(selfScore + threatenedScore + meleeScore + distanceScore * 0.2f);
     }
 
@@ -321,7 +326,7 @@ public sealed class SpellAIManagerGameComponent : GameComponent
     private static List<Pawn> HostileCandidates(Pawn pawn, SpellDef spell)
     {
         List<Pawn> candidates = new();
-        Pawn currentTarget = pawn.CurJob?.targetA.Thing as Pawn;
+        Pawn currentTarget = CurrentHostileJobTarget(pawn);
         if (IsValidHostileTarget(pawn, currentTarget))
         {
             candidates.Add(currentTarget);
@@ -359,13 +364,15 @@ public sealed class SpellAIManagerGameComponent : GameComponent
     {
         float range = Mathf.Max(0f, spell?.targeting?.range ?? 0f);
         List<Pawn> candidates = AlliedCandidates(pawn, range)
-            .Where(candidate => candidate == pawn || IsThreatened(candidate))
+            .Where(candidate => IsCombatEngaged(candidate) || IsThreatened(candidate))
             .OrderByDescending(candidate => candidate == pawn)
             .ThenBy(candidate => pawn.Position.DistanceToSquared(candidate.Position))
             .ToList();
 
         if (spell?.defName == "MF_Might")
         {
+            candidates = candidates.Where(IsMeleeCombatant).ToList();
+
             HediffDef mighty = DefDatabase<HediffDef>.GetNamedSilentFail("MF_Mighty");
             if (mighty != null)
             {
@@ -402,6 +409,36 @@ public sealed class SpellAIManagerGameComponent : GameComponent
             && !target.Downed
             && target.Spawned
             && caster.HostileTo(target);
+    }
+
+    private static Pawn CurrentHostileJobTarget(Pawn pawn)
+    {
+        Pawn target = pawn?.CurJob?.targetA.Thing as Pawn;
+        return IsValidHostileTarget(pawn, target) ? target : null;
+    }
+
+    private static bool IsCombatEngaged(Pawn pawn)
+    {
+        if (pawn?.CurJob == null)
+        {
+            return false;
+        }
+
+        if (CurrentHostileJobTarget(pawn) != null)
+        {
+            return true;
+        }
+
+        string jobDefName = pawn.CurJob.def?.defName;
+        return jobDefName == "AttackMelee"
+            || jobDefName == "Wait_Combat"
+            || jobDefName == "CastAbilityOnThing";
+    }
+
+    private static bool IsMeleeCombatant(Pawn pawn)
+    {
+        ThingWithComps primary = pawn?.equipment?.Primary;
+        return primary == null || primary.def.IsMeleeWeapon;
     }
 
     private static bool HasNonPermanentInjury(Pawn pawn)

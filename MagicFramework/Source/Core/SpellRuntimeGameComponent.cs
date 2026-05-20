@@ -217,7 +217,8 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         float total = 0f;
         for (int i = 1; i <= level; i++)
         {
-            total += 800f + ((i - 1) * 300f);
+            float highLevelPenalty = i > 5 ? (i - 5) * (i - 5) * 35f : 0f;
+            total += 1000f + ((i - 1) * 450f) + highLevelPenalty;
         }
 
         return total;

@@ -5,13 +5,14 @@
     <label>Magic Framework</label>
     <modName>Magic Framework</modName>
     <packageId>oracle.magicframework</packageId>
-    <versionKey>MagicFramework-1.2.0</versionKey>
+    <versionKey>MagicFramework-1.3.0</versionKey>
     <order>0</order>
     <notes>
-      <li>Magic Framework now has stronger support for first-party content built around spells, enchanted gear, deterministic rewards, mission sites, and save/load-friendly magic behavior.</li>
-      <li>Spell presentation, scaling, maintained effects, projectiles, lingering zones, summons, traps, teleports, shields, auras, and terrain-changing magic remain the stable authoring surface for this release.</li>
+      <li>Magic Framework now has stronger support for first-party content built around caster growth, arcane disciplines, deterministic rewards, mission sites, and save/load-friendly magic behavior.</li>
+      <li>Arcane Discipline support is now part of the stable content surface: mods can unlock discipline identities through research and use them to guide spell learning and pawn presentation.</li>
+      <li>Spell presentation, scaling, maintained effects, projectiles, lingering zones, summons, traps, teleports, shields, auras, resurrection, and terrain-changing magic remain the stable authoring surface for this release.</li>
       <li>Item-sourced magic has expanded: equipment can provide activated powers, passive statuses, melee triggers, damage resistance, and saved item-local cooldowns without teaching the pawn a permanent spell.</li>
-      <li>Magic effects are built to behave consistently across saves, so delayed blasts, chained lightning, wards, force fields, reward caches, and summoned creatures should remain dependable during normal play.</li>
+      <li>Magic effects are built to behave consistently across saves, so delayed blasts, chained lightning, wards, force fields, reward caches, leyline state, site generation, and summoned creatures should remain dependable during normal play.</li>
       <li>Settings: you can tune spell text, caster scaling, diagnostic logging, and reopen the latest notes from Magic Framework settings.</li>
       <li>Stay tuned: future updates are planned to improve spell presentation, expand the authoring guide, add richer content hooks, and eventually let hostile spellcasters bring magic to enemy encounters.</li>
       <li>You can reopen the latest notes from the Magic Framework settings page.</li>

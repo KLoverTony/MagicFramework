@@ -76,6 +76,94 @@
       color: var(--muted);
     }
 
+    .guide-callout {
+      margin: 22px 0;
+      padding: 18px 20px;
+      border: 1px solid rgba(217, 180, 95, 0.42);
+      border-radius: 8px;
+      background: rgba(217, 180, 95, 0.08);
+    }
+
+    .guide-callout p:last-child {
+      margin-bottom: 0;
+    }
+
+    .guide-steps {
+      display: grid;
+      gap: 12px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: guide-step;
+    }
+
+    .guide-steps li {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      counter-increment: guide-step;
+    }
+
+    .guide-steps li::before {
+      content: counter(guide-step, decimal-leading-zero);
+      color: var(--gold);
+      font-weight: 900;
+    }
+
+    .quickref-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .quickref-button {
+      min-height: 148px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      color: inherit;
+      text-align: left;
+      font: inherit;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .quickref-button:hover,
+    .quickref-button:focus-visible {
+      border-color: var(--gold);
+      outline: none;
+    }
+
+    .quickref-button span {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--green);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .quickref-button strong,
+    .quickref-button small {
+      display: block;
+    }
+
+    .quickref-button strong {
+      margin-bottom: 8px;
+      font-size: 1.08rem;
+    }
+
+    .quickref-button small {
+      color: var(--muted);
+    }
+
     .code-shell {
       margin: 18px 0;
     }
@@ -172,9 +260,106 @@
       text-transform: uppercase;
     }
 
+    .field-table code,
+    .guide-card code,
+    .guide-callout code {
+      color: #cdd6f4;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(16px, 4vw, 42px);
+      background: rgba(0, 0, 0, 0.68);
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .quickref-modal {
+      width: min(100%, 960px);
+      max-height: min(86vh, 820px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #11150f;
+      box-shadow: var(--shadow);
+    }
+
+    .quickref-modal header {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      background: #151a13;
+    }
+
+    .quickref-modal h2 {
+      margin-bottom: 6px;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+    }
+
+    .quickref-modal p {
+      color: var(--muted);
+    }
+
+    .modal-close {
+      flex: 0 0 auto;
+      min-width: 38px;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      font: inherit;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .modal-close:hover {
+      border-color: var(--gold);
+    }
+
+    .quickref-body {
+      display: grid;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .quickref-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .quickref-list li {
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      color: #cdd6f4;
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.88rem;
+    }
+
     @media (max-width: 900px) {
       .guide-shell,
-      .guide-card-grid {
+      .guide-card-grid,
+      .quickref-grid {
         grid-template-columns: 1fr;
       }
 
@@ -201,10 +386,14 @@
   <main id="top" class="guide-shell">
     <aside class="guide-nav" aria-label="Guide sections">
       <a href="#start">Start Here</a>
+      <a href="#designing-spells">Designing Spells</a>
       <a href="#first-direct-spell-minor-heal">Minor Heal</a>
       <a href="#first-projectile-spell-ember-bolt">Ember Bolt</a>
       <a href="#direct-versus-projectile-actions">Direct vs Projectile</a>
       <a href="#spelldef-anatomy">SpellDef Anatomy</a>
+      <a href="#quick-reference">Quick Reference</a>
+      <a href="#action-catalog">Action Catalog</a>
+      <a href="#validation-checklist">Validation</a>
       <a href="#builder-integration">Builder Integration</a>
       <a href="../spell-def-builder/index.html">Open SpellForge</a>
     </aside>
@@ -234,11 +423,38 @@
             <strong>SpellDef Anatomy</strong>
             <small>Learn the top-level sections that shape a spell.</small>
           </a>
+          <a class="resource-card" href="#quick-reference">
+            <span>Quickref</span>
+            <strong>Parameters &amp; Values</strong>
+            <small>Open compact references for targeting, actions, scaling, and lifecycle fields.</small>
+          </a>
           <a class="resource-card" href="../spell-def-builder/index.html">
             <span>Builder</span>
             <strong>Open SpellForge</strong>
             <small>Use the browser builder to generate starter XML.</small>
           </a>
+        </div>
+      </section>
+
+      <section id="designing-spells">
+        <p class="eyebrow">Design Workflow</p>
+        <h2>Design The Spell Before Writing XML</h2>
+        <p>
+          Good MagicFramework spells start as a gameplay decision, then become XML. Decide
+          what the player is allowed to do, when the effect happens, how the spell is paid
+          for, and what state must survive save/load before you pick individual actions.
+        </p>
+        <ol class="guide-steps">
+          <li><div><strong>Pick the role.</strong><br>Is this damage, rescue, control, infrastructure, a maintained defense, a delayed trap, or a summoned helper?</div></li>
+          <li><div><strong>Choose delivery.</strong><br>Use direct actions for immediate effects, projectiles for travel and impact timing, target queries for area/chain effects, and persistent actions for anything that remains on the map.</div></li>
+          <li><div><strong>Set target policy.</strong><br>Choose pawn/cell/thing targeting, affinity, self-cast behavior, line of sight, range, and terrain restrictions before balancing numbers.</div></li>
+          <li><div><strong>Pair checks and costs.</strong><br>Requirements explain why the cast cannot happen; costs spend resources after validation succeeds. Mana and cooldown usually need both sides.</div></li>
+          <li><div><strong>Plan scaling.</strong><br>Use lightweight `scaledAttributes` for normal growth. Use explicit `ScalableFloatDef` or scalar fields when one number needs special tuning.</div></li>
+          <li><div><strong>Design cleanup.</strong><br>Any delayed, repeated, summoned, spawned, maintained, wall, field, or area effect should have clear expire/remove/break behavior.</div></li>
+          <li><div><strong>Explain mechanics.</strong><br>Keep lore readable, then add generated tokens such as `{MF:SpellSummary}` so details stay current as tuning changes.</div></li>
+        </ol>
+        <div class="guide-callout">
+          <p><strong>Useful mental split:</strong> targeting controls the initial player selection. Actions can later retarget through queries, chains, child contexts, projectile impact context, or persistent lifecycle callbacks.</p>
         </div>
       </section>
 
@@ -261,10 +477,15 @@
             <p>Depend on `oracle.magicframework`. If you reuse MFVanilla metadata or research defs, also depend on `oracle.mfvanilla`.</p>
           </div>
         </div>
-        <pre class="guide-code" data-focus-tags="targeting,requirements,costs,actions" data-focus-label="Focused: targeting, costs, and actions"><code>&lt;MagicFramework.Definitions.SpellDef&gt;
+        <pre class="guide-code" data-focus-tags="targeting,requirements,costs,actions" data-focus-label="Focused: targeting, costs, and actions"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+&lt;Defs&gt;
+&lt;MagicFramework.Definitions.SpellDef&gt;
   &lt;defName&gt;Example_MinorHeal&lt;/defName&gt;
   &lt;label&gt;minor heal&lt;/label&gt;
-  &lt;description&gt;Restores a small amount of health to an allied pawn.&lt;/description&gt;
+  &lt;description&gt;Restores a small amount of health to an allied pawn.
+
+{MF:SpellSummary}&lt;/description&gt;
+  &lt;gizmoIconPath&gt;UI/Gizmos/Spells/Example_MinorHeal&lt;/gizmoIconPath&gt;
   &lt;range&gt;12&lt;/range&gt;
   &lt;castTimeTicks&gt;25&lt;/castTimeTicks&gt;
 
@@ -335,7 +556,8 @@
       &lt;/actions&gt;
     &lt;/li&gt;
   &lt;/actions&gt;
-&lt;/MagicFramework.Definitions.SpellDef&gt;</code></pre>
+&lt;/MagicFramework.Definitions.SpellDef&gt;
+&lt;/Defs&gt;</code></pre>
         <p>
           Change `HealActionDef.amount` for strength, `targeting.range` for reach,
           and the mana/cooldown requirement and cost pairs for balance.
@@ -352,6 +574,9 @@
             <tr><td>Self-only variant</td><td>Use `targeting.useCasterAsTarget` to cast without opening a target prompt.</td></tr>
           </tbody>
         </table>
+        <div class="guide-callout">
+          <p><strong>Common mistakes:</strong> setting only top-level `range`, adding a mana cost without a matching mana requirement, or leaving `pawnAffinity` as `All` on a beneficial spell. The targeter should make the safe intent obvious.</p>
+        </div>
       </section>
 
       <section id="first-projectile-spell-ember-bolt">
@@ -394,6 +619,9 @@
           `MF_Firebolt` in MF Vanilla is the production version of this pattern. It adds
           research, caster level requirements, debug labels, spell power scaling, and tuning.
         </p>
+        <div class="guide-callout">
+          <p>If `projectileDef` is missing or not a RimWorld projectile, MagicFramework logs a warning and runs `onImpactActions` immediately. That fallback prevents a dead spell, but it means the XML should be fixed.</p>
+        </div>
         <table class="field-table">
           <thead>
             <tr><th>Field</th><th>What It Controls</th></tr>
@@ -417,6 +645,9 @@
             <tr><td>Resource discovery</td><td>Search RimWorld `Data` defs and MFVanilla spell XML for `projectileDef`, `effectDef`, `soundDef`, `damageDef`, and `hediffDef` examples.</td></tr>
           </tbody>
         </table>
+        <div class="guide-callout">
+          <p><strong>Friendly-fire caution:</strong> `pawnAffinity` controls the initial target. Explosions, radius queries, chains, and child actions need their own affinity and include/exclude choices.</p>
+        </div>
       </section>
 
       <section id="direct-versus-projectile-actions">
@@ -465,6 +696,120 @@
         </table>
       </section>
 
+      <section id="quick-reference">
+        <p class="eyebrow">Quick Reference</p>
+        <h2>Parameters And Valid Values</h2>
+        <p>
+          Use these quickrefs while authoring. They are intentionally compact: open a category,
+          check the valid values and common fields, then return to the tutorial or SpellForge.
+        </p>
+        <div class="quickref-grid">
+          <button class="quickref-button" type="button" data-quickref="targeting">
+            <span>Targeting</span>
+            <strong>Initial Targeter</strong>
+            <small>Shapes, primary target types, affinity, terrain gates, and shape values.</small>
+          </button>
+          <button class="quickref-button" type="button" data-quickref="requirements">
+            <span>Costs</span>
+            <strong>Requirements &amp; Costs</strong>
+            <small>Mana, cooldown, Arcane Gift, caster level, and pairing conventions.</small>
+          </button>
+          <button class="quickref-button" type="button" data-quickref="actions">
+            <span>Actions</span>
+            <strong>Action Classes</strong>
+            <small>Common action defs grouped by damage, flow, movement, persistent, and utility roles.</small>
+          </button>
+          <button class="quickref-button" type="button" data-quickref="queries">
+            <span>Queries</span>
+            <strong>Target Queries</strong>
+            <small>Current target, radius, nearest, shape, directional chain, ordering, and filters.</small>
+          </button>
+          <button class="quickref-button" type="button" data-quickref="scaling">
+            <span>Power</span>
+            <strong>Scaling</strong>
+            <small>Power fields, scalable floats, scaling modes, and scaled attributes.</small>
+          </button>
+          <button class="quickref-button" type="button" data-quickref="lifecycle">
+            <span>Lifecycle</span>
+            <strong>Persistent Effects</strong>
+            <small>Create, pulse, expire, remove, break, status refresh policy, and cleanup hooks.</small>
+          </button>
+        </div>
+      </section>
+
+      <section id="action-catalog">
+        <p class="eyebrow">Reference</p>
+        <h2>Action Catalog</h2>
+        <p>
+          Actions are composable XML nodes under `actions`, `onImpactActions`, query child
+          actions, or lifecycle callbacks. Start with the smallest action that expresses the
+          spell, then add child lists only when timing or targeting actually changes.
+        </p>
+        <table class="field-table">
+          <thead>
+            <tr><th>Family</th><th>Action Defs</th><th>Use When</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Flow</td><td>`SequenceActionDef`, `DelayActionDef`, `RepeatActionDef`, `ConditionalActionDef`, `LogMessageActionDef`</td><td>You need ordered steps, delayed payloads, repeating pulses, branching logic, or dev diagnostics.</td></tr>
+            <tr><td>Presentation</td><td>`EffectActionDef`, `ProceduralFXActionDef`</td><td>You need explicit RimWorld effecters/sounds or framework procedural magic visuals.</td></tr>
+            <tr><td>Direct Effects</td><td>`DamageActionDef`, `HealActionDef`, `ApplyHediffActionDef`, `RemoveHediffActionDef`, `StunActionDef`, `ExtinguishFireActionDef`, `TemperaturePushActionDef`</td><td>You are changing a pawn, thing, fire, or local temperature immediately in the current context.</td></tr>
+            <tr><td>Area &amp; Queries</td><td>`ExplosionActionDef`, `ApplyToTargetsActionDef`, `ApplyChainTargetsActionDef`, `ChainLightningActionDef`</td><td>You need area damage, secondary targets, deterministic chain behavior, or child actions over queried targets.</td></tr>
+            <tr><td>Movement</td><td>`TeleportActionDef`, `KnockbackActionDef`, `PullActionDef`, `MovePawnTowardPointActionDef`, `MoveStoneChunksActionDef`</td><td>You are moving pawns, things, or stone chunks and need collision or destination rules.</td></tr>
+            <tr><td>Projectiles</td><td>`LaunchProjectileActionDef`</td><td>The effect should wait for vanilla projectile travel, impact, shield block, destruction, or timeout.</td></tr>
+            <tr><td>Persistent</td><td>`PersistentEffectActionDef`, `PersistentAreaZoneActionDef`, `PersistentWallZoneActionDef`, `ProximityTriggerActionDef`, `ApplyForceFieldActionDef`</td><td>Something remains in the world and needs save/load-aware cleanup or lifecycle callbacks.</td></tr>
+            <tr><td>Summon &amp; Spawn</td><td>`SummonPawnActionDef`, `SpawnThingActionDef`, `TerrainPatchActionDef`, `DestroyThingActionDef`, `ResurrectPawnActionDef`</td><td>The spell creates, changes, restores, or removes world state beyond a simple hediff or damage event.</td></tr>
+            <tr><td>Stats &amp; Status</td><td>`ApplyStatModifierActionDef`, `SustainedStatModifierActionDef`, `ClearStatModifiersActionDef`, `TimedStatusEffectActionDef`, `ApplyStatusEffectActionDef`</td><td>You need buff/debuff identity, stat modification, visible status cues, or refresh behavior.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="reference-tokens">
+        <p class="eyebrow">Generated Presentation</p>
+        <h2>Description Tokens</h2>
+        <p>
+          Use generated text for mechanics, not lore. Keep the first sentence readable, then
+          add one or two tokens so balancing changes do not leave stale descriptions behind.
+        </p>
+        <table class="field-table">
+          <thead>
+            <tr><th>Token</th><th>Use</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>`{MF:SpellSummary}`</td><td>Compact combined summary for spell details.</td></tr>
+            <tr><td>`{MF:Effects}`</td><td>Generated action/effect summary.</td></tr>
+            <tr><td>`{MF:ManaCost}`</td><td>Resolved mana cost text.</td></tr>
+            <tr><td>`{MF:Cooldown}`</td><td>Cooldown text.</td></tr>
+            <tr><td>`{MF:Range}`</td><td>Targeting range text.</td></tr>
+            <tr><td>`{MF:Requirements}`</td><td>Cast and learning requirement text.</td></tr>
+            <tr><td>`{MF:PowerScaling}`</td><td>Power and scaling summary when authored.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="validation-checklist">
+        <p class="eyebrow">Before Release</p>
+        <h2>Validation Checklist</h2>
+        <p>
+          MagicFramework can express a lot of behavior in XML, so validation needs to cover
+          more than “the button appears.” Test normal use, failure cases, and cleanup.
+        </p>
+        <table class="field-table">
+          <thead>
+            <tr><th>Area</th><th>Check</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>XML load</td><td>Start RimWorld and confirm no unresolved class, defName, enum, texture, or XML structure errors.</td></tr>
+            <tr><td>Learning</td><td>Verify research gates, Arcane Gift, caster level, scroll recipes, and hidden/unhidden behavior.</td></tr>
+            <tr><td>Targeting</td><td>Test valid targets, invalid targets, self-target rules, line of sight, terrain requirements, range boundaries, and hostile/ally filtering.</td></tr>
+            <tr><td>Costs</td><td>Confirm mana and cooldown requirements fail clearly, then costs apply only after accepted casts.</td></tr>
+            <tr><td>Actions</td><td>Check direct effects, projectile impact effects, query child actions, scaling, and generated description text against real gameplay.</td></tr>
+            <tr><td>Persistence</td><td>Save/load while delays, repeats, summons, walls, areas, fields, triggers, and maintained effects are active.</td></tr>
+            <tr><td>Cleanup</td><td>Down or kill the caster, remove the target, leave the map, expire the effect, recast it, and confirm no orphaned state remains.</td></tr>
+            <tr><td>Presentation</td><td>Verify icon path, gizmo label, generated details, sound/effect defs, and dev/debug labels are readable.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
       <section id="builder-integration">
         <p class="eyebrow">Browser Workflow</p>
         <h2>Use The Guide With SpellForge</h2>
@@ -481,6 +826,20 @@
     </article>
   </main>
 
+  <div class="modal-backdrop" data-quickref-modal hidden>
+    <div class="quickref-modal" role="dialog" aria-modal="true" aria-labelledby="quickref-title">
+      <header>
+        <div>
+          <p class="eyebrow">Quick Reference</p>
+          <h2 id="quickref-title">Reference</h2>
+          <p id="quickref-summary"></p>
+        </div>
+        <button class="modal-close" type="button" aria-label="Close quick reference">X</button>
+      </header>
+      <div class="quickref-body" id="quickref-body"></div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <span>MagicFramework author documentation.</span>
     <a href="../index.html">Back to home</a>
@@ -490,6 +849,120 @@
       const defPattern = /^(MF_|MFV_|Example_|Bullet_|Mote_|Psycast|Explosion_|Flame$|Burn$|Blunt$|Husky$|Spark|YellowSpark|ElectricalSpark|GiantExplosion|EnergyShield_)/;
       const rootTags = new Set(['Defs', 'MagicFramework.Definitions.SpellDef']);
       const alwaysVisibleTags = new Set(['defName', 'label', 'description', 'range', 'castTimeTicks', 'gizmoIconPath']);
+      const quickrefs = {
+        targeting: {
+          title: 'Targeting',
+          summary: 'Initial player target selection and first context. Actions can later retarget through queries, chains, projectile impact context, or lifecycle callbacks.',
+          values: [
+            ['SpellTargetShape', ['Single', 'Radius', 'Line', 'Cone', 'Wall', 'Chain']],
+            ['SpellPrimaryTargetType', ['Cell', 'Pawn', 'Thing', 'PawnOrThing', 'PawnOrCell']],
+            ['SpellPawnAffinity', ['All', 'Ally', 'Foe']]
+          ],
+          rows: [
+            ['shape', 'SpellTargetShape', 'Single', 'Which targeter shape the player starts with.'],
+            ['primaryTargetType', 'SpellPrimaryTargetType', 'PawnOrThing', 'What the initial click can select.'],
+            ['pawnAffinity', 'SpellPawnAffinity', 'All', 'Pawn filter for initial target selection.'],
+            ['includePawns/includeBuildings/includeItems', 'bool', 'true', 'Thing-category filters for selectable targets.'],
+            ['allowSelfTarget', 'bool', 'true', 'Whether the caster can select themselves.'],
+            ['useCasterAsTarget', 'bool', 'false', 'Skips target prompt and makes the caster the initial target.'],
+            ['requireLineOfSight', 'bool', 'false', 'Requires line of sight from caster to target.'],
+            ['requireStandableCell / requireWalkableCell / requireWaterCell', 'bool', 'false', 'Terrain and placement constraints for cell-targeted spells.'],
+            ['requireResurrectableCorpse', 'bool', 'false', 'Corpse gate for resurrection-style targeting.'],
+            ['range / scalableRange', 'float / ScalableFloatDef', '0', 'Fixed or power-scaled targeting range.'],
+            ['radius / lineLength / coneAngleDegrees / wallLength / maxChains', 'number', 'shape-specific', 'Extra values used by radius, line, cone, wall, and chain targeters.']
+          ]
+        },
+        requirements: {
+          title: 'Requirements & Costs',
+          summary: 'Requirements answer whether the cast may happen. Costs apply after validation succeeds. Keep paired values in sync unless the mismatch is intentional.',
+          values: [
+            ['Requirement classes', ['ManaRequirementDef', 'CooldownRequirementDef', 'ArcaneGiftRequirementDef', 'CasterLevelRequirementDef']],
+            ['Cost classes', ['ManaCostDef', 'CooldownCostDef']]
+          ],
+          rows: [
+            ['ManaRequirementDef.amount', 'float', '0', 'Requires the caster to have enough mana before execution.'],
+            ['ManaCostDef.amount', 'float', '0', 'Spends mana after validation succeeds.'],
+            ['CooldownRequirementDef.cooldownTicks', 'int', '0', 'Requires the spell cooldown to be ready.'],
+            ['CooldownCostDef.cooldownTicks', 'int', '0', 'Starts the cooldown after validation succeeds.'],
+            ['ArcaneGiftRequirementDef', 'empty node', '-', 'Requires MagicFramework Arcane Gift metadata.'],
+            ['CasterLevelRequirementDef.minimumLevel', 'int', '1', 'Requires the caster to have reached a minimum caster level.'],
+            ['learning.researchPrerequisites', 'ResearchProjectDef list', 'empty', 'Research gates for learning or scroll/recipe availability.'],
+            ['learning.hiddenUntilResearchUnlocked / hiddenUntilRequirementsMet', 'bool', 'false', 'Hides learnable spell surfaces until the player has a plausible path.']
+          ]
+        },
+        actions: {
+          title: 'Action Classes',
+          summary: 'Action nodes live under actions or child action lists. Every action can use debugLabel for readable logs and diagnostics.',
+          values: [
+            ['Sources', ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster']],
+            ['Projectile launchOrigin', ['Caster', 'CurrentTarget', 'CurrentCell']],
+            ['Projectile targetSource', ['CurrentTarget', 'CurrentCell', 'Caster']],
+            ['HediffAddMode', ['Default', 'Replace', 'TryAdd', 'SoftReplace']]
+          ],
+          rows: [
+            ['SequenceActionDef.actions', 'List<SpellActionDef>', 'empty', 'Runs child actions in order.'],
+            ['EffectActionDef', 'effectDef, soundDef, locationSource, attachToTarget', '-', 'Plays authored visuals/sound.'],
+            ['DamageActionDef', 'amount, damageDef, armorPenetration, guiltPolicy, useCombatLog', '-', 'Applies direct damage to current target.'],
+            ['HealActionDef', 'amount, permanentHealingAmount, regenerateMissingParts', '-', 'Distributes healing across current pawn injuries.'],
+            ['ApplyHediffActionDef', 'hediffDef, severity, addMode, durationTicks, maxSeverity', '-', 'Adds or refreshes a RimWorld hediff.'],
+            ['ExplosionActionDef', 'radius, damageAmount, damageDef, fireChance, spawnedThings, gasDef', '-', 'Creates a RimWorld explosion at current context.'],
+            ['LaunchProjectileActionDef', 'projectileDef, launchOrigin, targetSource, onImpactActions', '-', 'Launches a projectile now and runs child actions on impact.'],
+            ['ApplyToTargetsActionDef', 'targetQuery, actions', '-', 'Runs child actions against query results.'],
+            ['ConditionalActionDef', 'condition, thenActions, elseActions', '-', 'Branches execution from authored conditions.']
+          ]
+        },
+        queries: {
+          title: 'Target Queries',
+          summary: 'Queries are execution-time retargeting tools. Use them when the spell needs secondary targets after the initial cast.',
+          values: [
+            ['TargetQueryCenterSource', ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster']],
+            ['TargetQueryOrdering', ['None', 'Nearest', 'Farthest', 'LowestHealth', 'HighestHealth', 'HighestThreat', 'LowestThreat']]
+          ],
+          rows: [
+            ['TargetQueryDef.ordering / orderingCenterSource / maxTargets', 'enum / enum / int', 'None / CurrentCell / -1', 'Common ordering and result limit fields.'],
+            ['CurrentTargetQueryDef', 'no extra fields', '-', 'Uses the current target as the result set.'],
+            ['TargetsInRadiusQueryDef', 'radius, scalableRadius, centerSource, include*, pawnAffinity', '-', 'Collects targets around a point.'],
+            ['NearestValidTargetQueryDef', 'maxRadius, include*, pawnAffinity', 'maxTargets 1', 'Finds the nearest valid target.'],
+            ['ShapeTargetsQueryDef', 'shape, originSource, centerSource, radius, lineLength, coneAngleDegrees, wallLength, maxChains', '-', 'Mirrors targeting shapes during execution.'],
+            ['DirectionalChainQueryDef', 'jumpRadius, maxJumps, excludeVisitedTargets, preferForwardDirection, allowSplit, maxBranches, splitCount', '-', 'Builds deterministic chains with optional branching.']
+          ]
+        },
+        scaling: {
+          title: 'Scaling',
+          summary: 'Use lightweight scaledAttributes for normal global tuning, and explicit ScalableFloatDef or scalar fields when a specific number needs authored behavior.',
+          values: [
+            ['SpellPowerScalingMode', ['Flat', 'Linear', 'Tiered']],
+            ['SpellScaledAttribute', ['Damage', 'Healing', 'Radius', 'Duration', 'ManaCost', 'Cooldown']]
+          ],
+          rows: [
+            ['power.baseValue', 'float', '0', 'Starting power before caster/skill factors.'],
+            ['power.casterLevelFactor', 'float', '1', 'Adds power from MagicFramework caster level.'],
+            ['power.casterSkillDef / casterSkillFactor', 'Stat or Skill defName / float', 'empty / 1', 'Optional skill-derived power contribution.'],
+            ['power.scaledAttributes', 'SpellScaledAttribute list', 'empty', 'Opt-in to framework-wide lightweight scaling.'],
+            ['damageScalar/healingScalar/radiusScalar/durationScalar/manaCostScalar/cooldownScalar', 'SpellPowerScalarDef', 'empty', 'Explicit scalar authoring for one attribute family.'],
+            ['ScalableFloatDef', 'mode, baseValue, perPower, perTier, min, max', 'Linear', 'Field-level numeric scaling used by many actions.'],
+            ['tiers', 'minPower + tier', 'empty', 'Maps power to authored tier values for tier-aware spells.']
+          ]
+        },
+        lifecycle: {
+          title: 'Lifecycle & Persistence',
+          summary: 'Persistent spells should define what happens when they are created, pulse, expire naturally, are removed, or break from concentration/maintenance rules.',
+          values: [
+            ['SpellStatusRefreshPolicy', ['RefreshDuration', 'IgnoreIfActive', 'StackDuration', 'Replace']],
+            ['MagicFXEvent', ['Auto', 'CastStart', 'ProjectileLaunch', 'ProjectileImpact', 'Impact', 'AreaPulse', 'Explosion', 'SustainStart', 'SustainTick', 'SustainEnd']],
+            ['ClearStatModifierScope', ['AllFromFramework', 'FromCurrentCaster', 'FromCurrentSpell', 'FromSpecificSpell', 'WithStatusHediff']]
+          ],
+          rows: [
+            ['PersistentEffectActionDef', 'markerThingDef, durationTicks, failsafeDurationTicks, onCreate/onPulse/onExpire/onRemove/onBreak', '-', 'Generic persistent marker with save/load-aware callbacks.'],
+            ['PersistentAreaZoneActionDef', 'radius, pulseIntervalTicks, onPulseActions, zone visuals', '-', 'Area effects that remain and pulse over time.'],
+            ['PersistentWallZoneActionDef', 'wallLength, durationTicks, markerThingDef, onCreate/onExpire/onRemove', '-', 'Wall-shaped persistent effects.'],
+            ['ProximityTriggerActionDef', 'triggerRadius, pawnAffinity, checkIntervalTicks, onTriggerActions', '-', 'Delayed trap or rune-style trigger behavior.'],
+            ['ApplyForceFieldActionDef', 'hitPoints, durationTicks, maintenance, ambient visuals, lifecycle action lists', '-', 'Maintained or timed force-field behavior.'],
+            ['SpellStatusEffectDef', 'durationTicks, categories, refreshPolicy, statusCue, statModifiers, onApplyActions', '-', 'Reusable magical status identity.'],
+            ['SustainedStatModifierActionDef', 'durationTicks, maintenance, statusCue, onBreakActions', '-', 'Stat modifiers that need status, maintenance, or cleanup semantics.']
+          ]
+        }
+      };
 
       function classifyText(text) {
         if (/^(true|false)$/i.test(text)) return 'xml-boolean';
@@ -501,6 +974,88 @@
       function span(className, text) {
         return className ? `<span class="${className}">${text}</span>` : text;
       }
+
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function inlineCode(text) {
+        return `<code>${escapeHtml(text)}</code>`;
+      }
+
+      function renderQuickref(ref) {
+        const valuesHtml = ref.values.map(([name, values]) => `
+          <section>
+            <h3>${escapeHtml(name)}</h3>
+            <ul class="quickref-list">
+              ${values.map(value => `<li>${escapeHtml(value)}</li>`).join('')}
+            </ul>
+          </section>
+        `).join('');
+
+        const rowsHtml = ref.rows.map(row => `
+          <tr>
+            <td>${inlineCode(row[0])}</td>
+            <td>${escapeHtml(row[1])}</td>
+            <td>${escapeHtml(row[2])}</td>
+            <td>${escapeHtml(row[3])}</td>
+          </tr>
+        `).join('');
+
+        return `${valuesHtml}
+          <section>
+            <h3>Common Fields</h3>
+            <table class="field-table">
+              <thead>
+                <tr><th>Field / Class</th><th>Type</th><th>Default</th><th>Meaning</th></tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </section>`;
+      }
+
+      const modalBackdrop = document.querySelector('[data-quickref-modal]');
+      const modalTitle = document.querySelector('#quickref-title');
+      const modalSummary = document.querySelector('#quickref-summary');
+      const modalBody = document.querySelector('#quickref-body');
+      const modalClose = document.querySelector('.modal-close');
+      let lastQuickrefButton = null;
+
+      function closeQuickref() {
+        modalBackdrop.classList.remove('is-open');
+        modalBackdrop.hidden = true;
+        document.body.style.overflow = '';
+        if (lastQuickrefButton) lastQuickrefButton.focus();
+      }
+
+      function openQuickref(key, button) {
+        const ref = quickrefs[key];
+        if (!ref) return;
+        lastQuickrefButton = button;
+        modalTitle.textContent = ref.title;
+        modalSummary.textContent = ref.summary;
+        modalBody.innerHTML = renderQuickref(ref);
+        modalBackdrop.hidden = false;
+        modalBackdrop.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        modalClose.focus();
+      }
+
+      document.querySelectorAll('[data-quickref]').forEach(button => {
+        button.addEventListener('click', () => openQuickref(button.dataset.quickref, button));
+      });
+
+      modalClose.addEventListener('click', closeQuickref);
+      modalBackdrop.addEventListener('click', event => {
+        if (event.target === modalBackdrop) closeQuickref();
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !modalBackdrop.hidden) closeQuickref();
+      });
 
       function highlightXml(source) {
         return source
