@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <WorkTypeDef>
+    <defName>MFV_Arcane</defName>
+    <label>arcane</label>
+    <labelShort>Arcane</labelShort>
+    <pawnLabel>Arcane</pawnLabel>
+    <gerundLabel>learning arcana</gerundLabel>
+    <verb>learn arcana</verb>
+    <description>Study magic by observing more experienced gifted pawns during arcane research, scribing, alchemy, and enchantment work.</description>
+    <naturalPriority>1300</naturalPriority>
+    <alwaysStartActive>true</alwaysStartActive>
+    <relevantSkills>
+      <li>Intellectual</li>
+    </relevantSkills>
+  </WorkTypeDef>
+
+  <WorkGiverDef>
+    <defName>MFV_ArcaneApprenticeship</defName>
+    <label>apprentice to arcane mentor</label>
+    <giverClass>MFVanilla.Core.WorkGiver_ArcaneApprenticeship</giverClass>
+    <workType>MFV_Arcane</workType>
+    <priorityInType>100</priorityInType>
+    <verb>learn from</verb>
+    <gerund>learning from</gerund>
+  </WorkGiverDef>
+
   <WorkGiverDef>
     <defName>MFV_DoBillsPapyrusPress</defName>
     <label>make papyrus</label>

@@ -72,8 +72,8 @@ public class Dialog_PawnMemoryViewer : Window
         float curY = 0f;
         foreach (var record in records)
         {
-            DrawRecordRow(new Rect(0f, curY, viewRect.width, 90f), record, registry);
-            curY += 95f;
+            DrawRecordRow(new Rect(0f, curY, viewRect.width, 156f), record, registry);
+            curY += 161f;
         }
         viewHeight = curY;
         
@@ -93,9 +93,28 @@ public class Dialog_PawnMemoryViewer : Window
         string details = $"Map: {record.lastKnownMapName ?? "None"} | Death Map: {record.deathMapId?.ToString() ?? "None"} | Traits: {record.traits.Count} | Skills: {record.skills.Count}";
         Widgets.Label(new Rect(innerRect.x, innerRect.y + 24f, innerRect.width, 24f), details);
 
+        string moodText = record.moodAtDeath >= 0f ? record.moodAtDeath.ToStringPercent() : "Unknown";
+        string deathText = $"Death: {record.deathDamageDef ?? record.deathCulpritHediffDef ?? "Unknown"} | Violent: {record.deathWasViolent} | Abrupt: {record.deathWasAbrupt} | Mood: {moodText}";
+        Widgets.Label(new Rect(innerRect.x, innerRect.y + 48f, innerRect.width, 24f), deathText);
+
+        string riskText = $"Haunt risk: {record.hauntingRiskScore} ({HauntingRiskUtility.RiskBand(record.hauntingRiskScore)})";
+        if (!record.hauntingRiskReasons.NullOrEmpty())
+            riskText += " | " + string.Join("; ", record.hauntingRiskReasons.Take(4));
+        Widgets.Label(new Rect(innerRect.x, innerRect.y + 72f, innerRect.width, 24f), riskText);
+
+        string hauntState = record.hauntingScheduled
+            ? "Scheduled"
+            : record.hauntingSuppressed
+                ? "Suppressed: " + (record.hauntingSuppressionReason ?? "Unknown")
+                : record.hauntingEvaluated
+                    ? "Not scheduled"
+                    : "Not evaluated";
+        string hauntText = $"Haunting: {hauntState} | Chance: {record.hauntingChance.ToStringPercent()} | Roll: {record.hauntingRoll.ToStringPercent()}";
+        Widgets.Label(new Rect(innerRect.x, innerRect.y + 96f, innerRect.width, 24f), hauntText);
+
         // Buttons
         float btnX = innerRect.x;
-        float btnY = innerRect.y + 50f;
+        float btnY = innerRect.y + 120f;
         
         if (Widgets.ButtonText(new Rect(btnX, btnY, 100f, 24f), "Mark Released"))
         {

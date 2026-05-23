@@ -2,10 +2,24 @@
 <Defs>
 
   <JobDef>
+    <defName>MFV_UsePlanarGate</defName>
+    <driverClass>MFVanilla.Core.JobDriver_UsePlanarGate</driverClass>
+    <reportString>using planar gate.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
     <defName>MFV_EmbraceArcaneDiscipline</defName>
     <driverClass>MFVanilla.Core.JobDriver_EmbraceArcaneDiscipline</driverClass>
     <reportString>embracing an arcane discipline.</reportString>
     <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>MFV_ArcaneApprenticeship</defName>
+    <driverClass>MFVanilla.Core.JobDriver_ArcaneApprenticeship</driverClass>
+    <reportString>learning arcana from TargetA.</reportString>
+    <casualInterruptible>true</casualInterruptible>
   </JobDef>
 
 </Defs>

@@ -47,10 +47,29 @@
   </JobDef>
 
   <JobDef>
+    <defName>AF_PerformBonewrightAnointment</defName>
+    <driverClass>AeternusFaith.JobDriver_PerformBonewrightAnointment</driverClass>
+    <reportString>performing a Bonewright anointment.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
     <defName>AF_AttendSpectreRite</defName>
     <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
     <reportString>attending a spectre rite.</reportString>
     <casualInterruptible>true</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_SpectreRest</defName>
+    <driverClass>JobDriver_Wait</driverClass>
+    <reportString>resting between echoes.</reportString>
+    <isIdle>true</isIdle>
+    <suspendable>false</suspendable>
+    <allowOpportunisticPrefix>true</allowOpportunisticPrefix>
+    <carryThingAfterJob>true</carryThingAfterJob>
+    <dropThingBeforeJob>false</dropThingBeforeJob>
+    <ifFlyingKeepFlying>true</ifFlyingKeepFlying>
   </JobDef>
 
 </Defs>

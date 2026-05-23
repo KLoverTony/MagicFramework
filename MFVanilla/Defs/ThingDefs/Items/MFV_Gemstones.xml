@@ -28,7 +28,7 @@
     <stackLimit>25</stackLimit>
     <statBases>
       <MaxHitPoints>120</MaxHitPoints>
-      <MarketValue>16</MarketValue>
+      <MarketValue>45</MarketValue>
       <Mass>0.4</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -39,7 +39,7 @@
     <description>A dense gemstone-bearing chunk broken out of a mixed gemstone vein. It should yield more usable pieces than a standard chunk.</description>
     <statBases>
       <MaxHitPoints>150</MaxHitPoints>
-      <MarketValue>34</MarketValue>
+      <MarketValue>105</MarketValue>
       <Mass>0.7</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -50,7 +50,7 @@
     <description>A raw gemstone piece ready to be cut at a lapidary bench.</description>
     <statBases>
       <MaxHitPoints>70</MaxHitPoints>
-      <MarketValue>5</MarketValue>
+      <MarketValue>15</MarketValue>
       <Mass>0.04</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -81,7 +81,7 @@
     <description>A cut gemstone suitable for trade, decoration, enchanting, or fine magical work.</description>
     <statBases>
       <MaxHitPoints>70</MaxHitPoints>
-      <MarketValue>12</MarketValue>
+      <MarketValue>40</MarketValue>
       <Mass>0.03</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -91,7 +91,7 @@
   <ThingDef Name="MFV_FineCutGemstoneBase" ParentName="MFV_CutGemstoneBase" Abstract="True">
     <statBases>
       <MaxHitPoints>70</MaxHitPoints>
-      <MarketValue>24</MarketValue>
+      <MarketValue>95</MarketValue>
       <Mass>0.03</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -101,7 +101,7 @@
   <ThingDef Name="MFV_ExquisiteCutGemstoneBase" ParentName="MFV_CutGemstoneBase" Abstract="True">
     <statBases>
       <MaxHitPoints>70</MaxHitPoints>
-      <MarketValue>52</MarketValue>
+      <MarketValue>220</MarketValue>
       <Mass>0.03</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>
@@ -119,7 +119,7 @@
     <stackLimit>25</stackLimit>
     <statBases>
       <MaxHitPoints>90</MaxHitPoints>
-      <MarketValue>55</MarketValue>
+      <MarketValue>180</MarketValue>
       <Mass>0.12</Mass>
       <Flammability>0</Flammability>
       <DeteriorationRate>0</DeteriorationRate>

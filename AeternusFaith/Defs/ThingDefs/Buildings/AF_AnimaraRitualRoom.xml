@@ -66,6 +66,9 @@
         <commandDescription>Place a normal construction blueprint for an ossuary bone box in the center of this circle.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
       </li>
+      <li Class="AeternusFaith.CompProperties_BonewrightAnointment">
+        <commandIconPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_center</commandIconPath>
+      </li>
       <!-- Gizmo that places blueprints for all surrounding ritual room pieces -->
       <li Class="AeternusFaith.CompProperties_PlaceRitualRoomBlueprints">
         <commandLabel>Place ritual room blueprints</commandLabel>

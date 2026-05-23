@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="RockBase">
+    <defName>MFV_PhaseStone</defName>
+    <label>phase stone</label>
+    <description>A pale planar stone that seems to sit slightly out of alignment with ordinary space. Mining it leaves behind phase stone chunks.</description>
+    <graphicData>
+      <texPath>Things/Building/Linked/RockFlecked_Atlas</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <color>(92,110,145)</color>
+      <colorTwo>(166,202,230)</colorTwo>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>650</MaxHitPoints>
+      <Beauty>-1</Beauty>
+    </statBases>
+    <building>
+      <mineableThing>MFV_ChunkPhaseStone</mineableThing>
+      <mineableDropChance>0.45</mineableDropChance>
+      <isNaturalRock>true</isNaturalRock>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="RockBase">
+    <defName>MFV_Voidglass</defName>
+    <label>voidglass</label>
+    <description>A dark, glassy planar formation that bends light along its facets. Mining it leaves behind voidglass chunks.</description>
+    <graphicData>
+      <texPath>Things/Building/Linked/RockFlecked_Atlas</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <color>(42,38,58)</color>
+      <colorTwo>(104,76,146)</colorTwo>
+    </graphicData>
+    <statBases>
+      <MaxHitPoints>520</MaxHitPoints>
+      <Beauty>0</Beauty>
+    </statBases>
+    <building>
+      <mineableThing>MFV_ChunkVoidglass</mineableThing>
+      <mineableDropChance>0.5</mineableDropChance>
+      <isNaturalRock>true</isNaturalRock>
+    </building>
+  </ThingDef>
+
+</Defs>

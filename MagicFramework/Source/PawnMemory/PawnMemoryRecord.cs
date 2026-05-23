@@ -42,6 +42,9 @@ public class PawnMemoryRecord : IExposable
     public IntVec3? lastKnownCell;
     public int? deathMapId;
     public IntVec3? deathCell;
+    public string corpseThingId;
+    public int? corpseMapId;
+    public IntVec3? corpseCell;
     public int lastSeenTick;
     public int createdTick;
     public int lastUpdatedTick;
@@ -72,6 +75,29 @@ public class PawnMemoryRecord : IExposable
     public bool deadAtCapture;
     public List<string> majorHediffs = new List<string>();
     public List<string> missingBodyParts = new List<string>();
+
+    // Death Context and Haunting Risk
+    public float moodAtDeath = -1f;
+    public int hauntingRiskScore;
+    public List<string> hauntingRiskReasons = new List<string>();
+    public string deathDamageDef;
+    public string deathCulpritHediffDef;
+    public string deathInstigatorThingId;
+    public string deathInstigatorLabel;
+    public string deathWeaponDef;
+    public bool deathWasViolent;
+    public bool deathWasAbrupt;
+    public bool diedInMentalState;
+    public bool hauntingEvaluated;
+    public bool hauntingEligible;
+    public bool hauntingScheduled;
+    public bool hauntingSuppressed;
+    public string hauntingSuppressionReason;
+    public int? hauntingDecisionTick;
+    public int? hauntingEarliestTick;
+    public int? hauntingMapId;
+    public float hauntingChance;
+    public float hauntingRoll;
 
     // Imprint Lifecycle State
     public PawnMemoryState state = PawnMemoryState.Active;
@@ -106,6 +132,9 @@ public class PawnMemoryRecord : IExposable
         Scribe_Values.Look(ref lastKnownCell, "lastKnownCell");
         Scribe_Values.Look(ref deathMapId, "deathMapId");
         Scribe_Values.Look(ref deathCell, "deathCell");
+        Scribe_Values.Look(ref corpseThingId, "corpseThingId");
+        Scribe_Values.Look(ref corpseMapId, "corpseMapId");
+        Scribe_Values.Look(ref corpseCell, "corpseCell");
         Scribe_Values.Look(ref lastSeenTick, "lastSeenTick");
         Scribe_Values.Look(ref createdTick, "createdTick");
         Scribe_Values.Look(ref lastUpdatedTick, "lastUpdatedTick");
@@ -130,6 +159,28 @@ public class PawnMemoryRecord : IExposable
         Scribe_Collections.Look(ref majorHediffs, "majorHediffs", LookMode.Value);
         Scribe_Collections.Look(ref missingBodyParts, "missingBodyParts", LookMode.Value);
 
+        Scribe_Values.Look(ref moodAtDeath, "moodAtDeath", -1f);
+        Scribe_Values.Look(ref hauntingRiskScore, "hauntingRiskScore");
+        Scribe_Collections.Look(ref hauntingRiskReasons, "hauntingRiskReasons", LookMode.Value);
+        Scribe_Values.Look(ref deathDamageDef, "deathDamageDef");
+        Scribe_Values.Look(ref deathCulpritHediffDef, "deathCulpritHediffDef");
+        Scribe_Values.Look(ref deathInstigatorThingId, "deathInstigatorThingId");
+        Scribe_Values.Look(ref deathInstigatorLabel, "deathInstigatorLabel");
+        Scribe_Values.Look(ref deathWeaponDef, "deathWeaponDef");
+        Scribe_Values.Look(ref deathWasViolent, "deathWasViolent");
+        Scribe_Values.Look(ref deathWasAbrupt, "deathWasAbrupt");
+        Scribe_Values.Look(ref diedInMentalState, "diedInMentalState");
+        Scribe_Values.Look(ref hauntingEvaluated, "hauntingEvaluated");
+        Scribe_Values.Look(ref hauntingEligible, "hauntingEligible");
+        Scribe_Values.Look(ref hauntingScheduled, "hauntingScheduled");
+        Scribe_Values.Look(ref hauntingSuppressed, "hauntingSuppressed");
+        Scribe_Values.Look(ref hauntingSuppressionReason, "hauntingSuppressionReason");
+        Scribe_Values.Look(ref hauntingDecisionTick, "hauntingDecisionTick");
+        Scribe_Values.Look(ref hauntingEarliestTick, "hauntingEarliestTick");
+        Scribe_Values.Look(ref hauntingMapId, "hauntingMapId");
+        Scribe_Values.Look(ref hauntingChance, "hauntingChance");
+        Scribe_Values.Look(ref hauntingRoll, "hauntingRoll");
+
         Scribe_Values.Look(ref state, "state", PawnMemoryState.Active);
         Scribe_Values.Look(ref resurrectionAllowed, "resurrectionAllowed", true);
         Scribe_Values.Look(ref spiritActive, "spiritActive");
@@ -148,6 +199,7 @@ public class PawnMemoryRecord : IExposable
             skills ??= new List<SkillSnapshot>();
             majorHediffs ??= new List<string>();
             missingBodyParts ??= new List<string>();
+            hauntingRiskReasons ??= new List<string>();
         }
     }
 }

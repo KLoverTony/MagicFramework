@@ -103,29 +103,29 @@
       </li>
       <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_Fireball</thingDef>
-        <countRange>-1~1</countRange>
+        <countRange>0~1</countRange>
       </li>
       <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_FlameField</thingDef>
-        <countRange>-1~1</countRange>
+        <countRange>0~1</countRange>
       </li>
       <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_EarthCall</thingDef>
-        <countRange>-1~1</countRange>
+        <countRange>0~1</countRange>
       </li>
       <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_WatersEmbrace</thingDef>
-        <countRange>-1~1</countRange>
+        <countRange>0~1</countRange>
       </li>
       <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_Tornado</thingDef>
-        <countRange>-2~1</countRange>
+        <countRange>0~1</countRange>
       </li>
 
       <li Class="StockGenerator_Tag">
         <tradeTag>MFV_SpellScroll</tradeTag>
-        <thingDefCountRange>1~2</thingDefCountRange>
-        <countRange>0~1</countRange>
+        <thingDefCountRange>3~5</thingDefCountRange>
+        <countRange>1~1</countRange>
       </li>
 
       <li Class="StockGenerator_MarketValue">

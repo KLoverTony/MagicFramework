@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <SitePartDef>
+    <defName>MFV_PlanarPocket</defName>
+    <label>planar pocket</label>
+    <description>A folded pocket of space stabilized by planar magic.</description>
+    <workerClass>MFVanilla.Core.SitePartWorker_PlanarPocket</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>The planar pocket resolves into strange ground and impossible plant life.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MFV_PlanarPocket</li>
+    </tags>
+  </SitePartDef>
+
+  <GenStepDef>
+    <defName>MFV_PlanarPocket</defName>
+    <linkWithSite>MFV_PlanarPocket</linkWithSite>
+    <order>420</order>
+    <genStep Class="MFVanilla.Core.GenStep_PlanarPocket">
+      <terrainOptions>
+        <li>MFV_PlanarTileA</li>
+        <li>MFV_PlanarTileB</li>
+        <li>MFV_PlanarTileC</li>
+        <li>MFV_PlanarTileD</li>
+      </terrainOptions>
+      <plantOptions>
+        <li>Plant_MFV_PlanarA</li>
+        <li>Plant_MFV_PlanarB</li>
+        <li>Plant_MFV_PlanarC</li>
+        <li>Plant_MFV_PlanarD</li>
+        <li>Plant_MFV_PlanarE</li>
+        <li>Plant_MFV_PlanarF</li>
+        <li>Plant_MFV_PlanarG</li>
+        <li>Plant_MFV_PlanarH</li>
+        <li>Plant_MFV_PlanarI</li>
+        <li>Plant_MFV_PlanarJ</li>
+      </plantOptions>
+      <gateDef>MFV_PlanarGate</gateDef>
+      <plantDensity>0.075</plantDensity>
+      <chunkDensity>0.018</chunkDensity>
+      <mineableDensity>0.012</mineableDensity>
+    </genStep>
+  </GenStepDef>
+
+</Defs>

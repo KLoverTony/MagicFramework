@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_RaiseSkeleton</defName>
+    <label>raise skeleton</label>
+    <description>Consumes a corpse and raises a temporary skeletal guardian that fights for and protects the caster for several hours.</description>
+    <gizmoIconPath>Things/Pawn/Undead/Skeleton/Skeleton_south</gizmoIconPath>
+    <range>10</range>
+    <castTimeTicks>180</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Death</li>
+        <li>MF_Element_Spirit</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Necromancy</li>
+        <li>MF_Domain_Summoning</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Summoning</li>
+        <li>MF_Discipline_Ritual</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Summon</li>
+        <li>MF_Tag_CorpseRequired</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Necromancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Thing</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>true</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireCorpse>true</requireCorpse>
+      <range>10</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Raise Skeleton</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Raise Skeleton cooldown ready</debugLabel>
+        <cooldownTicks>2500</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Raise Skeleton</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Raise Skeleton cooldown</debugLabel>
+        <cooldownTicks>2500</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Raise Skeleton sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Raise Skeleton corpse flare</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <soundDef>PsychicPulseGlobal</soundDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.DestroyThingActionDef">
+            <debugLabel>Consume corpse for Raise Skeleton</debugLabel>
+            <allowPawns>false</allowPawns>
+          </li>
+          <li Class="MagicFramework.Definitions.SummonPawnActionDef">
+            <debugLabel>Raise Skeleton summon</debugLabel>
+            <pawnKindDef>MFV_Skeleton</pawnKindDef>
+            <durationTicks>30000</durationTicks>
+            <replaceExistingForCaster>false</replaceExistingForCaster>
+            <setFactionToPlayer>true</setFactionToPlayer>
+            <joinLord>true</joinLord>
+            <followMasterWhileDrafted>true</followMasterWhileDrafted>
+            <followMasterWhileFieldwork>true</followMasterWhileFieldwork>
+          </li>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Raise Skeleton arrival effect</debugLabel>
+            <effectDef>Skip_ExitNoDelay</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

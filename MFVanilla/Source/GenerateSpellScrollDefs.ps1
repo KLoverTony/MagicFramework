@@ -3,6 +3,7 @@ param(
 )
 
 $spellDefsDir = Join-Path $ModRoot 'Defs\SpellDefs'
+$researchDefsDir = Join-Path $ModRoot 'Defs\ResearchProjectDefs'
 $outputPath = Join-Path $ModRoot 'Defs\ThingDefs\Items\MFV_GeneratedSpellScrolls.xml'
 $recipeOutputPath = Join-Path $ModRoot 'Defs\RecipeDefs\MFV_GeneratedSpellScrollRecipes.xml'
 
@@ -45,13 +46,6 @@ function Get-ResearchPrerequisites {
     return @($researchNodes | ForEach-Object { $_.InnerText.Trim() } | Where-Object { $_ })
 }
 
-function Get-MarketValue {
-    param([System.Xml.XmlElement]$Spell)
-
-    $tier = Get-SpellTier -Spell $Spell
-    return 220 + ($tier * 40)
-}
-
 function Get-SpellTier {
     param([System.Xml.XmlElement]$Spell)
 
@@ -62,6 +56,73 @@ function Get-SpellTier {
     }
 
     return $tier
+}
+
+function Get-ResearchPrerequisitesFromProject {
+    param([System.Xml.XmlElement]$ResearchProject)
+
+    if ($null -eq $ResearchProject) {
+        return @()
+    }
+
+    $nodes = $ResearchProject.SelectNodes('prerequisites/li | hiddenPrerequisites/li')
+    if ($null -eq $nodes) {
+        return @()
+    }
+
+    return @($nodes | ForEach-Object { $_.InnerText.Trim() } | Where-Object { $_ })
+}
+
+$researchPrerequisiteMap = @{}
+$researchFiles = Get-ChildItem -Path $researchDefsDir -Filter '*.xml' -ErrorAction SilentlyContinue | Sort-Object Name
+foreach ($file in $researchFiles) {
+    [xml]$document = Get-Content -LiteralPath $file.FullName
+    foreach ($researchProject in $document.SelectNodes('/Defs/ResearchProjectDef')) {
+        $defName = Get-ChildText -Element $researchProject -Name 'defName'
+        if ([string]::IsNullOrWhiteSpace($defName)) {
+            continue
+        }
+
+        $researchPrerequisiteMap[$defName] = @(Get-ResearchPrerequisitesFromProject -ResearchProject $researchProject)
+    }
+}
+
+function Add-ResearchAndAncestors {
+    param(
+        [string]$ResearchDefName,
+        [hashtable]$Seen
+    )
+
+    if ([string]::IsNullOrWhiteSpace($ResearchDefName) -or $Seen.ContainsKey($ResearchDefName)) {
+        return
+    }
+
+    $Seen[$ResearchDefName] = $true
+    if (!$researchPrerequisiteMap.ContainsKey($ResearchDefName)) {
+        return
+    }
+
+    foreach ($prerequisite in @($researchPrerequisiteMap[$ResearchDefName])) {
+        Add-ResearchAndAncestors -ResearchDefName $prerequisite -Seen $Seen
+    }
+}
+
+function Get-ResearchUnlockCount {
+    param([string[]]$ResearchDefNames)
+
+    $seen = @{}
+    foreach ($researchDefName in @($ResearchDefNames)) {
+        Add-ResearchAndAncestors -ResearchDefName $researchDefName -Seen $seen
+    }
+
+    return [Math]::Max(1, $seen.Count)
+}
+
+function Get-MarketValue {
+    param([string[]]$ResearchDefNames)
+
+    $unlockCount = Get-ResearchUnlockCount -ResearchDefNames $ResearchDefNames
+    return 200 * $unlockCount
 }
 
 $spellFiles = Get-ChildItem -Path $spellDefsDir -Filter '*.xml' | Sort-Object Name
@@ -86,12 +147,14 @@ foreach ($file in $spellFiles) {
             $label = $defName
         }
 
+        $researchPrerequisites = @(Get-ResearchPrerequisites -Learning $learning)
+
         $spellRecords.Add([pscustomobject]@{
             DefName = $defName
             Label = $label
             Tier = Get-SpellTier -Spell $spell
-            MarketValue = Get-MarketValue -Spell $spell
-            Research = Get-ResearchPrerequisites -Learning $learning
+            MarketValue = Get-MarketValue -ResearchDefNames $researchPrerequisites
+            Research = $researchPrerequisites
         })
     }
 }
@@ -178,7 +241,7 @@ try {
         $recipeWriter.WriteStartElement('RecipeDef')
         $recipeWriter.WriteElementString('defName', "MFV_ScribeScroll_$($record.DefName)")
         $recipeWriter.WriteElementString('label', "scribe scroll ($($record.Label))")
-        $recipeWriter.WriteElementString('description', "Prepare a spell scroll that teaches a pawn how to cast $($record.Label).")
+        $recipeWriter.WriteElementString('description', "Prepare a spell scroll that teaches a pawn how to cast $($record.Label). The scribe must have the Arcane Gift and already know $($record.Label).")
         $recipeWriter.WriteElementString('jobString', "Scribing scroll ($($record.Label)).")
         $recipeWriter.WriteElementString('workAmount', (700 + ($record.Tier * 200)).ToString([System.Globalization.CultureInfo]::InvariantCulture))
         $recipeWriter.WriteElementString('workSpeedStat', 'GeneralLaborSpeed')

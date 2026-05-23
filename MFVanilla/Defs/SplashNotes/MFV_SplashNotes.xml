@@ -5,11 +5,20 @@
     <label>MF Vanilla</label>
     <modName>MF Vanilla</modName>
     <packageId>oracle.mfvanilla</packageId>
-    <versionKey>MFVanilla-0.8.0</versionKey>
+    <versionKey>MFVanilla-0.8.2</versionKey>
     <order>100</order>
     <notes>
       <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, arcane sites, and magical discoveries instead of the standard industrial path.</li>
       <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
+      <li>MF Vanilla 0.8.2 is a quality-of-life progression patch focused on making spell access and caster growth feel less bottlenecked.</li>
+      <li>Completing spell-unlocking arcane research now calls down mysterious aid: one matching spell scroll appears for the colony, giving each new school an immediate playable payoff.</li>
+      <li>Spell scrolls are easier to find through Elementalist traders and arcane treasure rewards, while scroll market value now scales with the depth of research needed to unlock the spell.</li>
+      <li>Gifted pawns now gain caster experience when learning spells from scrolls and when successfully casting spells they know.</li>
+      <li>Arcane Gift pawns can apprentice under higher-level gifted mentors while the mentor performs arcane research, scribing, alchemy, or enchantment work. Multiple apprentices can learn from the same mentor.</li>
+      <li>MF Vanilla 0.8.1 was a small quality-of-life patch: spell scroll recipes now clearly explain that the scribe must have the Arcane Gift and already know the spell being copied.</li>
+      <li>Manual work orders now give clearer failure reasons when a scribing or arcane forge job needs a gifted pawn, or when a scroll needs a scribe who knows the spell.</li>
+      <li>Magic passive coolers can now be minified like magic heaters, making magical temperature infrastructure easier to move during colony redesigns.</li>
+      <li>Arcane mission sites have gained additional decorative ruins and site dressing so caches, sanctums, and vaults have a stronger explored-place feel.</li>
       <li>MF Vanilla 0.8 expands the world layer with natural arcane mission opportunities, including Arcane Cache, Ruined Sanctum, and Sealed Vault sites.</li>
       <li>Arcane sites now use deterministic profile-driven layouts, reward chests, themed rooms, exterior ruins, mission letters, timeouts, and construct guardians.</li>
       <li>Leyline Sensitivity now reveals a hidden leyline map, can show optional strength numbers, improves mana recovery near strong currents, and can empower Arcane Forge work near resonant currents.</li>

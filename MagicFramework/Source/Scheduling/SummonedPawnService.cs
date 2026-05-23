@@ -5,6 +5,8 @@ using MagicFramework.Definitions;
 using MagicFramework.Execution;
 using RimWorld;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
 
 namespace MagicFramework.Scheduling;
 
@@ -56,6 +58,7 @@ public sealed class SummonedPawnService
 
         ApplyTraining(summonedPawn, context.caster as Pawn, summonPawnActionDef);
         AssignMaster(summonedPawn, context.caster as Pawn, summonPawnActionDef);
+        AssignDefensiveDuty(summonedPawn, context.caster as Pawn, summonPawnActionDef);
 
         int durationTicks = ResolveDurationTicks(context, summonPawnActionDef);
         SpellActionPathUtility.TryCreatePath(context.spellDef, summonPawnActionDef, out var actionPath);
@@ -178,5 +181,15 @@ public sealed class SummonedPawnService
         summonedPawn.playerSettings.Master = casterPawn;
         summonedPawn.playerSettings.followDrafted = summonPawnActionDef.followMasterWhileDrafted;
         summonedPawn.playerSettings.followFieldwork = summonPawnActionDef.followMasterWhileFieldwork;
+    }
+
+    private static void AssignDefensiveDuty(Pawn summonedPawn, Pawn casterPawn, SummonPawnActionDef summonPawnActionDef)
+    {
+        if (summonedPawn?.mindState == null || casterPawn == null || summonPawnActionDef?.joinLord != true)
+        {
+            return;
+        }
+
+        summonedPawn.mindState.duty = new PawnDuty(DutyDefOf.Defend, casterPawn, 8f);
     }
 }

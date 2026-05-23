@@ -351,6 +351,11 @@ public static class SpellGizmoUtility
             return false;
         }
 
+        if (targeting.requireCorpse && targetThing is not Corpse)
+        {
+            return false;
+        }
+
         if (!targeting.allowSelfTarget && hasThing && caster != null && targetThing == caster)
         {
             return false;

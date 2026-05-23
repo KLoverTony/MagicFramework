@@ -94,4 +94,29 @@
     <defaultLabelColor>(0.45, 0.65, 0.9)</defaultLabelColor>
   </HediffDef>
 
+  <HediffDef>
+    <defName>AF_EerieCold</defName>
+    <label>eerie cold</label>
+    <description>A supernatural chill clings to this pawn after standing near a manifested spirit.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <defaultLabelColor>(0.55, 0.75, 0.9)</defaultLabelColor>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>900</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>AF_BonewrightOssanithInitiate</defName>
+    <label>Ossanith Bonewright initiate</label>
+    <description>This pawn has been anointed into the Bonewright order under the Ossanith foundation.</description>
+    <hediffClass>Hediff</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <defaultLabelColor>(0.72, 0.72, 0.66)</defaultLabelColor>
+  </HediffDef>
+
 </Defs>

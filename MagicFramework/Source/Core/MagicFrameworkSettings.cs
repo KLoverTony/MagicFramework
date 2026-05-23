@@ -10,6 +10,10 @@ public sealed class MagicFrameworkSettings : ModSettings
     public const float DefaultDurationScalingPerPower = 0.04f;
     public const float DefaultManaCostReductionPerPower = 0.01f;
     public const float DefaultCooldownReductionPerPower = 0.01f;
+    public const int DefaultMaxHauntingsPerMap = 10;
+    public const int DefaultHauntingMinimumRiskScore = 25;
+    public const int DefaultHauntingMinDelayTicks = 120000;
+    public const int DefaultHauntingMaxDelayTicks = 240000;
 
     public bool logExecution;
     public bool logCosts;
@@ -34,6 +38,10 @@ public sealed class MagicFrameworkSettings : ModSettings
     public float durationScalingPerPower = DefaultDurationScalingPerPower;
     public float manaCostReductionPerPower = DefaultManaCostReductionPerPower;
     public float cooldownReductionPerPower = DefaultCooldownReductionPerPower;
+    public int maxHauntingsPerMap = DefaultMaxHauntingsPerMap;
+    public int hauntingMinimumRiskScore = DefaultHauntingMinimumRiskScore;
+    public int hauntingMinDelayTicks = DefaultHauntingMinDelayTicks;
+    public int hauntingMaxDelayTicks = DefaultHauntingMaxDelayTicks;
 
     public static MagicFrameworkSettings Current { get; private set; } = new();
 
@@ -96,5 +104,9 @@ public sealed class MagicFrameworkSettings : ModSettings
         Scribe_Values.Look(ref durationScalingPerPower, "durationScalingPerPower", DefaultDurationScalingPerPower);
         Scribe_Values.Look(ref manaCostReductionPerPower, "manaCostReductionPerPower", DefaultManaCostReductionPerPower);
         Scribe_Values.Look(ref cooldownReductionPerPower, "cooldownReductionPerPower", DefaultCooldownReductionPerPower);
+        Scribe_Values.Look(ref maxHauntingsPerMap, "maxHauntingsPerMap", DefaultMaxHauntingsPerMap);
+        Scribe_Values.Look(ref hauntingMinimumRiskScore, "hauntingMinimumRiskScore", DefaultHauntingMinimumRiskScore);
+        Scribe_Values.Look(ref hauntingMinDelayTicks, "hauntingMinDelayTicks", DefaultHauntingMinDelayTicks);
+        Scribe_Values.Look(ref hauntingMaxDelayTicks, "hauntingMaxDelayTicks", DefaultHauntingMaxDelayTicks);
     }
 }

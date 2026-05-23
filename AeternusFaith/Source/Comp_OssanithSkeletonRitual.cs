@@ -76,25 +76,32 @@ namespace AeternusFaith
                 return;
             }
 
-            Find.WindowStack.Add(new Dialog_SkeletonRitual(parent, circle, TryStartRitualJobs, IsValidCorpseTarget, IsEligibleConductor, IsEligibleAudience));
+            Find.WindowStack.Add(new Dialog_SkeletonRitual(parent, circle, TryStartRitualJobs, ValidateCorpseTarget, ValidateConductor, ValidateAudience));
+        }
+
+        internal AcceptanceReport ValidateCorpseTarget(Corpse corpse)
+        {
+            return RitualCorpseEligibilityUtility.ValidateHumanlikeMortalCorpse(corpse, parent.Map);
         }
 
         internal bool IsValidCorpseTarget(Corpse corpse)
         {
-            return RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, parent.Map);
+            return ValidateCorpseTarget(corpse).Accepted;
         }
 
         private void TryStartRitualJobs(Pawn conductor, List<Pawn> audience, Corpse corpse, Thing circle)
         {
-            if (!IsValidCorpseTarget(corpse))
+            AcceptanceReport corpseReport = ValidateCorpseTarget(corpse);
+            if (!corpseReport.Accepted)
             {
-                Messages.Message("Select a reachable humanlike mortal corpse on this map.", parent, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(corpseReport.Reason, parent, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
-            if (!IsEligibleConductor(conductor, corpse, circle))
+            AcceptanceReport conductorReport = ValidateConductor(conductor, corpse, circle);
+            if (!conductorReport.Accepted)
             {
-                Messages.Message("The selected conductor cannot reach and reserve the corpse, lectern, and circle.", corpse, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(conductorReport.Reason, corpse, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -136,30 +143,34 @@ namespace AeternusFaith
 
         internal bool IsEligibleConductor(Pawn pawn, Corpse corpse, Thing circle)
         {
-            if (!IsEligibleAudience(pawn))
-                return false;
+            return ValidateConductor(pawn, corpse, circle).Accepted;
+        }
 
-            if (pawn.WorkTagIsDisabled(WorkTags.ManualDumb))
-                return false;
+        internal AcceptanceReport ValidateConductor(Pawn pawn, Corpse corpse, Thing circle)
+        {
+            AcceptanceReport report = RitualPawnEligibilityUtility.ValidateBonewrightConductor(pawn);
+            if (!report.Accepted)
+                return report;
 
-            if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving) ||
-                !pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
-                return false;
+            report = RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, corpse, PathEndMode.ClosestTouch, "corpse");
+            if (!report.Accepted)
+                return report;
 
-            return pawn.CanReserveAndReach(corpse, PathEndMode.ClosestTouch, Danger.Deadly) &&
-                   pawn.CanReserveAndReach(parent, PathEndMode.InteractionCell, Danger.Deadly) &&
-                   pawn.CanReserveAndReach(circle, PathEndMode.Touch, Danger.Deadly);
+            report = RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, parent, PathEndMode.InteractionCell, "lectern");
+            if (!report.Accepted)
+                return report;
+
+            return RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, circle, PathEndMode.Touch, "ritual circle");
         }
 
         internal bool IsEligibleAudience(Pawn pawn)
         {
-            if (pawn == null || pawn.Dead || pawn.Downed || !pawn.Spawned || pawn.InMentalState)
-                return false;
+            return ValidateAudience(pawn).Accepted;
+        }
 
-            if (pawn.Faction != Faction.OfPlayer)
-                return false;
-
-            return pawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving);
+        internal AcceptanceReport ValidateAudience(Pawn pawn)
+        {
+            return RitualPawnEligibilityUtility.ValidateAudiencePawn(pawn);
         }
     }
 }

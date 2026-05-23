@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_ArcaneSiteDecorationBase" ParentName="BuildingBase" Abstract="True">
+    <label>arcane site decoration</label>
+    <description>An arcane remnant used only as decoration in generated mission sites.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <selectable>false</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <graphicData>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(1,1)</drawSize>
+      <damageData>
+        <enabled>false</enabled>
+      </damageData>
+    </graphicData>
+    <size>(1,1)</size>
+    <altitudeLayer>BuildingOnTop</altitudeLayer>
+    <passability>Standable</passability>
+    <fillPercent>0</fillPercent>
+    <pathCost>0</pathCost>
+    <useHitPoints>false</useHitPoints>
+    <terrainAffordanceNeeded IsNull="True" />
+    <building>
+      <isEdifice>false</isEdifice>
+      <deconstructible>false</deconstructible>
+      <claimable>false</claimable>
+    </building>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_A</defName>
+    <label>arcane site decoration a</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/a</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_AA</defName>
+    <label>arcane site decoration aa</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/aa</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_B</defName>
+    <label>arcane site decoration b</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/b</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_C</defName>
+    <label>arcane site decoration c</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/c</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_D</defName>
+    <label>arcane site decoration d</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/d</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_E</defName>
+    <label>arcane site decoration e</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/e</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_F</defName>
+    <label>arcane site decoration f</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/f</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_G</defName>
+    <label>arcane site decoration g</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/g</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_H</defName>
+    <label>arcane site decoration h</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/h</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_I</defName>
+    <label>arcane site decoration i</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/i</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_J</defName>
+    <label>arcane site decoration j</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/j</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_K</defName>
+    <label>arcane site decoration k</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/k</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_L</defName>
+    <label>arcane site decoration l</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/l</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_M</defName>
+    <label>arcane site decoration m</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/m</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_N</defName>
+    <label>arcane site decoration n</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/n</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_O</defName>
+    <label>arcane site decoration o</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/o</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_P</defName>
+    <label>arcane site decoration p</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/p</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_Q</defName>
+    <label>arcane site decoration q</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/q</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_R</defName>
+    <label>arcane site decoration r</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/r</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_S</defName>
+    <label>arcane site decoration s</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/s</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_T</defName>
+    <label>arcane site decoration t</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/t</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_U</defName>
+    <label>arcane site decoration u</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/u</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_V</defName>
+    <label>arcane site decoration v</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/v</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_W</defName>
+    <label>arcane site decoration w</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/w</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_X</defName>
+    <label>arcane site decoration x</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/x</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_Y</defName>
+    <label>arcane site decoration y</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/y</texPath>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_ArcaneSiteDecorationBase">
+    <defName>MFV_ArcaneSiteDecoration_Z</defName>
+    <label>arcane site decoration z</label>
+    <graphicData>
+      <texPath>Things/Building/Decorations/z</texPath>
+    </graphicData>
+  </ThingDef>
+
+</Defs>

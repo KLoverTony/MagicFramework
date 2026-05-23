@@ -2,6 +2,7 @@ using HarmonyLib;
 using RimWorld;
 using Verse;
 using Verse.AI;
+using AeternusFaith.Undead.Spectral;
 
 namespace AeternusFaith
 {
@@ -38,6 +39,18 @@ namespace AeternusFaith
         {
             if (__result?.targetA.Thing is Pawn recipient && SkeletonUndeadUtility.IsUndeadRace(recipient))
                 __result = null;
+        }
+    }
+
+    [HarmonyPatch(typeof(ResurrectionUtility), nameof(ResurrectionUtility.TryResurrect), typeof(Pawn), typeof(ResurrectionParams))]
+    public static class ResurrectionUtility_TryResurrect_SpectralPatch
+    {
+        public static void Postfix(Pawn pawn, bool __result)
+        {
+            if (!__result || pawn == null)
+                return;
+
+            MapComponent_SpectralEntities.RemoveSpiritsForSourcePawn(pawn);
         }
     }
 }

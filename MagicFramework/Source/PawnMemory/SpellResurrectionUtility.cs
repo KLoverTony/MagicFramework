@@ -179,11 +179,7 @@ public static class SpellResurrectionUtility
             DespawnActiveSpirit(record);
         }
 
-        record.spiritActive = false;
-        record.activeSpiritThingId = null;
-        record.state = PawnMemoryState.Active;
-        registry.UpdateMemory(pawn, PawnMemoryUpdateReason.Resurrection);
-        record.state = PawnMemoryState.Active;
+        PawnSoulRiteUtility.NotifyPawnResurrected(pawn);
     }
 
     private static void DespawnActiveSpirit(PawnMemoryRecord record)

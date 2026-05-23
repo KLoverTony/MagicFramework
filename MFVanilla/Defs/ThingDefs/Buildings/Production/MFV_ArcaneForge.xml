@@ -51,7 +51,6 @@
     <surfaceType>Item</surfaceType>
     <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
     <researchPrerequisites>
-      <li>Fabrication</li>
       <li>MFV_Enchantment</li>
     </researchPrerequisites>
     <inspectorTabs>

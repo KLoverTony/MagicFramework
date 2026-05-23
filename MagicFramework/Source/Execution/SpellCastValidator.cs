@@ -71,6 +71,12 @@ public sealed class SpellCastValidator
             return false;
         }
 
+        if (targeting.requireCorpse && targetThing is not Corpse)
+        {
+            reason = "Target must be a corpse.";
+            return false;
+        }
+
         if (targeting.requireResurrectableCorpse
             && !SpellResurrectionUtility.TryValidateCorpseForResurrection(target, out _, out reason))
         {

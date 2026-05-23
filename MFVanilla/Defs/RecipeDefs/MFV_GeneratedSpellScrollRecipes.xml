@@ -3,7 +3,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_AirBlast</defName>
     <label>scribe scroll (air blast)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast air blast.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast air blast. The scribe must have the Arcane Gift and already know air blast.</description>
     <jobString>Scribing scroll (air blast).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -54,7 +54,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ArcSeeker</defName>
     <label>scribe scroll (arc seeker)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast arc seeker.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast arc seeker. The scribe must have the Arcane Gift and already know arc seeker.</description>
     <jobString>Scribing scroll (arc seeker).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -105,7 +105,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_BlessingOfVigor</defName>
     <label>scribe scroll (blessing of vigor)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast blessing of vigor.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast blessing of vigor. The scribe must have the Arcane Gift and already know blessing of vigor.</description>
     <jobString>Scribing scroll (blessing of vigor).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -156,7 +156,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_BlinkStep</defName>
     <label>scribe scroll (blink step)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast blink step.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast blink step. The scribe must have the Arcane Gift and already know blink step.</description>
     <jobString>Scribing scroll (blink step).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -207,7 +207,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ChainLightning</defName>
     <label>scribe scroll (chain lightning)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast chain lightning.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast chain lightning. The scribe must have the Arcane Gift and already know chain lightning.</description>
     <jobString>Scribing scroll (chain lightning).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -258,7 +258,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_CreateFood</defName>
     <label>scribe scroll (create food)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast create food.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast create food. The scribe must have the Arcane Gift and already know create food.</description>
     <jobString>Scribing scroll (create food).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -309,7 +309,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_DelayedBlastRune</defName>
     <label>scribe scroll (delayed blast rune)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast delayed blast rune.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast delayed blast rune. The scribe must have the Arcane Gift and already know delayed blast rune.</description>
     <jobString>Scribing scroll (delayed blast rune).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -360,7 +360,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Deluge</defName>
     <label>scribe scroll (deluge)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast deluge.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast deluge. The scribe must have the Arcane Gift and already know deluge.</description>
     <jobString>Scribing scroll (deluge).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -411,7 +411,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Disintegrate</defName>
     <label>scribe scroll (disintegrate)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast disintegrate.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast disintegrate. The scribe must have the Arcane Gift and already know disintegrate.</description>
     <jobString>Scribing scroll (disintegrate).</jobString>
     <workAmount>1300</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -460,7 +460,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_EarthCall</defName>
     <label>scribe scroll (earth call)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast earth call.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast earth call. The scribe must have the Arcane Gift and already know earth call.</description>
     <jobString>Scribing scroll (earth call).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -511,7 +511,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Extinguish</defName>
     <label>scribe scroll (extinguish)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast extinguish.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast extinguish. The scribe must have the Arcane Gift and already know extinguish.</description>
     <jobString>Scribing scroll (extinguish).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -562,7 +562,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Fireball</defName>
     <label>scribe scroll (fireball)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast fireball.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast fireball. The scribe must have the Arcane Gift and already know fireball.</description>
     <jobString>Scribing scroll (fireball).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -613,7 +613,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Firebolt</defName>
     <label>scribe scroll (firebolt)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast firebolt.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast firebolt. The scribe must have the Arcane Gift and already know firebolt.</description>
     <jobString>Scribing scroll (firebolt).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -664,7 +664,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_FlameField</defName>
     <label>scribe scroll (flame field)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast flame field.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast flame field. The scribe must have the Arcane Gift and already know flame field.</description>
     <jobString>Scribing scroll (flame field).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -715,7 +715,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ForceField</defName>
     <label>scribe scroll (force field)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast force field.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast force field. The scribe must have the Arcane Gift and already know force field.</description>
     <jobString>Scribing scroll (force field).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -766,7 +766,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ForcePull</defName>
     <label>scribe scroll (force pull)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast force pull.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast force pull. The scribe must have the Arcane Gift and already know force pull.</description>
     <jobString>Scribing scroll (force pull).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -817,7 +817,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ForcePush</defName>
     <label>scribe scroll (force push)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast force push.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast force push. The scribe must have the Arcane Gift and already know force push.</description>
     <jobString>Scribing scroll (force push).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -868,7 +868,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Freeze</defName>
     <label>scribe scroll (freeze)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast freeze.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast freeze. The scribe must have the Arcane Gift and already know freeze.</description>
     <jobString>Scribing scroll (freeze).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -919,7 +919,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Haste</defName>
     <label>scribe scroll (haste)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast haste.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast haste. The scribe must have the Arcane Gift and already know haste.</description>
     <jobString>Scribing scroll (haste).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -970,7 +970,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Heal</defName>
     <label>scribe scroll (heal)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast heal.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast heal. The scribe must have the Arcane Gift and already know heal.</description>
     <jobString>Scribing scroll (heal).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1021,7 +1021,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Heat</defName>
     <label>scribe scroll (heat)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast heat.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast heat. The scribe must have the Arcane Gift and already know heat.</description>
     <jobString>Scribing scroll (heat).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1072,7 +1072,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ManaShield</defName>
     <label>scribe scroll (mana shield)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast mana shield.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast mana shield. The scribe must have the Arcane Gift and already know mana shield.</description>
     <jobString>Scribing scroll (mana shield).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1123,7 +1123,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Might</defName>
     <label>scribe scroll (might)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast might.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast might. The scribe must have the Arcane Gift and already know might.</description>
     <jobString>Scribing scroll (might).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1172,9 +1172,60 @@
     <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_RaiseSkeleton</defName>
+    <label>scribe scroll (raise skeleton)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast raise skeleton. The scribe must have the Arcane Gift and already know raise skeleton.</description>
+    <jobString>Scribing scroll (raise skeleton).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Necromancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_RaiseSkeleton>1</MFV_SpellScroll_MF_RaiseSkeleton>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_RaiseSkeleton</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Regeneration</defName>
     <label>scribe scroll (regeneration)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast regeneration.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast regeneration. The scribe must have the Arcane Gift and already know regeneration.</description>
     <jobString>Scribing scroll (regeneration).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1225,7 +1276,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_RepulsionWard</defName>
     <label>scribe scroll (repulsion ward)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast repulsion ward.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast repulsion ward. The scribe must have the Arcane Gift and already know repulsion ward.</description>
     <jobString>Scribing scroll (repulsion ward).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1276,7 +1327,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_RescueRecall</defName>
     <label>scribe scroll (rescue recall)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast rescue recall.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast rescue recall. The scribe must have the Arcane Gift and already know rescue recall.</description>
     <jobString>Scribing scroll (rescue recall).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1327,7 +1378,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Resurrection</defName>
     <label>scribe scroll (resurrection)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast resurrection.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast resurrection. The scribe must have the Arcane Gift and already know resurrection.</description>
     <jobString>Scribing scroll (resurrection).</jobString>
     <workAmount>1500</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1376,7 +1427,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_RuneTrap</defName>
     <label>scribe scroll (rune trap)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast rune trap.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast rune trap. The scribe must have the Arcane Gift and already know rune trap.</description>
     <jobString>Scribing scroll (rune trap).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1427,7 +1478,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Stoneskin</defName>
     <label>scribe scroll (stoneskin)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast stoneskin.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast stoneskin. The scribe must have the Arcane Gift and already know stoneskin.</description>
     <jobString>Scribing scroll (stoneskin).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1478,7 +1529,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_SummonDog</defName>
     <label>scribe scroll (summon dog)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast summon dog.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast summon dog. The scribe must have the Arcane Gift and already know summon dog.</description>
     <jobString>Scribing scroll (summon dog).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1529,7 +1580,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ThreatSpike</defName>
     <label>scribe scroll (threat spike)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast threat spike.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast threat spike. The scribe must have the Arcane Gift and already know threat spike.</description>
     <jobString>Scribing scroll (threat spike).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1580,7 +1631,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Tornado</defName>
     <label>scribe scroll (Tornado)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast Tornado.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast Tornado. The scribe must have the Arcane Gift and already know Tornado.</description>
     <jobString>Scribing scroll (Tornado).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1631,7 +1682,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Transposition</defName>
     <label>scribe scroll (transposition)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast transposition.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast transposition. The scribe must have the Arcane Gift and already know transposition.</description>
     <jobString>Scribing scroll (transposition).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1682,7 +1733,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_TriagePulse</defName>
     <label>scribe scroll (triage pulse)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast triage pulse.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast triage pulse. The scribe must have the Arcane Gift and already know triage pulse.</description>
     <jobString>Scribing scroll (triage pulse).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1733,7 +1784,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_WallOfFire</defName>
     <label>scribe scroll (wall of fire)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast wall of fire.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast wall of fire. The scribe must have the Arcane Gift and already know wall of fire.</description>
     <jobString>Scribing scroll (wall of fire).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1784,7 +1835,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Warmth</defName>
     <label>scribe scroll (warmth)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast warmth.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast warmth. The scribe must have the Arcane Gift and already know warmth.</description>
     <jobString>Scribing scroll (warmth).</jobString>
     <workAmount>900</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
@@ -1835,7 +1886,7 @@
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_WatersEmbrace</defName>
     <label>scribe scroll (water's embrace)</label>
-    <description>Prepare a spell scroll that teaches a pawn how to cast water's embrace.</description>
+    <description>Prepare a spell scroll that teaches a pawn how to cast water's embrace. The scribe must have the Arcane Gift and already know water's embrace.</description>
     <jobString>Scribing scroll (water's embrace).</jobString>
     <workAmount>1100</workAmount>
     <workSpeedStat>GeneralLaborSpeed</workSpeedStat>

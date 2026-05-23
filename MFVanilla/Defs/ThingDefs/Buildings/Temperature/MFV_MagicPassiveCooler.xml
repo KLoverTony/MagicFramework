@@ -24,9 +24,14 @@
     <tickerType>Normal</tickerType>
     <drawerType>RealtimeOnly</drawerType>
     <fillPercent>0.40</fillPercent>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <thingCategories>
+      <li>BuildingsTemperature</li>
+    </thingCategories>
     <statBases>
       <MaxHitPoints>80</MaxHitPoints>
       <WorkToBuild>250</WorkToBuild>
+      <Mass>4</Mass>
       <Flammability>0.5</Flammability>
     </statBases>
     <selectable>true</selectable>

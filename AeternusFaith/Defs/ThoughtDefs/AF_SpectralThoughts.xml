@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThoughtDef>
+    <defName>AF_EerieColdThought</defName>
+    <workerClass>ThoughtWorker_Hediff</workerClass>
+    <hediff>AF_EerieCold</hediff>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>eerie cold</label>
+        <description>A cold presence is lingering nearby.</description>
+        <baseMoodEffect>-5</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+</Defs>

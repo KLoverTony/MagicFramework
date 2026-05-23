@@ -12,17 +12,17 @@ namespace AeternusFaith
             Thing lectern,
             Thing circle,
             Action<Pawn, List<Pawn>, Corpse, Thing> startRitual,
-            Func<Corpse, bool> corpseValidator,
-            Func<Pawn, Corpse, Thing, bool> conductorValidator,
-            Func<Pawn, bool> audienceValidator)
+            Func<Corpse, AcceptanceReport> corpseValidator,
+            Func<Pawn, Corpse, Thing, AcceptanceReport> conductorValidator,
+            Func<Pawn, AcceptanceReport> audienceValidator)
             : base(
                 "Skeleton rite",
                 "Begin rite",
-                lectern?.Map?.mapPawns?.FreeColonistsSpawned.Where(pawn => audienceValidator(pawn)) ?? Enumerable.Empty<Pawn>(),
+                lectern?.Map?.mapPawns?.FreeColonistsSpawned.Where(pawn => audienceValidator(pawn).Accepted) ?? Enumerable.Empty<Pawn>(),
                 lectern?.Map?.listerThings?.AllThings.OfType<Corpse>() ?? Enumerable.Empty<Corpse>(),
-                corpse => corpseValidator(corpse) ? true : "The rite requires a humanlike mortal corpse.",
-                (pawn, corpse) => conductorValidator(pawn, corpse, circle) ? true : "Cannot reach and reserve the corpse, lectern, and circle.",
-                pawn => audienceValidator(pawn) ? true : "Not available to attend this rite.",
+                corpseValidator,
+                (pawn, corpse) => conductorValidator(pawn, corpse, circle),
+                audienceValidator,
                 result => startRitual(result.conductor, result.audience, result.corpse, circle))
         {
         }

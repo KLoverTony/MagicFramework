@@ -1,6 +1,6 @@
 # MagicFramework Roadmap Supplement
 
-This supplement preserves the current implementation plan for addressing the remaining `ProjectTodo.md` items. The main todo remains the source of truth for individual task definitions; this file focuses on sequencing, milestones, priority, complexity, and smoke-test expectations.
+This supplement preserves an older implementation sequencing plan for roadmap context. The active short-term dashboard now lives in [ProjectTodo.md](ProjectTodo.md), while detailed task definitions live in [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md), [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md), [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md), and [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md).
 
 ## Planning Principles
 

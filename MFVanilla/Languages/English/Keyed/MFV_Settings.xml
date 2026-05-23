@@ -26,4 +26,7 @@
 
   <MFV_ShowLatestMagicNotes>Show latest magic notes</MFV_ShowLatestMagicNotes>
   <MFV_ResetSettingsToDefaults>Reset to defaults</MFV_ResetSettingsToDefaults>
+
+  <MFV_RequiresArcaneGiftWorker>Requires a pawn with the Arcane Gift.</MFV_RequiresArcaneGiftWorker>
+  <MFV_MustKnowSpellToScribe>Requires a scribe who already knows {0}.</MFV_MustKnowSpellToScribe>
 </LanguageData>

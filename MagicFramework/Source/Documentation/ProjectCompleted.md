@@ -4,6 +4,36 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MFVanilla 0.8.2 / MagicFramework 1.3.1 progression QoL patch.
+  Uploaded:
+  - May 22, 2026.
+  Current state:
+  - Completing spell-unlocking arcane research drops one matching mystery scroll with a mysterious-aid message, giving each newly unlocked spell pool an immediate payoff without directly granting spells.
+  - Generated spell scroll market values now scale by the full research prerequisite chain, roughly `200 x required research count`, making deeper scrolls significant purchases.
+  - Elementalist trader stock and arcane treasure tables now make spell scrolls more reliably available without making them cheap.
+  - Learning a spell from a scroll grants caster XP, and successful known-spell casts grant small caster XP through MagicFramework runtime support.
+  - Arcane Gift pawns can apprentice under higher-level gifted mentors while the mentor performs qualifying arcane work: arcane research, scribing, alchemy, or enchantment.
+  - Apprenticeship is exposed through normal RimWorld work/right-click behavior as "Prioritize learning from X"; multiple apprentices can learn from the same mentor.
+  Validation:
+  - Research scroll drop was tested and worked well in game.
+  - Apprenticeship was tested in game and works after fixing the XP award from a brittle global-tick modulo check to accumulated apprenticeship time.
+  Follow-up posture:
+  - Watch whether combined scroll drops, trader stock, treasure rewards, casting XP, and apprenticeship make spell acquisition or caster leveling too fast.
+  - Pawns incapable of study/research do not apprentice for now; leave this as an accepted identity boundary unless it becomes a concrete progression problem.
+
+- MFVanilla 0.8 / MagicFramework 1.3 uploaded release band.
+  Uploaded:
+  - May 19, 2026 at 11 PM.
+  Current state:
+  - MFVanilla world-layer mission release is the last uploaded band.
+  - Arcane Cache, Ruined Sanctum, and Sealed Vault opportunities are implemented through deterministic site generation, arcane treasure chest rewards, construct defenders, incident entries, and debug spawn/offer support.
+  - Arcane Cache passed normal-play smoke testing around day 45, including event arrival and expected completion.
+  - Deep Iron Golem was dev tested and produced a strong boss fight; automata were working fairly well in current testing.
+  - Leyline Sensitivity, Arcane Discipline rituals, the elemental spell expansion, Elementalist tribe first pass, and updated splash notes shipped as part of the band.
+  Follow-up posture:
+  - Ruined Sanctum and Sealed Vault remain normal-play observation items for cleanup, reward extraction, save/load, repeat generation, Deep Iron Golem readability/drops, and tuning.
+  - Gemstone reward economy remains a watch item after the first "few and valuable" tuning pass.
+
 - MFVanilla caster-level growth hotfix.
   Current state:
   - MagicFramework caster runtime state now stores earned caster experience in addition to caster level.

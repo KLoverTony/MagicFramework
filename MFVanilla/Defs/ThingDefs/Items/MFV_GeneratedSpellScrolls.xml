@@ -6,7 +6,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast air blast.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -29,7 +29,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast arc seeker.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -52,7 +52,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast blessing of vigor.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -75,7 +75,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast blink step.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -98,7 +98,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast chain lightning.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -121,7 +121,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast create food.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -144,7 +144,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast delayed blast rune.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1400</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -168,7 +168,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast deluge.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -196,7 +196,7 @@
       <drawSize>0.8</drawSize>
     </graphicData>
     <statBases>
-      <MarketValue>340</MarketValue>
+      <MarketValue>2200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -219,7 +219,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast earth call.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -242,7 +242,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast extinguish.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -265,7 +265,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast fireball.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -288,7 +288,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast firebolt.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -311,7 +311,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast flame field.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -334,7 +334,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast force field.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>2200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -357,7 +357,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast force pull.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -380,7 +380,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast force push.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -403,7 +403,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast freeze.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -426,7 +426,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast haste.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -449,7 +449,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast heal.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -472,7 +472,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast heat.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -495,7 +495,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast mana shield.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>2200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -518,7 +518,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast might.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -536,12 +536,35 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_RaiseSkeleton</defName>
+    <label>spell scroll (raise skeleton)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast raise skeleton.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>1200</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_RaiseSkeleton</spell>
+        <requiredResearch>
+          <li>MFV_Necromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_Regeneration</defName>
     <label>spell scroll (regeneration)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast regeneration.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -564,7 +587,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast repulsion ward.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -588,7 +611,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast rescue recall.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -616,7 +639,7 @@
       <drawSize>0.8</drawSize>
     </graphicData>
     <statBases>
-      <MarketValue>380</MarketValue>
+      <MarketValue>2600</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -639,7 +662,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast rune trap.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -662,7 +685,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast stoneskin.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -685,7 +708,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast summon dog.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -708,7 +731,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast threat spike.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>800</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -731,7 +754,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast Tornado.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -754,7 +777,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast transposition.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -777,7 +800,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast triage pulse.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -800,7 +823,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast wall of fire.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -823,7 +846,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast warmth.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>260</MarketValue>
+      <MarketValue>1000</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />
@@ -846,7 +869,7 @@
     <description>A prepared arcane scroll that teaches a pawn how to cast water's embrace.</description>
     <forceDebugSpawnable>true</forceDebugSpawnable>
     <statBases>
-      <MarketValue>300</MarketValue>
+      <MarketValue>1200</MarketValue>
     </statBases>
     <comps Inherit="False">
       <li Class="CompProperties_Forbiddable" />

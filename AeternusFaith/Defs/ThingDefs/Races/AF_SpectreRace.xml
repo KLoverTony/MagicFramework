@@ -49,7 +49,7 @@
     </statBases>
 
     <race>
-      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeMain>AF_Spectre</thinkTreeMain>
       <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
       <intelligence>Humanlike</intelligence>
       <!-- Keep this humanlike. Animal render nodes call CurKindLifeStage and will error on humanlike pawns. -->

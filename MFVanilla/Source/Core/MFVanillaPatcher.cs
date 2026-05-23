@@ -62,6 +62,12 @@ public static class MFVanillaPatcher
         );
 
         harmony.Patch(
+            AccessTools.Method(typeof(ResearchManager), nameof(ResearchManager.FinishProject), new[] { typeof(ResearchProjectDef), typeof(bool), typeof(Pawn), typeof(bool) }),
+            prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchManager_FinishProject_Prefix)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchManager_FinishProject_Postfix))
+        );
+
+        harmony.Patch(
             AccessTools.Method(typeof(Bill), nameof(Bill.PawnAllowedToStartAnew)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Bill_PawnAllowedToStartAnew_Postfix))
         );
@@ -225,6 +231,73 @@ public static class MFVanillaPatcher
         ArcanePracticeUtility.NotifyArcaneResearchPerformed(researcher, bench);
     }
 
+    private static void ResearchManager_FinishProject_Prefix(ResearchProjectDef proj, out bool __state)
+    {
+        __state = proj?.IsFinished == true;
+    }
+
+    private static void ResearchManager_FinishProject_Postfix(ResearchProjectDef proj, Pawn researcher, bool __state)
+    {
+        if (__state || proj?.IsFinished != true) return;
+
+        TryDropMysteriousAidScroll(proj, researcher);
+    }
+
+    private static void TryDropMysteriousAidScroll(ResearchProjectDef project, Pawn researcher)
+    {
+        ThingDef scrollDef = RandomScrollUnlockedBy(project);
+        if (scrollDef == null) return;
+
+        Map map = researcher?.MapHeld
+            ?? Find.Maps?.FirstOrDefault(candidate => candidate?.IsPlayerHome == true);
+        if (map == null) return;
+
+        IntVec3 dropCell = researcher?.Spawned == true ? researcher.Position : map.Center;
+        Thing scroll = ThingMaker.MakeThing(scrollDef);
+        if (!GenPlace.TryPlaceThing(scroll, dropCell, map, ThingPlaceMode.Near, out Thing placedThing))
+        {
+            return;
+        }
+
+        Messages.Message(
+            "A mysterious voice echoes across your town: \"This will aid you in your quest.\"",
+            placedThing,
+            MessageTypeDefOf.PositiveEvent,
+            true);
+    }
+
+    private static ThingDef RandomScrollUnlockedBy(ResearchProjectDef project)
+    {
+        if (project == null) return null;
+
+        List<ThingDef> candidates = DefDatabase<ThingDef>.AllDefsListForReading
+            .Where(thingDef => IsMFVanillaSpellScrollUnlockedBy(thingDef, project))
+            .ToList();
+
+        return candidates.Count == 0 ? null : candidates.RandomElement();
+    }
+
+    private static bool IsMFVanillaSpellScrollUnlockedBy(ThingDef thingDef, ResearchProjectDef project)
+    {
+        if (thingDef?.defName == null
+            || !thingDef.defName.StartsWith("MFV_SpellScroll_", StringComparison.Ordinal)
+            || thingDef.comps == null)
+        {
+            return false;
+        }
+
+        CompProperties_UseEffectLearnSpell learnComp = thingDef.comps
+            .OfType<CompProperties_UseEffectLearnSpell>()
+            .FirstOrDefault();
+        List<ResearchProjectDef> requiredResearch = learnComp?.requiredResearch;
+        if (requiredResearch == null || !requiredResearch.Contains(project))
+        {
+            return false;
+        }
+
+        return requiredResearch.All(requiredProject => requiredProject?.IsFinished == true);
+    }
+
     private static void Bill_PawnAllowedToStartAnew_Postfix(Bill __instance, Pawn p, ref bool __result)
     {
         if (!__result || p == null) return;
@@ -234,6 +307,7 @@ public static class MFVanillaPatcher
 
         if (SpellRuntimeGameComponent.Instance?.KnowsSpell(p, spell) != true)
         {
+            JobFailReason.Is("MFV_MustKnowSpellToScribe".Translate(spell.LabelCap));
             __result = false;
         }
     }
@@ -289,6 +363,7 @@ public static class MFVanillaPatcher
             return true;
         }
 
+        JobFailReason.Is("MFV_RequiresArcaneGiftWorker".Translate());
         __result = null;
         return false;
     }

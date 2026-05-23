@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -30,6 +31,7 @@ namespace AeternusFaith
             this.FailOnDestroyedOrNull(CorpseInd);
             this.FailOnDestroyedOrNull(LecternInd);
             this.FailOnDestroyedOrNull(CircleInd);
+            this.FailOn(() => !BonewrightUtility.IsBonewright(pawn));
 
             yield return Toils_Reserve.Reserve(CorpseInd);
             yield return Toils_Reserve.Reserve(LecternInd);
@@ -97,6 +99,12 @@ namespace AeternusFaith
 
         private void FinishRite()
         {
+            if (!BonewrightUtility.IsBonewright(pawn))
+            {
+                Messages.Message("Only a Bonewright can complete the skeleton rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             Corpse corpse = Corpse ?? FindPlacedCorpseNearCircle();
             if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
@@ -111,6 +119,7 @@ namespace AeternusFaith
             Ideo sourceIdeo = ModsConfig.IdeologyActive ? sourcePawn?.ideo?.Ideo : null;
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
 
+            PawnSoulRiteUtility.NotifyCorpseConsumedWithoutBindingSoul(sourcePawn, corpse, pawn);
             Pawn skeleton = CreateSkeletonPawn(corpse, sourcePawn, sourceName, sourceGender, sourceIdeo);
             if (skeleton == null)
             {

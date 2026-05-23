@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -29,6 +30,7 @@ namespace AeternusFaith
             this.FailOnDestroyedOrNull(CorpseInd);
             this.FailOnDestroyedOrNull(LecternInd);
             this.FailOnDestroyedOrNull(OssuaryInd);
+            this.FailOn(() => !BonewrightUtility.IsBonewright(pawn));
 
             yield return Toils_Reserve.Reserve(CorpseInd);
             yield return Toils_Reserve.Reserve(LecternInd);
@@ -96,6 +98,12 @@ namespace AeternusFaith
 
         private void FinishRite()
         {
+            if (!BonewrightUtility.IsBonewright(pawn))
+            {
+                Messages.Message("Only a Bonewright can complete the ossuary rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             Corpse corpse = Corpse ?? FindPlacedCorpseNearOssuary();
             if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
@@ -113,6 +121,7 @@ namespace AeternusFaith
             Pawn deceased = corpse.InnerPawn;
             ossuaryContents?.Record(corpse, pawn);
             string corpseLabel = corpse.LabelShortCap;
+            PawnSoulRiteUtility.NotifySoulReleased(deceased, corpse, pawn);
             MarkFuneralObligationsCompleted(deceased);
             corpse.Destroy(DestroyMode.Vanish);
             MarkFuneralObligationsCompleted(deceased);

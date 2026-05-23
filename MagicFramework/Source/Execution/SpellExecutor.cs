@@ -1,7 +1,10 @@
 using MagicFramework.Context;
+using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Scheduling;
 using MagicFramework.Visuals;
+using UnityEngine;
+using RimWorld;
 using Verse;
 
 namespace MagicFramework.Execution;
@@ -11,6 +14,9 @@ namespace MagicFramework.Execution;
 /// </summary>
 public sealed class SpellExecutor
 {
+    private const float CastSpellBaseExperience = 5f;
+    private const float CastSpellExperiencePerTier = 3f;
+
     private readonly SpellCastValidator validator;
     private readonly SpellCostProcessor costProcessor;
     private readonly SpellActionRunner actionRunner;
@@ -74,6 +80,37 @@ public sealed class SpellExecutor
 
         actionRunner.RunRootActions(context);
         scheduler.FlushDebugSchedule(context);
-        return !context.executionState.failed && !context.executionState.cancelled;
+        bool completed = !context.executionState.failed && !context.executionState.cancelled;
+        if (completed)
+        {
+            AwardCastingExperience(context);
+        }
+
+        return completed;
+    }
+
+    private static void AwardCastingExperience(SpellContext context)
+    {
+        if (context?.caster is not Pawn pawn || context.spellDef == null)
+        {
+            return;
+        }
+
+        SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
+        if (runtime == null
+            || !runtime.HasArcaneGift(pawn)
+            || !runtime.KnowsSpell(pawn, context.spellDef)
+            || context.sourceItem != null)
+        {
+            return;
+        }
+
+        float xp = CastSpellBaseExperience + (CastSpellExperiencePerTier * SpellTier(context.spellDef));
+        runtime.GainCasterExperience(pawn, xp);
+    }
+
+    private static int SpellTier(SpellDef spellDef)
+    {
+        return Mathf.Max(1, spellDef?.meta?.tier ?? 1);
     }
 }

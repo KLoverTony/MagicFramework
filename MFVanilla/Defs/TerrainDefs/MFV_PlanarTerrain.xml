@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarTileA</defName>
+    <label>planar glass</label>
+    <description>A smooth ground plane from a folded pocket of unstable space.</description>
+    <texturePath>Things/Terrain/Planar/TileAlpha1</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>360</renderPrecedence>
+    <pathCost>1</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.8</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarTileB</defName>
+    <label>planar shale</label>
+    <description>A darker plate of condensed planar matter.</description>
+    <texturePath>Things/Terrain/Planar/TileAlpha2</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>355</renderPrecedence>
+    <pathCost>2</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.7</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarTileC</defName>
+    <label>planar bloomstone</label>
+    <description>A translucent planar surface threaded with soft arcane color.</description>
+    <texturePath>Things/Terrain/Planar/TileAlpha3</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>350</renderPrecedence>
+    <pathCost>2</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.9</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarTileD</defName>
+    <label>planar duskplate</label>
+    <description>A dense planar plate that drinks in ordinary light.</description>
+    <texturePath>Things/Terrain/Planar/TileAlpha4</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>345</renderPrecedence>
+    <pathCost>3</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.6</fertility>
+  </TerrainDef>
+
+</Defs>

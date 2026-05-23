@@ -16,16 +16,16 @@
           <li><minRoll>36</minRoll><maxRoll>65</maxRoll><thingDef>MFV_SpellScroll_MF_Firebolt</thingDef><weight>1</weight></li>
           <li><minRoll>36</minRoll><maxRoll>65</maxRoll><thingDef>MFV_SpellScroll_MF_Heal</thingDef><weight>1</weight></li>
           <li><minRoll>36</minRoll><maxRoll>65</maxRoll><thingDef>MFV_SpellScroll_MF_Haste</thingDef><weight>1</weight></li>
-          <li><minRoll>66</minRoll><maxRoll>95</maxRoll><thingDef>MFV_SpellScroll_MF_BlinkStep</thingDef><weight>1</weight></li>
-          <li><minRoll>66</minRoll><maxRoll>95</maxRoll><thingDef>MFV_SpellScroll_MF_Fireball</thingDef><weight>1</weight></li>
+          <li><minRoll>66</minRoll><maxRoll>95</maxRoll><thingDef>MFV_SpellScroll_MF_BlinkStep</thingDef><weight>2</weight></li>
+          <li><minRoll>66</minRoll><maxRoll>95</maxRoll><thingDef>MFV_SpellScroll_MF_Fireball</thingDef><weight>2</weight></li>
           <li><minRoll>66</minRoll><maxRoll>95</maxRoll><thingDef>Apparel_PlateArmor</thingDef><weight>1</weight><quality>Good</quality></li>
           <li><minRoll>96</minRoll><maxRoll>125</maxRoll><thingDef>MFV_FlamingLongsword</thingDef><weight>1</weight><quality>Good</quality></li>
           <li><minRoll>96</minRoll><maxRoll>125</maxRoll><thingDef>MFV_ZephyrSpear</thingDef><weight>1</weight><quality>Good</quality></li>
           <li><minRoll>96</minRoll><maxRoll>125</maxRoll><thingDef>MFV_TidebreakerMace</thingDef><weight>1</weight><quality>Good</quality></li>
           <li><minRoll>96</minRoll><maxRoll>125</maxRoll><thingDef>MFV_StonefallMace</thingDef><weight>1</weight><quality>Good</quality></li>
           <li><minRoll>96</minRoll><maxRoll>125</maxRoll><thingDef>Apparel_FlakVest</thingDef><weight>1</weight><quality>Excellent</quality></li>
-          <li><minRoll>126</minRoll><maxRoll>160</maxRoll><thingDef>MFV_SpellScroll_MF_DelayedBlastRune</thingDef><weight>1</weight></li>
-          <li><minRoll>126</minRoll><maxRoll>160</maxRoll><thingDef>MFV_SpellScroll_MF_ForceField</thingDef><weight>1</weight></li>
+          <li><minRoll>126</minRoll><maxRoll>160</maxRoll><thingDef>MFV_SpellScroll_MF_DelayedBlastRune</thingDef><weight>2</weight></li>
+          <li><minRoll>126</minRoll><maxRoll>160</maxRoll><thingDef>MFV_SpellScroll_MF_ForceField</thingDef><weight>2</weight></li>
           <li><minRoll>126</minRoll><maxRoll>160</maxRoll><thingDef>Apparel_ArmorRecon</thingDef><weight>1</weight><quality>Excellent</quality></li>
           <li><minRoll>161</minRoll><maxRoll>220</maxRoll><thingDef>MFV_FlamingLongsword</thingDef><weight>1</weight><quality>Masterwork</quality></li>
           <li><minRoll>161</minRoll><maxRoll>220</maxRoll><thingDef>MFV_ZephyrSpear</thingDef><weight>1</weight><quality>Masterwork</quality></li>
@@ -39,7 +39,7 @@
         <entries>
           <li><minRoll>1</minRoll><maxRoll>35</maxRoll><thingDef>MFV_ArcaneInk</thingDef><weight>2</weight><minCount>6</minCount><maxCount>14</maxCount></li>
           <li><minRoll>1</minRoll><maxRoll>35</maxRoll><thingDef>MFV_Papyrus</thingDef><weight>1</weight><minCount>10</minCount><maxCount>24</maxCount></li>
-          <li><minRoll>1</minRoll><maxRoll>35</maxRoll><thingDef>MFV_GemstoneDust</thingDef><weight>2</weight><minCount>18</minCount><maxCount>45</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>35</maxRoll><thingDef>MFV_GemstoneDust</thingDef><weight>2</weight><minCount>10</minCount><maxCount>24</maxCount></li>
           <li><minRoll>36</minRoll><maxRoll>75</maxRoll><thingDef>MFV_Parchment</thingDef><weight>2</weight><minCount>8</minCount><maxCount>18</maxCount></li>
           <li><minRoll>36</minRoll><maxRoll>75</maxRoll><thingDef>MFV_ExoticHerbs</thingDef><weight>2</weight><minCount>16</minCount><maxCount>34</maxCount></li>
           <li><minRoll>36</minRoll><maxRoll>75</maxRoll><thingDef>DevilstrandCloth</thingDef><weight>1</weight><minCount>20</minCount><maxCount>45</maxCount></li>
@@ -53,19 +53,19 @@
       </li>
       <li>
         <label>gemstones</label>
-        <rolls>3</rolls>
+        <rolls>2</rolls>
         <entries>
-          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonRuby</thingDef><weight>1</weight><minCount>1</minCount><maxCount>3</maxCount></li>
-          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonSapphire</thingDef><weight>1</weight><minCount>1</minCount><maxCount>3</maxCount></li>
-          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonEmerald</thingDef><weight>1</weight><minCount>1</minCount><maxCount>3</maxCount></li>
-          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonTopaz</thingDef><weight>1</weight><minCount>1</minCount><maxCount>3</maxCount></li>
-          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonAmethyst</thingDef><weight>1</weight><minCount>1</minCount><maxCount>3</maxCount></li>
-          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineRuby</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
-          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineSapphire</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
-          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineEmerald</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
-          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineTopaz</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
-          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineAmethyst</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
-          <li><minRoll>91</minRoll><maxRoll>140</maxRoll><thingDef>MFV_CommonDiamond</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonRuby</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonSapphire</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonEmerald</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonTopaz</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>1</minRoll><maxRoll>45</maxRoll><thingDef>MFV_CommonAmethyst</thingDef><weight>1</weight><minCount>1</minCount><maxCount>2</maxCount></li>
+          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineRuby</thingDef><weight>1</weight></li>
+          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineSapphire</thingDef><weight>1</weight></li>
+          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineEmerald</thingDef><weight>1</weight></li>
+          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineTopaz</thingDef><weight>1</weight></li>
+          <li><minRoll>46</minRoll><maxRoll>90</maxRoll><thingDef>MFV_FineAmethyst</thingDef><weight>1</weight></li>
+          <li><minRoll>91</minRoll><maxRoll>140</maxRoll><thingDef>MFV_CommonDiamond</thingDef><weight>1</weight></li>
           <li><minRoll>91</minRoll><maxRoll>140</maxRoll><thingDef>MFV_ExquisiteRuby</thingDef><weight>1</weight></li>
           <li><minRoll>91</minRoll><maxRoll>140</maxRoll><thingDef>MFV_ExquisiteSapphire</thingDef><weight>1</weight></li>
           <li><minRoll>91</minRoll><maxRoll>140</maxRoll><thingDef>MFV_ExquisiteEmerald</thingDef><weight>1</weight></li>

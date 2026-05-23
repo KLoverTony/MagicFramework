@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using RimWorld;
 using Verse;
+using Verse.AI;
 
 namespace AeternusFaith
 {
@@ -30,7 +31,11 @@ namespace AeternusFaith
         {
             base.PostExposeData();
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
+            {
                 SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
+                SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+                SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
+            }
         }
 
         public override void CompTickRare()
@@ -98,6 +103,7 @@ namespace AeternusFaith
             if (pawn == null)
                 return;
 
+            EnsureMindState(pawn);
             NormalizeSkeletonLifeStage(pawn);
             EnforceUndeadNeeds(pawn);
             SuppressUndeadSocialInteractions(pawn);
@@ -273,6 +279,15 @@ namespace AeternusFaith
             pawn.AllComps.Add(comp);
         }
 
+        public static void EnsureMindState(Pawn pawn)
+        {
+            if (pawn == null)
+                return;
+
+            pawn.mindState ??= new Pawn_MindState(pawn);
+            pawn.mindState.mentalStateHandler ??= new MentalStateHandler(pawn);
+        }
+
         public static void ClearHumanIdentity(Pawn pawn)
         {
             if (pawn == null)
@@ -386,10 +401,28 @@ namespace AeternusFaith
         private static void ApplyXenotype(Pawn pawn, string xenotypeDefName)
         {
             XenotypeDef xenotypeDef = DefDatabase<XenotypeDef>.GetNamedSilentFail(xenotypeDefName);
-            if (xenotypeDef == null || pawn.genes.Xenotype == xenotypeDef)
+            if (xenotypeDef == null)
+                return;
+
+            StripGeneratedGenes(pawn);
+            if (pawn.genes.Xenotype == xenotypeDef)
                 return;
 
             pawn.genes.SetXenotypeDirect(xenotypeDef);
+            pawn.Drawer?.renderer?.SetAllGraphicsDirty();
+        }
+
+        private static void StripGeneratedGenes(Pawn pawn)
+        {
+            if (pawn?.genes?.GenesListForReading == null)
+                return;
+
+            foreach (Gene gene in pawn.genes.GenesListForReading.ToList())
+            {
+                pawn.genes.RemoveGene(gene);
+            }
+
+            pawn.genes.ClearXenogenes();
         }
     }
 }

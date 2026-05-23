@@ -30,3 +30,48 @@ public static class Pawn_Kill_MemoryPatch
         WorldComponent_PawnMemories.Instance?.NotifyPawnKilled(__instance, dinfo, exactCulprit);
     }
 }
+
+[HarmonyPatch(typeof(Corpse), nameof(Corpse.SpawnSetup))]
+public static class Corpse_SpawnSetup_MemoryPatch
+{
+    public static void Postfix(Corpse __instance, Map map, bool respawningAfterLoad)
+    {
+        if (__instance?.InnerPawn == null || !__instance.InnerPawn.RaceProps.Humanlike) return;
+
+        WorldComponent_PawnMemories.Instance?.RecordCorpseAnchor(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(Corpse), nameof(Corpse.DeSpawn))]
+public static class Corpse_DeSpawn_MemoryPatch
+{
+    public static void Prefix(Corpse __instance, DestroyMode mode = DestroyMode.Vanish)
+    {
+        if (__instance?.InnerPawn == null || !__instance.InnerPawn.RaceProps.Humanlike) return;
+
+        WorldComponent_PawnMemories.Instance?.RecordCorpseAnchor(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(Corpse), nameof(Corpse.Destroy))]
+public static class Corpse_Destroy_MemoryPatch
+{
+    public static void Prefix(Corpse __instance, DestroyMode mode = DestroyMode.Vanish)
+    {
+        if (__instance?.InnerPawn == null || !__instance.InnerPawn.RaceProps.Humanlike) return;
+
+        WorldComponent_PawnMemories.Instance?.NotifyCorpseDestroyed(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(ResurrectionUtility), nameof(ResurrectionUtility.TryResurrect), typeof(Pawn), typeof(ResurrectionParams))]
+public static class ResurrectionUtility_TryResurrect_MemoryPatch
+{
+    public static void Postfix(Pawn pawn, bool __result)
+    {
+        if (!__result || pawn == null || pawn.RaceProps?.Humanlike != true)
+            return;
+
+        PawnSoulRiteUtility.NotifyPawnResurrected(pawn);
+    }
+}

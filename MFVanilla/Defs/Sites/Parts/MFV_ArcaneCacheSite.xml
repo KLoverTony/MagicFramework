@@ -75,6 +75,7 @@
         <offsetZ>9</offsetZ>
       </li>
     </dressing>
+    <decorationCount>5</decorationCount>
     <addEntryPath>true</addEntryPath>
     <entryPathLength>5</entryPathLength>
     <addExteriorRuin>true</addExteriorRuin>
@@ -161,6 +162,7 @@
         <offsetZ>9</offsetZ>
       </li>
     </dressing>
+    <decorationCount>18</decorationCount>
     <roomModules>
       <li>
         <axis>South</axis>
@@ -255,6 +257,7 @@
         <offsetZ>7</offsetZ>
       </li>
     </dressing>
+    <decorationCount>4</decorationCount>
     <addEntryPath>true</addEntryPath>
     <entryPathLength>3</entryPathLength>
     <addExteriorRuin>true</addExteriorRuin>
@@ -340,6 +343,7 @@
         <offsetZ>9</offsetZ>
       </li>
     </dressing>
+    <decorationCount>8</decorationCount>
     <roomModules>
       <li>
         <axis>South</axis>
@@ -430,6 +434,7 @@
         <offsetZ>11</offsetZ>
       </li>
     </dressing>
+    <decorationCount>16</decorationCount>
     <roomModules>
       <li>
         <axis>South</axis>
@@ -518,6 +523,7 @@
         <offsetZ>11</offsetZ>
       </li>
     </dressing>
+    <decorationCount>10</decorationCount>
     <roomModules>
       <li>
         <axis>South</axis>

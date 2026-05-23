@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AeternusFaith;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -76,25 +77,38 @@ namespace AeternusFaith.Undead.Spectral
                 return;
             }
 
-            Find.WindowStack.Add(new Dialog_SpectreRitual(parent, circle, TryStartRitualJobs, IsValidCorpseTarget, IsEligibleConductor, IsEligibleAudience));
+            Find.WindowStack.Add(new Dialog_SpectreRitual(parent, circle, TryStartRitualJobs, ValidateCorpseTarget, ValidateConductor, ValidateAudience));
+        }
+
+        internal AcceptanceReport ValidateCorpseTarget(Corpse corpse)
+        {
+            return RitualCorpseEligibilityUtility.ValidateAnyCorpseOnMap(corpse, parent.Map);
         }
 
         internal bool IsValidCorpseTarget(Corpse corpse)
         {
-            return corpse != null && !corpse.Destroyed && corpse.Spawned && corpse.Map == parent.Map;
+            return ValidateCorpseTarget(corpse).Accepted;
         }
 
         private void TryStartRitualJobs(Pawn conductor, List<Pawn> audience, Corpse corpse, Thing circle)
         {
-            if (!IsValidCorpseTarget(corpse))
+            AcceptanceReport corpseReport = ValidateCorpseTarget(corpse);
+            if (!corpseReport.Accepted)
             {
-                Messages.Message("Select a reachable corpse on this map.", parent, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(corpseReport.Reason, parent, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
-            if (!IsEligibleConductor(conductor, corpse, circle))
+            AcceptanceReport conductorReport = ValidateConductor(conductor, corpse, circle);
+            if (!conductorReport.Accepted)
             {
-                Messages.Message("The selected conductor cannot reach and reserve the corpse, lectern, and ritual center.", parent, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(conductorReport.Reason, parent, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            if (MapComponent_SpectralEntities.HasActiveRiteBoundSpectre(conductor, out SpectralEntity existingSpectre))
+            {
+                Messages.Message(conductor.LabelShortCap + " is already bound to " + existingSpectre.label + ".", conductor, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -136,42 +150,49 @@ namespace AeternusFaith.Undead.Spectral
 
         internal bool IsEligibleConductor(Pawn pawn, Corpse corpse, Thing circle)
         {
-            if (!IsEligibleAudience(pawn))
-                return false;
+            return ValidateConductor(pawn, corpse, circle).Accepted;
+        }
 
-            if (pawn.WorkTagIsDisabled(WorkTags.ManualDumb))
-                return false;
+        internal AcceptanceReport ValidateConductor(Pawn pawn, Corpse corpse, Thing circle)
+        {
+            AcceptanceReport report = RitualPawnEligibilityUtility.ValidateBonewrightConductor(pawn);
+            if (!report.Accepted)
+                return report;
 
-            if (!pawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving) ||
-                !pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
-                return false;
+            if (MapComponent_SpectralEntities.HasActiveRiteBoundSpectre(pawn, out SpectralEntity existingSpectre))
+                return pawn.LabelShortCap + " is already bound to " + existingSpectre.label + ".";
 
-            return pawn.CanReserveAndReach(corpse, PathEndMode.ClosestTouch, Danger.Deadly) &&
-                   pawn.CanReserveAndReach(parent, PathEndMode.InteractionCell, Danger.Deadly) &&
-                   pawn.CanReserveAndReach(circle, PathEndMode.Touch, Danger.Deadly);
+            report = RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, corpse, PathEndMode.ClosestTouch, "corpse");
+            if (!report.Accepted)
+                return report;
+
+            report = RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, parent, PathEndMode.InteractionCell, "lectern");
+            if (!report.Accepted)
+                return report;
+
+            return RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, circle, PathEndMode.Touch, "ritual center");
         }
 
         internal bool IsEligibleAudience(Pawn pawn)
         {
-            if (pawn == null || pawn.Dead || pawn.Downed || !pawn.Spawned || pawn.InMentalState)
-                return false;
-
-            if (pawn.Faction != Faction.OfPlayer)
-                return false;
-
-            return pawn.health.capacities.CapableOf(PawnCapacityDefOf.Moving);
+            return ValidateAudience(pawn).Accepted;
         }
 
-        public static void ManifestSpectre(Map map, Thing source, Thing circle, Pawn sourcePawn = null, string sourceName = null, Ideo sourceIdeo = null)
+        internal AcceptanceReport ValidateAudience(Pawn pawn)
+        {
+            return RitualPawnEligibilityUtility.ValidateAudiencePawn(pawn);
+        }
+
+        public static SpectralEntity ManifestSpectre(Map map, Thing source, Thing circle, Pawn sourcePawn = null, string sourceName = null, Ideo sourceIdeo = null, Pawn summoner = null)
         {
             if (map == null || circle == null)
-                return;
+                return null;
 
             MapComponent_SpectralEntities comp = map.GetComponent<MapComponent_SpectralEntities>();
             if (comp == null)
             {
                 Messages.Message("Could not find the spectral entity tracker for this map.", source ?? circle, MessageTypeDefOf.RejectInput, historical: false);
-                return;
+                return null;
             }
 
             SpectralEntity spirit = new SpectralEntity(map)
@@ -181,13 +202,22 @@ namespace AeternusFaith.Undead.Spectral
                 anchorPosition = circle.Position,
                 lastKnownPosition = ResolveManifestCell(map, circle, source),
                 pawnKind = PawnKindDefOf.Colonist,
-                faction = Faction.OfPlayer,
+                faction = null,
+                persistentPawn = true,
+                persistentManifestation = true,
+                intermittentManifestation = false,
+                riteBoundSpectre = true,
+                boundSummoner = summoner,
+                boundSummonerThingId = summoner?.ThingID,
                 sourcePawn = sourcePawn,
+                sourcePawnThingId = sourcePawn?.ThingID,
+                sourceMemoryId = sourcePawn?.ThingID,
                 sourceIdeo = sourceIdeo
             };
 
             comp.AddSpirit(spirit);
-            spirit.Manifest();
+            spirit.ManifestPersistent();
+            return spirit;
         }
 
         private static IntVec3 ResolveManifestCell(Map map, Thing circle, Thing fallback)

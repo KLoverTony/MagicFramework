@@ -1,4 +1,5 @@
 using MagicFramework.Debug;
+using RimWorld;
 using UnityEngine;
 using Verse;
 
@@ -45,6 +46,15 @@ public sealed class MagicFrameworkMod : Mod
         DrawPercentSlider(listing, "Duration per power", ref settings.durationScalingPerPower, 0f, 0.12f);
         DrawPercentSlider(listing, "Mana cost reduction per power", ref settings.manaCostReductionPerPower, 0f, 0.08f);
         DrawPercentSlider(listing, "Cooldown reduction per power", ref settings.cooldownReductionPerPower, 0f, 0.08f);
+        listing.GapLine();
+        listing.Label("Soul haunting");
+        listing.GapLine();
+        DrawIntSlider(listing, "Max scheduled hauntings per map", ref settings.maxHauntingsPerMap, 0, 50);
+        DrawIntSlider(listing, "Minimum haunting risk score", ref settings.hauntingMinimumRiskScore, 0, 100);
+        DrawDaysSlider(listing, "Minimum haunting delay", ref settings.hauntingMinDelayTicks, 0, 5);
+        DrawDaysSlider(listing, "Maximum haunting delay", ref settings.hauntingMaxDelayTicks, 0, 10);
+        if (settings.hauntingMaxDelayTicks < settings.hauntingMinDelayTicks)
+            settings.hauntingMaxDelayTicks = settings.hauntingMinDelayTicks;
         listing.GapLine();
         listing.Label("Diagnostic logging");
         listing.GapLine();
@@ -141,5 +151,21 @@ public sealed class MagicFrameworkMod : Mod
         value = Mathf.Clamp(value, min, max);
         listing.Label($"{label}: {value.ToStringPercent("F0")}");
         value = listing.Slider(value, min, max);
+    }
+
+    private static void DrawIntSlider(Listing_Standard listing, string label, ref int value, int min, int max)
+    {
+        value = Mathf.RoundToInt(Mathf.Clamp(value, min, max));
+        listing.Label($"{label}: {value}");
+        value = Mathf.RoundToInt(listing.Slider(value, min, max));
+    }
+
+    private static void DrawDaysSlider(Listing_Standard listing, string label, ref int value, int minDays, int maxDays)
+    {
+        int days = Mathf.RoundToInt(value / (float)GenDate.TicksPerDay);
+        days = Mathf.Clamp(days, minDays, maxDays);
+        listing.Label($"{label}: {days} day(s)");
+        days = Mathf.RoundToInt(listing.Slider(days, minDays, maxDays));
+        value = days * GenDate.TicksPerDay;
     }
 }

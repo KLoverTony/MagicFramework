@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef Name="MFV_PlanarPlantBase" ParentName="PlantBase" Abstract="True">
+    <statBases>
+      <MaxHitPoints>65</MaxHitPoints>
+      <Nutrition>0.04</Nutrition>
+      <Flammability>0.4</Flammability>
+      <Beauty>1</Beauty>
+    </statBases>
+    <selectable>true</selectable>
+    <pathCost>10</pathCost>
+    <plant>
+      <dieIfLeafless>true</dieIfLeafless>
+      <topWindExposure>0.05</topWindExposure>
+      <growDays>10</growDays>
+      <visualSizeRange>0.55~1.0</visualSizeRange>
+      <wildOrder>2</wildOrder>
+      <purpose>Misc</purpose>
+    </plant>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarA</defName>
+    <label>planar frond</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantA</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarB</defName>
+    <label>planar bristle</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantB</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarC</defName>
+    <label>planar reed</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantC</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarD</defName>
+    <label>planar bloom</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantD</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarE</defName>
+    <label>planar thorn</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantE</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarF</defName>
+    <label>planar tuft</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantF</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarG</defName>
+    <label>planar sprout</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantG</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarH</defName>
+    <label>planar fern</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantH</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarI</defName>
+    <label>planar stem</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantI</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarJ</defName>
+    <label>planar cluster</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantJ</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <plant>
+      <visualSizeRange>0.95~1.45</visualSizeRange>
+    </plant>
+  </ThingDef>
+
+</Defs>

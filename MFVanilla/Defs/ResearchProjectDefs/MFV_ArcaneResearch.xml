@@ -400,6 +400,7 @@
     <description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</description>
     <customUnlockTexts>
       <li>Arcane Discipline: Necromancer</li>
+      <li>Spell: Raise Skeleton</li>
     </customUnlockTexts>
     <baseCost>1400</baseCost>
     <techLevel>Medieval</techLevel>

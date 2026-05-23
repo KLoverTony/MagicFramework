@@ -48,6 +48,7 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
         SpellDef spellDef = Props.spell;
         if (SpellRuntimeGameComponent.Instance.LearnSpell(usedBy, spellDef))
         {
+            ArcanePracticeUtility.NotifySpellLearnedFromScroll(usedBy, spellDef);
             Messages.Message($"{usedBy.LabelShortCap} learned {spellDef.LabelCap}.", usedBy, MessageTypeDefOf.TaskCompletion, false);
         }
     }

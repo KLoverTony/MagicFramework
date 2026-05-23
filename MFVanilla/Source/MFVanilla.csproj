@@ -59,6 +59,7 @@
   <ItemGroup>
     <AboutContent Include="..\About\**\*.*" />
     <DefContent Include="..\Defs\**\*.*" />
+    <LanguageContent Include="..\Languages\**\*.*" />
     <TextureContent Include="..\Textures\**\*.*" />
   </ItemGroup>
 
@@ -76,10 +77,12 @@
 
     <RemoveDir Directories="$(ModDeployDir)\About" Condition="Exists('$(ModDeployDir)\About')" />
     <RemoveDir Directories="$(ModDeployDir)\Defs" Condition="Exists('$(ModDeployDir)\Defs')" />
+    <RemoveDir Directories="$(ModDeployDir)\Languages" Condition="Exists('$(ModDeployDir)\Languages')" />
     <RemoveDir Directories="$(ModDeployDir)\Textures" Condition="Exists('$(ModDeployDir)\Textures')" />
 
     <MakeDir Directories="$(ModDeployDir)\About" />
     <MakeDir Directories="$(ModDeployDir)\Defs" />
+    <MakeDir Directories="$(ModDeployDir)\Languages" />
     <MakeDir Directories="$(ModDeployDir)\Textures" />
 
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDeployAssembliesDir)" SkipUnchangedFiles="true" />
@@ -90,6 +93,10 @@
     <Copy
       SourceFiles="@(DefContent)"
       DestinationFiles="@(DefContent->'$(ModDeployDir)\Defs\%(RecursiveDir)%(Filename)%(Extension)')"
+      SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="@(LanguageContent)"
+      DestinationFiles="@(LanguageContent->'$(ModDeployDir)\Languages\%(RecursiveDir)%(Filename)%(Extension)')"
       SkipUnchangedFiles="true" />
     <Copy
       SourceFiles="@(TextureContent)"

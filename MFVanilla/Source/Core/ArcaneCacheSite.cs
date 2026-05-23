@@ -375,6 +375,8 @@ public sealed class ArcaneSiteProfileDef : Def
     public List<PawnKindDef> defenderPawnKinds;
     public List<ArcaneSiteDefenderEntryDef> defenderEntries;
     public List<ArcaneSiteDressingDef> dressing;
+    public List<ThingDef> decorationThingDefs;
+    public int decorationCount;
     public List<ArcaneSiteRoomModuleDef> roomModules;
     public bool addEntryPath;
     public int entryPathLength = 6;
@@ -441,6 +443,37 @@ public enum ArcaneSiteRoomKind
 
 public sealed class GenStep_ArcaneCache : GenStep
 {
+    private static readonly string[] DefaultDecorationThingDefNames =
+    {
+        "MFV_ArcaneSiteDecoration_A",
+        "MFV_ArcaneSiteDecoration_AA",
+        "MFV_ArcaneSiteDecoration_B",
+        "MFV_ArcaneSiteDecoration_C",
+        "MFV_ArcaneSiteDecoration_D",
+        "MFV_ArcaneSiteDecoration_E",
+        "MFV_ArcaneSiteDecoration_F",
+        "MFV_ArcaneSiteDecoration_G",
+        "MFV_ArcaneSiteDecoration_H",
+        "MFV_ArcaneSiteDecoration_I",
+        "MFV_ArcaneSiteDecoration_J",
+        "MFV_ArcaneSiteDecoration_K",
+        "MFV_ArcaneSiteDecoration_L",
+        "MFV_ArcaneSiteDecoration_M",
+        "MFV_ArcaneSiteDecoration_N",
+        "MFV_ArcaneSiteDecoration_O",
+        "MFV_ArcaneSiteDecoration_P",
+        "MFV_ArcaneSiteDecoration_Q",
+        "MFV_ArcaneSiteDecoration_R",
+        "MFV_ArcaneSiteDecoration_S",
+        "MFV_ArcaneSiteDecoration_T",
+        "MFV_ArcaneSiteDecoration_U",
+        "MFV_ArcaneSiteDecoration_V",
+        "MFV_ArcaneSiteDecoration_W",
+        "MFV_ArcaneSiteDecoration_X",
+        "MFV_ArcaneSiteDecoration_Y",
+        "MFV_ArcaneSiteDecoration_Z"
+    };
+
     public ArcaneSiteProfileDef profile;
     public List<ArcaneSiteProfileDef> profilePool;
     public List<ArcaneSiteProfileEntryDef> profileEntries;
@@ -473,6 +506,7 @@ public sealed class GenStep_ArcaneCache : GenStep
         BuildExteriorModules(map, room, resolvedProfile, outerWallStuff);
         BreakRuinWalls(map, room, moduleRooms, resolvedProfile, siteSeed);
         Thing chest = SpawnCacheChest(map, room.CenterCell, resolvedProfile);
+        ScatterDecorations(map, room, moduleRooms, resolvedProfile, siteSeed);
         List<Pawn> defenders = SpawnDefenders(map, room, resolvedDefenderCount, resolvedProfile, threatPoints, siteSeed);
         LogDevGeneration(map, parms, resolvedProfile, siteSeed, room, moduleRooms, chest, defenders);
     }
@@ -1015,6 +1049,101 @@ public sealed class GenStep_ArcaneCache : GenStep
         }
 
         GenSpawn.Spawn(ThingMaker.MakeThing(thingDef), cell, map);
+    }
+
+    private static void ScatterDecorations(Map map, CellRect mainRoom, List<CellRect> moduleRooms, ArcaneSiteProfileDef profile, int siteSeed)
+    {
+        int count = Math.Max(0, profile.decorationCount);
+        if (count == 0)
+        {
+            return;
+        }
+
+        List<ThingDef> decorationDefs = ResolveDecorationThingDefs(profile);
+        if (decorationDefs.Count == 0)
+        {
+            return;
+        }
+
+        List<IntVec3> cells = CandidateDecorationCells(map, mainRoom, moduleRooms, profile.layoutShape);
+        for (int i = 0; i < count && cells.Count > 0; i++)
+        {
+            int cellIndex = StableIndex(siteSeed, (profile.shortHash * 397) ^ (i * 7919), cells.Count);
+            IntVec3 cell = cells[cellIndex];
+            cells.RemoveAt(cellIndex);
+
+            ThingDef thingDef = decorationDefs[StableIndex(siteSeed, (profile.shortHash * 997) ^ (i * 104729), decorationDefs.Count)];
+            if (thingDef != null)
+            {
+                GenSpawn.Spawn(ThingMaker.MakeThing(thingDef), cell, map);
+            }
+        }
+    }
+
+    private static List<ThingDef> ResolveDecorationThingDefs(ArcaneSiteProfileDef profile)
+    {
+        if (!profile.decorationThingDefs.NullOrEmpty())
+        {
+            return profile.decorationThingDefs.FindAll(def => def != null);
+        }
+
+        List<ThingDef> resolved = new();
+        for (int i = 0; i < DefaultDecorationThingDefNames.Length; i++)
+        {
+            ThingDef thingDef = DefDatabase<ThingDef>.GetNamedSilentFail(DefaultDecorationThingDefNames[i]);
+            if (thingDef != null)
+            {
+                resolved.Add(thingDef);
+            }
+        }
+
+        return resolved;
+    }
+
+    private static List<IntVec3> CandidateDecorationCells(Map map, CellRect mainRoom, List<CellRect> moduleRooms, ArcaneSiteLayoutShape mainLayoutShape)
+    {
+        List<IntVec3> cells = new();
+        AddCandidateDecorationCells(map, mainRoom, mainLayoutShape, cells);
+        if (!moduleRooms.NullOrEmpty())
+        {
+            for (int i = 0; i < moduleRooms.Count; i++)
+            {
+                AddCandidateDecorationCells(map, moduleRooms[i], ArcaneSiteLayoutShape.Rectangle, cells);
+            }
+        }
+
+        return cells;
+    }
+
+    private static void AddCandidateDecorationCells(Map map, CellRect room, ArcaneSiteLayoutShape layoutShape, List<IntVec3> cells)
+    {
+        foreach (IntVec3 cell in room.ContractedBy(1).Cells)
+        {
+            if (cell.InBounds(map) && cell.Standable(map) && IsInteriorCell(room, cell, layoutShape) && CanPlaceDecorationAt(map, cell))
+            {
+                cells.Add(cell);
+            }
+        }
+    }
+
+    private static bool CanPlaceDecorationAt(Map map, IntVec3 cell)
+    {
+        List<Thing> things = cell.GetThingList(map);
+        for (int i = 0; i < things.Count; i++)
+        {
+            ThingDef def = things[i]?.def;
+            if (def == null)
+            {
+                continue;
+            }
+
+            if (def.category == ThingCategory.Building || def.category == ThingCategory.Item || def.category == ThingCategory.Pawn)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private int ResolveDefenderCount(GenStepParams parms, ArcaneSiteProfileDef profile)

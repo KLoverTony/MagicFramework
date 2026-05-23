@@ -26,8 +26,13 @@ namespace AeternusFaith.Undead.Spectral
                 anchorPosition = cell,
                 lastKnownPosition = cell,
                 pawnKind = PawnKindDefOf.Colonist,
-                faction = Faction.OfPlayer
+                faction = null,
+                persistentPawn = false,
+                persistentManifestation = false,
+                intermittentManifestation = true
             };
+            spirit.ScheduleNextHaunt();
+            spirit.ScheduleNextManifestation();
 
             comp.AddSpirit(spirit);
             Messages.Message($"Spawned spectral entity '{spirit.label}' at {cell}.", MessageTypeDefOf.TaskCompletion, false);
@@ -93,8 +98,9 @@ namespace AeternusFaith.Undead.Spectral
             var comp = map.GetComponent<MapComponent_SpectralEntities>();
             if (comp == null) return;
 
-            Log.Message("--- Spectral Entities ---");
-            if (!comp.spirits.Any())
+            Log.Message("--- Spectral Entities on " + map.Parent?.Label + " ---");
+            int listed = 0;
+            if (comp.spirits == null || !comp.spirits.Any())
             {
                 Log.Message("None.");
             }
@@ -102,15 +108,34 @@ namespace AeternusFaith.Undead.Spectral
             {
                 foreach (var spirit in comp.spirits)
                 {
-                    Log.Message($"- {spirit.label} (ID: {spirit.id})");
-                    Log.Message($"  State: {spirit.state}");
-                    Log.Message($"  Anchor: {spirit.anchorPosition}, Last Known: {spirit.lastKnownPosition}");
-                    Log.Message($"  PawnKind: {spirit.pawnKind?.defName ?? "null"}, Faction: {spirit.faction?.Name ?? "null"}");
-                    Log.Message($"  Cached Pawn: {(spirit.cachedPawn != null ? spirit.cachedPawn.Name.ToStringShort : "null")}");
-                    Log.Message($"  Last Action: {spirit.lastActionSummary}");
+                    if (spirit == null)
+                    {
+                        Log.Message("- null spectral entity entry");
+                        continue;
+                    }
+
+                    listed++;
+                    Pawn cachedPawn = spirit.cachedPawn;
+                    string cachedPawnLabel = cachedPawn == null
+                        ? "null"
+                        : (cachedPawn.Name?.ToStringShort ?? cachedPawn.LabelShort ?? cachedPawn.ThingID ?? "unnamed pawn");
+                    Log.Message("- " + SafeText(spirit.label, "unlabeled spirit") + " (ID: " + SafeText(spirit.id, "no id") + ")");
+                    Log.Message("  State: " + spirit.state);
+                    Log.Message("  Anchor: " + spirit.anchorPosition + ", Last Known: " + spirit.lastKnownPosition);
+                    Log.Message("  PawnKind: " + (spirit.pawnKind?.defName ?? "null") + ", Faction: " + (spirit.faction?.Name ?? "null"));
+                    Log.Message("  Cached Pawn: " + cachedPawnLabel + " spawned=" + (cachedPawn?.Spawned.ToString() ?? "false"));
+                    Log.Message("  Manifestation: persistentPawn=" + spirit.persistentPawn + ", persistentManifestation=" + spirit.persistentManifestation + ", intermittent=" + spirit.intermittentManifestation);
+                    Log.Message("  Next haunt/manifest/end ticks: " + spirit.nextHauntTick + " / " + spirit.nextManifestTick + " / " + spirit.manifestationEndTick);
+                    Log.Message("  Last Action: " + SafeText(spirit.lastActionSummary, "none"));
                 }
             }
             Log.Message("-------------------------");
+            Messages.Message("Listed " + listed + " spectral entities in the log.", MessageTypeDefOf.TaskCompletion, historical: false);
+        }
+
+        private static string SafeText(string value, string fallback)
+        {
+            return value.NullOrEmpty() ? fallback : value;
         }
 
         [DebugAction("AeternusFaith - Spectral", "Clear Spectral Entities", actionType = DebugActionType.Action, allowedGameStates = AllowedGameStates.PlayingOnMap)]

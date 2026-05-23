@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>MFV_PlanarGate</defName>
+    <label>planar gate</label>
+    <description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into a planar pocket.</description>
+    <thingClass>MFVanilla.Core.Building_PlanarGate</thingClass>
+    <category>Building</category>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2600</uiOrder>
+    <graphicData>
+      <texPath>Things/Building/PlanarGate/PlanarGate</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <drawSize>(3,3)</drawSize>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+      </damageData>
+    </graphicData>
+    <size>(3,3)</size>
+    <tickerType>Normal</tickerType>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <fillPercent>0.25</fillPercent>
+    <pathCost>15</pathCost>
+    <useHitPoints>true</useHitPoints>
+    <castEdgeShadows>true</castEdgeShadows>
+    <staticSunShadowHeight>0.35</staticSunShadowHeight>
+    <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <researchPrerequisites>
+      <li>MFV_ArcaneTheory</li>
+    </researchPrerequisites>
+    <costList>
+      <Steel>120</Steel>
+      <Plasteel>30</Plasteel>
+      <ComponentIndustrial>3</ComponentIndustrial>
+    </costList>
+    <statBases>
+      <MaxHitPoints>320</MaxHitPoints>
+      <WorkToBuild>5200</WorkToBuild>
+      <Flammability>0.15</Flammability>
+    </statBases>
+    <building>
+      <paintable>true</paintable>
+    </building>
+    <comps>
+      <li Class="MFVanilla.Core.CompProperties_PlanarGate">
+        <sitePartDefName>MFV_PlanarPocket</sitePartDefName>
+        <minSiteDistance>1</minSiteDistance>
+        <maxSiteDistance>4</maxSiteDistance>
+        <activationRadius>5</activationRadius>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

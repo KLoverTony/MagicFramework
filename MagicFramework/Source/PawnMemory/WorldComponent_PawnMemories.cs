@@ -39,6 +39,13 @@ public class WorldComponent_PawnMemories : WorldComponent
         return GetMemory(pawn.ThingID);
     }
 
+    public PawnMemoryRecord GetMemory(Corpse corpse)
+    {
+        Pawn innerPawn = corpse?.InnerPawn;
+        if (innerPawn == null) return null;
+        return GetMemory(innerPawn);
+    }
+
     public IEnumerable<PawnMemoryRecord> GetAllRecords()
     {
         return memoriesByPawnId.Values;
@@ -60,6 +67,77 @@ public class WorldComponent_PawnMemories : WorldComponent
             UpdateMemory(pawn, PawnMemoryUpdateReason.EnteredMap);
         }
         return record;
+    }
+
+    public void RecordCorpseAnchor(Corpse corpse)
+    {
+        Pawn innerPawn = corpse?.InnerPawn;
+        if (innerPawn == null || !innerPawn.RaceProps.Humanlike) return;
+
+        PawnMemoryRecord record = GetOrCreateMemory(innerPawn);
+        if (record == null) return;
+
+        record.corpseAnchorKnown = true;
+        record.corpseThingId = corpse.ThingID;
+        record.corpseMapId = corpse.Map?.uniqueID;
+        record.corpseCell = corpse.PositionHeld;
+        record.lastUpdatedTick = Find.TickManager.TicksGame;
+    }
+
+    public void ClearCorpseAnchor(Pawn pawn)
+    {
+        PawnMemoryRecord record = GetMemory(pawn);
+        if (record == null) return;
+
+        record.corpseAnchorKnown = false;
+        record.corpseThingId = null;
+        record.corpseMapId = null;
+        record.corpseCell = null;
+        record.lastUpdatedTick = Find.TickManager.TicksGame;
+    }
+
+    public void NotifyCorpseDestroyed(Corpse corpse)
+    {
+        Pawn innerPawn = corpse?.InnerPawn;
+        if (innerPawn == null || !innerPawn.RaceProps.Humanlike) return;
+
+        PawnMemoryRecord record = GetOrCreateMemory(innerPawn);
+        if (record == null) return;
+
+        record.bodyDestroyed = true;
+        record.corpseAnchorKnown = false;
+        record.corpseThingId = null;
+        record.corpseMapId = null;
+        record.corpseCell = null;
+        record.lastUpdatedTick = Find.TickManager.TicksGame;
+    }
+
+    public Corpse TryFindCorpse(Pawn pawn)
+    {
+        return TryFindCorpse(GetMemory(pawn));
+    }
+
+    public Corpse TryFindCorpse(PawnMemoryRecord record)
+    {
+        if (record == null) return null;
+
+        Corpse corpse = TryFindCorpseByThingId(record);
+        if (corpse != null) return corpse;
+
+        corpse = TryFindCorpseByInnerPawn(record);
+        if (corpse != null)
+        {
+            RecordCorpseAnchor(corpse);
+            return corpse;
+        }
+
+        if (record.corpseAnchorKnown)
+        {
+            record.corpseAnchorKnown = false;
+            record.lastUpdatedTick = Find.TickManager.TicksGame;
+        }
+
+        return null;
     }
 
     public void UpdateMemory(Pawn pawn, PawnMemoryUpdateReason reason)
@@ -187,6 +265,13 @@ public class WorldComponent_PawnMemories : WorldComponent
             {
                 record.state = PawnMemoryState.DeadPendingRites;
             }
+
+            HauntingRiskUtility.CaptureDeathContext(pawn, record, dinfo, exactCulprit);
+            HauntingEvaluator.EvaluateAfterDeath(record, memoriesByPawnId.Values);
+
+            Corpse corpse = TryFindCorpseByInnerPawn(record);
+            if (corpse != null)
+                RecordCorpseAnchor(corpse);
         }
     }
     
@@ -223,5 +308,46 @@ public class WorldComponent_PawnMemories : WorldComponent
                 }
             }
         }
+    }
+
+    private Corpse TryFindCorpseByThingId(PawnMemoryRecord record)
+    {
+        if (record == null || string.IsNullOrEmpty(record.corpseThingId)) return null;
+
+        foreach (Map map in Find.Maps)
+        {
+            if (record.corpseMapId.HasValue && map.uniqueID != record.corpseMapId.Value)
+                continue;
+
+            List<Thing> things = map.listerThings?.AllThings;
+            if (things == null) continue;
+
+            foreach (Thing thing in things)
+            {
+                if (thing is Corpse corpse && corpse.ThingID == record.corpseThingId && !corpse.Destroyed)
+                    return corpse;
+            }
+        }
+
+        return null;
+    }
+
+    private Corpse TryFindCorpseByInnerPawn(PawnMemoryRecord record)
+    {
+        if (record == null || string.IsNullOrEmpty(record.uniquePawnId)) return null;
+
+        foreach (Map map in Find.Maps)
+        {
+            List<Thing> things = map.listerThings?.AllThings;
+            if (things == null) continue;
+
+            foreach (Thing thing in things)
+            {
+                if (thing is Corpse corpse && corpse.InnerPawn?.ThingID == record.uniquePawnId && !corpse.Destroyed)
+                    return corpse;
+            }
+        }
+
+        return null;
     }
 }

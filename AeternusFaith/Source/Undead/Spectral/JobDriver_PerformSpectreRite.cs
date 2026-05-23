@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using AeternusFaith;
+using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -29,6 +31,7 @@ namespace AeternusFaith.Undead.Spectral
             this.FailOnDestroyedOrNull(CorpseInd);
             this.FailOnDestroyedOrNull(LecternInd);
             this.FailOnDestroyedOrNull(CircleInd);
+            this.FailOn(() => !BonewrightUtility.IsBonewright(pawn));
 
             yield return Toils_Reserve.Reserve(CorpseInd);
             yield return Toils_Reserve.Reserve(LecternInd);
@@ -96,6 +99,12 @@ namespace AeternusFaith.Undead.Spectral
 
         private void FinishRite()
         {
+            if (!BonewrightUtility.IsBonewright(pawn))
+            {
+                Messages.Message("Only a Bonewright can complete the spectre rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             if (Map == null || Lectern == null || Circle == null || Circle.Destroyed)
                 return;
 
@@ -103,14 +112,22 @@ namespace AeternusFaith.Undead.Spectral
             if (corpse == null || corpse.Destroyed)
                 return;
 
+            if (MapComponent_SpectralEntities.HasActiveRiteBoundSpectre(pawn, out SpectralEntity existingSpectre))
+            {
+                Messages.Message(pawn.LabelShortCap + " is already bound to " + existingSpectre.label + ".", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             string corpseLabel = corpse.LabelShortCap;
             Pawn sourcePawn = corpse.InnerPawn;
             string sourceName = ResolveSourceName(corpse);
             Ideo sourceIdeo = ModsConfig.IdeologyActive ? sourcePawn?.ideo?.Ideo : null;
+            PawnSoulRiteUtility.NotifyCorpseConsumed(sourcePawn, corpse);
             if (!corpse.Destroyed)
                 corpse.Destroy(DestroyMode.Vanish);
 
-            Comp_SummonSpectre.ManifestSpectre(Map, Lectern, Circle, sourcePawn, sourceName, sourceIdeo);
+            SpectralEntity spirit = Comp_SummonSpectre.ManifestSpectre(Map, Lectern, Circle, sourcePawn, sourceName, sourceIdeo, pawn);
+            PawnSoulRiteUtility.NotifySpiritManifested(sourcePawn, spirit?.id, permanent: true);
             ReleaseAttendees();
             Messages.Message(corpseLabel + " manifests as a spectre.", Circle, MessageTypeDefOf.PositiveEvent, historical: false);
         }

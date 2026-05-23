@@ -26,6 +26,7 @@ The generator supports:
 - weighted, threat-gated defender selection
 - optional side-room modules on each cardinal axis
 - simple room dressing by relative offsets
+- deterministic scatter of site-only decoration props
 - entry paths, exterior ruin scatter, and broken wall gaps
 - dev-mode generation logging with profile, seed, room, module count, chest, and defender summary
 
