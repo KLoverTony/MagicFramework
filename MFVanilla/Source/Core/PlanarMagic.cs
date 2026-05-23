@@ -62,6 +62,17 @@ public sealed class CompPlanarGate : ThingComp
             icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
             action = TraverseSelectedPawns
         };
+
+        if (Prefs.DevMode)
+        {
+            yield return new Command_Action
+            {
+                defaultLabel = "Reset planar pocket link",
+                defaultDesc = "Forget this gate's current planar pocket site so the next use creates a fresh pocket map.",
+                icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
+                action = ResetPlanarPocketLink
+            };
+        }
     }
 
     public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
@@ -121,6 +132,12 @@ public sealed class CompPlanarGate : ThingComp
         }
 
         StartTraversalJobs(pawns);
+    }
+
+    private void ResetPlanarPocketLink()
+    {
+        siteId = -1;
+        Messages.Message("The planar gate's pocket link has been reset.", MessageTypeDefOf.NeutralEvent, false);
     }
 
     public bool TryTraversePawn(Pawn pawn)
@@ -254,6 +271,8 @@ public sealed class CompPlanarGate : ThingComp
 public static class PlanarMagicUtility
 {
     public const string PlanarPocketSitePartDefName = "MFV_PlanarPocket";
+    public const string PlanarPocketMapGeneratorDefName = "MFV_PlanarPocketMap";
+    public const int PlanarPocketMapSize = 120;
 
     public static bool TryCreatePlanarPocketSite(
         Map originMap,
@@ -338,16 +357,27 @@ public static class PlanarMagicUtility
             return site.Map;
         }
 
-        IntVec3 mapSize = site.PreferredMapSize;
-        if (mapSize.x <= 0 || mapSize.z <= 0)
+        IntVec3 mapSize = new(PlanarPocketMapSize, 1, PlanarPocketMapSize);
+        MapGeneratorDef mapGeneratorDef = DefDatabase<MapGeneratorDef>.GetNamedSilentFail(PlanarPocketMapGeneratorDefName);
+        IEnumerable<GenStepWithParams> extraGenSteps = null;
+        if (mapGeneratorDef == null)
         {
-            mapSize = new IntVec3(120, 1, 120);
+            mapGeneratorDef = site.MapGeneratorDef ?? RimWorld.MapGeneratorDefOf.Encounter;
+            extraGenSteps = site.ExtraGenStepDefs;
+            Log.Warning($"[MFVanilla] {PlanarPocketMapGeneratorDefName} was not found; falling back to {mapGeneratorDef.defName}.");
         }
 
-        MapGeneratorDef mapGeneratorDef = site.MapGeneratorDef ?? RimWorld.MapGeneratorDefOf.Encounter;
-        Map map = MapGenerator.GenerateMap(mapSize, site, mapGeneratorDef, site.ExtraGenStepDefs, null, false, true);
-        EnsurePlanarPocketReady(map);
-        return map;
+        try
+        {
+            Map map = MapGenerator.GenerateMap(mapSize, site, mapGeneratorDef, extraGenSteps, null, false, false);
+            EnsurePlanarPocketReady(map);
+            return map;
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[MFVanilla] Failed to generate planar pocket map for site {site.ID}: {ex}");
+            return null;
+        }
     }
 
     public static void EnsurePlanarPocketReady(Map map)

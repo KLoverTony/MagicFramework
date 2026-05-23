@@ -17,6 +17,13 @@
     </tags>
   </SitePartDef>
 
+  <MapGeneratorDef>
+    <defName>MFV_PlanarPocketMap</defName>
+    <genSteps>
+      <li>MFV_PlanarPocket</li>
+    </genSteps>
+  </MapGeneratorDef>
+
   <GenStepDef>
     <defName>MFV_PlanarPocket</defName>
     <linkWithSite>MFV_PlanarPocket</linkWithSite>
