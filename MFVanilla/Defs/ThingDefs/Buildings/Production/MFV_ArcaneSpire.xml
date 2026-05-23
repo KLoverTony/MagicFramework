@@ -52,6 +52,7 @@
       <li Class="CompProperties_Facility">
         <linkableBuildings>
           <li>MFV_ArcaneForge</li>
+          <li>MFV_PlanarGate</li>
         </linkableBuildings>
         <maxSimultaneous>1</maxSimultaneous>
         <maxDistance>10</maxDistance>

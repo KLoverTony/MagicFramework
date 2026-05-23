@@ -54,6 +54,15 @@
         <minSiteDistance>1</minSiteDistance>
         <maxSiteDistance>4</maxSiteDistance>
         <activationRadius>5</activationRadius>
+        <alignmentTicksMin>30000</alignmentTicksMin>
+        <alignmentTicksMax>90000</alignmentTicksMax>
+        <spireDefName>MFV_ArcaneSpire</spireDefName>
+        <spireRadius>10</spireRadius>
+        <maxAlignmentSpires>4</maxAlignmentSpires>
+        <alignmentPowerPerSpire>0.35</alignmentPowerPerSpire>
+        <alignmentCycleDays>12</alignmentCycleDays>
+        <baseAlignmentWindowDays>1</baseAlignmentWindowDays>
+        <alignmentWindowDaysPerSpire>0.5</alignmentWindowDaysPerSpire>
       </li>
     </comps>
   </ThingDef>

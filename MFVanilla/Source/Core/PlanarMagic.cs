@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using RimWorld.Planet;
 using UnityEngine;
@@ -14,6 +15,17 @@ public sealed class SitePartWorker_PlanarPocket : SitePartWorker
 
 public sealed class PlanarPocketParent : PocketMapParent
 {
+    public int originMapId = -1;
+    public IntVec3 originGatePosition = IntVec3.Invalid;
+    public int forcedReturnTick = -1;
+
+    public override void ExposeData()
+    {
+        base.ExposeData();
+        Scribe_Values.Look(ref originMapId, "originMapId", -1);
+        Scribe_Values.Look(ref originGatePosition, "originGatePosition", IntVec3.Invalid);
+        Scribe_Values.Look(ref forcedReturnTick, "forcedReturnTick", -1);
+    }
 }
 
 public sealed class Building_PlanarGate : Building
@@ -26,10 +38,95 @@ public sealed class CompProperties_PlanarGate : CompProperties
     public int minSiteDistance = 1;
     public int maxSiteDistance = 4;
     public int activationRadius = 5;
+    public int alignmentTicksMin = 30000;
+    public int alignmentTicksMax = 90000;
+    public string spireDefName = "MFV_ArcaneSpire";
+    public float spireRadius = 10f;
+    public int maxAlignmentSpires = 4;
+    public float alignmentPowerPerSpire = 0.35f;
+    public float alignmentCycleDays = 12f;
+    public float baseAlignmentWindowDays = 1f;
+    public float alignmentWindowDaysPerSpire = 0.5f;
 
     public CompProperties_PlanarGate()
     {
         compClass = typeof(CompPlanarGate);
+    }
+}
+
+public sealed class PlanarAlignmentGameComponent : GameComponent
+{
+    public PlanarAlignmentGameComponent(Game game)
+    {
+    }
+
+    public static PlanarAlignmentGameComponent Instance => Current.Game?.GetComponent<PlanarAlignmentGameComponent>();
+
+    public bool IsAligned(CompProperties_PlanarGate props, float gatePower)
+    {
+        return TicksIntoCycle(props) < AlignmentWindowTicks(props, gatePower);
+    }
+
+    public int RemainingTicks(CompProperties_PlanarGate props, float gatePower)
+    {
+        int ticksIntoCycle = TicksIntoCycle(props);
+        int windowTicks = AlignmentWindowTicks(props, gatePower);
+        int cycleTicks = AlignmentCycleTicks(props);
+        if (ticksIntoCycle < windowTicks)
+        {
+            return 0;
+        }
+
+        return Mathf.Max(0, cycleTicks - ticksIntoCycle);
+    }
+
+    public string StatusText(CompProperties_PlanarGate props, float gatePower)
+    {
+        int remainingTicks = RemainingTicks(props, gatePower);
+        if (remainingTicks <= 0)
+        {
+            int windowRemainingTicks = AlignmentWindowTicks(props, gatePower) - TicksIntoCycle(props);
+            return $"The celestial planes are aligned. The gate can open for {Mathf.Max(0, windowRemainingTicks).ToStringTicksToPeriod()}.";
+        }
+
+        return $"Waiting for celestial alignment: {remainingTicks.ToStringTicksToPeriod()} remaining.";
+    }
+
+    public int CurrentWindowEndTick(CompProperties_PlanarGate props, float gatePower)
+    {
+        int ticksIntoCycle = TicksIntoCycle(props);
+        int windowTicks = AlignmentWindowTicks(props, gatePower);
+        if (ticksIntoCycle >= windowTicks)
+        {
+            return GenTicks.TicksGame;
+        }
+
+        return GenTicks.TicksGame + (windowTicks - ticksIntoCycle);
+    }
+
+    public void NotifyGateOpened(CompProperties_PlanarGate props)
+    {
+    }
+
+    private static int TicksIntoCycle(CompProperties_PlanarGate props)
+    {
+        int cycleTicks = AlignmentCycleTicks(props);
+        return cycleTicks <= 0 ? 0 : GenTicks.TicksGame % cycleTicks;
+    }
+
+    private static int AlignmentCycleTicks(CompProperties_PlanarGate props)
+    {
+        float cycleDays = Mathf.Max(0.1f, props?.alignmentCycleDays ?? 12f);
+        return Mathf.Max(1, Mathf.RoundToInt(cycleDays * GenDate.TicksPerDay));
+    }
+
+    private static int AlignmentWindowTicks(CompProperties_PlanarGate props, float gatePower)
+    {
+        float cycleDays = Mathf.Max(0.1f, props?.alignmentCycleDays ?? 12f);
+        float baseDays = Mathf.Max(0.01f, props?.baseAlignmentWindowDays ?? 1f);
+        float bonusDays = Mathf.Max(0f, gatePower - 1f) * ((props?.alignmentWindowDaysPerSpire ?? 0.5f) / Mathf.Max(0.01f, props?.alignmentPowerPerSpire ?? 0.35f));
+        float windowDays = Mathf.Min(cycleDays, baseDays + bonusDays);
+        return Mathf.Max(1, Mathf.RoundToInt(windowDays * GenDate.TicksPerDay));
     }
 }
 
@@ -51,13 +148,22 @@ public sealed class CompPlanarGate : ThingComp
             yield break;
         }
 
-        yield return new Command_Action
+        float alignmentPower = AlignmentPower();
+        PlanarAlignmentGameComponent alignment = PlanarAlignmentGameComponent.Instance;
+        bool isAligned = alignment?.IsAligned(Props, alignmentPower) == true;
+        Command_Action command = new()
         {
             defaultLabel = "Send selected through gate",
-            defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.",
+            defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.\n\n{AlignmentStatusText(alignmentPower)}",
             icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
             action = TraverseSelectedPawns
         };
+        if (!isAligned)
+        {
+            command.Disable("The celestial planes are not aligned.");
+        }
+
+        yield return command;
     }
 
     public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
@@ -114,7 +220,15 @@ public sealed class CompPlanarGate : ThingComp
             return false;
         }
 
+        PlanarAlignmentGameComponent alignment = PlanarAlignmentGameComponent.Instance;
+        if (alignment?.IsAligned(Props, AlignmentPower()) != true)
+        {
+            Messages.Message(AlignmentStatusText(AlignmentPower()), MessageTypeDefOf.RejectInput, false);
+            return false;
+        }
+
         Map sourceMap = pawn.Map;
+        float alignmentPower = AlignmentPower();
         Map destinationMap = GetOrCreatePlanarPocketMap();
         if (destinationMap == null)
         {
@@ -125,6 +239,11 @@ public sealed class CompPlanarGate : ThingComp
 
             Messages.Message("The planar gate could not stabilize a pocket map.", MessageTypeDefOf.RejectInput, false);
             return false;
+        }
+
+        if (destinationMap.Parent is PlanarPocketParent pocketParent)
+        {
+            pocketParent.forcedReturnTick = alignment.CurrentWindowEndTick(Props, alignmentPower);
         }
 
         IntVec3 arrivalCenter = new(destinationMap.Size.x / 2, 0, destinationMap.Size.z / 2);
@@ -139,6 +258,7 @@ public sealed class CompPlanarGate : ThingComp
             return false;
         }
 
+        alignment.NotifyGateOpened(Props);
         Current.Game.CurrentMap = destinationMap;
         Find.Selector.ClearSelection();
         Find.Selector.Select(pawn);
@@ -200,7 +320,7 @@ public sealed class CompPlanarGate : ThingComp
         PlanarPocketParent pocketParent = PlanarMagicUtility.FindPlanarPocketParentById(pocketParentId);
         if (pocketParent == null)
         {
-            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, out pocketParent))
+            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, parent.Position, out pocketParent))
             {
                 return null;
             }
@@ -248,6 +368,61 @@ public sealed class CompPlanarGate : ThingComp
 
         return true;
     }
+
+    public override string CompInspectStringExtra()
+    {
+        int linkedSpires = LinkedArcaneSpires().Count();
+        float power = AlignmentPower(linkedSpires);
+        string spireText = linkedSpires == 1 ? "1 arcane spire linked" : $"{linkedSpires} arcane spires linked";
+        return $"{AlignmentStatusText(power)}\nPlanar gate power: {power:0.##}x ({spireText}).";
+    }
+
+    private string AlignmentStatusText(float alignmentPower)
+    {
+        return PlanarAlignmentGameComponent.Instance?.StatusText(Props, alignmentPower) ?? "The gate cannot read the celestial alignment.";
+    }
+
+    private float AlignmentPower()
+    {
+        return AlignmentPower(LinkedArcaneSpires().Count());
+    }
+
+    private float AlignmentPower(int linkedSpireCount)
+    {
+        int spireCount = Mathf.Clamp(linkedSpireCount, 0, Mathf.Max(0, Props.maxAlignmentSpires));
+        return 1f + spireCount * Mathf.Max(0f, Props.alignmentPowerPerSpire);
+    }
+
+    private IEnumerable<Thing> LinkedArcaneSpires()
+    {
+        if (parent?.Spawned != true || parent.Map == null)
+        {
+            yield break;
+        }
+
+        ThingDef spireDef = DefDatabase<ThingDef>.GetNamedSilentFail(Props.spireDefName);
+        if (spireDef == null)
+        {
+            yield break;
+        }
+
+        float radiusSquared = Props.spireRadius * Props.spireRadius;
+        int yielded = 0;
+        foreach (Thing spire in parent.Map.listerThings.ThingsOfDef(spireDef))
+        {
+            if (spire?.Spawned == true
+                && spire.Position.DistanceToSquared(parent.Position) <= radiusSquared
+                && GenSight.LineOfSight(parent.Position, spire.Position, parent.Map))
+            {
+                yield return spire;
+                yielded++;
+                if (yielded >= Props.maxAlignmentSpires)
+                {
+                    yield break;
+                }
+            }
+        }
+    }
 }
 
 public static class PlanarMagicUtility
@@ -268,7 +443,7 @@ public static class PlanarMagicUtility
         Messages.Message(PlanarTransportBlockedMessage, MessageTypeDefOf.RejectInput, false);
     }
 
-    public static bool TryCreatePlanarPocketParent(Map originMap, out PlanarPocketParent pocketParent)
+    public static bool TryCreatePlanarPocketParent(Map originMap, IntVec3 originGatePosition, out PlanarPocketParent pocketParent)
     {
         pocketParent = null;
         if (originMap == null || originMap.Tile < 0)
@@ -291,6 +466,8 @@ public static class PlanarMagicUtility
         }
 
         pocketParent.Tile = originMap.Tile;
+        pocketParent.originMapId = originMap.uniqueID;
+        pocketParent.originGatePosition = originGatePosition;
         Find.WorldObjects.Add(pocketParent);
         if (Prefs.DevMode)
         {
@@ -947,7 +1124,12 @@ public static class PlanarMagicUtility
 
     private static IntVec3 ResolveArrivalCell(Map map, IntVec3 center, int index)
     {
-        if (CellFinder.TryRandomClosewalkCellNear(center, map, 4 + index, out IntVec3 cell, c => c.Standable(map)))
+        if (CellFinder.TryRandomClosewalkCellNear(center, map, 4, out IntVec3 cell, c => c.Standable(map)))
+        {
+            return cell;
+        }
+
+        if (CellFinder.TryRandomClosewalkCellNear(center, map, 8, out cell, c => c.Standable(map)))
         {
             return cell;
         }
@@ -958,6 +1140,194 @@ public static class PlanarMagicUtility
         }
 
         return CellFinder.RandomCell(map);
+    }
+
+    public static Map FindMapByUniqueId(int uniqueId)
+    {
+        if (uniqueId < 0)
+        {
+            return null;
+        }
+
+        List<Map> maps = Find.Maps;
+        if (maps == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < maps.Count; i++)
+        {
+            if (maps[i]?.uniqueID == uniqueId)
+            {
+                return maps[i];
+            }
+        }
+
+        return null;
+    }
+
+    public static bool TryReturnSelectedFromPlanarPocket(Map pocketMap, List<Thing> selectedThings)
+    {
+        if (pocketMap == null || selectedThings.NullOrEmpty())
+        {
+            return false;
+        }
+
+        PlanarPocketParent pocketParent = pocketMap.Parent as PlanarPocketParent;
+        Map destinationMap = FindMapByUniqueId(pocketParent?.originMapId ?? -1) ?? Current.Game?.AnyPlayerHomeMap;
+        if (destinationMap == null)
+        {
+            Messages.Message("The planar pocket cannot find a stable return point.", MessageTypeDefOf.RejectInput, false);
+            return false;
+        }
+
+        float carriedMass = ReturnCarriedMass(selectedThings);
+        float carryingCapacity = ReturnCarryingCapacity(selectedThings);
+        if (carriedMass > carryingCapacity)
+        {
+            Messages.Message($"The selected supplies are too heavy to return: {carriedMass:0.#} / {carryingCapacity:0.#} kg.", MessageTypeDefOf.RejectInput, false);
+            return false;
+        }
+
+        IntVec3 center = pocketParent != null && pocketParent.originGatePosition.IsValid
+            ? pocketParent.originGatePosition
+            : new IntVec3(destinationMap.Size.x / 2, 0, destinationMap.Size.z / 2);
+
+        Thing firstReturned = null;
+        int returned = 0;
+        for (int i = 0; i < selectedThings.Count; i++)
+        {
+            Thing thing = selectedThings[i];
+            if (thing == null || thing.Destroyed)
+            {
+                continue;
+            }
+
+            IntVec3 cell = ResolveArrivalCell(destinationMap, center, returned);
+            if (thing is Pawn pawn)
+            {
+                pawn.jobs?.StopAll(false, true);
+            }
+
+            if (thing.Spawned)
+            {
+                thing.DeSpawn(DestroyMode.Vanish);
+            }
+
+            GenSpawn.Spawn(thing, cell, destinationMap);
+            firstReturned ??= thing;
+            returned++;
+        }
+
+        if (returned <= 0)
+        {
+            return false;
+        }
+
+        Current.Game.CurrentMap = destinationMap;
+        Find.Selector.ClearSelection();
+        if (firstReturned != null && !firstReturned.Destroyed)
+        {
+            Find.Selector.Select(firstReturned);
+            CameraJumper.TryJump(firstReturned);
+        }
+        else
+        {
+            CameraJumper.TryJump(center, destinationMap);
+        }
+
+        Messages.Message($"{returned} traveler(s) and supplies return from the planar pocket.", MessageTypeDefOf.PositiveEvent, false);
+        TryCleanupPlanarPocketMap(pocketMap);
+        return true;
+    }
+
+    private static void TryCleanupPlanarPocketMap(Map pocketMap)
+    {
+        if (pocketMap == null || !IsPlanarPocketMap(pocketMap))
+        {
+            return;
+        }
+
+        if (HasAnySpawnedPawn(pocketMap))
+        {
+            Log.Warning($"[MFVanilla] Planar pocket map {pocketMap.uniqueID} was not removed because at least one pawn remains on it.");
+            Messages.Message("The planar pocket remains unstable: someone is still inside.", MessageTypeDefOf.CautionInput, false);
+            return;
+        }
+
+        MapParent parent = pocketMap.Parent;
+        try
+        {
+            Current.Game.DeinitAndRemoveMap(pocketMap, false);
+            if (parent != null && Find.WorldObjects.Contains(parent))
+            {
+                Find.WorldObjects.Remove(parent);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"[MFVanilla] Failed to clean up planar pocket map {pocketMap.uniqueID}: {ex}");
+        }
+    }
+
+    private static bool HasAnySpawnedPawn(Map map)
+    {
+        IReadOnlyList<Pawn> pawns = map?.mapPawns?.AllPawnsSpawned;
+        if (pawns == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < pawns.Count; i++)
+        {
+            Pawn pawn = pawns[i];
+            if (pawn != null && !pawn.Destroyed && pawn.Spawned)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static float ReturnCarryingCapacity(IEnumerable<Thing> selectedThings)
+    {
+        if (selectedThings == null)
+        {
+            return 0f;
+        }
+
+        float capacity = 0f;
+        foreach (Thing thing in selectedThings)
+        {
+            if (thing is Pawn pawn && !pawn.Destroyed)
+            {
+                capacity += pawn.GetStatValue(StatDefOf.CarryingCapacity, true);
+            }
+        }
+
+        return capacity;
+    }
+
+    public static float ReturnCarriedMass(IEnumerable<Thing> selectedThings)
+    {
+        if (selectedThings == null)
+        {
+            return 0f;
+        }
+
+        float mass = 0f;
+        foreach (Thing thing in selectedThings)
+        {
+            if (thing == null || thing.Destroyed || thing is Pawn)
+            {
+                continue;
+            }
+
+            mass += thing.GetStatValue(StatDefOf.Mass, true) * thing.stackCount;
+        }
+
+        return mass;
     }
 }
 
@@ -983,9 +1353,201 @@ public sealed class JobDriver_UsePlanarGate : JobDriver
     }
 }
 
+public sealed class Dialog_PlanarPocketReturn : Window
+{
+    private readonly Map pocketMap;
+    private readonly Action<bool> onClosed;
+    private readonly List<Thing> candidates = new();
+    private readonly HashSet<Thing> selected = new();
+    private Vector2 scrollPosition;
+    private bool completedReturn;
+
+    public Dialog_PlanarPocketReturn(Map pocketMap, Action<bool> onClosed)
+    {
+        this.pocketMap = pocketMap;
+        this.onClosed = onClosed;
+        forcePause = true;
+        absorbInputAroundWindow = true;
+        closeOnClickedOutside = false;
+        doCloseX = false;
+        BuildCandidates();
+    }
+
+    public override Vector2 InitialSize => new(640f, 620f);
+
+    public override void DoWindowContents(Rect inRect)
+    {
+        Text.Font = GameFont.Medium;
+        Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), "Planar return");
+        Text.Font = GameFont.Small;
+        Rect descriptionRect = new(inRect.x, inRect.y + 38f, inRect.width, 52f);
+        Widgets.Label(descriptionRect, "The planar pocket begins to collapse. Select travelers and supplies to return to the gate map.");
+
+        float carriedMass = PlanarMagicUtility.ReturnCarriedMass(selected);
+        float carryingCapacity = PlanarMagicUtility.ReturnCarryingCapacity(selected);
+        bool overCapacity = carriedMass > carryingCapacity;
+        Rect massRect = new(inRect.x, inRect.y + 88f, inRect.width, 24f);
+        GUI.color = overCapacity ? Color.red : Color.white;
+        Widgets.Label(massRect, $"Selected supplies: {carriedMass:0.#} / {carryingCapacity:0.#} kg");
+        GUI.color = Color.white;
+
+        Rect outRect = new(inRect.x, inRect.y + 118f, inRect.width, inRect.height - 172f);
+        Rect viewRect = new(0f, 0f, outRect.width - 16f, candidates.Count * 30f + 8f);
+        Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+        float y = 4f;
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            Thing thing = candidates[i];
+            if (thing == null || thing.Destroyed)
+            {
+                continue;
+            }
+
+            bool isForcedPawn = thing is Pawn;
+            bool isSelected = isForcedPawn || selected.Contains(thing);
+            string label = thing is Pawn pawn ? $"{pawn.LabelShortCap} (capacity {pawn.GetStatValue(StatDefOf.CarryingCapacity, true):0.#} kg)" : $"{thing.LabelCap} ({thing.GetStatValue(StatDefOf.Mass, true) * thing.stackCount:0.#} kg)";
+            if (thing.stackCount > 1)
+            {
+                label = $"{label} x{thing.stackCount}";
+            }
+
+            Widgets.CheckboxLabeled(new Rect(4f, y, viewRect.width - 8f, 28f), label, ref isSelected);
+            if (isForcedPawn || isSelected)
+            {
+                selected.Add(thing);
+            }
+            else
+            {
+                selected.Remove(thing);
+            }
+
+            y += 30f;
+        }
+
+        Widgets.EndScrollView();
+
+        float buttonY = inRect.yMax - 40f;
+        if (Widgets.ButtonText(new Rect(inRect.x, buttonY, 160f, 36f), "Select all"))
+        {
+            selected.Clear();
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                selected.Add(candidates[i]);
+            }
+        }
+
+        if (Widgets.ButtonText(new Rect(inRect.x + 170f, buttonY, 160f, 36f), "Clear items"))
+        {
+            selected.RemoveWhere(thing => thing is not Pawn);
+        }
+
+        if (overCapacity)
+        {
+            Widgets.DrawHighlight(new Rect(inRect.xMax - 170f, buttonY, 170f, 36f));
+        }
+
+        if (Widgets.ButtonText(new Rect(inRect.xMax - 170f, buttonY, 170f, 36f), "Return selected"))
+        {
+            TryReturnSelected();
+        }
+    }
+
+    public override void PostClose()
+    {
+        base.PostClose();
+        onClosed?.Invoke(completedReturn);
+    }
+
+    private void BuildCandidates()
+    {
+        candidates.Clear();
+        selected.Clear();
+        if (pocketMap == null)
+        {
+            return;
+        }
+
+        IReadOnlyList<Pawn> pawns = pocketMap.mapPawns?.AllPawnsSpawned;
+        if (pawns != null)
+        {
+            for (int i = 0; i < pawns.Count; i++)
+            {
+                Pawn pawn = pawns[i];
+                if (pawn != null && !pawn.Destroyed && (pawn.Faction == Faction.OfPlayer || pawn.IsPrisonerOfColony))
+                {
+                    candidates.Add(pawn);
+                    selected.Add(pawn);
+                }
+            }
+        }
+
+        List<Thing> things = pocketMap.listerThings?.AllThings;
+        if (things != null)
+        {
+            for (int i = 0; i < things.Count; i++)
+            {
+                Thing thing = things[i];
+                if (thing != null && !thing.Destroyed && thing.def.category == ThingCategory.Item)
+                {
+                    candidates.Add(thing);
+                }
+            }
+        }
+    }
+
+    private void TryReturnSelected()
+    {
+        ForceSelectAllPawns();
+        bool hasPawn = false;
+        foreach (Thing thing in selected)
+        {
+            if (thing is Pawn)
+            {
+                hasPawn = true;
+                break;
+            }
+        }
+
+        if (!hasPawn)
+        {
+            Messages.Message("At least one traveler must return from the planar pocket.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        float carriedMass = PlanarMagicUtility.ReturnCarriedMass(selected);
+        float carryingCapacity = PlanarMagicUtility.ReturnCarryingCapacity(selected);
+        if (carriedMass > carryingCapacity)
+        {
+            Messages.Message($"The selected supplies are too heavy to return: {carriedMass:0.#} / {carryingCapacity:0.#} kg.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (PlanarMagicUtility.TryReturnSelectedFromPlanarPocket(pocketMap, selected.ToList()))
+        {
+            completedReturn = true;
+            Close(false);
+        }
+    }
+
+    private void ForceSelectAllPawns()
+    {
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            if (candidates[i] is Pawn)
+            {
+                selected.Add(candidates[i]);
+            }
+        }
+    }
+}
+
 public sealed class MapComponent_PlanarPocketRepair : MapComponent
 {
     private bool repaired;
+    private const int FallbackReturnDelayTicks = 7500;
+    private int returnDueTick = -1;
+    private bool returnPromptOpen;
+    private bool returnCompleted;
 
     public MapComponent_PlanarPocketRepair(Map map)
         : base(map)
@@ -996,12 +1558,31 @@ public sealed class MapComponent_PlanarPocketRepair : MapComponent
     {
         base.FinalizeInit();
         TryRepair();
+        EnsureReturnTimer();
     }
 
     public override void ExposeData()
     {
         base.ExposeData();
         Scribe_Values.Look(ref repaired, "repaired", false);
+        Scribe_Values.Look(ref returnDueTick, "returnDueTick", -1);
+        Scribe_Values.Look(ref returnPromptOpen, "returnPromptOpen", false);
+        Scribe_Values.Look(ref returnCompleted, "returnCompleted", false);
+    }
+
+    public override void MapComponentTick()
+    {
+        base.MapComponentTick();
+        if (!PlanarMagicUtility.IsPlanarPocketMap(map) || returnCompleted)
+        {
+            return;
+        }
+
+        EnsureReturnTimer();
+        if (returnDueTick >= 0 && Find.TickManager.TicksGame >= returnDueTick && !returnPromptOpen)
+        {
+            OpenReturnDialog();
+        }
     }
 
     private void TryRepair()
@@ -1013,6 +1594,39 @@ public sealed class MapComponent_PlanarPocketRepair : MapComponent
 
         PlanarMagicUtility.EnsurePlanarPocketReady(map);
         repaired = true;
+    }
+
+    private void EnsureReturnTimer()
+    {
+        if (!PlanarMagicUtility.IsPlanarPocketMap(map) || returnCompleted || returnDueTick >= 0)
+        {
+            return;
+        }
+
+        if (map.Parent is PlanarPocketParent pocketParent && pocketParent.forcedReturnTick > Find.TickManager.TicksGame)
+        {
+            returnDueTick = pocketParent.forcedReturnTick;
+            return;
+        }
+
+        returnDueTick = Find.TickManager.TicksGame + FallbackReturnDelayTicks;
+    }
+
+    private void OpenReturnDialog()
+    {
+        returnPromptOpen = true;
+        Find.WindowStack.Add(new Dialog_PlanarPocketReturn(map, completed =>
+        {
+            returnPromptOpen = false;
+            if (completed)
+            {
+                returnCompleted = true;
+            }
+            else
+            {
+                returnDueTick = Find.TickManager.TicksGame + 250;
+            }
+        }));
     }
 }
 
