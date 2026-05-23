@@ -17,6 +17,12 @@
     </tags>
   </SitePartDef>
 
+  <WorldObjectDef>
+    <defName>MFV_PlanarPocketParent</defName>
+    <label>planar pocket</label>
+    <worldObjectClass>MFVanilla.Core.PlanarPocketParent</worldObjectClass>
+  </WorldObjectDef>
+
   <MapGeneratorDef>
     <defName>MFV_PlanarPocketMap</defName>
     <genSteps>

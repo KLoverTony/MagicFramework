@@ -12,6 +12,10 @@ public sealed class SitePartWorker_PlanarPocket : SitePartWorker
 {
 }
 
+public sealed class PlanarPocketParent : PocketMapParent
+{
+}
+
 public sealed class Building_PlanarGate : Building
 {
 }
@@ -31,7 +35,7 @@ public sealed class CompProperties_PlanarGate : CompProperties
 
 public sealed class CompPlanarGate : ThingComp
 {
-    private int siteId = -1;
+    private int pocketParentId = -1;
 
     private CompProperties_PlanarGate Props => (CompProperties_PlanarGate)props;
 
@@ -49,30 +53,11 @@ public sealed class CompPlanarGate : ThingComp
 
         yield return new Command_Action
         {
-            defaultLabel = "Open planar pocket",
-            defaultDesc = "Stabilize and view this gate's planar pocket.",
-            icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
-            action = OpenPlanarPocket
-        };
-
-        yield return new Command_Action
-        {
             defaultLabel = "Send selected through gate",
             defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.",
             icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
             action = TraverseSelectedPawns
         };
-
-        if (Prefs.DevMode)
-        {
-            yield return new Command_Action
-            {
-                defaultLabel = "Reset planar pocket link",
-                defaultDesc = "Forget this gate's current planar pocket site so the next use creates a fresh pocket map.",
-                icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
-                action = ResetPlanarPocketLink
-            };
-        }
     }
 
     public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
@@ -95,19 +80,6 @@ public sealed class CompPlanarGate : ThingComp
             }),
             pawn,
             parent);
-    }
-
-    private void OpenPlanarPocket()
-    {
-        Map map = GetOrCreatePlanarPocketMap();
-        if (map == null)
-        {
-            Messages.Message("The planar gate could not stabilize a pocket map.", MessageTypeDefOf.RejectInput, false);
-            return;
-        }
-
-        Current.Game.CurrentMap = map;
-        Messages.Message("The planar pocket is stable.", MessageTypeDefOf.PositiveEvent, false);
     }
 
     private void TraverseSelectedPawns()
@@ -134,12 +106,6 @@ public sealed class CompPlanarGate : ThingComp
         StartTraversalJobs(pawns);
     }
 
-    private void ResetPlanarPocketLink()
-    {
-        siteId = -1;
-        Messages.Message("The planar gate's pocket link has been reset.", MessageTypeDefOf.NeutralEvent, false);
-    }
-
     public bool TryTraversePawn(Pawn pawn)
     {
         if (!CanPawnUseGate(pawn, out string failReason))
@@ -148,9 +114,15 @@ public sealed class CompPlanarGate : ThingComp
             return false;
         }
 
+        Map sourceMap = pawn.Map;
         Map destinationMap = GetOrCreatePlanarPocketMap();
         if (destinationMap == null)
         {
+            if (sourceMap != null)
+            {
+                Current.Game.CurrentMap = sourceMap;
+            }
+
             Messages.Message("The planar gate could not stabilize a pocket map.", MessageTypeDefOf.RejectInput, false);
             return false;
         }
@@ -159,6 +131,11 @@ public sealed class CompPlanarGate : ThingComp
         int moved = PlanarMagicUtility.TransferPawnsThroughGate(new List<Pawn> { pawn }, destinationMap, arrivalCenter);
         if (moved <= 0)
         {
+            if (sourceMap != null)
+            {
+                Current.Game.CurrentMap = sourceMap;
+            }
+
             return false;
         }
 
@@ -173,7 +150,12 @@ public sealed class CompPlanarGate : ThingComp
     public override void PostExposeData()
     {
         base.PostExposeData();
-        Scribe_Values.Look(ref siteId, "siteId", -1);
+        Scribe_Values.Look(ref pocketParentId, "pocketParentId", -1);
+        if (Scribe.mode == LoadSaveMode.LoadingVars && pocketParentId < 0)
+        {
+            int legacySiteId = -1;
+            Scribe_Values.Look(ref legacySiteId, "siteId", -1);
+        }
     }
 
     private int StartTraversalJobs(List<Pawn> pawns)
@@ -215,18 +197,18 @@ public sealed class CompPlanarGate : ThingComp
 
     private Map GetOrCreatePlanarPocketMap()
     {
-        Site site = PlanarMagicUtility.FindSiteById(siteId);
-        if (site == null)
+        PlanarPocketParent pocketParent = PlanarMagicUtility.FindPlanarPocketParentById(pocketParentId);
+        if (pocketParent == null)
         {
-            if (!PlanarMagicUtility.TryCreatePlanarPocketSite(parent.Map, Props.sitePartDefName, Props.minSiteDistance, Props.maxSiteDistance, selectSite: false, out site))
+            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, out pocketParent))
             {
                 return null;
             }
 
-            siteId = site.ID;
+            pocketParentId = pocketParent.ID;
         }
 
-        Map map = PlanarMagicUtility.GetOrGenerateSiteMap(site);
+        Map map = PlanarMagicUtility.GetOrGeneratePocketMap(pocketParent);
         PlanarMagicUtility.EnsurePlanarPocketReady(map);
         return map;
     }
@@ -271,8 +253,52 @@ public sealed class CompPlanarGate : ThingComp
 public static class PlanarMagicUtility
 {
     public const string PlanarPocketSitePartDefName = "MFV_PlanarPocket";
+    public const string PlanarPocketParentDefName = "MFV_PlanarPocketParent";
     public const string PlanarPocketMapGeneratorDefName = "MFV_PlanarPocketMap";
     public const int PlanarPocketMapSize = 120;
+    public const string PlanarTransportBlockedMessage = "Planar interference prevents conventional off-map transport from this pocket.";
+
+    public static bool BlocksOffMapTransport(Map map)
+    {
+        return IsPlanarPocketMap(map);
+    }
+
+    public static void MessageOffMapTransportBlocked()
+    {
+        Messages.Message(PlanarTransportBlockedMessage, MessageTypeDefOf.RejectInput, false);
+    }
+
+    public static bool TryCreatePlanarPocketParent(Map originMap, out PlanarPocketParent pocketParent)
+    {
+        pocketParent = null;
+        if (originMap == null || originMap.Tile < 0)
+        {
+            return false;
+        }
+
+        WorldObjectDef parentDef = DefDatabase<WorldObjectDef>.GetNamedSilentFail(PlanarPocketParentDefName);
+        if (parentDef == null)
+        {
+            Log.Warning($"[MFVanilla] Could not create planar pocket because {PlanarPocketParentDefName} WorldObjectDef was not found.");
+            return false;
+        }
+
+        pocketParent = WorldObjectMaker.MakeWorldObject(parentDef) as PlanarPocketParent;
+        if (pocketParent == null)
+        {
+            Log.Warning($"[MFVanilla] Could not create planar pocket because {PlanarPocketParentDefName} did not make a PlanarPocketParent.");
+            return false;
+        }
+
+        pocketParent.Tile = originMap.Tile;
+        Find.WorldObjects.Add(pocketParent);
+        if (Prefs.DevMode)
+        {
+            Log.Message($"[MFVanilla] Created hidden planar pocket parent {pocketParent.ID} from map tile {originMap.Tile}.");
+        }
+
+        return true;
+    }
 
     public static bool TryCreatePlanarPocketSite(
         Map originMap,
@@ -345,16 +371,40 @@ public static class PlanarMagicUtility
         return null;
     }
 
-    public static Map GetOrGenerateSiteMap(Site site)
+    public static PlanarPocketParent FindPlanarPocketParentById(int parentId)
     {
-        if (site == null)
+        if (parentId < 0)
         {
             return null;
         }
 
-        if (site.HasMap)
+        List<WorldObject> worldObjects = Find.WorldObjects?.AllWorldObjects;
+        if (worldObjects == null)
         {
-            return site.Map;
+            return null;
+        }
+
+        for (int i = 0; i < worldObjects.Count; i++)
+        {
+            if (worldObjects[i] is PlanarPocketParent parent && parent.ID == parentId)
+            {
+                return parent;
+            }
+        }
+
+        return null;
+    }
+
+    public static Map GetOrGeneratePocketMap(MapParent parent)
+    {
+        if (parent == null)
+        {
+            return null;
+        }
+
+        if (parent.HasMap)
+        {
+            return parent.Map;
         }
 
         IntVec3 mapSize = new(PlanarPocketMapSize, 1, PlanarPocketMapSize);
@@ -362,22 +412,26 @@ public static class PlanarMagicUtility
         IEnumerable<GenStepWithParams> extraGenSteps = null;
         if (mapGeneratorDef == null)
         {
-            mapGeneratorDef = site.MapGeneratorDef ?? RimWorld.MapGeneratorDefOf.Encounter;
-            extraGenSteps = site.ExtraGenStepDefs;
+            mapGeneratorDef = RimWorld.MapGeneratorDefOf.Encounter;
             Log.Warning($"[MFVanilla] {PlanarPocketMapGeneratorDefName} was not found; falling back to {mapGeneratorDef.defName}.");
         }
 
         try
         {
-            Map map = MapGenerator.GenerateMap(mapSize, site, mapGeneratorDef, extraGenSteps, null, false, false);
+            Map map = MapGenerator.GenerateMap(mapSize, parent, mapGeneratorDef, extraGenSteps, null, false, false);
             EnsurePlanarPocketReady(map);
             return map;
         }
         catch (Exception ex)
         {
-            Log.Error($"[MFVanilla] Failed to generate planar pocket map for site {site.ID}: {ex}");
+            Log.Error($"[MFVanilla] Failed to generate planar pocket map for parent {parent.ID}: {ex}");
             return null;
         }
+    }
+
+    public static Map GetOrGenerateSiteMap(Site site)
+    {
+        return GetOrGeneratePocketMap(site);
     }
 
     public static void EnsurePlanarPocketReady(Map map)
@@ -511,10 +565,10 @@ public static class PlanarMagicUtility
         }
 
         int spawned = 0;
-        int attempts = Math.Max(200, targetCount * 20);
-        for (int i = 0; i < attempts && spawned < targetCount; i++)
+        List<IntVec3> cells = JitteredScatterCells(map, seed, targetCount);
+        for (int i = 0; i < cells.Count && spawned < targetCount; i++)
         {
-            IntVec3 cell = RandomStableCell(map, seed, i);
+            IntVec3 cell = cells[i];
             if (!CanScatterAt(map, cell))
             {
                 continue;
@@ -525,6 +579,26 @@ public static class PlanarMagicUtility
             if (thing is Plant plant)
             {
                 plant.Growth = 0.55f + (StableRange(seed, i * 13007) * 0.45f);
+            }
+
+            GenSpawn.Spawn(thing, cell, map);
+            spawned++;
+        }
+
+        int attempts = Math.Max(200, targetCount * 8);
+        for (int i = 0; i < attempts && spawned < targetCount; i++)
+        {
+            IntVec3 cell = HashedStableCell(map, seed, i);
+            if (!CanScatterAt(map, cell))
+            {
+                continue;
+            }
+
+            ThingDef plantDef = plants[StableIndex(seed, i * 17491, plants.Count)];
+            Thing thing = ThingMaker.MakeThing(plantDef);
+            if (thing is Plant plant)
+            {
+                plant.Growth = 0.55f + (StableRange(seed, i * 23497) * 0.45f);
             }
 
             GenSpawn.Spawn(thing, cell, map);
@@ -558,7 +632,7 @@ public static class PlanarMagicUtility
         int attempts = Math.Max(120, targetCount * 16);
         for (int i = 0; i < attempts && spawned < targetCount; i++)
         {
-            IntVec3 cell = RandomStableCell(map, seed, i);
+            IntVec3 cell = HashedStableCell(map, seed, i);
             if (!CanScatterAt(map, cell))
             {
                 continue;
@@ -596,7 +670,7 @@ public static class PlanarMagicUtility
         int attempts = Math.Max(140, targetCount * 20);
         for (int i = 0; i < attempts && spawned < targetCount; i++)
         {
-            IntVec3 cell = RandomStableCell(map, seed, i);
+            IntVec3 cell = HashedStableCell(map, seed, i);
             if (!CanScatterAt(map, cell))
             {
                 continue;
@@ -689,11 +763,52 @@ public static class PlanarMagicUtility
         return true;
     }
 
-    private static IntVec3 RandomStableCell(Map map, int seed, int index)
+    private static List<IntVec3> JitteredScatterCells(Map map, int seed, int targetCount)
     {
-        int x = StableIndex(seed, index * 104729, map.Size.x);
-        int z = StableIndex(seed, index * 13007, map.Size.z);
+        List<IntVec3> cells = new();
+        int usableCount = Math.Max(1, targetCount);
+        float cellArea = Math.Max(1f, (map.Size.x * map.Size.z) / (float)usableCount);
+        int stride = Math.Max(3, Mathf.RoundToInt(Mathf.Sqrt(cellArea)));
+        for (int xBase = 0; xBase < map.Size.x; xBase += stride)
+        {
+            for (int zBase = 0; zBase < map.Size.z; zBase += stride)
+            {
+                int salt = (xBase * 73856093) ^ (zBase * 19349663);
+                int width = Math.Min(stride, map.Size.x - xBase);
+                int height = Math.Min(stride, map.Size.z - zBase);
+                int x = xBase + StableIndex(seed, salt ^ 0x24F1A, width);
+                int z = zBase + StableIndex(seed, salt ^ 0x6D2B7, height);
+                cells.Add(new IntVec3(x, 0, z));
+            }
+        }
+
+        cells.Sort((a, b) => StableHash(seed, a.x * 397 ^ a.z * 7919).CompareTo(StableHash(seed, b.x * 397 ^ b.z * 7919)));
+        return cells;
+    }
+
+    private static IntVec3 HashedStableCell(Map map, int seed, int index)
+    {
+        int hash = StableHash(seed, index * 104729);
+        int x = (hash & int.MaxValue) % map.Size.x;
+        int z = ((hash >> 16) ^ (hash * 1103515245)) & int.MaxValue;
+        z %= map.Size.z;
         return new IntVec3(x, 0, z);
+    }
+
+    private static int StableHash(int seed, int salt)
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = (hash * 397) ^ seed;
+            hash = (hash * 397) ^ salt;
+            hash ^= hash >> 16;
+            hash *= -2048144789;
+            hash ^= hash >> 13;
+            hash *= -1028477387;
+            hash ^= hash >> 16;
+            return hash;
+        }
     }
 
     private static int StableIndex(int seed, int salt, int count)
@@ -725,6 +840,11 @@ public static class PlanarMagicUtility
 
     public static bool IsPlanarPocketMap(Map map)
     {
+        if (map?.Parent is PlanarPocketParent)
+        {
+            return true;
+        }
+
         if (map?.Parent is not Site site || site.parts.NullOrEmpty())
         {
             return false;

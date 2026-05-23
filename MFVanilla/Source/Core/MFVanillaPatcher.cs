@@ -2,6 +2,7 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
 using RimWorld;
@@ -102,8 +103,98 @@ public static class MFVanillaPatcher
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Postfix))
         );
 
+        PatchPlanarTransportBlocks(harmony);
+
         _isPatched = true;
         Log.Message("[MFVanilla] Vanilla tech research suppression patches applied.");
+    }
+
+    private static void PatchPlanarTransportBlocks(Harmony harmony)
+    {
+        PatchTransportGizmos(harmony, "RimWorld.CompLaunchable");
+        PatchTransportGizmos(harmony, "RimWorld.CompShuttle");
+
+        Type shuttlePermitType = AccessTools.TypeByName("RimWorld.RoyalTitlePermitWorker_CallShuttle");
+        MethodInfo validateTarget = AccessTools.Method(shuttlePermitType, "ValidateTarget", new[] { typeof(LocalTargetInfo), typeof(bool) });
+        if (validateTarget != null)
+        {
+            harmony.Patch(validateTarget, prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(RoyalShuttlePermit_ValidateTarget_Prefix)));
+        }
+    }
+
+    private static void PatchTransportGizmos(Harmony harmony, string typeName)
+    {
+        Type type = AccessTools.TypeByName(typeName);
+        if (type == null)
+        {
+            return;
+        }
+
+        MethodInfo method = AccessTools.Method(type, "CompGetGizmosExtra");
+        if (method != null)
+        {
+            harmony.Patch(method, postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(TransportComp_CompGetGizmosExtra_Postfix)));
+        }
+    }
+
+    private static void TransportComp_CompGetGizmosExtra_Postfix(ThingComp __instance, ref IEnumerable<Gizmo> __result)
+    {
+        if (__instance?.parent?.Map == null || !PlanarMagicUtility.BlocksOffMapTransport(__instance.parent.Map) || __result == null)
+        {
+            return;
+        }
+
+        __result = DisableTransportGizmos(__result);
+    }
+
+    private static IEnumerable<Gizmo> DisableTransportGizmos(IEnumerable<Gizmo> gizmos)
+    {
+        foreach (Gizmo gizmo in gizmos)
+        {
+            if (gizmo is Command command && IsLikelyTransportCommand(command))
+            {
+                command.Disable(PlanarMagicUtility.PlanarTransportBlockedMessage);
+            }
+
+            yield return gizmo;
+        }
+    }
+
+    private static bool IsLikelyTransportCommand(Command command)
+    {
+        string label = command.defaultLabel?.ToString() ?? string.Empty;
+        string desc = command.defaultDesc?.ToString() ?? string.Empty;
+        return ContainsTransportWord(label) || ContainsTransportWord(desc);
+    }
+
+    private static bool ContainsTransportWord(string text)
+    {
+        if (text.NullOrEmpty())
+        {
+            return false;
+        }
+
+        return text.IndexOf("launch", StringComparison.OrdinalIgnoreCase) >= 0
+            || text.IndexOf("shuttle", StringComparison.OrdinalIgnoreCase) >= 0
+            || text.IndexOf("transport", StringComparison.OrdinalIgnoreCase) >= 0
+            || text.IndexOf("pod", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private static bool RoyalShuttlePermit_ValidateTarget_Prefix(LocalTargetInfo target, bool showMessages, ref bool __result)
+    {
+        Map map = Find.CurrentMap;
+        if (map != null && PlanarMagicUtility.BlocksOffMapTransport(map))
+        {
+            if (showMessages)
+            {
+                PlanarMagicUtility.MessageOffMapTransportBlocked();
+            }
+
+            __result = false;
+            return false;
+        }
+
+        return true;
     }
 
     public static void ResetSuppressionCache()
