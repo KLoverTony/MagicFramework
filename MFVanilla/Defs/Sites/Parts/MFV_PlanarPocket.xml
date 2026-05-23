@@ -1,11 +1,71 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
+  <MagicFramework.Core.PlanarFlowFeatureDef>
+    <defName>MFV_PlanarManaStream</defName>
+    <label>planar mana stream</label>
+    <channelTerrain>MFV_ManaRiverDeep</channelTerrain>
+    <edgeTerrain>MFV_ManaRiverShallow</edgeTerrain>
+    <bankTerrain>MFV_ManaRiverBank</bankTerrain>
+    <minWidth>2</minWidth>
+    <maxWidth>5</maxWidth>
+    <bankWidth>2</bankWidth>
+    <meanderStrength>0.42</meanderStrength>
+    <bankThingDensity>0.008</bankThingDensity>
+    <bankThings>
+      <li>Plant_MFV_PlanarA</li>
+      <li>Plant_MFV_PlanarB</li>
+      <li>Plant_MFV_PlanarC</li>
+      <li>Plant_MFV_PlanarD</li>
+    </bankThings>
+  </MagicFramework.Core.PlanarFlowFeatureDef>
+
+  <MagicFramework.Core.PlanarDimensionDef>
+    <defName>MFV_PlanarPocketDimension</defName>
+    <label>planar pocket</label>
+    <worldObjectDef>MFV_PlanarPocketParent</worldObjectDef>
+    <mapGeneratorDef>MFV_PlanarPocketMap</mapGeneratorDef>
+    <returnGateDef>MFV_PlanarGate</returnGateDef>
+    <mapSize>120</mapSize>
+    <terrainOptions>
+      <li>MFV_PlanarTileA</li>
+      <li>MFV_PlanarTileB</li>
+      <li>MFV_PlanarTileC</li>
+      <li>MFV_PlanarTileD</li>
+    </terrainOptions>
+    <plantOptions>
+      <li>Plant_MFV_PlanarA</li>
+      <li>Plant_MFV_PlanarB</li>
+      <li>Plant_MFV_PlanarC</li>
+      <li>Plant_MFV_PlanarD</li>
+      <li>Plant_MFV_PlanarE</li>
+      <li>Plant_MFV_PlanarF</li>
+      <li>Plant_MFV_PlanarG</li>
+      <li>Plant_MFV_PlanarH</li>
+      <li>Plant_MFV_PlanarI</li>
+      <li>Plant_MFV_PlanarJ</li>
+    </plantOptions>
+    <chunkOptions>
+      <li>MFV_ChunkPhaseStone</li>
+      <li>MFV_ChunkVoidglass</li>
+    </chunkOptions>
+    <mineableOptions>
+      <li>MFV_PhaseStone</li>
+      <li>MFV_Voidglass</li>
+    </mineableOptions>
+    <flowFeatures>
+      <li>MFV_PlanarManaStream</li>
+    </flowFeatures>
+    <plantDensity>0.075</plantDensity>
+    <chunkDensity>0.018</chunkDensity>
+    <mineableDensity>0.012</mineableDensity>
+  </MagicFramework.Core.PlanarDimensionDef>
+
   <SitePartDef>
     <defName>MFV_PlanarPocket</defName>
     <label>planar pocket</label>
     <description>A folded pocket of space stabilized by planar magic.</description>
-    <workerClass>MFVanilla.Core.SitePartWorker_PlanarPocket</workerClass>
+    <workerClass>MagicFramework.Core.SitePartWorker_PlanarPocket</workerClass>
     <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
     <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
     <arrivedLetter>The planar pocket resolves into strange ground and impossible plant life.</arrivedLetter>
@@ -20,7 +80,7 @@
   <WorldObjectDef>
     <defName>MFV_PlanarPocketParent</defName>
     <label>planar pocket</label>
-    <worldObjectClass>MFVanilla.Core.PlanarPocketParent</worldObjectClass>
+    <worldObjectClass>MagicFramework.Core.PlanarPocketParent</worldObjectClass>
   </WorldObjectDef>
 
   <MapGeneratorDef>
@@ -34,7 +94,8 @@
     <defName>MFV_PlanarPocket</defName>
     <linkWithSite>MFV_PlanarPocket</linkWithSite>
     <order>420</order>
-    <genStep Class="MFVanilla.Core.GenStep_PlanarPocket">
+    <genStep Class="MagicFramework.Core.GenStep_PlanarPocket">
+      <dimension>MFV_PlanarPocketDimension</dimension>
       <terrainOptions>
         <li>MFV_PlanarTileA</li>
         <li>MFV_PlanarTileB</li>

@@ -47,6 +47,12 @@ public sealed class CompProperties_PlanarGate : CompProperties
     public float alignmentCycleDays = 12f;
     public float baseAlignmentWindowDays = 1f;
     public float alignmentWindowDaysPerSpire = 0.5f;
+    public string activeFleckDef = "ElectricalSpark";
+    public string activeFlashFleckDef = "SparkFlash";
+    public int activeFleckIntervalTicksMin = 120;
+    public int activeFleckIntervalTicksMax = 240;
+    public float activeFleckRadius = 1.35f;
+    public float activeFleckScale = 0.8f;
 
     public CompProperties_PlanarGate()
     {
@@ -133,8 +139,32 @@ public sealed class PlanarAlignmentGameComponent : GameComponent
 public sealed class CompPlanarGate : ThingComp
 {
     private int pocketParentId = -1;
+    private int nextActiveFleckTick;
 
     private CompProperties_PlanarGate Props => (CompProperties_PlanarGate)props;
+
+    public override void PostSpawnSetup(bool respawningAfterLoad)
+    {
+        base.PostSpawnSetup(respawningAfterLoad);
+        ScheduleNextActiveFleck();
+    }
+
+    public override void CompTick()
+    {
+        base.CompTick();
+
+        if (parent?.Spawned != true || parent.Map == null || Find.TickManager.TicksGame < nextActiveFleckTick)
+        {
+            return;
+        }
+
+        if (PlanarAlignmentGameComponent.Instance?.IsAligned(Props, AlignmentPower()) == true)
+        {
+            ThrowActiveFlecks();
+        }
+
+        ScheduleNextActiveFleck();
+    }
 
     public override IEnumerable<Gizmo> CompGetGizmosExtra()
     {
@@ -155,7 +185,7 @@ public sealed class CompPlanarGate : ThingComp
         {
             defaultLabel = "Send selected through gate",
             defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.\n\n{AlignmentStatusText(alignmentPower)}",
-            icon = ContentFinder<Texture2D>.Get("Things/Building/PlanarGate/PlanarGate-removebg-preview", false),
+            icon = ContentFinder<Texture2D>.Get("UI/Gizmos/Planar/PlanarGateOpen", false),
             action = TraverseSelectedPawns
         };
         if (!isAligned)
@@ -422,6 +452,45 @@ public sealed class CompPlanarGate : ThingComp
                 }
             }
         }
+    }
+
+    private void ThrowActiveFlecks()
+    {
+        FleckDef fleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(Props.activeFleckDef);
+        if (fleckDef == null || parent.Map == null)
+        {
+            return;
+        }
+
+        FleckDef flashFleckDef = DefDatabase<FleckDef>.GetNamedSilentFail(Props.activeFlashFleckDef);
+        Vector3 center = parent.DrawPos;
+        center.y = AltitudeLayer.MoteOverhead.AltitudeFor();
+        int tick = Find.TickManager.TicksGame;
+        float radius = Mathf.Max(0.1f, Props.activeFleckRadius);
+        int fleckCount = Mathf.Clamp(3 + LinkedArcaneSpires().Count(), 3, 7);
+
+        for (int i = 0; i < fleckCount; i++)
+        {
+            float angle = ((tick / 19f) + (360f / fleckCount * i)) * Mathf.Deg2Rad;
+            Vector3 position = center;
+            position.x += Mathf.Cos(angle) * radius;
+            position.z += Mathf.Sin(angle) * radius;
+            FleckMaker.Static(position, parent.Map, fleckDef, Mathf.Max(0.1f, Props.activeFleckScale));
+        }
+
+        if (flashFleckDef != null)
+        {
+            FleckMaker.Static(center, parent.Map, flashFleckDef, Mathf.Max(0.1f, Props.activeFleckScale * 1.15f));
+        }
+    }
+
+    private void ScheduleNextActiveFleck()
+    {
+        int min = Mathf.Max(1, Props.activeFleckIntervalTicksMin);
+        int max = Mathf.Max(min, Props.activeFleckIntervalTicksMax);
+        int range = max - min + 1;
+        int offset = min + Mathf.Abs(Gen.HashCombineInt(parent?.thingIDNumber ?? 0, Find.TickManager.TicksGame)) % range;
+        nextActiveFleckTick = Find.TickManager.TicksGame + offset;
     }
 }
 

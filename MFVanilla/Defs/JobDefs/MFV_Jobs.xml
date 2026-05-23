@@ -3,7 +3,7 @@
 
   <JobDef>
     <defName>MFV_UsePlanarGate</defName>
-    <driverClass>MFVanilla.Core.JobDriver_UsePlanarGate</driverClass>
+    <driverClass>MagicFramework.Core.JobDriver_UsePlanarGate</driverClass>
     <reportString>using planar gate.</reportString>
     <casualInterruptible>false</casualInterruptible>
   </JobDef>

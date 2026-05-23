@@ -10,6 +10,12 @@
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
     </graphicData>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_ArcaneInk</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <thingCategories>
       <li>ResourcesRaw</li>
     </thingCategories>

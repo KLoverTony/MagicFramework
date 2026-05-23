@@ -5,6 +5,7 @@ using MagicFramework.Definitions;
 using MagicFramework.Debug;
 using MagicFramework.Scheduling;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace MagicFramework.Core;
@@ -180,6 +181,127 @@ public static class MagicFrameworkPawnGizmoPatch
                 yield return itemAbilityGizmo;
             }
         }
+    }
+}
+
+[HarmonyPatch(typeof(Dialog_InfoCard), "FillCard")]
+public static class MagicFrameworkInfoCardImagePatch
+{
+    private const float MinImageHeight = 64f;
+    private const float MaxImageHeight = 260f;
+    private const float ImageSpacing = 12f;
+    private static readonly FieldInfo ThingField = AccessTools.Field(typeof(Dialog_InfoCard), "thing");
+    private static readonly FieldInfo DefField = AccessTools.Field(typeof(Dialog_InfoCard), "def");
+    private static readonly FieldInfo TabField = AccessTools.Field(typeof(Dialog_InfoCard), "tab");
+    private static readonly Dictionary<string, Texture2D> TextureCache = new();
+
+    public static void Prefix(Dialog_InfoCard __instance, ref Rect cardRect, out Rect __state)
+    {
+        __state = Rect.zero;
+        if (!TryResolveImage(__instance, out InfoCardImageExtension extension, out _))
+        {
+            return;
+        }
+
+        float imageHeight = ResolveImageHeight(extension, cardRect);
+        if (imageHeight <= 0f)
+        {
+            return;
+        }
+
+        __state = new Rect(cardRect.x, cardRect.y, cardRect.width, imageHeight);
+        cardRect.y += imageHeight + ImageSpacing;
+        cardRect.height = Mathf.Max(0f, cardRect.height - imageHeight - ImageSpacing);
+    }
+
+    public static void Postfix(Dialog_InfoCard __instance, Rect __state)
+    {
+        if (__state == Rect.zero || !TryResolveImage(__instance, out _, out Texture2D texture) || texture == null)
+        {
+            return;
+        }
+
+        Rect imageRect = FitTexture(__state, texture);
+        GUI.DrawTexture(imageRect, texture, ScaleMode.ScaleToFit, true);
+    }
+
+    private static bool TryResolveImage(Dialog_InfoCard dialog, out InfoCardImageExtension extension, out Texture2D texture)
+    {
+        extension = null;
+        texture = null;
+        if (!IsStatsTab(dialog))
+        {
+            return false;
+        }
+
+        Def def = ResolveDef(dialog);
+        extension = def?.GetModExtension<InfoCardImageExtension>();
+        if (extension == null || !extension.showImageInInfoCard)
+        {
+            return false;
+        }
+
+        string imagePath = extension.imagePath.NullOrEmpty() ? extension.ImageToShowInInfoCard : extension.imagePath;
+        if (imagePath.NullOrEmpty())
+        {
+            return false;
+        }
+
+        texture = ResolveTexture(imagePath);
+        return texture != null;
+    }
+
+    private static bool IsStatsTab(Dialog_InfoCard dialog)
+    {
+        object tab = TabField?.GetValue(dialog);
+        return tab == null || tab.ToString() == "Stats";
+    }
+
+    private static Def ResolveDef(Dialog_InfoCard dialog)
+    {
+        if (ThingField?.GetValue(dialog) is Thing thing)
+        {
+            return thing.def;
+        }
+
+        Def def = DefField?.GetValue(dialog) as Def;
+        if (def is PawnKindDef pawnKind)
+        {
+            return pawnKind.race;
+        }
+
+        return def;
+    }
+
+    private static Texture2D ResolveTexture(string imagePath)
+    {
+        if (!TextureCache.TryGetValue(imagePath, out Texture2D texture))
+        {
+            texture = ContentFinder<Texture2D>.Get(imagePath, false);
+            TextureCache[imagePath] = texture;
+        }
+
+        return texture;
+    }
+
+    private static float ResolveImageHeight(InfoCardImageExtension extension, Rect cardRect)
+    {
+        float authoredHeight = Mathf.Clamp(extension.imageHeight, MinImageHeight, MaxImageHeight);
+        return Mathf.Min(authoredHeight, Mathf.Max(0f, cardRect.height * 0.45f));
+    }
+
+    private static Rect FitTexture(Rect container, Texture2D texture)
+    {
+        float textureRatio = texture.width / (float)texture.height;
+        float containerRatio = container.width / container.height;
+        if (textureRatio > containerRatio)
+        {
+            float height = container.width / textureRatio;
+            return new Rect(container.x, container.y + ((container.height - height) / 2f), container.width, height);
+        }
+
+        float width = container.height * textureRatio;
+        return new Rect(container.x + ((container.width - width) / 2f), container.y, width, container.height);
     }
 }
 

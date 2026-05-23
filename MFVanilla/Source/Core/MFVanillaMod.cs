@@ -23,7 +23,7 @@ public sealed class MFVanillaMod : Mod
         /// <summary>
         /// Whether to hide vanilla electricity and downstream tech research.
         /// </summary>
-        public bool DisableTechResearch = true;
+        public bool DisableTechResearch = false;
 
         /// <summary>
         /// Whether to show a warning on game start when tech is disabled.
@@ -47,7 +47,7 @@ public sealed class MFVanillaMod : Mod
 
         public override void ExposeData()
         {
-            Scribe_Values.Look(ref DisableTechResearch, "disableTechResearch", true);
+            Scribe_Values.Look(ref DisableTechResearch, "disableTechResearch", false);
             Scribe_Values.Look(ref ShowTechDisabledWarning, "showTechDisabledWarning", true);
             Scribe_Values.Look(ref ShowDevModeSpellGizmos, "showDevModeSpellGizmos", false);
             Scribe_Values.Look(ref ShowLeylineStrengthNumbers, "showLeylineStrengthNumbers", false);
@@ -181,7 +181,7 @@ public sealed class MFVanillaMod : Mod
 
         if (listing.ButtonText("MFV_ResetSettingsToDefaults".Translate()))
         {
-            Settings.DisableTechResearch = true;
+            Settings.DisableTechResearch = false;
             Settings.ShowTechDisabledWarning = true;
             Settings.ShowDevModeSpellGizmos = false;
             Settings.ShowLeylineStrengthNumbers = false;

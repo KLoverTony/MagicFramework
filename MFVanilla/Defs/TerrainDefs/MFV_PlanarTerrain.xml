@@ -93,4 +93,73 @@
     <fertility>0.6</fertility>
   </TerrainDef>
 
+  <TerrainDef ParentName="WaterChestDeepBase">
+    <defName>MFV_ManaRiverDeep</defName>
+    <label>deep mana current</label>
+    <description>A luminous stream of condensed planar mana. Its surface moves like water, but the current carries arcane charge instead of ordinary silt.</description>
+    <texturePath>Terrain/Surfaces/WaterChestDeepRamp</texturePath>
+    <waterDepthShader>Map/WaterDepth</waterDepthShader>
+    <renderPrecedence>399</renderPrecedence>
+    <color>(0.62,0.35,1)</color>
+    <pathCost>42</pathCost>
+    <affordances>
+      <li>MovingFluid</li>
+    </affordances>
+    <tags>
+      <li>River</li>
+    </tags>
+    <waterDepthShaderParameters>
+      <_UseWaterOffset>1</_UseWaterOffset>
+    </waterDepthShaderParameters>
+  </TerrainDef>
+
+  <TerrainDef ParentName="WaterShallowBase">
+    <defName>MFV_ManaRiverShallow</defName>
+    <label>shallow mana current</label>
+    <description>A thin layer of moving planar mana, bright enough to stain nearby ground with violet-blue light.</description>
+    <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+    <waterDepthShader>Map/WaterDepth</waterDepthShader>
+    <renderPrecedence>398</renderPrecedence>
+    <color>(0.45,0.85,1)</color>
+    <pathCost>28</pathCost>
+    <affordances>
+      <li>MovingFluid</li>
+      <li>ShallowWater</li>
+      <li>Bridgeable</li>
+      <li>Walkable</li>
+    </affordances>
+    <tags>
+      <li>River</li>
+      <li>WaterFreshShallow</li>
+      <li>WaterFreshShallowMoving</li>
+    </tags>
+    <waterDepthShaderParameters>
+      <_UseWaterOffset>1</_UseWaterOffset>
+    </waterDepthShaderParameters>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_ManaRiverBank</defName>
+    <label>mana-washed bank</label>
+    <description>Planar stone washed smooth by nearby mana currents.</description>
+    <texturePath>Things/Terrain/Planar/TileAlpha3</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>352</renderPrecedence>
+    <color>(0.55,0.42,1)</color>
+    <pathCost>1</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.85</fertility>
+  </TerrainDef>
+
 </Defs>

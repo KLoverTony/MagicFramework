@@ -11,6 +11,12 @@
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.8</drawSize>
     </graphicData>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_SpellScroll</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <selectable>true</selectable>
     <stackLimit>1</stackLimit>
     <thingCategories>

@@ -320,6 +320,12 @@
     <defName>MFV_FleshGolem</defName>
     <label>flesh golem</label>
     <description>A stitched guardian animated by vital magic and crude command runes. It lumbers into melee, absorbs punishment, and knits torn flesh back together while the fight continues.</description>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Creatures/MFV_Art_FleshGolem</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <statBases>
       <MarketValue>1100</MarketValue>
       <MoveSpeed>2.65</MoveSpeed>

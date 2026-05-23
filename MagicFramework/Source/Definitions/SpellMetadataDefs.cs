@@ -51,6 +51,17 @@ public class ArcaneDisciplineUnlockExtension : DefModExtension
 }
 
 /// <summary>
+/// Adds optional artwork to a def's info card.
+/// </summary>
+public class InfoCardImageExtension : DefModExtension
+{
+    public bool showImageInInfoCard = true;
+    public string imagePath;
+    public string ImageToShowInInfoCard;
+    public float imageHeight = 180f;
+}
+
+/// <summary>
 /// Flexible free-form spell marker for filtering and rule matching.
 /// </summary>
 public class SpellTagDef : Def

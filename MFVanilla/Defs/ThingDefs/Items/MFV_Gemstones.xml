@@ -13,6 +13,12 @@
     <tradeTags>
       <li>MFV_Gemstone</li>
     </tradeTags>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_Gems</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <stackLimit>75</stackLimit>
     <statBases>
       <MaxHitPoints>80</MaxHitPoints>

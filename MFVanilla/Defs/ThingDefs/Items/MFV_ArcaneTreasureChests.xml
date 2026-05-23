@@ -35,6 +35,12 @@
       <drawSize>0.9</drawSize>
       <color>(0.5,0.36,0.78)</color>
     </graphicData>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_ArcaneTreasureChest</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <comps>
       <li Class="CompProperties_Forbiddable" />
       <li Class="CompProperties_Usable">
@@ -60,6 +66,12 @@
       <drawSize>0.9</drawSize>
       <color>(0.5,0.36,0.78)</color>
     </graphicData>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_ArcaneTreasureChest</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <statBases>
       <MarketValue>950</MarketValue>
     </statBases>

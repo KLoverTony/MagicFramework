@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <SitePartDef>
+    <defName>MF_PlanarDimension</defName>
+    <label>planar dimension</label>
+    <description>A folded region of extra-dimensional space stabilized by magic.</description>
+    <workerClass>MagicFramework.Core.SitePartWorker_PlanarPocket</workerClass>
+    <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
+    <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
+    <arrivedLetter>The planar dimension resolves around the caravan.</arrivedLetter>
+    <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
+    <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
+    <gravShipsCanLandOn>true</gravShipsCanLandOn>
+    <tags>
+      <li>MF_PlanarDimension</li>
+    </tags>
+  </SitePartDef>
+
+  <WorldObjectDef>
+    <defName>MF_PlanarDimensionParent</defName>
+    <label>planar dimension</label>
+    <worldObjectClass>MagicFramework.Core.PlanarPocketParent</worldObjectClass>
+  </WorldObjectDef>
+
+  <MapGeneratorDef>
+    <defName>MF_PlanarDimensionMap</defName>
+    <genSteps>
+      <li>MF_PlanarDimension</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <GenStepDef>
+    <defName>MF_PlanarDimension</defName>
+    <linkWithSite>MF_PlanarDimension</linkWithSite>
+    <order>420</order>
+    <genStep Class="MagicFramework.Core.GenStep_PlanarPocket">
+      <plantDensity>0.075</plantDensity>
+      <chunkDensity>0.018</chunkDensity>
+      <mineableDensity>0.012</mineableDensity>
+    </genStep>
+  </GenStepDef>
+
+</Defs>

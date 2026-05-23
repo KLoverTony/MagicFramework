@@ -5,7 +5,7 @@
     <defName>MFV_PlanarGate</defName>
     <label>planar gate</label>
     <description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into a planar pocket.</description>
-    <thingClass>MFVanilla.Core.Building_PlanarGate</thingClass>
+    <thingClass>MagicFramework.Core.Building_PlanarGate</thingClass>
     <category>Building</category>
     <designationCategory>Misc</designationCategory>
     <uiOrder>2600</uiOrder>
@@ -49,7 +49,8 @@
       <paintable>true</paintable>
     </building>
     <comps>
-      <li Class="MFVanilla.Core.CompProperties_PlanarGate">
+      <li Class="MagicFramework.Core.CompProperties_PlanarGate">
+        <dimension>MFV_PlanarPocketDimension</dimension>
         <sitePartDefName>MFV_PlanarPocket</sitePartDefName>
         <minSiteDistance>1</minSiteDistance>
         <maxSiteDistance>4</maxSiteDistance>
@@ -63,6 +64,12 @@
         <alignmentCycleDays>12</alignmentCycleDays>
         <baseAlignmentWindowDays>1</baseAlignmentWindowDays>
         <alignmentWindowDaysPerSpire>0.5</alignmentWindowDaysPerSpire>
+        <activeFleckDef>ElectricalSpark</activeFleckDef>
+        <activeFlashFleckDef>SparkFlash</activeFlashFleckDef>
+        <activeFleckIntervalTicksMin>120</activeFleckIntervalTicksMin>
+        <activeFleckIntervalTicksMax>240</activeFleckIntervalTicksMax>
+        <activeFleckRadius>1.35</activeFleckRadius>
+        <activeFleckScale>0.8</activeFleckScale>
       </li>
     </comps>
   </ThingDef>

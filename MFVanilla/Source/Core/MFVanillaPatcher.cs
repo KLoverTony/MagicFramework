@@ -9,6 +9,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using MFPlanarMagicUtility = MagicFramework.Core.PlanarMagicUtility;
 
 namespace MFVanilla.Core;
 
@@ -139,7 +140,7 @@ public static class MFVanillaPatcher
 
     private static void TransportComp_CompGetGizmosExtra_Postfix(ThingComp __instance, ref IEnumerable<Gizmo> __result)
     {
-        if (__instance?.parent?.Map == null || !PlanarMagicUtility.BlocksOffMapTransport(__instance.parent.Map) || __result == null)
+        if (__instance?.parent?.Map == null || !MFPlanarMagicUtility.BlocksOffMapTransport(__instance.parent.Map) || __result == null)
         {
             return;
         }
@@ -153,7 +154,7 @@ public static class MFVanillaPatcher
         {
             if (gizmo is Command command && IsLikelyTransportCommand(command))
             {
-                command.Disable(PlanarMagicUtility.PlanarTransportBlockedMessage);
+                command.Disable(MFPlanarMagicUtility.PlanarTransportBlockedMessage);
             }
 
             yield return gizmo;
@@ -183,11 +184,11 @@ public static class MFVanillaPatcher
     private static bool RoyalShuttlePermit_ValidateTarget_Prefix(LocalTargetInfo target, bool showMessages, ref bool __result)
     {
         Map map = Find.CurrentMap;
-        if (map != null && PlanarMagicUtility.BlocksOffMapTransport(map))
+        if (map != null && MFPlanarMagicUtility.BlocksOffMapTransport(map))
         {
             if (showMessages)
             {
-                PlanarMagicUtility.MessageOffMapTransportBlocked();
+                MFPlanarMagicUtility.MessageOffMapTransportBlocked();
             }
 
             __result = false;

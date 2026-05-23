@@ -10,6 +10,12 @@
       <texPath>Things/Item/Flaming_Sword</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
+    <modExtensions>
+      <li Class="MagicFramework.Definitions.InfoCardImageExtension">
+        <imagePath>Art/Items/MFV_Art_Flaming_Sword</imagePath>
+        <imageHeight>180</imageHeight>
+      </li>
+    </modExtensions>
     <techLevel>Medieval</techLevel>
     <weaponTags>
       <li>MedievalMeleeAdvanced</li>
