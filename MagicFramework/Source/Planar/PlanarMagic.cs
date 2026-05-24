@@ -23,6 +23,7 @@ public sealed class PlanarDimensionDef : Def
     public List<ThingDef> chunkOptions = new();
     public List<ThingDef> mineableOptions = new();
     public List<PlanarFlowFeatureDef> flowFeatures = new();
+    public List<PlanarPlantClusterDef> plantClusters = new();
     public int mapSize = 120;
     public float plantDensity = 0.075f;
     public float chunkDensity = 0.018f;
@@ -46,12 +47,24 @@ public sealed class PlanarFlowFeatureDef : Def
     public bool clearBuildingsInChannel;
 }
 
+public sealed class PlanarPlantClusterDef : Def
+{
+    public ThingDef plantDef;
+    public List<ThingDef> anchorDefs = new();
+    public int radius = 4;
+    public int minPlantsPerAnchor = 2;
+    public int maxPlantsPerAnchor = 5;
+    public float growthMin = 0.65f;
+    public float growthMax = 1f;
+}
+
 public sealed class PlanarPocketParent : PocketMapParent
 {
     public PlanarDimensionDef dimension;
     public int originMapId = -1;
     public IntVec3 originGatePosition = IntVec3.Invalid;
     public int forcedReturnTick = -1;
+    public int generationSeed;
 
     public override void ExposeData()
     {
@@ -60,6 +73,7 @@ public sealed class PlanarPocketParent : PocketMapParent
         Scribe_Values.Look(ref originMapId, "originMapId", -1);
         Scribe_Values.Look(ref originGatePosition, "originGatePosition", IntVec3.Invalid);
         Scribe_Values.Look(ref forcedReturnTick, "forcedReturnTick", -1);
+        Scribe_Values.Look(ref generationSeed, "generationSeed", 0);
     }
 }
 
@@ -162,6 +176,12 @@ public sealed class PlanarAlignmentGameComponent : GameComponent
 
     public void NotifyGateOpened(CompProperties_PlanarGate props)
     {
+    }
+
+    public int CurrentCycleIndex(CompProperties_PlanarGate props)
+    {
+        int cycleTicks = AlignmentCycleTicks(props);
+        return cycleTicks <= 0 ? 0 : GenTicks.TicksGame / cycleTicks;
     }
 
     private static int TicksIntoCycle(CompProperties_PlanarGate props)
@@ -400,7 +420,8 @@ public sealed class CompPlanarGate : ThingComp
         PlanarPocketParent pocketParent = PlanarMagicUtility.FindPlanarPocketParentById(pocketParentId);
         if (pocketParent == null)
         {
-            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, parent.Position, Props.ResolvedDimension, out pocketParent))
+            int cycleIndex = PlanarAlignmentGameComponent.Instance?.CurrentCycleIndex(Props) ?? 0;
+            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, parent.Position, Props.ResolvedDimension, cycleIndex, out pocketParent))
             {
                 return null;
             }
@@ -562,7 +583,7 @@ public static class PlanarMagicUtility
         Messages.Message(PlanarTransportBlockedMessage, MessageTypeDefOf.RejectInput, false);
     }
 
-    public static bool TryCreatePlanarPocketParent(Map originMap, IntVec3 originGatePosition, PlanarDimensionDef dimension, out PlanarPocketParent pocketParent)
+    public static bool TryCreatePlanarPocketParent(Map originMap, IntVec3 originGatePosition, PlanarDimensionDef dimension, int cycleIndex, out PlanarPocketParent pocketParent)
     {
         pocketParent = null;
         if (originMap == null || originMap.Tile < 0)
@@ -588,6 +609,7 @@ public static class PlanarMagicUtility
         pocketParent.dimension = dimension;
         pocketParent.originMapId = originMap.uniqueID;
         pocketParent.originGatePosition = originGatePosition;
+        pocketParent.generationSeed = ResolvePlanarGenerationSeed(originMap, originGatePosition, dimension, cycleIndex);
         Find.WorldObjects.Add(pocketParent);
         if (Prefs.DevMode)
         {
@@ -595,6 +617,21 @@ public static class PlanarMagicUtility
         }
 
         return true;
+    }
+
+    private static int ResolvePlanarGenerationSeed(Map originMap, IntVec3 originGatePosition, PlanarDimensionDef dimension, int cycleIndex)
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = (hash * 397) ^ (originMap?.uniqueID ?? -1);
+            hash = (hash * 397) ^ (originMap?.Tile ?? -1);
+            hash = (hash * 397) ^ originGatePosition.x;
+            hash = (hash * 397) ^ originGatePosition.z;
+            hash = (hash * 397) ^ (dimension?.shortHash ?? 0);
+            hash = (hash * 397) ^ cycleIndex;
+            return hash;
+        }
     }
 
     public static bool TryCreatePlanarPocketSite(
@@ -793,6 +830,7 @@ public static class PlanarMagicUtility
             ScatterPlanarStoneChunks(map, map.Tile ^ 0x31B4D2F1, Math.Max(10, mapArea / 360) - chunkCount, chunks);
         }
 
+        ScatterPlanarPlantClusters(map, dimension, map.Tile ^ 0x19B64C7D);
         FloodFillerFog.FloodUnfog(new IntVec3(map.Size.x / 2, 0, map.Size.z / 2), map);
     }
 
@@ -1075,6 +1113,85 @@ public static class PlanarMagicUtility
         }
     }
 
+    public static void ScatterPlanarPlantClusters(Map map, PlanarDimensionDef dimension, int seed)
+    {
+        if (map == null || dimension?.plantClusters.NullOrEmpty() != false)
+        {
+            return;
+        }
+
+        for (int i = 0; i < dimension.plantClusters.Count; i++)
+        {
+            PlanarPlantClusterDef cluster = dimension.plantClusters[i];
+            if (cluster?.plantDef == null || cluster.anchorDefs.NullOrEmpty())
+            {
+                continue;
+            }
+
+            List<Thing> anchors = ResolveAnchorThings(map, cluster.anchorDefs);
+            for (int j = 0; j < anchors.Count; j++)
+            {
+                Thing anchor = anchors[j];
+                if (anchor?.Spawned != true)
+                {
+                    continue;
+                }
+
+                ScatterPlantClusterAround(map, cluster, anchor.Position, seed ^ (i * 104729) ^ (j * 3917));
+            }
+        }
+    }
+
+    private static List<Thing> ResolveAnchorThings(Map map, List<ThingDef> anchorDefs)
+    {
+        List<Thing> anchors = new();
+        for (int i = 0; i < anchorDefs.Count; i++)
+        {
+            ThingDef anchorDef = anchorDefs[i];
+            if (anchorDef == null)
+            {
+                continue;
+            }
+
+            List<Thing> things = map.listerThings.ThingsOfDef(anchorDef);
+            if (!things.NullOrEmpty())
+            {
+                anchors.AddRange(things);
+            }
+        }
+
+        return anchors;
+    }
+
+    private static void ScatterPlantClusterAround(Map map, PlanarPlantClusterDef cluster, IntVec3 center, int seed)
+    {
+        int min = Math.Max(0, cluster.minPlantsPerAnchor);
+        int max = Math.Max(min, cluster.maxPlantsPerAnchor);
+        int targetCount = min + StableIndex(seed, 0x57CC, max - min + 1);
+        int attempts = Math.Max(24, targetCount * 10);
+        int spawned = 0;
+        int radius = Math.Max(1, cluster.radius);
+        for (int i = 0; i < attempts && spawned < targetCount; i++)
+        {
+            IntVec3 cell = center + GenRadial.RadialPattern[StableIndex(seed, i * 92821, GenRadial.NumCellsInRadius(radius))];
+            if (!CanScatterAt(map, cell))
+            {
+                continue;
+            }
+
+            Thing thing = ThingMaker.MakeThing(cluster.plantDef);
+            if (thing is Plant plant)
+            {
+                float minGrowth = Mathf.Clamp01(cluster.growthMin);
+                float maxGrowth = Mathf.Clamp01(Mathf.Max(minGrowth, cluster.growthMax));
+                plant.Growth = minGrowth + StableRange(seed, i * 17033) * (maxGrowth - minGrowth);
+            }
+
+            GenSpawn.Spawn(thing, cell, map);
+            spawned++;
+        }
+    }
+
     private static int CountThingsWithDefPrefix(Map map, string defNamePrefix)
     {
         if (map == null)
@@ -1181,6 +1298,11 @@ public static class PlanarMagicUtility
             return false;
         }
 
+        if (PlanarMagicUtility.IsFluidTerrain(map.terrainGrid.TerrainAt(cell)))
+        {
+            return false;
+        }
+
         List<Thing> things = cell.GetThingList(map);
         for (int i = 0; i < things.Count; i++)
         {
@@ -1197,6 +1319,36 @@ public static class PlanarMagicUtility
         }
 
         return true;
+    }
+
+    public static bool IsFluidTerrain(TerrainDef terrain)
+    {
+        if (terrain == null)
+        {
+            return false;
+        }
+
+        string defName = terrain.defName ?? string.Empty;
+        if (defName.IndexOf("Water", StringComparison.OrdinalIgnoreCase) >= 0
+            || defName.IndexOf("River", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return true;
+        }
+
+        if (terrain.tags != null)
+        {
+            for (int i = 0; i < terrain.tags.Count; i++)
+            {
+                string tag = terrain.tags[i] ?? string.Empty;
+                if (tag.IndexOf("Water", StringComparison.OrdinalIgnoreCase) >= 0
+                    || tag.IndexOf("River", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private static List<IntVec3> JitteredScatterCells(Map map, int seed, int targetCount)
@@ -1898,7 +2050,9 @@ public static class PlanarFlowFeatureUtility
             return;
         }
 
-        List<IntVec3> bankCells = new();
+        HashSet<IntVec3> channelCells = new();
+        HashSet<IntVec3> edgeCells = new();
+        HashSet<IntVec3> bankCells = new();
         List<IntVec3> path = BuildPath(map, seed, flow);
         for (int i = 0; i < path.Count; i++)
         {
@@ -1914,30 +2068,100 @@ public static class PlanarFlowFeatureUtility
                     continue;
                 }
 
-                int distance = Mathf.Max(Mathf.Abs(cell.x - center.x), Mathf.Abs(cell.z - center.z));
+                float distance = Mathf.Sqrt((cell.x - center.x) * (cell.x - center.x) + (cell.z - center.z) * (cell.z - center.z));
                 if (distance <= width)
                 {
-                    ClearFlowCell(map, cell, flow);
-                    map.terrainGrid.SetTerrain(cell, flow.channelTerrain);
+                    channelCells.Add(cell);
+                    edgeCells.Remove(cell);
+                    bankCells.Remove(cell);
                 }
                 else if (distance <= edgeRadius && flow.edgeTerrain != null)
                 {
-                    ClearFlowCell(map, cell, flow);
-                    map.terrainGrid.SetTerrain(cell, flow.edgeTerrain);
+                    if (!channelCells.Contains(cell))
+                    {
+                        edgeCells.Add(cell);
+                        bankCells.Remove(cell);
+                    }
                 }
                 else if (distance <= bankRadius)
                 {
-                    if (flow.bankTerrain != null)
+                    if (!channelCells.Contains(cell) && !edgeCells.Contains(cell))
                     {
-                        map.terrainGrid.SetTerrain(cell, flow.bankTerrain);
+                        bankCells.Add(cell);
                     }
-
-                    bankCells.Add(cell);
                 }
             }
         }
 
-        ScatterBankThings(map, flow, bankCells, seed ^ 0x4D75A2B);
+        foreach (IntVec3 cell in channelCells)
+        {
+            ClearFlowCell(map, cell, flow);
+            map.terrainGrid.SetTerrain(cell, flow.channelTerrain);
+        }
+
+        if (flow.edgeTerrain != null)
+        {
+            foreach (IntVec3 cell in edgeCells)
+            {
+                ClearFlowCell(map, cell, flow);
+                map.terrainGrid.SetTerrain(cell, flow.edgeTerrain);
+            }
+        }
+
+        if (flow.bankTerrain != null)
+        {
+            HashSet<IntVec3> shorelineCells = ResolveShorelineCells(map, channelCells, edgeCells, bankCells);
+            foreach (IntVec3 cell in shorelineCells)
+            {
+                if (!PlanarMagicUtility.IsFluidTerrain(map.terrainGrid.TerrainAt(cell)))
+                {
+                    map.terrainGrid.SetTerrain(cell, flow.bankTerrain);
+                }
+            }
+
+            ScatterBankThings(map, flow, shorelineCells, seed ^ 0x4D75A2B);
+        }
+    }
+
+    private static HashSet<IntVec3> ResolveShorelineCells(Map map, HashSet<IntVec3> channelCells, HashSet<IntVec3> edgeCells, HashSet<IntVec3> candidateBankCells)
+    {
+        HashSet<IntVec3> shorelineCells = new();
+        foreach (IntVec3 waterCell in channelCells)
+        {
+            AddAdjacentShorelineCells(map, waterCell, channelCells, edgeCells, candidateBankCells, shorelineCells);
+        }
+
+        foreach (IntVec3 waterCell in edgeCells)
+        {
+            AddAdjacentShorelineCells(map, waterCell, channelCells, edgeCells, candidateBankCells, shorelineCells);
+        }
+
+        return shorelineCells;
+    }
+
+    private static void AddAdjacentShorelineCells(Map map, IntVec3 waterCell, HashSet<IntVec3> channelCells, HashSet<IntVec3> edgeCells, HashSet<IntVec3> candidateBankCells, HashSet<IntVec3> shorelineCells)
+    {
+        for (int dx = -1; dx <= 1; dx++)
+        {
+            for (int dz = -1; dz <= 1; dz++)
+            {
+                if (dx == 0 && dz == 0)
+                {
+                    continue;
+                }
+
+                IntVec3 cell = new(waterCell.x + dx, 0, waterCell.z + dz);
+                if (!cell.InBounds(map) || channelCells.Contains(cell) || edgeCells.Contains(cell))
+                {
+                    continue;
+                }
+
+                if (candidateBankCells.Contains(cell))
+                {
+                    shorelineCells.Add(cell);
+                }
+            }
+        }
     }
 
     private static List<IntVec3> BuildPath(Map map, int seed, PlanarFlowFeatureDef flow)
@@ -1999,9 +2223,10 @@ public static class PlanarFlowFeatureUtility
         }
     }
 
-    private static void ScatterBankThings(Map map, PlanarFlowFeatureDef flow, List<IntVec3> bankCells, int seed)
+    private static void ScatterBankThings(Map map, PlanarFlowFeatureDef flow, IEnumerable<IntVec3> bankCells, int seed)
     {
-        if (flow.bankThings.NullOrEmpty() || bankCells.NullOrEmpty() || flow.bankThingDensity <= 0f)
+        List<IntVec3> cells = bankCells?.ToList();
+        if (flow.bankThings.NullOrEmpty() || cells.NullOrEmpty() || flow.bankThingDensity <= 0f)
         {
             return;
         }
@@ -2012,13 +2237,13 @@ public static class PlanarFlowFeatureUtility
             return;
         }
 
-        int targetCount = Mathf.RoundToInt(bankCells.Count * flow.bankThingDensity);
+        int targetCount = Mathf.RoundToInt(cells.Count * flow.bankThingDensity);
         int spawned = 0;
-        bankCells.Sort((a, b) => StableHash(seed, a.x * 397 ^ a.z * 7919).CompareTo(StableHash(seed, b.x * 397 ^ b.z * 7919)));
-        for (int i = 0; i < bankCells.Count && spawned < targetCount; i++)
+        cells.Sort((a, b) => StableHash(seed, a.x * 397 ^ a.z * 7919).CompareTo(StableHash(seed, b.x * 397 ^ b.z * 7919)));
+        for (int i = 0; i < cells.Count && spawned < targetCount; i++)
         {
-            IntVec3 cell = bankCells[i];
-            if (!cell.Standable(map) || !cell.GetThingList(map).NullOrEmpty())
+            IntVec3 cell = cells[i];
+            if (!cell.Standable(map) || PlanarMagicUtility.IsFluidTerrain(map.terrainGrid.TerrainAt(cell)) || !cell.GetThingList(map).NullOrEmpty())
             {
                 continue;
             }
@@ -2118,6 +2343,7 @@ public sealed class GenStep_PlanarPocket : GenStep
         PlanarMagicUtility.ScatterPlanarPlants(map, seed ^ 0x6E61C457, Math.Max(20, (int)(mapArea * (resolvedDimension?.plantDensity ?? plantDensity))), ResolvePlants(resolvedDimension));
         PlanarMagicUtility.ScatterPlanarMineables(map, seed ^ 0x280E9C2D, Math.Max(6, (int)(mapArea * (resolvedDimension?.mineableDensity ?? mineableDensity))), ResolveMineables(resolvedDimension));
         PlanarMagicUtility.ScatterPlanarStoneChunks(map, seed ^ 0x3F62B7A9, Math.Max(8, (int)(mapArea * (resolvedDimension?.chunkDensity ?? chunkDensity))), ResolveChunks(resolvedDimension));
+        PlanarMagicUtility.ScatterPlanarPlantClusters(map, resolvedDimension, seed ^ 0x19B64C7D);
     }
 
     private List<TerrainDef> ResolveTerrains(PlanarDimensionDef resolvedDimension)
@@ -2181,6 +2407,11 @@ public sealed class GenStep_PlanarPocket : GenStep
 
     private static int ResolveSeed(Map map, GenStepParams parms)
     {
+        if (map?.Parent is PlanarPocketParent pocketParent && pocketParent.generationSeed != 0)
+        {
+            return pocketParent.generationSeed;
+        }
+
         unchecked
         {
             int hash = 17;

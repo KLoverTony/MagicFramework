@@ -120,7 +120,7 @@
     <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
     <waterDepthShader>Map/WaterDepth</waterDepthShader>
     <renderPrecedence>398</renderPrecedence>
-    <color>(0.45,0.85,1)</color>
+    <color>(0.32,0.58,0.95)</color>
     <pathCost>28</pathCost>
     <affordances>
       <li>MovingFluid</li>

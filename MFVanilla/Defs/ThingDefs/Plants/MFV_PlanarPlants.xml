@@ -109,8 +109,10 @@
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
     <plant>
-      <visualSizeRange>0.95~1.45</visualSizeRange>
+      <visualSizeRange>1.55~2.35</visualSizeRange>
+      <growDays>22</growDays>
     </plant>
+    <pathCost>35</pathCost>
   </ThingDef>
 
 </Defs>

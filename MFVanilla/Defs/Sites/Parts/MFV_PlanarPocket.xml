@@ -9,7 +9,7 @@
     <bankTerrain>MFV_ManaRiverBank</bankTerrain>
     <minWidth>2</minWidth>
     <maxWidth>5</maxWidth>
-    <bankWidth>2</bankWidth>
+    <bankWidth>1</bankWidth>
     <meanderStrength>0.42</meanderStrength>
     <bankThingDensity>0.008</bankThingDensity>
     <bankThings>
@@ -19,6 +19,20 @@
       <li>Plant_MFV_PlanarD</li>
     </bankThings>
   </MagicFramework.Core.PlanarFlowFeatureDef>
+
+  <MagicFramework.Core.PlanarPlantClusterDef>
+    <defName>MFV_PlanarBloomVoidglassCluster</defName>
+    <plantDef>Plant_MFV_PlanarD</plantDef>
+    <anchorDefs>
+      <li>MFV_ChunkVoidglass</li>
+      <li>MFV_Voidglass</li>
+    </anchorDefs>
+    <radius>5</radius>
+    <minPlantsPerAnchor>3</minPlantsPerAnchor>
+    <maxPlantsPerAnchor>7</maxPlantsPerAnchor>
+    <growthMin>0.75</growthMin>
+    <growthMax>1</growthMax>
+  </MagicFramework.Core.PlanarPlantClusterDef>
 
   <MagicFramework.Core.PlanarDimensionDef>
     <defName>MFV_PlanarPocketDimension</defName>
@@ -56,7 +70,10 @@
     <flowFeatures>
       <li>MFV_PlanarManaStream</li>
     </flowFeatures>
-    <plantDensity>0.075</plantDensity>
+    <plantClusters>
+      <li>MFV_PlanarBloomVoidglassCluster</li>
+    </plantClusters>
+    <plantDensity>0.035</plantDensity>
     <chunkDensity>0.018</chunkDensity>
     <mineableDensity>0.012</mineableDensity>
   </MagicFramework.Core.PlanarDimensionDef>
