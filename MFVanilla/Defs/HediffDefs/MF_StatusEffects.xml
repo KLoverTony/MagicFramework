@@ -81,6 +81,16 @@
   </HediffDef>
 
   <HediffDef>
+    <defName>MF_CleansedBlood</defName>
+    <label>cleansed blood</label>
+    <description>This pawn is under a maintained vital charm that periodically treats disease and infection.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+  </HediffDef>
+
+  <HediffDef>
     <defName>MF_SharedEssence</defName>
     <label>shared essence</label>
     <description>This pawn's life force has been temporarily entwined with another through resurrection magic, leaving consciousness dimmed while the bond settles.</description>

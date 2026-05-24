@@ -1434,7 +1434,9 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             modifiers = statusEffectDef.statModifiers;
         }
 
-        if (modifiers == null || modifiers.Count == 0)
+        bool hasPulseActions = statModifierActionDef.onPulseActions != null && statModifierActionDef.onPulseActions.Count > 0;
+        bool hasStatusCue = statModifierActionDef.statusCue != null || statusEffectDef?.statusCue != null || !string.IsNullOrWhiteSpace(statModifierActionDef.indicatorHediffDef);
+        if ((modifiers == null || modifiers.Count == 0) && !hasPulseActions && !hasStatusCue)
         {
             Log.Warning("[MagicFramework] SustainedStatModifierActionWorker skipped because no modifiers were authored.");
             return;
@@ -1462,7 +1464,7 @@ public sealed class SustainedStatModifierActionWorker : SpellActionWorker
             statModifierActionDef.maintenance,
             statModifierActionDef.pulseIntervalTicks,
             sourceActionPath,
-            modifiers);
+            modifiers ?? new List<SpellStatModifierDef>());
 
         if (statusEffectDef?.onApplyActions != null && statusEffectDef.onApplyActions.Count > 0)
         {
@@ -2360,6 +2362,151 @@ public sealed class HealActionWorker : SpellActionWorker
     private static bool BodyPartMatches(BodyPartRecord part, string defName)
     {
         return part?.def?.defName == defName;
+    }
+}
+
+public sealed class TendHediffActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        TendHediffActionDef tendActionDef = actionDef as TendHediffActionDef;
+        if (tendActionDef == null)
+        {
+            return;
+        }
+
+        Thing targetThing = tendActionDef.targetSource == StatModifierTargetSource.Caster
+            ? context?.caster
+            : context?.currentTarget.Thing;
+        Pawn targetPawn = targetThing as Pawn;
+        if (targetPawn == null || targetPawn.Destroyed || targetPawn.health?.hediffSet == null)
+        {
+            Log.Warning("[MagicFramework] TendHediffActionWorker skipped because the target was not a valid pawn.");
+            return;
+        }
+
+        float quality = Mathf.Max(0f, SpellPowerUtility.ResolveScalableFloat(context, tendActionDef.tendQuality, tendActionDef.scalableTendQuality));
+        if (quality <= 0f)
+        {
+            return;
+        }
+
+        float maxQuality = SpellPowerUtility.ResolveScalableFloat(context, tendActionDef.maxTendQuality, tendActionDef.scalableMaxTendQuality);
+        if (maxQuality < quality)
+        {
+            maxQuality = quality;
+        }
+
+        HashSet<HediffDef> allowedHediffs = ResolveHediffSet(tendActionDef.hediffDefs);
+        HashSet<HediffDef> excludedHediffs = ResolveHediffSet(tendActionDef.excludedHediffDefs);
+        List<Hediff> matches = new();
+        List<Hediff> hediffs = targetPawn.health.hediffSet.hediffs;
+        for (int i = 0; i < hediffs.Count; i++)
+        {
+            Hediff hediff = hediffs[i];
+            if (IsMatchingHediff(hediff, tendActionDef, allowedHediffs, excludedHediffs))
+            {
+                matches.Add(hediff);
+            }
+        }
+
+        matches.Sort((left, right) => right.TendPriority.CompareTo(left.TendPriority));
+
+        int tendedCount = 0;
+        int limit = tendActionDef.maxHediffs > 0 ? tendActionDef.maxHediffs : int.MaxValue;
+        for (int i = 0; i < matches.Count && tendedCount < limit; i++)
+        {
+            Hediff hediff = matches[i];
+            if (hediff == null || !targetPawn.health.hediffSet.hediffs.Contains(hediff))
+            {
+                continue;
+            }
+
+            hediff.Tended(quality, maxQuality, tendedCount);
+            tendedCount++;
+        }
+
+        if (tendedCount > 0)
+        {
+            targetPawn.health.Notify_HediffChanged(null);
+        }
+
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Magically tended {tendedCount} hediff(s) on {targetPawn.LabelCap} at quality {quality:0.##}.");
+    }
+
+    private static bool IsMatchingHediff(
+        Hediff hediff,
+        TendHediffActionDef actionDef,
+        HashSet<HediffDef> allowedHediffs,
+        HashSet<HediffDef> excludedHediffs)
+    {
+        if (hediff?.def == null)
+        {
+            return false;
+        }
+
+        if (excludedHediffs.Contains(hediff.def))
+        {
+            return false;
+        }
+
+        if (allowedHediffs.Count > 0 && !allowedHediffs.Contains(hediff.def))
+        {
+            return false;
+        }
+
+        if (actionDef.requireTendableNow && !hediff.TendableNow(false))
+        {
+            return false;
+        }
+
+        if (hediff is Hediff_Injury)
+        {
+            return actionDef.includeInjuries;
+        }
+
+        return (actionDef.includeImmunizable && HasImmunizableComp(hediff))
+            || (actionDef.includeInfections && IsInfectionLike(hediff))
+            || actionDef.includeOtherTendableNonInjury;
+    }
+
+    private static bool HasImmunizableComp(Hediff hediff)
+    {
+        return hediff is HediffWithComps hediffWithComps
+            && hediffWithComps.GetComp<HediffComp_Immunizable>() != null;
+    }
+
+    private static bool IsInfectionLike(Hediff hediff)
+    {
+        string defName = hediff?.def?.defName;
+        return !string.IsNullOrWhiteSpace(defName)
+            && defName.IndexOf("Infection", StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
+    private static HashSet<HediffDef> ResolveHediffSet(List<string> hediffDefNames)
+    {
+        HashSet<HediffDef> hediffDefs = new();
+        if (hediffDefNames == null)
+        {
+            return hediffDefs;
+        }
+
+        for (int i = 0; i < hediffDefNames.Count; i++)
+        {
+            string hediffDefName = hediffDefNames[i];
+            if (string.IsNullOrWhiteSpace(hediffDefName))
+            {
+                continue;
+            }
+
+            HediffDef hediffDef = DefDatabase<HediffDef>.GetNamedSilentFail(hediffDefName);
+            if (hediffDef != null)
+            {
+                hediffDefs.Add(hediffDef);
+            }
+        }
+
+        return hediffDefs;
     }
 }
 

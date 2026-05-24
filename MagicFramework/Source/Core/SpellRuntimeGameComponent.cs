@@ -388,7 +388,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         IEnumerable<int> sourceActionPath,
         IEnumerable<SpellStatModifierDef> authoredModifiers)
     {
-        if (target == null || spellDef == null || authoredModifiers == null)
+        if (target == null || spellDef == null)
         {
             return;
         }
@@ -428,29 +428,34 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             modifier.indicatorHediffDef = indicatorHediffDef;
         }
 
-        foreach (SpellStatModifierDef authoredModifier in authoredModifiers)
+        if (authoredModifiers != null)
         {
-            if (authoredModifier == null || string.IsNullOrWhiteSpace(authoredModifier.statDef))
+            foreach (SpellStatModifierDef authoredModifier in authoredModifiers)
             {
-                continue;
-            }
+                if (authoredModifier == null || string.IsNullOrWhiteSpace(authoredModifier.statDef))
+                {
+                    continue;
+                }
 
-            StatDef statDef = DefDatabase<StatDef>.GetNamedSilentFail(authoredModifier.statDef);
-            if (statDef == null)
-            {
-                Log.Warning($"[MagicFramework] Could not resolve stat def '{authoredModifier.statDef}' for sustained modifier.");
-                continue;
-            }
+                StatDef statDef = DefDatabase<StatDef>.GetNamedSilentFail(authoredModifier.statDef);
+                if (statDef == null)
+                {
+                    Log.Warning($"[MagicFramework] Could not resolve stat def '{authoredModifier.statDef}' for sustained modifier.");
+                    continue;
+                }
 
-            modifier.modifiers.Add(new ActiveSpellStatModifierEntry
-            {
-                statDef = statDef,
-                offset = authoredModifier.offset,
-                factor = authoredModifier.factor
-            });
+                modifier.modifiers.Add(new ActiveSpellStatModifierEntry
+                {
+                    statDef = statDef,
+                    offset = authoredModifier.offset,
+                    factor = authoredModifier.factor
+                });
+            }
         }
 
-        if (modifier.modifiers.Count == 0)
+        bool hasStatusCue = modifier.indicatorHediffDef != null;
+        bool hasPulseActions = pulseIntervalTicks > 0 && sourceActionPath != null;
+        if (modifier.modifiers.Count == 0 && !hasStatusCue && !hasPulseActions)
         {
             return;
         }
@@ -458,7 +463,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         activeStatModifiers.Add(modifier);
         EnsureIndicatorApplied(modifier);
         string durationLabel = maxDurationTicks > 0 ? $"{maxDurationTicks} ticks" : "until broken";
-        MagicLog.Message(MagicLogSubsystem.StatModifiers, $"[MagicFramework] Applied {modifier.modifiers.Count} sustained stat modifier(s) to {target.LabelCap} for {durationLabel}.");
+        MagicLog.Message(MagicLogSubsystem.StatModifiers, $"[MagicFramework] Applied sustained effect with {modifier.modifiers.Count} stat modifier(s) to {target.LabelCap} for {durationLabel}.");
     }
 
     public void ApplyForceField(

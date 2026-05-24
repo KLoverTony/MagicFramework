@@ -81,6 +81,7 @@ AeternusFaith remains important, but it is no longer the main active release ban
 | MF-047 | P1 | S | MFVanilla/Items | Polish | Finish first enchanted weapon set inspect text, art details, damage-resistance checks, save/load, and balance smoke tests. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-047-enchanted-weapon-special-features). |
 | MF-051 | P1 | M | MFVanilla/Forbidden | Validation | Smoke test Dominate Will, temporary allegiance, and Forbidden Plague's contagious treated-disease loop before further Forbidden Lore expansion. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-051-forbidden-lore-first-spells). |
 | MF-046B | P1 | M | MFVanilla/Spells | Implementation | Dig and Earth Wall have first implementations and need in-game validation; add the next Aquamancy spell after that smoke pass. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
+| MF-062 | P2 | M | MFVanilla/Vitalism | Validation | Cure Disease and reusable magical tend support have first implementations; needs in-game disease/treatment validation and balance tuning. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-062-cure-disease-spell-concept). |
 | MF-037 | P1 | S | MFVanilla/Economy | Watch | Production loop is provisionally accepted; only reopen for concrete issues in pacing, player clarity, scroll access, apprenticeship, or gemstone/reward economy. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-037-mfvanilla-production-and-progression). |
 | MF-031 | P2 | M | Framework/Docs | Support | Continue the Spell Design Guide where it helps stabilize the MFVanilla authoring surface and future content packs. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-031-spell-design-guide). |
 | MF-032 | P2 | M | Framework/Compatibility | Support | Keep deterministic/save-load/multiplayer risks visible, especially around planar transfer, missions, item abilities, AI casting, and random production outcomes. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-032-compatibility). |
@@ -123,4 +124,5 @@ Consideration backlog:
 2. Smoke test Forbidden Lore spells: Dominate Will allegiance/cancellation/save-load behavior, and Forbidden Plague infection, spread, treatment blocking, wound pulses, cure, and save/load cleanup.
 3. Continue targeted Planar Magic checks around save/load, alignment tuning, pocket duration, return capacity, material economy, and player-facing failure text.
 4. Smoke test Dig and Earth Wall, then choose the next Aquamancy spell to round out sparse schools.
-5. Run normal-play watches for Ruined Sanctum and Sealed Vault, then finish enchanted weapon polish.
+5. Smoke test Cure Disease against vanilla diseases, wound infections, and Forbidden Plague; tune pulse interval and 5.0 tend quality after seeing real outcomes.
+6. Run normal-play watches for Ruined Sanctum and Sealed Vault, then finish enchanted weapon polish.

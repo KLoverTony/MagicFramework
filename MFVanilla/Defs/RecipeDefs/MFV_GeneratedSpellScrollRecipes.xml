@@ -307,6 +307,57 @@
     <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_CureDisease</defName>
+    <label>scribe scroll (cure disease)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast cure disease. The scribe must have the Arcane Gift and already know cure disease.</description>
+    <jobString>Scribing scroll (cure disease).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Vitalism</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_CureDisease>1</MFV_SpellScroll_MF_CureDisease>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_CureDisease</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_DelayedBlastRune</defName>
     <label>scribe scroll (delayed blast rune)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast delayed blast rune. The scribe must have the Arcane Gift and already know delayed blast rune.</description>

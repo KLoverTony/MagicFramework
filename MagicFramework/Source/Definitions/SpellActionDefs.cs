@@ -860,6 +860,28 @@ public sealed class HealActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Magically tends matching hediffs on an authored pawn target.
+/// </summary>
+public sealed class TendHediffActionDef : SpellActionDef
+{
+    public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
+    public float tendQuality = 1f;
+    public ScalableFloatDef scalableTendQuality;
+    public float maxTendQuality = -1f;
+    public ScalableFloatDef scalableMaxTendQuality;
+    public bool requireTendableNow = true;
+    public bool includeInjuries;
+    public bool includeImmunizable = true;
+    public bool includeInfections = true;
+    public bool includeOtherTendableNonInjury;
+    public int maxHediffs = -1;
+    public List<string> hediffDefs = new();
+    public List<string> excludedHediffDefs = new();
+
+    public override SpellActionWorker CreateWorker() => new TendHediffActionWorker();
+}
+
+/// <summary>
 /// Resurrects the pawn inside the current corpse target without providing a full-body restoration.
 /// </summary>
 public sealed class ResurrectPawnActionDef : SpellActionDef

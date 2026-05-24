@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_CureDisease</defName>
+    <label>cure disease</label>
+    <description>Maintains a vital charm on an allied pawn, periodically treating disease and infection with overwhelming magical care.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_CureDisease</gizmoIconPath>
+    <range>10</range>
+    <castTimeTicks>90</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Life</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Vitalism</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Healing</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Buff</li>
+        <li>MF_Tag_Channelled</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Vitalism</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Ally</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>10</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Cure Disease</debugLabel>
+        <amount>30</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Cure Disease cooldown ready</debugLabel>
+        <cooldownTicks>1200</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Cure Disease</debugLabel>
+        <amount>30</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Cure Disease cooldown</debugLabel>
+        <cooldownTicks>1200</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Cure Disease sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Cure Disease effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.SustainedStatModifierActionDef">
+            <debugLabel>Cure Disease maintained treatment</debugLabel>
+            <statusEffectDef>MFV_Status_CleansedBlood</statusEffectDef>
+            <targetSource>CurrentTarget</targetSource>
+            <maxDurationTicks>2500</maxDurationTicks>
+            <scalableMaxDurationTicks>
+              <baseValue>2500</baseValue>
+              <perPower>100</perPower>
+              <max>4500</max>
+            </scalableMaxDurationTicks>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+            <maxRange>10</maxRange>
+            <breakWhenCasterDowned>true</breakWhenCasterDowned>
+            <breakWhenTargetDowned>false</breakWhenTargetDowned>
+            <breakWhenTargetOutOfRange>true</breakWhenTargetOutOfRange>
+            <breakWhenLineOfSightLost>false</breakWhenLineOfSightLost>
+            <maintenance>
+              <profiles>
+                <li>CasterConscious</li>
+                <li>TargetValid</li>
+                <li>Tethered</li>
+              </profiles>
+              <maxRange>10</maxRange>
+            </maintenance>
+            <pulseIntervalTicks>2500</pulseIntervalTicks>
+            <onPulseActions>
+              <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+                <debugLabel>Cure Disease pulse visuals</debugLabel>
+                <fxEvent>SustainTick</fxEvent>
+                <locationSource>CurrentTarget</locationSource>
+              </li>
+              <li Class="MagicFramework.Definitions.TendHediffActionDef">
+                <debugLabel>Cure Disease magical tend</debugLabel>
+                <targetSource>CurrentTarget</targetSource>
+                <tendQuality>3</tendQuality>
+                <scalableTendQuality>
+                  <baseValue>3</baseValue>
+                  <perPower>0.1</perPower>
+                  <max>5</max>
+                </scalableTendQuality>
+                <maxTendQuality>3</maxTendQuality>
+                <scalableMaxTendQuality>
+                  <baseValue>3</baseValue>
+                  <perPower>0.1</perPower>
+                  <max>5</max>
+                </scalableMaxTendQuality>
+                <requireTendableNow>true</requireTendableNow>
+                <includeInjuries>false</includeInjuries>
+                <includeImmunizable>true</includeImmunizable>
+                <includeInfections>true</includeInfections>
+                <includeOtherTendableNonInjury>false</includeOtherTendableNonInjury>
+              </li>
+            </onPulseActions>
+          </li>
+          <li Class="MagicFramework.Definitions.TendHediffActionDef">
+            <debugLabel>Cure Disease immediate magical tend</debugLabel>
+            <targetSource>CurrentTarget</targetSource>
+            <tendQuality>3</tendQuality>
+            <scalableTendQuality>
+              <baseValue>3</baseValue>
+              <perPower>0.1</perPower>
+              <max>5</max>
+            </scalableTendQuality>
+            <maxTendQuality>3</maxTendQuality>
+            <scalableMaxTendQuality>
+              <baseValue>3</baseValue>
+              <perPower>0.1</perPower>
+              <max>5</max>
+            </scalableMaxTendQuality>
+            <requireTendableNow>true</requireTendableNow>
+            <includeInjuries>false</includeInjuries>
+            <includeImmunizable>true</includeImmunizable>
+            <includeInfections>true</includeInfections>
+            <includeOtherTendableNonInjury>false</includeOtherTendableNonInjury>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -274,6 +274,23 @@
   </MagicFramework.Definitions.SpellStatusEffectDef>
 
   <MagicFramework.Definitions.SpellStatusEffectDef>
+    <defName>MFV_Status_CleansedBlood</defName>
+    <label>cleansed blood</label>
+    <description>A maintained vital charm is treating disease and infection in this pawn.</description>
+    <categories>
+      <li>buff</li>
+      <li>healing</li>
+      <li>disease</li>
+    </categories>
+    <durationTicks>1800</durationTicks>
+    <statusCue>
+      <hediffDef>MF_CleansedBlood</hediffDef>
+      <severity>0.01</severity>
+      <removeOnExpire>true</removeOnExpire>
+    </statusCue>
+  </MagicFramework.Definitions.SpellStatusEffectDef>
+
+  <MagicFramework.Definitions.SpellStatusEffectDef>
     <defName>MFV_Status_FrozenSlow</defName>
     <label>frozen</label>
     <description>Magical cold slows this pawn's movement.</description>

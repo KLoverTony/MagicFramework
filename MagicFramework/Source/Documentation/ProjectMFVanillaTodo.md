@@ -187,6 +187,52 @@ Earth Wall validation checklist:
 7. Tune mana, cooldown, duration, range, wall length, and stuff choice after seeing combat use.
 
 
+### MF-062 Cure Disease Spell Concept
+
+Goal: add a Vitalism support spell that lets a caster sustain magical treatment on an allied pawn without replacing ordinary doctors entirely.
+
+Design direction:
+- Target an allied pawn, including self-targeting.
+- Pay a meaningful upfront mana cost and start a moderate cooldown on cast.
+- Apply a visible maintained status hediff such as `MF_CleansedBlood` while the caster sustains the spell.
+- Cast targeting should require line of sight, but maintenance should not; once established, the effect should only break on caster incapacity, invalid target, or excessive range.
+- Use the existing gizmo texture at `UI/Gizmos/Spells/MF_CureDisease`.
+- While active, periodically tend the target's active diseases/infections at very high quality, provisionally around 500%, rather than directly deleting disease hediffs.
+- Prefer treatment semantics over raw immunity gain so the spell interacts with vanilla disease UI, tend duration, infection suppression, and MFVanilla's `MF_ForbiddenPlague` treatment gate.
+
+Current implementation:
+- MagicFramework now has `TendHediffActionDef`, a reusable magical treatment action that can target the caster or current target.
+- `TendHediffActionDef` can filter injuries, immunizable diseases, infection-like hediffs, other tendable non-injury hediffs, explicit allow lists, and explicit block lists.
+- Treatment quality and max quality are authored/scalable floats and can exceed ordinary 100% tend quality for magical effects.
+- `SustainedStatModifierActionDef` can now maintain a status/pulse effect without requiring at least one stat modifier.
+- MFVanilla adds `MF_CureDisease`, gated by `MFV_Vitalism`, with the existing `UI/Gizmos/Spells/MF_CureDisease` icon.
+- MFVanilla adds `MF_CleansedBlood` / `MFV_Status_CleansedBlood` as the visible maintained status.
+- Cure Disease applies one immediate magical tend on cast, then repeats treatment through maintained pulses.
+- Generated scroll and scribing recipe coverage includes Cure Disease.
+
+Provisional tuning:
+- Research: `MFV_Vitalism`, possibly a tier 2 or tier 3 healing spell.
+- Caster level: 3+ if the quality remains extremely high.
+- Range: 8-12 cells.
+- Cast targeting: require line of sight.
+- Maintenance: require tether/range, but do not require line of sight.
+- Cast time: 90 ticks, so it is a deliberate medical intervention.
+- Upfront cost: 24-35 mana.
+- Upkeep: 0 mana.
+- Cooldown: 900-1800 ticks.
+- Pulse interval: 2500-5000 ticks, depending on whether each pulse tends all diseases or just one.
+- Current first-pass tuning: 30 mana, 1200-tick cooldown, immediate treatment plus 2500-tick pulse interval, tend quality `3 + casterLevel / 10` capped at 5.0, and max duration `2500 + casterLevel * 100` capped at 4500 ticks.
+
+Validation checklist:
+1. Cast on pawns with vanilla infection, flu/plague/malaria-style diseases, gut worms/muscle parasites, and MFVanilla Forbidden Plague.
+2. Confirm only tendable disease/infection hediffs are affected; injuries should remain ordinary doctor work unless explicitly allowed.
+3. Confirm treatment quality, tend duration, and disease UI update as expected.
+4. Confirm already-tended diseases do not receive runaway repeated treatment unless that is intentional.
+5. Confirm caster downed, target invalid, range break, manual cancellation, and save/load cleanup remove the maintained status cleanly.
+6. Confirm maintenance continues when line of sight is blocked after a valid cast.
+7. Tune quality, pulse interval, mana, cooldown, and caster level against a normal doctor with medicine and hospital support.
+
+
 ### MF-055 Planar Magic Foundation And Validation
 
 Goal: turn the new Planar Magic foundation into a stable MFVanilla release feature rather than leaving it as exploratory long-term content.
