@@ -114,6 +114,14 @@
         <countRange>0~1</countRange>
       </li>
       <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SpellScroll_MF_Dig</thingDef>
+        <countRange>0~1</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
+        <thingDef>MFV_SpellScroll_MF_EarthWall</thingDef>
+        <countRange>0~1</countRange>
+      </li>
+      <li Class="StockGenerator_SingleDef">
         <thingDef>MFV_SpellScroll_MF_WatersEmbrace</thingDef>
         <countRange>0~1</countRange>
       </li>

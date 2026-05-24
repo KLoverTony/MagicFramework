@@ -166,4 +166,135 @@
       </li>
     </stages>
   </HediffDef>
+
+  <HediffDef ParentName="InjuryBase">
+    <defName>MF_PlagueLesion</defName>
+    <label>plague lesion</label>
+    <labelNoun>a plague lesion</labelNoun>
+    <description>A raw lesion raised by forbidden plague magic.</description>
+    <comps>
+      <li Class="HediffCompProperties_TendDuration">
+        <labelTendedWell>cleaned</labelTendedWell>
+        <labelTendedWellInner>cleaned</labelTendedWellInner>
+        <labelSolidTendedWell>cleaned</labelSolidTendedWell>
+      </li>
+      <li Class="HediffCompProperties_GetsPermanent">
+        <permanentLabel>scar</permanentLabel>
+      </li>
+    </comps>
+    <injuryProps>
+      <painPerSeverity>0.01</painPerSeverity>
+      <bleedRate>0.015</bleedRate>
+      <canMerge>false</canMerge>
+      <destroyedLabel>Destroyed</destroyedLabel>
+    </injuryProps>
+  </HediffDef>
+
+  <HediffDef ParentName="InjuryBase">
+    <defName>MF_PlagueBlister</defName>
+    <label>plague blister</label>
+    <labelNoun>a plague blister</labelNoun>
+    <description>A swollen blister raised by forbidden plague magic.</description>
+    <comps>
+      <li Class="HediffCompProperties_TendDuration">
+        <labelTendedWell>cleaned</labelTendedWell>
+        <labelTendedWellInner>cleaned</labelTendedWellInner>
+        <labelSolidTendedWell>cleaned</labelSolidTendedWell>
+      </li>
+    </comps>
+    <injuryProps>
+      <painPerSeverity>0.008</painPerSeverity>
+      <bleedRate>0.004</bleedRate>
+      <canMerge>false</canMerge>
+      <destroyedLabel>Destroyed</destroyedLabel>
+    </injuryProps>
+  </HediffDef>
+
+  <HediffDef>
+    <defName>MF_ForbiddenPlague</defName>
+    <label>forbidden plague</label>
+    <description>A magical contagion that spreads between people and periodically raises painful lesions and blisters unless treated.</description>
+    <hediffClass>MFVanilla.Core.ForbiddenPlagueHediff</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.12</initialSeverity>
+    <makesSickThought>true</makesSickThought>
+    <lethalSeverity>1</lethalSeverity>
+    <tendable>true</tendable>
+    <comps>
+      <li Class="HediffCompProperties_TendDuration">
+        <baseTendDurationHours>12</baseTendDurationHours>
+        <severityPerDayTended>-0.30</severityPerDayTended>
+      </li>
+      <li Class="HediffCompProperties_Immunizable">
+        <severityPerDayNotImmune>0.18</severityPerDayNotImmune>
+        <immunityPerDaySick>0.44</immunityPerDaySick>
+        <severityPerDayImmune>-0.45</severityPerDayImmune>
+        <immunityPerDayNotSick>-0.03</immunityPerDayNotSick>
+      </li>
+    </comps>
+    <stages>
+      <li>
+        <label>incubating</label>
+        <painOffset>0.08</painOffset>
+        <capMods>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.03</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.35</minSeverity>
+        <label>eruptive</label>
+        <painOffset>0.18</painOffset>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.05</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.08</offset>
+          </li>
+        </capMods>
+      </li>
+      <li>
+        <minSeverity>0.7</minSeverity>
+        <label>virulent</label>
+        <lifeThreatening>true</lifeThreatening>
+        <painOffset>0.35</painOffset>
+        <capMods>
+          <li>
+            <capacity>Consciousness</capacity>
+            <offset>-0.18</offset>
+          </li>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.16</offset>
+          </li>
+          <li>
+            <capacity>Moving</capacity>
+            <offset>-0.12</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ForbiddenPlagueExtension">
+        <lesionIntervalTicks>6000</lesionIntervalTicks>
+        <spreadIntervalTicks>2500</spreadIntervalTicks>
+        <spreadRadius>4.9</spreadRadius>
+        <spreadChance>0.24</spreadChance>
+        <tendedSpreadChance>0</tendedSpreadChance>
+        <infectionSeverity>0.08</infectionSeverity>
+        <lesionSeverityRange>1.5~3.5</lesionSeverityRange>
+        <lesionHediffDefs>
+          <li>MF_PlagueLesion</li>
+          <li>MF_PlagueBlister</li>
+        </lesionHediffDefs>
+        <humanlikeOnly>true</humanlikeOnly>
+      </li>
+    </modExtensions>
+  </HediffDef>
 </Defs>

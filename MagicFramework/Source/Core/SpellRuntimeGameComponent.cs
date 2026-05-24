@@ -6,6 +6,7 @@ using MagicFramework.Scheduling;
 using RimWorld;
 using UnityEngine;
 using Verse;
+using Verse.AI;
 using Verse.Sound;
 
 namespace MagicFramework.Core;
@@ -20,6 +21,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
     private List<CasterRuntimeState> casterStates = new();
     private List<ActiveSpellStatModifier> activeStatModifiers = new();
     private List<ActiveSpellForceField> activeForceFields = new();
+    private List<ActiveTemporaryAllegiance> activeTemporaryAllegiances = new();
     private static readonly Dictionary<string, Material> ForceFieldOverlayMaterials = new();
     private bool cleaningStatModifiers;
 
@@ -547,6 +549,71 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         MagicLog.Message(MagicLogSubsystem.ForceFields, $"[MagicFramework] Applied force field to {target.LabelCap}.");
     }
 
+    public void ApplyTemporaryAllegiance(
+        Pawn target,
+        Thing caster,
+        SpellDef spellDef,
+        Faction temporaryFaction,
+        int maxDurationTicks,
+        bool replaceExistingFromCasterSpell,
+        SpellStatusCueDef statusCue,
+        float maxRange,
+        SpellMaintenanceDef maintenance,
+        float sustainedManaCost,
+        int sustainedManaCostIntervalTicks)
+    {
+        if (target == null || spellDef == null || temporaryFaction == null)
+        {
+            return;
+        }
+
+        activeTemporaryAllegiances ??= new List<ActiveTemporaryAllegiance>();
+        if (replaceExistingFromCasterSpell)
+        {
+            RemoveTemporaryAllegiances(target, caster, spellDef);
+        }
+
+        int currentTick = Find.TickManager?.TicksGame ?? 0;
+        Faction originalFaction = target.Faction;
+        EnsureTemporaryFactionRelations(temporaryFaction, originalFaction);
+
+        ActiveTemporaryAllegiance allegiance = new()
+        {
+            target = target,
+            caster = caster,
+            spellDef = spellDef,
+            originalFaction = originalFaction,
+            temporaryFaction = temporaryFaction,
+            expireAtTick = maxDurationTicks > 0 ? currentTick + maxDurationTicks : -1,
+            indicatorSeverity = statusCue?.severity ?? 0.01f,
+            removeIndicatorOnExpire = statusCue?.removeOnExpire ?? true,
+            statusCueLabel = ResolveStatusCueLabel(statusCue, spellDef),
+            statusCueDescription = ResolveStatusCueDescription(statusCue, spellDef),
+            maxRange = maxRange,
+            maintenance = maintenance,
+            sustainedManaCost = Mathf.Max(0f, sustainedManaCost),
+            sustainedManaCostIntervalTicks = Mathf.Max(1, sustainedManaCostIntervalTicks),
+            nextSustainedManaCostTick = currentTick + Mathf.Max(1, sustainedManaCostIntervalTicks)
+        };
+
+        HediffDef indicatorHediffDef = ResolveStatusCueHediffDef(statusCue);
+        if (indicatorHediffDef != null)
+        {
+            allegiance.indicatorHediffDef = indicatorHediffDef;
+        }
+
+        target.SetFaction(temporaryFaction);
+        if (caster is Pawn casterPawn && target.mindState != null)
+        {
+            float defendRadius = maxRange > 0f ? maxRange : 8f;
+            target.mindState.duty = new PawnDuty(DutyDefOf.Defend, casterPawn, defendRadius);
+        }
+
+        activeTemporaryAllegiances.Add(allegiance);
+        EnsureTemporaryAllegianceIndicatorApplied(allegiance);
+        Messages.Message($"{target.LabelShortCap} is compelled to fight as an ally.", target, MessageTypeDefOf.NeutralEvent, false);
+    }
+
     public void ApplyForceFieldDamageReduction(Thing thing, ref DamageInfo dinfo, ref bool absorbed)
     {
         if (thing == null || activeForceFields == null || activeForceFields.Count == 0 || absorbed)
@@ -689,6 +756,18 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             }
         }
 
+        if (activeTemporaryAllegiances != null)
+        {
+            for (int i = 0; i < activeTemporaryAllegiances.Count; i++)
+            {
+                ActiveTemporaryAllegiance allegiance = activeTemporaryAllegiances[i];
+                if (allegiance?.caster == caster && allegiance.spellDef == spellDef)
+                {
+                    return true;
+                }
+            }
+        }
+
         Map map = caster.MapHeld;
         if (map?.GetComponent<PersistentAreaZoneMapComponent>()?.HasMaintainedForCasterSpell(caster, spellDef) == true)
         {
@@ -798,6 +877,22 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (areaZoneRuntime != null)
         {
             removedCount += areaZoneRuntime.RemoveForCasterSpell(caster, spellDef);
+        }
+
+        if (activeTemporaryAllegiances != null)
+        {
+            for (int i = activeTemporaryAllegiances.Count - 1; i >= 0; i--)
+            {
+                ActiveTemporaryAllegiance allegiance = activeTemporaryAllegiances[i];
+                if (allegiance?.caster != caster || allegiance.spellDef != spellDef)
+                {
+                    continue;
+                }
+
+                activeTemporaryAllegiances.RemoveAt(i);
+                RestoreTemporaryAllegiance(allegiance);
+                removedCount++;
+            }
         }
 
         for (int i = 0; i < statBreakRecords.Count; i++)
@@ -932,6 +1027,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         int currentTick = Find.TickManager?.TicksGame ?? 0;
         CleanupExpiredStatModifiers(currentTick);
         CleanupExpiredForceFields(currentTick);
+        CleanupExpiredTemporaryAllegiances(currentTick);
         TickSustainedStatModifierPulses(currentTick);
         TickForceFieldPulses(currentTick);
         TickForceFieldSustainedManaCosts(currentTick);
@@ -943,6 +1039,7 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         Scribe_Collections.Look(ref casterStates, "casterStates", LookMode.Deep);
         Scribe_Collections.Look(ref activeStatModifiers, "activeStatModifiers", LookMode.Deep);
         Scribe_Collections.Look(ref activeForceFields, "activeForceFields", LookMode.Deep);
+        Scribe_Collections.Look(ref activeTemporaryAllegiances, "activeTemporaryAllegiances", LookMode.Deep);
 
         if (Scribe.mode == LoadSaveMode.PostLoadInit && casterStates == null)
         {
@@ -957,6 +1054,11 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (Scribe.mode == LoadSaveMode.PostLoadInit && activeForceFields == null)
         {
             activeForceFields = new List<ActiveSpellForceField>();
+        }
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit && activeTemporaryAllegiances == null)
+        {
+            activeTemporaryAllegiances = new List<ActiveTemporaryAllegiance>();
         }
     }
 
@@ -1161,6 +1263,30 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
     }
 
+    private void RemoveTemporaryAllegiances(Pawn target, Thing caster, SpellDef spellDef)
+    {
+        if (activeTemporaryAllegiances == null)
+        {
+            return;
+        }
+
+        for (int i = activeTemporaryAllegiances.Count - 1; i >= 0; i--)
+        {
+            ActiveTemporaryAllegiance allegiance = activeTemporaryAllegiances[i];
+            if (allegiance == null || allegiance.target == null || allegiance.target.Destroyed)
+            {
+                activeTemporaryAllegiances.RemoveAt(i);
+                continue;
+            }
+
+            if (allegiance.target == target && allegiance.caster == caster && allegiance.spellDef == spellDef)
+            {
+                activeTemporaryAllegiances.RemoveAt(i);
+                RestoreTemporaryAllegiance(allegiance);
+            }
+        }
+    }
+
     private void CleanupExpiredForceFields(int currentTick)
     {
         if (activeForceFields == null)
@@ -1199,6 +1325,114 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         {
             RunForceFieldLifecycleActions(lifecycleRecords[i]);
         }
+    }
+
+    private void CleanupExpiredTemporaryAllegiances(int currentTick)
+    {
+        if (activeTemporaryAllegiances == null)
+        {
+            return;
+        }
+
+        for (int i = activeTemporaryAllegiances.Count - 1; i >= 0; i--)
+        {
+            ActiveTemporaryAllegiance allegiance = activeTemporaryAllegiances[i];
+            if (TryGetTemporaryAllegianceRemovalReason(allegiance, currentTick, out string reason))
+            {
+                activeTemporaryAllegiances.RemoveAt(i);
+                RestoreTemporaryAllegiance(allegiance);
+                if (!string.IsNullOrWhiteSpace(reason))
+                {
+                    MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Temporary allegiance ended: {reason}.");
+                }
+                continue;
+            }
+
+            if (allegiance.sustainedManaCost > 0f && currentTick >= allegiance.nextSustainedManaCostTick)
+            {
+                if (!HasEnoughMana(allegiance.caster, allegiance.sustainedManaCost))
+                {
+                    activeTemporaryAllegiances.RemoveAt(i);
+                    RestoreTemporaryAllegiance(allegiance);
+                    MagicLog.Message(MagicLogSubsystem.Execution, "[MagicFramework] Temporary allegiance ended because the caster could not pay upkeep.");
+                    continue;
+                }
+
+                SpendMana(allegiance.caster, allegiance.sustainedManaCost);
+                allegiance.nextSustainedManaCostTick = currentTick + Mathf.Max(1, allegiance.sustainedManaCostIntervalTicks);
+            }
+        }
+    }
+
+    private static bool TryGetTemporaryAllegianceRemovalReason(ActiveTemporaryAllegiance allegiance, int currentTick, out string reason)
+    {
+        reason = null;
+        if (allegiance == null)
+        {
+            reason = "runtime record invalid";
+            return true;
+        }
+
+        if (allegiance.target == null || allegiance.target.Destroyed || allegiance.target.Dead)
+        {
+            reason = "target invalid";
+            return true;
+        }
+
+        if (allegiance.caster == null || allegiance.caster.Destroyed)
+        {
+            reason = "caster invalid";
+            return true;
+        }
+
+        if (allegiance.IsExpired(currentTick))
+        {
+            reason = "duration expired";
+            return true;
+        }
+
+        if (allegiance.maintenance?.profiles != null && allegiance.maintenance.profiles.Count > 0)
+        {
+            Map map = allegiance.target.MapHeld ?? allegiance.caster.MapHeld;
+            return SpellMaintenanceUtility.IsMaintenanceBroken(allegiance.maintenance, allegiance.caster, allegiance.target, map, allegiance.target.Position, out reason);
+        }
+
+        Map casterMap = allegiance.caster.MapHeld;
+        Map targetMap = allegiance.target.MapHeld;
+        if (casterMap == null || targetMap == null || casterMap != targetMap)
+        {
+            reason = "caster and target are not on the same map";
+            return true;
+        }
+
+        if (allegiance.maxRange > 0f && allegiance.caster.Position.DistanceTo(allegiance.target.Position) > allegiance.maxRange)
+        {
+            reason = "target out of range";
+            return true;
+        }
+
+        return false;
+    }
+
+    private static void RestoreTemporaryAllegiance(ActiveTemporaryAllegiance allegiance)
+    {
+        if (allegiance?.target == null || allegiance.target.Destroyed)
+        {
+            return;
+        }
+
+        Pawn pawn = allegiance.target;
+        if (pawn.Faction == allegiance.temporaryFaction)
+        {
+            pawn.SetFaction(allegiance.originalFaction);
+        }
+
+        if (pawn.mindState != null)
+        {
+            pawn.mindState.duty = null;
+        }
+
+        CleanupTemporaryAllegianceIndicator(allegiance);
     }
 
     private static bool TryGetForceFieldBreakReason(ActiveSpellForceField forceField, out string reason)
@@ -1351,6 +1585,66 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (forceField.indicatorSeverity > 0f && existingIndicator.Severity < forceField.indicatorSeverity)
         {
             existingIndicator.Severity = forceField.indicatorSeverity;
+        }
+    }
+
+    private static void EnsureTemporaryAllegianceIndicatorApplied(ActiveTemporaryAllegiance allegiance)
+    {
+        if (allegiance?.indicatorHediffDef == null || allegiance.target?.health == null)
+        {
+            return;
+        }
+
+        Hediff existingIndicator = allegiance.target.health.hediffSet?.GetFirstHediffOfDef(allegiance.indicatorHediffDef);
+        if (existingIndicator == null)
+        {
+            existingIndicator = HediffMaker.MakeHediff(allegiance.indicatorHediffDef, allegiance.target);
+            allegiance.target.health.AddHediff(existingIndicator);
+        }
+
+        if (existingIndicator is SpellStatusCueHediff statusCueHediff)
+        {
+            statusCueHediff.statusLabel = allegiance.statusCueLabel;
+            statusCueHediff.statusDescription = allegiance.statusCueDescription;
+        }
+
+        if (allegiance.indicatorSeverity > 0f && existingIndicator.Severity < allegiance.indicatorSeverity)
+        {
+            existingIndicator.Severity = allegiance.indicatorSeverity;
+        }
+    }
+
+    private static void CleanupTemporaryAllegianceIndicator(ActiveTemporaryAllegiance allegiance)
+    {
+        if (allegiance?.removeIndicatorOnExpire != true || allegiance.indicatorHediffDef == null || allegiance.target?.health == null)
+        {
+            return;
+        }
+
+        Hediff existingIndicator = allegiance.target.health.hediffSet?.GetFirstHediffOfDef(allegiance.indicatorHediffDef);
+        if (existingIndicator != null)
+        {
+            allegiance.target.health.RemoveHediff(existingIndicator);
+        }
+    }
+
+    private static void EnsureTemporaryFactionRelations(Faction temporaryFaction, Faction originalFaction)
+    {
+        if (temporaryFaction == null)
+        {
+            return;
+        }
+
+        if (Faction.OfPlayer != null)
+        {
+            temporaryFaction.TryAffectGoodwillWith(Faction.OfPlayer, 100, canSendMessage: false, canSendHostilityLetter: false);
+            Faction.OfPlayer.TryAffectGoodwillWith(temporaryFaction, 100, canSendMessage: false, canSendHostilityLetter: false);
+        }
+
+        if (originalFaction != null && originalFaction != temporaryFaction)
+        {
+            temporaryFaction.TryAffectGoodwillWith(originalFaction, -100, canSendMessage: false, canSendHostilityLetter: false);
+            originalFaction.TryAffectGoodwillWith(temporaryFaction, -100, canSendMessage: false, canSendHostilityLetter: false);
         }
     }
 

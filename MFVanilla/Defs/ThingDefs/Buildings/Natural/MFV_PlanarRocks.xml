@@ -19,7 +19,8 @@
     <building>
       <mineableThing>MFV_ChunkPhaseStone</mineableThing>
       <mineableDropChance>0.45</mineableDropChance>
-      <isNaturalRock>true</isNaturalRock>
+      <isNaturalRock>false</isNaturalRock>
+      <claimable>false</claimable>
     </building>
   </ThingDef>
 
@@ -41,7 +42,8 @@
     <building>
       <mineableThing>MFV_ChunkVoidglass</mineableThing>
       <mineableDropChance>0.5</mineableDropChance>
-      <isNaturalRock>true</isNaturalRock>
+      <isNaturalRock>false</isNaturalRock>
+      <claimable>false</claimable>
     </building>
   </ThingDef>
 

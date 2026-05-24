@@ -65,7 +65,8 @@ Status:
 - Arcane Forge first-edition weapon work is tracked by MF-041.
 - Encounter maps and construct enemies are tracked by MF-049 and MF-050.
 - Current cleanup pass removed completed MF-045, MF-046, and MF-061 work from the active index; their remaining concerns are now release hygiene or future follow-up tasks.
-- This item remains open as a planning and cleanup bucket, especially for research nodes and stale documentation that no longer match live content.
+- Planar Magic has moved out of the distant backlog into MF-055 as an implemented foundation that passed initial functional smoke testing and now needs polish, tuning, documentation, and release hygiene.
+- This item remains open as the active MFVanilla completion bucket, especially for research nodes, player-facing docs, and stale roadmap promises that no longer match live content.
 
 Next-release content direction:
 - Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
@@ -79,14 +80,147 @@ Good candidates:
 - more utility recipes or buildings that consume magic production outputs
 - targeted Arcane Forge expansions that reuse the elemental focus model without becoming a broad equipment framework
 - one or two additional spell families only if they validate already-supported primitives or a narrowly needed framework hook
+- Geomancy and Aquamancy follow-up spells, because the current survey found earth especially sparse and water still somewhat thin
+- Forbidden Lore follow-up after Dominate Will validation, because the research line now has a first spell but no broader identity yet
 - stronger integration between spell metadata, scroll recipes, research, and generated descriptions
 - clearer player feedback for spell scaling, active enhancement rules, and unlock paths
 - balance pass for mana, cooldowns, costs, work amounts, and resource scarcity
-- concrete follow-up tasks for underused research nodes, especially Leyline Sensitivity, Illusion, Fleshcraft, Planar Magic, Infernal Pact, Grand Sorcery, and Chronomancy
+- concrete follow-up tasks for underused research nodes, especially Illusion, Fleshcraft, Infernal Pact, Grand Sorcery, and Chronomancy
+- release-polish follow-up for research nodes that now have first-pass content, especially Leyline Sensitivity and Planar Magic
 
 Deferral rule:
 - defer anything that primarily exists to prove a speculative framework system rather than make MFVanilla better now
 - defer hostile AI casting, magic weapons/tools, real fire integration, and celestial event depth until after MFVanilla and AeternusFaith first-edition goals are in hand
+
+
+### MF-051 Forbidden Lore First Spells
+
+Goal: give Forbidden Lore concrete spell identity through dangerous control, contagion, and consequences rather than generic direct damage.
+
+Status: first implementations added and built. Dominate Will and Forbidden Plague need in-game validation before expanding this branch.
+
+Current state:
+- MagicFramework now has `TemporaryAllegianceActionDef`, backed by saved `ActiveTemporaryAllegiance` runtime records.
+- The action temporarily moves a hostile pawn into an authored non-player faction rather than `Faction.OfPlayer`, so the target should not become a player-controlled colonist.
+- Runtime cleanup restores the original faction and removes the visible status cue on expiry, maintained-spell cancellation, target/caster invalidation, range/line-of-sight/maintenance break, or insufficient mana upkeep.
+- MFVanilla adds the hidden `MFV_CompelledPawns` faction for temporary dominated pawns.
+- MFVanilla adds `MF_DominateWill`, gated by `MFV_ForbiddenLore`: range 7, 90-tick cast time, 28 mana upfront, 720-tick cooldown, 600-tick max duration, 3 mana per 60 ticks upkeep, caster level 5, hostile humanlike targets only.
+- MFVanilla adds `MF_ForbiddenPlague`, gated by `MFV_ForbiddenLore`: range 12, 90-tick cast time, 30 mana, 900-tick cooldown, hostile pawn target, caster level 5.
+- `MF_ForbiddenPlague` applies a custom `ForbiddenPlagueHediff` that spreads to nearby untreated humanlike pawns, stops spreading while tended, progresses/cures through vanilla tend/immunity comps, and periodically creates `MF_PlagueLesion` / `MF_PlagueBlister` injury hediffs while untreated.
+- Forbidden Lore spell scrolls are excluded from the research-completion mystery aid drop; initial acquisition should come from finding or purchasing those scrolls.
+- Generated spell scroll and scribing recipe coverage includes Dominate Will and Forbidden Plague.
+
+Dominate Will validation checklist:
+1. Cast on hostile humanlike pawns from normal combat and confirm the target becomes allied but not player-controllable.
+2. Confirm dominated pawns attack former allies or otherwise behave usefully under the temporary faction/duty.
+3. Confirm manual cancellation restores the original faction and removes the status cue.
+4. Confirm break behavior for caster downed, stunned, mental state, target downed/dead, range break, line-of-sight break, and insufficient upkeep mana.
+5. Save/load while domination is active, then confirm cleanup and faction restoration still work.
+6. Test raid cleanup after all enemies are dead, fled, or restored so compelled pawns do not leave stale hostile/ally state.
+7. Tune mana, range, duration, cooldown, and target restrictions after seeing real combat behavior.
+
+Forbidden Plague validation checklist:
+1. Cast on a hostile humanlike pawn and confirm `MF_ForbiddenPlague` appears with immunity/tend UI.
+2. Leave it untreated and confirm lesions/blisters appear as local wounds over time.
+3. Keep infected pawns near other humanlike pawns and confirm the disease spreads at a readable but not explosive pace.
+4. Tend the disease and confirm spread stops while treatment is active and lesion pulses pause.
+5. Confirm immunity/treatment can cure the disease without leaving stale custom state.
+6. Save/load while the disease is active, then confirm next lesion/spread timing still works.
+7. Tune severity growth, spread radius/chance, lesion interval/severity, mana, cooldown, and target restrictions after live combat use.
+
+Follow-up opportunities:
+- Add weaker Forbidden Lore control effects such as fear, forced flee, confusion, silence, forced attack, or short job interruption.
+- Add backlash or social/mood consequences if full domination proves too efficient.
+- Add plague backlash or ritual containment costs if contagious play proves too easy to weaponize safely.
+- Consider boss/psy-sensitivity/resistance rules before allowing broader target classes.
+
+
+### MF-046B Geomancy And Aquamancy Follow-Up
+
+Goal: round out sparse earth and water schools after the current spell survey.
+
+Status: first Geomancy implementations added. Dig and Earth Wall need in-game smoke tests before tuning; Aquamancy still needs its next selected spell.
+
+Design direction:
+- Geomancy needs the most help. Favor spells that make earth feel defensive, positional, and materially grounded rather than another generic damage school.
+- Aquamancy is less empty but still wants one or two more identity spells beyond Deluge, Extinguish, and Water's Embrace.
+- Prefer XML-first spells using existing primitives where possible; add framework hooks only when they clearly support multiple spells or items.
+
+Current state:
+- MagicFramework now has `SpawnWallLineActionDef`, which spawns a temporary line of real wall-like things and tracks them through the existing spawned-thing cleanup component.
+- MagicFramework now has `MineThingsActionDef`, which mines nearby `Mineable` things through RimWorld's normal `DestroyMined` path so ordinary mining yields and MFVanilla gemstone vein behavior remain intact.
+- MFVanilla adds `MF_Dig`, gated by `MFV_Geomancy`: range 16, 45-tick cast time, 18 mana, 240-tick cooldown, base 3 mined cells scaling with caster level up to 7.
+- MFVanilla adds `MF_EarthWall`, gated by `MFV_Geomancy`: range 18, 60-tick cast time, 22 mana, 420-tick cooldown, 5-cell granite wall, 900-tick base duration scaling up to 1500 ticks.
+- Generated spell scroll and scribing recipe coverage includes Dig and Earth Wall.
+
+Candidate Geomancy spells:
+- Dig: implemented first pass; validate targeting, mining yield, resource mineables, gemstone veins, scaling, and balance.
+- Earth Wall: implemented first pass; validate placement, cleanup, cover/pathing behavior, faction ownership, and balance.
+- Stone Grasp: short-range root/slow using reusable status effects and maybe small blunt damage.
+- Shatterstone: consumes or targets stone chunks for a cone/burst of fragments.
+- Tremor: small area stagger/knockback/stun with low damage and strong positioning identity.
+
+Candidate Aquamancy spells:
+- Riptide: directional pull/push around water or wet terrain.
+- Soothing Rain: area ally recovery or heat/fire mitigation with weather/water flavor.
+- Frost/Wet synergy pass: make Drenched matter more for cold, slow, or lightning-adjacent effects if the mechanics stay readable.
+
+Success criteria:
+- earth and water each gain at least one spell that changes player decisions, not just another damage button
+- new spells have research, scroll, generated description, and icon coverage
+- any new framework primitive is justified by more than one plausible content use
+
+Dig validation checklist:
+1. Cast on natural rock, ore/resource mineables, gemstone veins, and invalid non-mineable buildings.
+2. Confirm base casts mine 3 cells and higher caster levels scale toward 7 cells.
+3. Confirm mined cells use normal mining yield behavior, including chunks/ore and MFVanilla gemstone yield handling.
+4. Confirm line-of-sight and range feel appropriate for a utility spell.
+5. Tune mana, cooldown, cast time, range, radius, and scaling after seeing whether it competes too strongly with pawn mining labor.
+
+Earth Wall validation checklist:
+1. Cast on open floor, soil, rough stone, bridges, doors/near buildings, occupied cells, and narrow corridors.
+2. Confirm the wall line faces perpendicular to the caster-target direction and only fills valid cells.
+3. Confirm enemies and colonists path around or interact with the wall as expected.
+4. Confirm wall faction/ownership is sensible and does not create hostile-player weirdness.
+5. Confirm recasting removes the caster's previous Earth Wall without deleting unrelated spawned things.
+6. Save/load while the wall is active, then confirm expiry still removes all spawned wall cells.
+7. Tune mana, cooldown, duration, range, wall length, and stuff choice after seeing combat use.
+
+
+### MF-055 Planar Magic Foundation And Validation
+
+Goal: turn the new Planar Magic foundation into a stable MFVanilla release feature rather than leaving it as exploratory long-term content.
+
+Status: first implementation exists, has passed an initial functional smoke test, and should now be treated as an active polish/opportunity surface for the MFVanilla completion pass.
+
+Current state:
+- Planar gates exist as buildable/useable content tied to the Planar Magic research path and arcane spire support.
+- Planar pockets can be created as temporary pocket maps with their own world object/site part, map generator, return gate, terrain, plants, mineables, stone chunks, and debug spawning support.
+- Gate use supports selected pawn traversal, alignment timing, player-facing failure messages, and pocket-map readiness checks.
+- Planar return flow includes a return dialog, selected travelers/supplies, carrying-capacity checks, forced return timing, and cleanup safeguards.
+- MFVanilla blocks off-map transport from planar pocket maps where ordinary transport would break the intended exit loop.
+- XML-authored planar dimension/site support now lives beside the MFVanilla site content, with first-pass planar terrain, plants, stone, and material hooks.
+- Initial smoke testing indicates the core loop is functional and fun.
+
+Priority:
+- polish the complete player loop from research/building to entry, exploration, extraction, return, and cleanup
+- continue checking save/load behavior before entry, while inside the pocket, during forced return, after return, and after cleanup
+- tune alignment timing, gate range, spire/power contribution, pocket duration, return capacity, material abundance, and failure messaging
+- update player-facing documentation, splash notes, and release notes so Planar Magic reads as an intentional feature
+- decide whether the first release needs only resource/exploration payoff or also a small authored threat, hazard, or treasure beat
+
+Next steps:
+1. Keep targeted save/load checks at each lifecycle point: before opening, inside the pocket, after forced return is scheduled, after return, and after map cleanup.
+2. Tune gate alignment, spire contribution, pocket duration, return capacity, and failure text based on normal-play feel.
+3. Check whether planar materials enter the MFVanilla economy cleanly through mining, hauling, storage, tradeability, and recipe/value expectations.
+4. Update splash notes and completed-work notes now that `Mods/MFVanilla/Documentation/ModPlan.md` recognizes the feature as functional.
+5. Pick one conservative first opportunity if the release needs more payoff: a rare resource cluster, small planar hazard, simple guardian beat, or minor treasure hook.
+
+Success criteria:
+- players can understand when and why the gate opens, what can enter, how to return, and what risks remain
+- pocket maps do not strand pawns or leave stale world/map objects after normal return or save/load
+- planar materials and rewards feel useful without bypassing the established gemstone, scroll, and arcane treasure economy
+- the foundation can support later planar hazards, sites, expedition chains, and Grand Sorcery rewards without reopening the core transfer/cleanup loop
 
 
 ### MF-042 Arcane Treasure Chests

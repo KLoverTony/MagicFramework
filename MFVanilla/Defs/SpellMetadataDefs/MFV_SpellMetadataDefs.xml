@@ -165,6 +165,13 @@
     <displayOrder>130</displayOrder>
   </MagicFramework.Definitions.SpellDomainDef>
 
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_ForbiddenLore</defName>
+    <label>forbidden lore</label>
+    <primaryElement>MF_Element_Shadow</primaryElement>
+    <displayOrder>140</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
   <!-- Disciplines -->
   <MagicFramework.Definitions.SpellDisciplineDef>
     <defName>MF_Discipline_Combat</defName>

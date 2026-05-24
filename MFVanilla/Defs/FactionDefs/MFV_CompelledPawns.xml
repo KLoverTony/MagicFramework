@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <FactionDef ParentName="FactionBase">
+    <defName>MFV_CompelledPawns</defName>
+    <label>compelled pawns</label>
+    <description>Temporary faction used by Magic Framework maintained allegiance effects. It should not appear as an ordinary world faction.</description>
+    <pawnSingular>compelled pawn</pawnSingular>
+    <pawnsPlural>compelled pawns</pawnsPlural>
+    <hidden>true</hidden>
+    <canMakeRandomly>false</canMakeRandomly>
+    <canSiege>false</canSiege>
+    <canStageAttacks>false</canStageAttacks>
+    <requiredCountAtGameStart>0</requiredCountAtGameStart>
+    <mustStartOneEnemy>false</mustStartOneEnemy>
+    <factionIconPath>World/WorldObjects/Expanding/SettlementTemporary</factionIconPath>
+    <leaderTitle>thrall</leaderTitle>
+    <techLevel>Neolithic</techLevel>
+    <basicMemberKind>Villager</basicMemberKind>
+    <colorSpectrum>
+      <li>(0.35, 0.18, 0.55)</li>
+      <li>(0.55, 0.25, 0.75)</li>
+    </colorSpectrum>
+  </FactionDef>
+
+</Defs>

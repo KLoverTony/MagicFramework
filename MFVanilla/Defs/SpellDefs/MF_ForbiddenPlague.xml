@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_ForbiddenPlague</defName>
+    <label>forbidden plague</label>
+    <description>Infects an enemy with a magical plague that spreads to nearby people and raises painful lesions until the disease is treated and overcome.</description>
+    <range>12</range>
+    <castTimeTicks>90</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_ForbiddenPlague</gizmoIconPath>
+
+    <meta>
+      <tier>3</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_ForbiddenLore</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_Debuff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_ForbiddenLore</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>5</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Severity</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>12</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Forbidden Plague</debugLabel>
+        <amount>30</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Forbidden Plague cooldown ready</debugLabel>
+        <cooldownTicks>900</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Forbidden Plague</debugLabel>
+        <amount>30</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Forbidden Plague cooldown</debugLabel>
+        <cooldownTicks>900</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Forbidden Plague sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Forbidden Plague cast effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+            <debugLabel>Forbidden Plague infection</debugLabel>
+            <hediffDef>MF_ForbiddenPlague</hediffDef>
+            <severity>0.18</severity>
+            <scalableSeverity>
+              <baseValue>0.18</baseValue>
+              <perPower>0.012</perPower>
+              <max>0.30</max>
+            </scalableSeverity>
+            <addMode>TryAdd</addMode>
+            <checkIfAlreadyHas>true</checkIfAlreadyHas>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

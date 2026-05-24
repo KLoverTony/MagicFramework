@@ -46,6 +46,10 @@
     <defName>MFV_Lapidary</defName>
     <label>lapidary</label>
     <description>Study the careful cutting and polishing of gemstones for trade, decoration, and magical craftsmanship.</description>
+    <customUnlockTexts>
+      <li>Gemstone chunk breaking</li>
+      <li>Gemstone cutting</li>
+    </customUnlockTexts>
     <baseCost>500</baseCost>
     <techLevel>Neolithic</techLevel>
     <tab>MFV_Arcane</tab>

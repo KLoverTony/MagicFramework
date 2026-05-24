@@ -18,6 +18,8 @@ namespace MFVanilla.Core;
 /// </summary>
 public static class MFVanillaPatcher
 {
+    private const string ForbiddenLoreResearchDefName = "MFV_ForbiddenLore";
+
     private static readonly HashSet<string> SuppressionRoots = new()
     {
         "Electricity",
@@ -26,6 +28,13 @@ public static class MFVanillaPatcher
     };
 
     private static readonly HashSet<string> SuppressedResearchDefNames = new();
+    private static readonly HashSet<string> LapidaryPlaceholderUnlockDefNames = new()
+    {
+        GemstoneUtility.BreakChunkRecipeDefName,
+        GemstoneUtility.BreakDenseChunkRecipeDefName,
+        GemstoneUtility.CutGemstoneRecipeDefName,
+    };
+
     private static bool _isPatched;
     private static bool _suppressionCacheBuilt;
 
@@ -41,6 +50,11 @@ public static class MFVanillaPatcher
         harmony.Patch(
             AccessTools.PropertyGetter(typeof(ResearchProjectDef), nameof(ResearchProjectDef.CanStartNow)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchProjectDef_CanStartNow_Postfix))
+        );
+
+        harmony.Patch(
+            AccessTools.PropertyGetter(typeof(ResearchProjectDef), nameof(ResearchProjectDef.UnlockedDefs)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(ResearchProjectDef_UnlockedDefs_Postfix))
         );
 
         harmony.Patch(
@@ -286,6 +300,15 @@ public static class MFVanillaPatcher
         }
     }
 
+    private static void ResearchProjectDef_UnlockedDefs_Postfix(ResearchProjectDef __instance, ref List<Def> __result)
+    {
+        if (__instance?.defName != "MFV_Lapidary" || __result == null) return;
+
+        __result = __result
+            .Where(def => def == null || !LapidaryPlaceholderUnlockDefNames.Contains(def.defName))
+            .ToList();
+    }
+
     private static void MainTabWindow_Research_VisibleResearchProjects_Postfix(ref List<ResearchProjectDef> __result)
     {
         if (MFVanillaMod.Settings == null || !MFVanillaMod.Settings.DisableTechResearch || __result == null) return;
@@ -383,6 +406,11 @@ public static class MFVanillaPatcher
             .FirstOrDefault();
         List<ResearchProjectDef> requiredResearch = learnComp?.requiredResearch;
         if (requiredResearch == null || !requiredResearch.Contains(project))
+        {
+            return false;
+        }
+
+        if (requiredResearch.Any(requiredProject => requiredProject?.defName == ForbiddenLoreResearchDefName))
         {
             return false;
         }

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_DominateWill</defName>
+    <label>dominate will</label>
+    <description>Seizes an enemy's will for a short time, forcing them to fight as a temporary ally while the caster maintains concentration.</description>
+    <range>7</range>
+    <castTimeTicks>90</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_DominateWill</gizmoIconPath>
+
+    <meta>
+      <tier>3</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_ForbiddenLore</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_Debuff</li>
+        <li>MF_Tag_Channelled</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_ForbiddenLore</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>5</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>7</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Dominate Will</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Dominate Will cooldown ready</debugLabel>
+        <cooldownTicks>720</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Dominate Will</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Dominate Will cooldown</debugLabel>
+        <cooldownTicks>720</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Dominate Will sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Dominate Will cast effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.TemporaryAllegianceActionDef">
+            <debugLabel>Dominate Will temporary allegiance</debugLabel>
+            <temporaryFactionDef>MFV_CompelledPawns</temporaryFactionDef>
+            <maxDurationTicks>600</maxDurationTicks>
+            <statusCue>
+              <label>Dominated will</label>
+              <description>This pawn's will is being forcibly held by a forbidden spell.</description>
+              <severity>0.01</severity>
+              <removeOnExpire>true</removeOnExpire>
+            </statusCue>
+            <maxRange>7</maxRange>
+            <maintenance>
+              <profiles>
+                <li>CasterFocused</li>
+                <li>TargetValid</li>
+                <li>TargetConscious</li>
+                <li>Tethered</li>
+                <li>LineOfSight</li>
+              </profiles>
+              <maxRange>7</maxRange>
+            </maintenance>
+            <sustainedManaCost>3</sustainedManaCost>
+            <sustainedManaCostIntervalTicks>60</sustainedManaCostIntervalTicks>
+            <humanlikeOnly>true</humanlikeOnly>
+            <rejectPlayerFaction>true</rejectPlayerFaction>
+            <rejectPrisoners>true</rejectPrisoners>
+            <rejectSlaves>true</rejectSlaves>
+            <rejectGuests>true</rejectGuests>
+            <rejectMechanoids>true</rejectMechanoids>
+            <replaceExistingFromCasterSpell>true</replaceExistingFromCasterSpell>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

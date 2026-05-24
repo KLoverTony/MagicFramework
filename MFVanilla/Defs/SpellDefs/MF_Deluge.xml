@@ -4,6 +4,7 @@
     <defName>MF_Deluge</defName>
     <label>deluge</label>
     <description>Calls down a violent surge of water that douses fires, drenches pawns, and pushes them away from the center.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Deluge</gizmoIconPath>
     <range>24</range>
     <castTimeTicks>60</castTimeTicks>
     <gizmoIconPath>UI/Gizmos/Spells/MF_Deluge</gizmoIconPath>

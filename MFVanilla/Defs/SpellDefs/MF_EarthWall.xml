@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_EarthWall</defName>
+    <label>earth wall</label>
+    <description>Raises a short-lived wall of stone from open ground, blocking movement and line of fire until it crumbles away.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_EarthWall</gizmoIconPath>
+    <range>18</range>
+    <castTimeTicks>60</castTimeTicks>
+    <element>Earth</element>
+    <delivery>Pulse</delivery>
+    <effectShape>Wall</effectShape>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Earth</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Geomancy</li>
+        <li>MF_Domain_Warding</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Warding</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Area</li>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Geomancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Wall</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireWalkableCell>true</requireWalkableCell>
+      <range>18</range>
+      <wallLength>5</wallLength>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Earth Wall</debugLabel>
+        <amount>22</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Earth Wall cooldown ready</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Earth Wall</debugLabel>
+        <amount>22</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Earth Wall cooldown</debugLabel>
+        <cooldownTicks>420</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Earth Wall sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Earth Wall pulse FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.SpawnWallLineActionDef">
+            <debugLabel>Earth Wall temporary stone wall</debugLabel>
+            <thingDef>Wall</thingDef>
+            <stuffDef>BlocksGranite</stuffDef>
+            <wallLength>5</wallLength>
+            <durationTicks>900</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>900</baseValue>
+              <perPower>24</perPower>
+              <max>1500</max>
+            </scalableDurationTicks>
+            <forbidden>false</forbidden>
+            <setFactionToCaster>true</setFactionToCaster>
+            <requireWalkableCell>true</requireWalkableCell>
+            <requireStandableCell>true</requireStandableCell>
+            <requireNoEdifice>true</requireNoEdifice>
+            <replaceExistingForCasterSpell>true</replaceExistingForCasterSpell>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

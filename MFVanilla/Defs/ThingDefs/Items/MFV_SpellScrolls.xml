@@ -18,6 +18,7 @@
       </li>
     </modExtensions>
     <selectable>true</selectable>
+    <alwaysHaulable>true</alwaysHaulable>
     <stackLimit>1</stackLimit>
     <thingCategories>
       <li>ItemsMisc</li>

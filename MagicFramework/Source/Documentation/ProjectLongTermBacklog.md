@@ -6,6 +6,10 @@ Long-range MFVanilla and MagicFramework content ideas extracted from ProjectTodo
 
 Goal: add mind-control magic as a dangerous Forbidden Lore feature without making ordinary hostile AI or player control unstable.
 
+Current status:
+- The first implementation has moved into the active MFVanilla backlog as [MF-051 Forbidden Lore Mind Control](ProjectMFVanillaTodo.md#mf-051-forbidden-lore-mind-control).
+- This long-term entry now represents expansion beyond Dominate Will: broader control effects, resistance rules, backlash, and advanced Forbidden Lore identity.
+
 Design direction:
 - treat mind control as forbidden, costly, and narratively risky rather than a routine crowd-control spell
 - prefer short, readable effects first: compel movement, interrupt work, force a target to flee, temporary mental break influence, or brief ally/hostile confusion
@@ -13,9 +17,9 @@ Design direction:
 - require clear player feedback, strong cooldown/cost pressure, and save/load-safe state cleanup
 
 First implementation pass:
-1. Identify which effects can be authored with existing mental-state, hediff, job, or forced-target primitives.
-2. Add one narrow validation spell under `MFV_ForbiddenLore`.
-3. Smoke test target validity, downed/dead cleanup, save/load, prisoner/colonist/hostile behavior, and faction edge cases.
+1. Validate Dominate Will and the temporary allegiance runtime in real combat.
+2. Tune cost, duration, range, target restrictions, and cleanup based on that smoke test.
+3. Only then choose the next Forbidden Lore control effect.
 
 
 ### MF-052 Illusionary Pawns
@@ -70,6 +74,10 @@ First implementation pass:
 
 Goal: add a Planar Magic feature that lets advanced colonies interact with other planes through events, expeditions, or special sites.
 
+Current status:
+- The first planar foundation has been promoted into the active MFVanilla completion pass as [MF-055 Planar Magic Foundation And Validation](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation).
+- This long-term entry now represents expansion beyond the current gate/pocket-map foundation: richer hazards, expedition chains, threats, authored rewards, special sites, and deeper planar ecology.
+
 Design direction:
 - start as a controlled exploration loop rather than full new-world simulation
 - possible forms: planar rift site, expedition incident, temporary pocket map, encounter chain, or costly scan that reveals a planar destination
@@ -77,9 +85,9 @@ Design direction:
 - risks should be explicit: dangerous defenders, unstable exits, curses, pawn injury, or time pressure
 
 First implementation pass:
-1. Choose the minimum viable loop: world site, temporary map, or event chain.
-2. Reuse arcane site profile/generation infrastructure where possible.
-3. Smoke test generation, travel, map closure, reward extraction, save/load, and abandonment.
+1. Validate the current planar gate and pocket-map loop through the active MFVanilla task.
+2. After the foundation is stable, choose the next expansion shape: hazard layer, threat encounter, resource expedition, planar reward chain, or new site family.
+3. Reuse the active foundation where possible instead of creating a second travel/map lifecycle.
 
 
 ### MF-056 Grand Sorcery Legendary Weapons And Buff Ritual

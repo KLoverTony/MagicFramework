@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Dig</defName>
+    <label>dig</label>
+    <description>Splits nearby rock with geomantic force, mining a small cluster of stone around the chosen block.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Dig</gizmoIconPath>
+    <range>16</range>
+    <castTimeTicks>45</castTimeTicks>
+    <element>Earth</element>
+    <delivery>Pulse</delivery>
+    <effectShape>Single</effectShape>
+
+    <meta>
+      <tier>1</tier>
+      <elements>
+        <li>MF_Element_Earth</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Geomancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Geomancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>2</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Thing</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>true</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>16</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Dig</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Dig cooldown ready</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Dig</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Dig cooldown</debugLabel>
+        <cooldownTicks>240</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Dig sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.ProceduralFXActionDef">
+            <debugLabel>Dig impact FX</debugLabel>
+            <fxEvent>AreaPulse</fxEvent>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.MineThingsActionDef">
+            <debugLabel>Dig mine nearby rock</debugLabel>
+            <count>3</count>
+            <scalableCount>
+              <baseValue>3</baseValue>
+              <perPower>0.2</perPower>
+              <max>7</max>
+            </scalableCount>
+            <radius>1.6</radius>
+            <requireMineable>true</requireMineable>
+            <requireNaturalRock>false</requireNaturalRock>
+            <includeResourceMineables>true</includeResourceMineables>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

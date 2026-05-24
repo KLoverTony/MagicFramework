@@ -383,6 +383,22 @@ public sealed class SpawnThingActionWorker : SpellActionWorker
     }
 }
 
+public sealed class SpawnWallLineActionWorker : SpellActionWorker
+{
+    private readonly SpawnWallLineService spawnWallLineService = new();
+
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        SpawnWallLineActionDef spawnWallLineActionDef = actionDef as SpawnWallLineActionDef;
+        if (spawnWallLineActionDef == null)
+        {
+            return;
+        }
+
+        spawnWallLineService.CreateWallLine(context, spawnWallLineActionDef);
+    }
+}
+
 public sealed class TerrainPatchActionWorker : SpellActionWorker
 {
     public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
@@ -1848,6 +1864,146 @@ public sealed class ApplyForceFieldActionWorker : SpellActionWorker
     }
 }
 
+public sealed class TemporaryAllegianceActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        TemporaryAllegianceActionDef allegianceDef = actionDef as TemporaryAllegianceActionDef;
+        if (allegianceDef == null || context == null)
+        {
+            return;
+        }
+
+        Thing targetThing = allegianceDef.targetSource == StatModifierTargetSource.Caster
+            ? context.caster
+            : context.currentTarget.Thing;
+
+        if (targetThing is not Pawn targetPawn)
+        {
+            Log.Warning("[MagicFramework] TemporaryAllegianceActionWorker skipped because the target was not a pawn.");
+            return;
+        }
+
+        if (!CanAffectPawn(targetPawn, allegianceDef, out string rejectReason))
+        {
+            Messages.Message($"Cannot dominate {targetPawn.LabelShortCap}: {rejectReason}.", targetPawn, MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        Faction temporaryFaction = ResolveTemporaryFaction(allegianceDef.temporaryFactionDef);
+        if (temporaryFaction == null)
+        {
+            Log.Warning($"[MagicFramework] TemporaryAllegianceActionWorker skipped because faction def '{allegianceDef.temporaryFactionDef ?? "<null>"}' could not be resolved or created.");
+            return;
+        }
+
+        int maxDurationTicks = SpellActionScalingUtility.ResolveOptionalPositiveDurationTicks(context, allegianceDef.maxDurationTicks, allegianceDef.scalableMaxDurationTicks);
+        SpellRuntimeGameComponent.Instance?.ApplyTemporaryAllegiance(
+            targetPawn,
+            context.caster,
+            context.spellDef,
+            temporaryFaction,
+            maxDurationTicks,
+            allegianceDef.replaceExistingFromCasterSpell,
+            allegianceDef.statusCue,
+            allegianceDef.maxRange,
+            allegianceDef.maintenance,
+            allegianceDef.sustainedManaCost,
+            allegianceDef.sustainedManaCostIntervalTicks);
+    }
+
+    private static bool CanAffectPawn(Pawn pawn, TemporaryAllegianceActionDef allegianceDef, out string reason)
+    {
+        reason = null;
+        if (pawn == null || pawn.Destroyed || pawn.Dead)
+        {
+            reason = "target is invalid";
+            return false;
+        }
+
+        if (allegianceDef.humanlikeOnly && !pawn.RaceProps.Humanlike)
+        {
+            reason = "target is not humanlike";
+            return false;
+        }
+
+        if (allegianceDef.rejectMechanoids && pawn.RaceProps.IsMechanoid)
+        {
+            reason = "target is a mechanoid";
+            return false;
+        }
+
+        if (allegianceDef.rejectPlayerFaction && pawn.Faction == Faction.OfPlayer)
+        {
+            reason = "target already belongs to the colony";
+            return false;
+        }
+
+        if (allegianceDef.rejectPrisoners && pawn.IsPrisoner)
+        {
+            reason = "target is a prisoner";
+            return false;
+        }
+
+        if (allegianceDef.rejectSlaves && pawn.IsSlave)
+        {
+            reason = "target is a slave";
+            return false;
+        }
+
+        if (allegianceDef.rejectGuests && (pawn.IsQuestLodger() || pawn.HostFaction == Faction.OfPlayer))
+        {
+            reason = "target is a guest";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static Faction ResolveTemporaryFaction(string factionDefName)
+    {
+        if (string.IsNullOrWhiteSpace(factionDefName))
+        {
+            return null;
+        }
+
+        FactionDef factionDef = DefDatabase<FactionDef>.GetNamedSilentFail(factionDefName);
+        if (factionDef == null)
+        {
+            return null;
+        }
+
+        Faction existing = Find.FactionManager?.FirstFactionOfDef(factionDef);
+        if (existing != null)
+        {
+            EnsureTemporaryRelations(existing);
+            return existing;
+        }
+
+        Faction generated = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms(factionDef));
+        if (generated == null)
+        {
+            return null;
+        }
+
+        generated.hidden = true;
+        Find.FactionManager?.Add(generated);
+        EnsureTemporaryRelations(generated);
+        return generated;
+    }
+
+    private static void EnsureTemporaryRelations(Faction temporaryFaction)
+    {
+        if (temporaryFaction == null || Faction.OfPlayer == null)
+        {
+            return;
+        }
+
+        temporaryFaction.TryAffectGoodwillWith(Faction.OfPlayer, 100, canSendMessage: false, canSendHostilityLetter: false);
+        Faction.OfPlayer.TryAffectGoodwillWith(temporaryFaction, 100, canSendMessage: false, canSendHostilityLetter: false);
+    }
+}
+
 public sealed class ClearStatModifiersActionWorker : SpellActionWorker
 {
     public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
@@ -2785,6 +2941,99 @@ public sealed class DestroyThingActionWorker : SpellActionWorker
 
         targetThing.Destroy(DestroyMode.Vanish);
         MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Destroyed {targetThing.LabelCap} via disintegration-style effect.");
+    }
+}
+
+public sealed class MineThingsActionWorker : SpellActionWorker
+{
+    public override void Execute(SpellContext context, SpellActionDef actionDef, SpellActionRunner runner)
+    {
+        MineThingsActionDef mineActionDef = actionDef as MineThingsActionDef;
+        if (context?.map == null || mineActionDef == null)
+        {
+            return;
+        }
+
+        IntVec3 center = context.currentTarget.IsValid ? context.currentTarget.Cell : context.currentCell;
+        if (!center.IsValid)
+        {
+            Log.Warning("[MagicFramework] MineThingsActionWorker skipped because its target cell was invalid.");
+            return;
+        }
+
+        int count = Mathf.Max(1, SpellPowerUtility.ResolveScalableInt(context, mineActionDef.count, mineActionDef.scalableCount));
+        float radius = Mathf.Max(0f, SpellPowerUtility.ResolveScalableFloat(context, mineActionDef.radius, mineActionDef.scalableRadius));
+        List<Mineable> mineables = CollectMineables(context, mineActionDef, center, radius);
+        if (mineables.Count == 0)
+        {
+            MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] MineThingsActionWorker found no mineable rocks near {center}.");
+            return;
+        }
+
+        Pawn miner = context.caster as Pawn;
+        int minedCount = 0;
+        for (int i = 0; i < mineables.Count && minedCount < count; i++)
+        {
+            Mineable mineable = mineables[i];
+            if (mineable == null || mineable.Destroyed)
+            {
+                continue;
+            }
+
+            mineable.DestroyMined(miner);
+            minedCount++;
+        }
+
+        MagicLog.Message(MagicLogSubsystem.Execution, $"[MagicFramework] Mined {minedCount} rock cells near {center}.");
+    }
+
+    private static List<Mineable> CollectMineables(SpellContext context, MineThingsActionDef mineActionDef, IntVec3 center, float radius)
+    {
+        List<Mineable> mineables = new();
+        HashSet<Mineable> seen = new();
+        Thing directThing = context.currentTarget.Thing;
+        if (directThing is Mineable directMineable && IsValidMineable(directMineable, mineActionDef) && seen.Add(directMineable))
+        {
+            mineables.Add(directMineable);
+        }
+
+        foreach (Thing thing in GenRadial.RadialDistinctThingsAround(center, context.map, radius, true))
+        {
+            if (thing is not Mineable mineable || !IsValidMineable(mineable, mineActionDef) || !seen.Add(mineable))
+            {
+                continue;
+            }
+
+            mineables.Add(mineable);
+        }
+
+        mineables.SortBy(mineable => mineable.Position.DistanceToSquared(center));
+        return mineables;
+    }
+
+    private static bool IsValidMineable(Mineable mineable, MineThingsActionDef mineActionDef)
+    {
+        if (mineable?.def == null)
+        {
+            return false;
+        }
+
+        if (mineActionDef.requireMineable && !mineable.def.mineable)
+        {
+            return false;
+        }
+
+        if (mineActionDef.requireNaturalRock && mineable.def.building?.isNaturalRock != true)
+        {
+            return false;
+        }
+
+        if (!mineActionDef.includeResourceMineables && mineable.def.building?.mineableThing != null)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
 

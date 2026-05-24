@@ -565,6 +565,9 @@ public static class SpellDescriptionUtility
             case DestroyThingActionDef:
                 lines.Add("Destroys the target.");
                 break;
+            case MineThingsActionDef mine:
+                lines.Add("Mines up to " + DescribeScalableCount(mine.count, mine.scalableCount) + " nearby rock cells.");
+                break;
         }
     }
 

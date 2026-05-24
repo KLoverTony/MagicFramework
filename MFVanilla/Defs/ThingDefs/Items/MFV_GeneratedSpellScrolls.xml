@@ -186,6 +186,29 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Dig</defName>
+    <label>spell scroll (dig)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast dig.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>1200</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Dig</spell>
+        <requiredResearch>
+          <li>MFV_Geomancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_Disintegrate</defName>
     <label>spell scroll (disintegrate)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast disintegrate.</description>
@@ -214,6 +237,34 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_DominateWill</defName>
+    <label>spell scroll (dominate will)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast dominate will.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <graphicData>
+      <texPath>Things/Item/Spell scroll - major</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <statBases>
+      <MarketValue>1400</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_DominateWill</spell>
+        <requiredResearch>
+          <li>MFV_ForbiddenLore</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_EarthCall</defName>
     <label>spell scroll (earth call)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast earth call.</description>
@@ -229,6 +280,29 @@
       </li>
       <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
         <spell>MF_EarthCall</spell>
+        <requiredResearch>
+          <li>MFV_Geomancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_EarthWall</defName>
+    <label>spell scroll (earth wall)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast earth wall.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>1200</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_EarthWall</spell>
         <requiredResearch>
           <li>MFV_Geomancy</li>
         </requiredResearch>
@@ -323,6 +397,34 @@
         <spell>MF_FlameField</spell>
         <requiredResearch>
           <li>MFV_Pyromancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_ForbiddenPlague</defName>
+    <label>spell scroll (forbidden plague)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast forbidden plague.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <graphicData>
+      <texPath>Things/Item/Spell scroll - major</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.8</drawSize>
+    </graphicData>
+    <statBases>
+      <MarketValue>1400</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_ForbiddenPlague</spell>
+        <requiredResearch>
+          <li>MFV_ForbiddenLore</li>
         </requiredResearch>
       </li>
       <li Class="CompProperties_UseEffectDestroySelf" />

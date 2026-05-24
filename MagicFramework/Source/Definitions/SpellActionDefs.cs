@@ -414,6 +414,53 @@ public sealed class SpawnThingActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Spawns a temporary line of wall-like things centered on the current cell.
+/// </summary>
+public sealed class SpawnWallLineActionDef : SpellActionDef
+{
+    public string thingDef = "Wall";
+    public string stuffDef;
+    public int wallLength = 5;
+    public int durationTicks = 600;
+    public ScalableFloatDef scalableDurationTicks;
+    public bool forbidden;
+    public bool setFactionToCaster = true;
+    public bool requireWalkableCell = true;
+    public bool requireStandableCell = true;
+    public bool requireNoEdifice = true;
+    public bool replaceExistingForCasterSpell = true;
+    public List<SpellActionDef> onCreateActions = new();
+    public List<SpellActionDef> onExpireActions = new();
+    public List<SpellActionDef> onRemoveActions = new();
+    public List<SpellActionDef> onBreakActions = new();
+
+    public override IEnumerable<SpellActionDef> GetChildActions()
+    {
+        foreach (SpellActionDef action in onCreateActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onExpireActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onRemoveActions)
+        {
+            yield return action;
+        }
+
+        foreach (SpellActionDef action in onBreakActions)
+        {
+            yield return action;
+        }
+    }
+
+    public override SpellActionWorker CreateWorker() => new SpawnWallLineActionWorker();
+}
+
+/// <summary>
 /// Mutates terrain and weather buildup around a resolved point.
 /// </summary>
 public sealed class TerrainPatchActionDef : SpellActionDef
@@ -693,6 +740,31 @@ public sealed class ApplyForceFieldActionDef : SpellActionDef
 }
 
 /// <summary>
+/// Temporarily shifts a hostile pawn to an allied non-player faction while the caster maintains control.
+/// </summary>
+public sealed class TemporaryAllegianceActionDef : SpellActionDef
+{
+    public StatModifierTargetSource targetSource = StatModifierTargetSource.CurrentTarget;
+    public string temporaryFactionDef = "MFV_CompelledPawns";
+    public int maxDurationTicks = 600;
+    public ScalableFloatDef scalableMaxDurationTicks;
+    public SpellStatusCueDef statusCue;
+    public float maxRange = -1f;
+    public SpellMaintenanceDef maintenance;
+    public float sustainedManaCost;
+    public int sustainedManaCostIntervalTicks = 60;
+    public bool humanlikeOnly = true;
+    public bool rejectPlayerFaction = true;
+    public bool rejectPrisoners = true;
+    public bool rejectSlaves = true;
+    public bool rejectGuests = true;
+    public bool rejectMechanoids = true;
+    public bool replaceExistingFromCasterSpell = true;
+
+    public override SpellActionWorker CreateWorker() => new TemporaryAllegianceActionWorker();
+}
+
+/// <summary>
 /// Removes active framework stat modifiers and their status cues from an authored subject.
 /// </summary>
 public sealed class ClearStatModifiersActionDef : SpellActionDef
@@ -847,6 +919,22 @@ public sealed class DestroyThingActionDef : SpellActionDef
     public bool allowPawns;
 
     public override SpellActionWorker CreateWorker() => new DestroyThingActionWorker();
+}
+
+/// <summary>
+/// Mines nearby mineable things around the current target, using RimWorld's normal mining yield path.
+/// </summary>
+public sealed class MineThingsActionDef : SpellActionDef
+{
+    public int count = 1;
+    public ScalableFloatDef scalableCount;
+    public float radius = 1.5f;
+    public ScalableFloatDef scalableRadius;
+    public bool requireMineable = true;
+    public bool requireNaturalRock;
+    public bool includeResourceMineables = true;
+
+    public override SpellActionWorker CreateWorker() => new MineThingsActionWorker();
 }
 
 /// <summary>

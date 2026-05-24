@@ -110,17 +110,29 @@ public sealed class SpawnedThingMapComponent : MapComponent
         if (record?.SpellDef == null
             || record.ActionPath == null
             || record.ActionPath.Count == 0
-            || SpellActionPathUtility.ResolveAction(record.SpellDef, record.ActionPath) is not SpawnThingActionDef actionDef)
+            || SpellActionPathUtility.ResolveAction(record.SpellDef, record.ActionPath) is not SpellActionDef actionDef)
         {
             return;
         }
 
-        List<SpellActionDef> actions = lifecycleEvent switch
+        List<SpellActionDef> actions = actionDef switch
         {
-            SpawnedThingLifecycleEvent.Create => actionDef.onCreateActions,
-            SpawnedThingLifecycleEvent.Expire => actionDef.onExpireActions,
-            SpawnedThingLifecycleEvent.Remove => actionDef.onRemoveActions,
-            SpawnedThingLifecycleEvent.Break => actionDef.onBreakActions,
+            SpawnThingActionDef spawnThingActionDef => lifecycleEvent switch
+            {
+                SpawnedThingLifecycleEvent.Create => spawnThingActionDef.onCreateActions,
+                SpawnedThingLifecycleEvent.Expire => spawnThingActionDef.onExpireActions,
+                SpawnedThingLifecycleEvent.Remove => spawnThingActionDef.onRemoveActions,
+                SpawnedThingLifecycleEvent.Break => spawnThingActionDef.onBreakActions,
+                _ => null
+            },
+            SpawnWallLineActionDef wallLineActionDef => lifecycleEvent switch
+            {
+                SpawnedThingLifecycleEvent.Create => wallLineActionDef.onCreateActions,
+                SpawnedThingLifecycleEvent.Expire => wallLineActionDef.onExpireActions,
+                SpawnedThingLifecycleEvent.Remove => wallLineActionDef.onRemoveActions,
+                SpawnedThingLifecycleEvent.Break => wallLineActionDef.onBreakActions,
+                _ => null
+            },
             _ => null
         };
 
