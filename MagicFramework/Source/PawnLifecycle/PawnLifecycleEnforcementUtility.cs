@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reflection;
 using RimWorld;
 using Verse;
+using Verse.AI;
+using Verse.AI.Group;
 
 namespace MagicFramework.PawnLifecycle;
 
@@ -86,6 +88,11 @@ public static class PawnLifecycleEnforcementUtility
             EnforceGearPolicy(pawn, extension);
         }
 
+        if (extension.enforceControlPolicy)
+        {
+            EnforceControlPolicy(pawn, extension);
+        }
+
         if (extension.enforceWorkPolicy)
         {
             EnforceWorkPolicy(pawn, extension);
@@ -129,6 +136,11 @@ public static class PawnLifecycleEnforcementUtility
         if (extension.enforceGearPolicy)
         {
             EnforceGearPolicy(pawn, extension);
+        }
+
+        if (extension.enforceControlPolicy)
+        {
+            EnforceControlPolicy(pawn, extension);
         }
 
         if (extension.enforceMarkers)
@@ -317,6 +329,40 @@ public static class PawnLifecycleEnforcementUtility
         }
     }
 
+    public static void EnforceControlPolicy(Pawn pawn, PawnLifecycleExtension extension = null)
+    {
+        if (pawn == null)
+        {
+            return;
+        }
+
+        extension ??= PawnLifecycleUtility.GetLifecycle(pawn);
+        if (extension == null)
+        {
+            return;
+        }
+
+        CompPawnLifecycleEnforcer lifecycleComp = pawn.GetComp<CompPawnLifecycleEnforcer>();
+        Pawn master = lifecycleComp?.Master ?? pawn.playerSettings?.Master;
+
+        switch (extension.controlPolicy)
+        {
+            case PawnLifecycleControlPolicy.MasterBoundMinion:
+            case PawnLifecycleControlPolicy.DraftedFollower:
+            case PawnLifecycleControlPolicy.TemporarySummon:
+                ApplyMasterSettings(pawn, master, lifecycleComp);
+                break;
+            case PawnLifecycleControlPolicy.AutonomousGuest:
+            case PawnLifecycleControlPolicy.AutonomousServant:
+            case PawnLifecycleControlPolicy.AlliedNonControllable:
+            case PawnLifecycleControlPolicy.EventControlled:
+                Undraft(pawn);
+                ApplyMasterSettings(pawn, master, lifecycleComp);
+                ApplyAutonomousMasterDuty(pawn, master, lifecycleComp);
+                break;
+        }
+    }
+
     public static void NormalizeLifeStage(Pawn pawn)
     {
         if (pawn?.ageTracker == null)
@@ -432,6 +478,39 @@ public static class PawnLifecycleEnforcementUtility
             {
                 pawn.workSettings.SetPriority(workTypeDef, priority);
             }
+        }
+    }
+
+    private static void ApplyMasterSettings(Pawn pawn, Pawn master, CompPawnLifecycleEnforcer lifecycleComp)
+    {
+        if (pawn?.playerSettings == null || master == null)
+        {
+            return;
+        }
+
+        pawn.playerSettings.Master = master;
+        pawn.playerSettings.followDrafted = lifecycleComp?.FollowMasterWhileDrafted ?? true;
+        pawn.playerSettings.followFieldwork = lifecycleComp?.FollowMasterWhileFieldwork ?? true;
+    }
+
+    private static void ApplyAutonomousMasterDuty(Pawn pawn, Pawn master, CompPawnLifecycleEnforcer lifecycleComp)
+    {
+        if (pawn?.mindState == null || master == null || master.Destroyed)
+        {
+            return;
+        }
+
+        if (master.drafter?.Drafted == true && (lifecycleComp?.FollowMasterWhileDrafted ?? true))
+        {
+            pawn.mindState.duty = new PawnDuty(DutyDefOf.Defend, master, 8f);
+        }
+    }
+
+    private static void Undraft(Pawn pawn)
+    {
+        if (pawn?.drafter?.Drafted == true)
+        {
+            pawn.drafter.Drafted = false;
         }
     }
 

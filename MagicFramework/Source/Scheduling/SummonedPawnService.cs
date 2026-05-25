@@ -185,6 +185,10 @@ public sealed class SummonedPawnService
         summonedPawn.playerSettings.Master = casterPawn;
         summonedPawn.playerSettings.followDrafted = summonPawnActionDef.followMasterWhileDrafted;
         summonedPawn.playerSettings.followFieldwork = summonPawnActionDef.followMasterWhileFieldwork;
+        summonedPawn.GetComp<CompPawnLifecycleEnforcer>()?.AssignMaster(
+            casterPawn,
+            summonPawnActionDef.followMasterWhileDrafted,
+            summonPawnActionDef.followMasterWhileFieldwork);
     }
 
     private static void AssignDefensiveDuty(Pawn summonedPawn, Pawn casterPawn, SummonPawnActionDef summonPawnActionDef)

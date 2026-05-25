@@ -63,6 +63,7 @@
         <enforceNeeds>true</enforceNeeds>
         <enforceSocialPolicy>true</enforceSocialPolicy>
         <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceControlPolicy>true</enforceControlPolicy>
         <enforceWorkPolicy>true</enforceWorkPolicy>
         <enforceIdentityPolicy>true</enforceIdentityPolicy>
         <clearGeneratedHealthState>true</clearGeneratedHealthState>

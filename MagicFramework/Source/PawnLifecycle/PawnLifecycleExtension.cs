@@ -73,6 +73,7 @@ public enum PawnLifecycleControlPolicy
     Ordinary,
     HostileOnly,
     AutonomousGuest,
+    AutonomousServant,
     AlliedNonControllable,
     DraftedFollower,
     MasterBoundMinion,
@@ -182,6 +183,7 @@ public class PawnLifecycleExtension : DefModExtension
     public bool enforceNeeds;
     public bool enforceSocialPolicy;
     public bool enforceGearPolicy;
+    public bool enforceControlPolicy;
     public bool enforceWorkPolicy;
     public bool enforceIdentityPolicy;
     public bool clearGeneratedHealthState;
