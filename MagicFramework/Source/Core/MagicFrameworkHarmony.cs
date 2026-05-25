@@ -126,6 +126,11 @@ public static class MagicFrameworkPawnGizmoPatch
     {
         foreach (Gizmo gizmo in __result)
         {
+            if (IsBlockedDraftGizmo(__instance, gizmo))
+            {
+                continue;
+            }
+
             yield return gizmo;
         }
 
@@ -181,6 +186,46 @@ public static class MagicFrameworkPawnGizmoPatch
             {
                 yield return itemAbilityGizmo;
             }
+        }
+    }
+
+    private static bool IsBlockedDraftGizmo(Pawn pawn, Gizmo gizmo)
+    {
+        if (pawn == null || gizmo is not Command_Toggle command || !ShouldBlockDirectDraft(pawn))
+        {
+            return false;
+        }
+
+        return command.hotKey == KeyBindingDefOf.Command_ColonistDraft
+            || command.defaultLabel == "CommandDraftLabel".Translate();
+    }
+
+    internal static bool ShouldBlockDirectDraft(Pawn pawn)
+    {
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+        return extension?.controlPolicy is PawnLifecycleControlPolicy.AutonomousGuest
+            or PawnLifecycleControlPolicy.AutonomousServant
+            or PawnLifecycleControlPolicy.AlliedNonControllable
+            or PawnLifecycleControlPolicy.EventControlled;
+    }
+}
+
+[HarmonyPatch(typeof(Pawn_DraftController), nameof(Pawn_DraftController.Drafted), MethodType.Setter)]
+public static class MagicFrameworkPawnDraftControllerDraftedPatch
+{
+    private static readonly FieldInfo PawnField = AccessTools.Field(typeof(Pawn_DraftController), "pawn");
+
+    public static void Prefix(Pawn_DraftController __instance, ref bool value)
+    {
+        if (!value)
+        {
+            return;
+        }
+
+        Pawn pawn = PawnField?.GetValue(__instance) as Pawn;
+        if (MagicFrameworkPawnGizmoPatch.ShouldBlockDirectDraft(pawn))
+        {
+            value = false;
         }
     }
 }
@@ -371,7 +416,7 @@ public static class MagicFrameworkPawnApparelWearPatch
             return true;
         }
 
-        newApparel?.Destroy(DestroyMode.Vanish);
+        MagicFrameworkLifecycleGearPolicyPatchUtility.TryDropRejectedThing(pawn, newApparel);
         return false;
     }
 }
@@ -387,7 +432,7 @@ public static class MagicFrameworkPawnEquipmentAddEquipmentPatch
             return true;
         }
 
-        newEq?.Destroy(DestroyMode.Vanish);
+        MagicFrameworkLifecycleGearPolicyPatchUtility.TryDropRejectedThing(pawn, newEq);
         return false;
     }
 }
@@ -419,6 +464,22 @@ internal static class MagicFrameworkLifecycleGearPolicyPatchUtility
         PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
         return extension?.enforceGearPolicy == true
             && extension.gearPolicy is PawnLifecycleGearPolicy.None or PawnLifecycleGearPolicy.StripAll or PawnLifecycleGearPolicy.ApparelOnly;
+    }
+
+    public static void TryDropRejectedThing(Pawn pawn, Thing thing)
+    {
+        if (thing == null || thing.Destroyed || thing.Spawned)
+        {
+            return;
+        }
+
+        Map map = pawn?.MapHeld ?? pawn?.Map;
+        if (map == null)
+        {
+            return;
+        }
+
+        GenPlace.TryPlaceThing(thing, pawn.PositionHeld, map, ThingPlaceMode.Near);
     }
 }
 

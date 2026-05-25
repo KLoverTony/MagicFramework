@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace MagicFramework.PawnLifecycle;
@@ -191,5 +192,6 @@ public class PawnLifecycleExtension : DefModExtension
     public bool enforceMarkers;
 
     public List<HediffDef> markerHediffs;
+    public List<TraitDef> lifecycleTraits;
     public List<string> lifecycleTags;
 }

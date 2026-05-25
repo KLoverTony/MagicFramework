@@ -45,7 +45,7 @@
   <ThingDef ParentName="BasePawn">
     <defName>MFV_Skeleton</defName>
     <label>skeleton</label>
-    <description>A brittle undead servant assembled from grave-bone and held upright by necromantic command. It has no hunger, fear, or comfort, but the spell sustaining it eventually collapses.</description>
+    <description>A brittle undead guardian assembled from grave-bone and held upright by necromantic command. It has no hunger, fear, or comfort, and exists only briefly to fight for its summoner.</description>
     <modExtensions>
       <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
         <bodyForm>Skeletal</bodyForm>
@@ -54,7 +54,7 @@
         <socialPolicy>None</socialPolicy>
         <gearPolicy>StripAll</gearPolicy>
         <controlPolicy>MasterBoundMinion</controlPolicy>
-        <workPolicy>MundaneLabor</workPolicy>
+        <workPolicy>CombatOnly</workPolicy>
         <recoveryPolicy>None</recoveryPolicy>
         <deathPolicy>LeaveRemains</deathPolicy>
         <soulPolicy>CorpseOnlyHusk</soulPolicy>
@@ -74,6 +74,9 @@
           <li>MFV_SkeletalBody</li>
           <li>MFV_SkeletalLimitations</li>
         </markerHediffs>
+        <lifecycleTraits>
+          <li>MF_Lifecycle_CombatOnlyWork</li>
+        </lifecycleTraits>
       </li>
     </modExtensions>
     <inspectorTabs Inherit="False">

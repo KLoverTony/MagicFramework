@@ -28,7 +28,7 @@
   <ThingDef ParentName="BasePawn">
     <defName>AF_SkeletonRace</defName>
     <label>skeleton</label>
-    <description>A ritually bound skeleton animated by Ossanith bone rites. It has no living appetites, no breath, and only enough will to obey its binder.</description>
+    <description>A ritually bound skeleton animated by Ossanith bone rites. It has no living appetites, no breath, and only enough will to serve its binder.</description>
     <modExtensions>
       <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
         <bodyForm>Skeletal</bodyForm>
@@ -36,7 +36,7 @@
         <needsPolicy>None</needsPolicy>
         <socialPolicy>None</socialPolicy>
         <gearPolicy>StripAll</gearPolicy>
-        <controlPolicy>MasterBoundMinion</controlPolicy>
+        <controlPolicy>AutonomousServant</controlPolicy>
         <workPolicy>MundaneLabor</workPolicy>
         <recoveryPolicy>None</recoveryPolicy>
         <deathPolicy>LeaveRemains</deathPolicy>
@@ -51,6 +51,9 @@
         <enforceIdentityPolicy>true</enforceIdentityPolicy>
         <clearGeneratedHealthState>true</clearGeneratedHealthState>
         <enforceLifeStage>true</enforceLifeStage>
+        <lifecycleTraits>
+          <li>MF_Lifecycle_MundaneServantWork</li>
+        </lifecycleTraits>
       </li>
     </modExtensions>
     <inspectorTabs Inherit="False">
@@ -176,6 +179,7 @@
       <li>Anesthetize</li>
     </recipes>
     <comps>
+      <li Class="MagicFramework.PawnLifecycle.CompProperties_PawnLifecycleEnforcer" />
       <li Class="AeternusFaith.CompProperties_SkeletonUndeadCleanup" />
     </comps>
   </ThingDef>

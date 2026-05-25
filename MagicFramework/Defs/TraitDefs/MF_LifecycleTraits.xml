@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <TraitDef>
+    <defName>MF_Lifecycle_CombatOnlyWork</defName>
+    <commonality>0</commonality>
+    <disabledWorkTags>
+      <li>AllWork</li>
+    </disabledWorkTags>
+    <degreeDatas>
+      <li>
+        <label>combat-bound</label>
+        <description>{PAWN_nameDef} has no will for colony labor and can only fight under binding command.</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
+  <TraitDef>
+    <defName>MF_Lifecycle_MundaneServantWork</defName>
+    <commonality>0</commonality>
+    <disabledWorkTags>
+      <li>Caring</li>
+      <li>Social</li>
+      <li>Animals</li>
+      <li>Cooking</li>
+      <li>Hunting</li>
+      <li>ManualSkilled</li>
+      <li>PlantWork</li>
+      <li>Mining</li>
+      <li>Constructing</li>
+      <li>Crafting</li>
+      <li>Artistic</li>
+      <li>Intellectual</li>
+    </disabledWorkTags>
+    <degreeDatas>
+      <li>
+        <label>mundane servant</label>
+        <description>{PAWN_nameDef} can only perform simple service labor.</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
+</Defs>

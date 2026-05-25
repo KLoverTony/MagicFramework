@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_SettingsCategory>Magic Framework</MF_SettingsCategory>
+
+  <MF_SettingsInterface>Interface</MF_SettingsInterface>
+  <MF_UseColoredSpellText>Use colored spell text</MF_UseColoredSpellText>
+  <MF_UseColoredSpellTextTooltip>Adds color tags to generated spell summaries where RimWorld rich text supports them.</MF_UseColoredSpellTextTooltip>
+  <MF_ShowLatestMagicFrameworkNotes>Show latest Magic Framework notes</MF_ShowLatestMagicFrameworkNotes>
+
+  <MF_CasterLevelScaling>Caster level scaling</MF_CasterLevelScaling>
+  <MF_DamagePerPower>Damage per power</MF_DamagePerPower>
+  <MF_HealingPerPower>Healing per power</MF_HealingPerPower>
+  <MF_RadiusRangePerPower>Radius/range per power</MF_RadiusRangePerPower>
+  <MF_DurationPerPower>Duration per power</MF_DurationPerPower>
+  <MF_ManaCostReductionPerPower>Mana cost reduction per power</MF_ManaCostReductionPerPower>
+  <MF_CooldownReductionPerPower>Cooldown reduction per power</MF_CooldownReductionPerPower>
+  <MF_SettingValue>{0}: {1}</MF_SettingValue>
+
+  <MF_SoulHaunting>Soul haunting</MF_SoulHaunting>
+  <MF_MaxScheduledHauntingsPerMap>Max scheduled hauntings per map</MF_MaxScheduledHauntingsPerMap>
+  <MF_MinimumHauntingRiskScore>Minimum haunting risk score</MF_MinimumHauntingRiskScore>
+  <MF_MinimumHauntingDelay>Minimum haunting delay</MF_MinimumHauntingDelay>
+  <MF_MaximumHauntingDelay>Maximum haunting delay</MF_MaximumHauntingDelay>
+  <MF_SettingDaysValue>{0}: {1} day(s)</MF_SettingDaysValue>
+
+  <MF_DiagnosticLogging>Diagnostic logging</MF_DiagnosticLogging>
+  <MF_LogExecution>Execution</MF_LogExecution>
+  <MF_LogExecutionTooltip>Logs action execution and general spell runtime flow.</MF_LogExecutionTooltip>
+  <MF_LogCosts>Costs</MF_LogCosts>
+  <MF_LogCostsTooltip>Logs mana spending and cooldown starts.</MF_LogCostsTooltip>
+  <MF_LogRequirements>Requirements</MF_LogRequirements>
+  <MF_LogRequirementsTooltip>Logs requirement and cast validation diagnostics.</MF_LogRequirementsTooltip>
+  <MF_LogTargeting>Targeting</MF_LogTargeting>
+  <MF_LogTargetingTooltip>Logs target query and target resolution diagnostics.</MF_LogTargetingTooltip>
+  <MF_LogTriggers>Triggers</MF_LogTriggers>
+  <MF_LogTriggersTooltip>Logs armed spell trigger scheduling and firing.</MF_LogTriggersTooltip>
+  <MF_LogPersistentEffects>Persistent effects</MF_LogPersistentEffects>
+  <MF_LogPersistentEffectsTooltip>Logs persistent markers and generic persistent effects.</MF_LogPersistentEffectsTooltip>
+  <MF_LogWallZones>Wall zones</MF_LogWallZones>
+  <MF_LogWallZonesTooltip>Logs persistent wall zone creation and runtime diagnostics.</MF_LogWallZonesTooltip>
+  <MF_LogAreaZones>Area zones</MF_LogAreaZones>
+  <MF_LogAreaZonesTooltip>Logs persistent area zone creation and runtime diagnostics.</MF_LogAreaZonesTooltip>
+  <MF_LogStatModifiers>Stat modifiers</MF_LogStatModifiers>
+  <MF_LogStatModifiersTooltip>Logs timed and sustained stat modifier activity.</MF_LogStatModifiersTooltip>
+  <MF_LogDisplacement>Displacement</MF_LogDisplacement>
+  <MF_LogDisplacementTooltip>Logs knockback, pull, and teleport activity.</MF_LogDisplacementTooltip>
+  <MF_LogProjectiles>Projectiles</MF_LogProjectiles>
+  <MF_LogProjectilesTooltip>Logs projectile launch and impact runtime activity.</MF_LogProjectilesTooltip>
+  <MF_LogForceFields>Force fields</MF_LogForceFields>
+  <MF_LogForceFieldsTooltip>Logs maintained force-field absorption, reduction, upkeep, and breaks.</MF_LogForceFieldsTooltip>
+  <MF_LogEnhancements>Enhancements</MF_LogEnhancements>
+  <MF_LogEnhancementsTooltip>Logs enhancement rule diagnostics.</MF_LogEnhancementsTooltip>
+  <MF_LogVisuals>Visuals</MF_LogVisuals>
+  <MF_LogVisualsTooltip>Logs procedural visual effect playback.</MF_LogVisualsTooltip>
+  <MF_LogSummons>Summons</MF_LogSummons>
+  <MF_LogSummonsTooltip>Logs summoned pawns and temporary spawned things.</MF_LogSummonsTooltip>
+  <MF_DisableRoutineLogging>Disable Routine Logging</MF_DisableRoutineLogging>
+  <MF_EnableAllRoutineLogging>Enable All Routine Logging</MF_EnableAllRoutineLogging>
+
+  <MF_DebugLogSnapshots>Debug log snapshots</MF_DebugLogSnapshots>
+  <MF_LogDelayedRuntime>Log Delayed Runtime</MF_LogDelayedRuntime>
+  <MF_LogArmedTriggers>Log Armed Triggers</MF_LogArmedTriggers>
+  <MF_LogPersistentEffectsSnapshot>Log Persistent Effects</MF_LogPersistentEffectsSnapshot>
+  <MF_LogWallZonesSnapshot>Log Wall Zones</MF_LogWallZonesSnapshot>
+  <MF_LogAreaZonesSnapshot>Log Area Zones</MF_LogAreaZonesSnapshot>
+</LanguageData>

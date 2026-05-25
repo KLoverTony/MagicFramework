@@ -10,6 +10,8 @@ namespace MagicFramework.PawnLifecycle;
 
 public static class PawnLifecycleEnforcementUtility
 {
+    private const int DefaultLifecycleBiologicalAgeYears = 30;
+
     private static readonly string[] NonFoodRestNeedDefNames =
     {
         "Joy",
@@ -247,9 +249,14 @@ public static class PawnLifecycleEnforcementUtility
 
             if (pawn.story.traits != null)
             {
+                EnforceLifecycleTraits(pawn, extension);
+
                 foreach (Trait trait in pawn.story.traits.TraitsSorted.ToList())
                 {
-                    pawn.story.traits.RemoveTrait(trait, false);
+                    if (trait?.def == null || extension.lifecycleTraits?.Contains(trait.def) != true)
+                    {
+                        pawn.story.traits.RemoveTrait(trait, false);
+                    }
                 }
             }
         }
@@ -303,7 +310,7 @@ public static class PawnLifecycleEnforcementUtility
 
     public static void EnforceWorkPolicy(Pawn pawn, PawnLifecycleExtension extension = null)
     {
-        if (pawn?.workSettings == null)
+        if (pawn == null)
         {
             return;
         }
@@ -314,19 +321,9 @@ public static class PawnLifecycleEnforcementUtility
             return;
         }
 
-        switch (extension.workPolicy)
-        {
-            case PawnLifecycleWorkPolicy.None:
-            case PawnLifecycleWorkPolicy.CombatOnly:
-                pawn.workSettings.DisableAll();
-                break;
-            case PawnLifecycleWorkPolicy.HaulingCleaningOnly:
-                SetAllowedWork(pawn, ("Hauling", 1), ("Cleaning", 2));
-                break;
-            case PawnLifecycleWorkPolicy.MundaneLabor:
-                SetAllowedWork(pawn, ("Hauling", 1), ("Cleaning", 2), ("BasicWorker", 2), ("Firefighter", 3));
-                break;
-        }
+        EnforceLifecycleTraits(pawn, extension);
+        pawn.Notify_DisabledWorkTypesChanged();
+        pawn.workSettings?.Notify_DisabledWorkTypesChanged();
     }
 
     public static void EnforceControlPolicy(Pawn pawn, PawnLifecycleExtension extension = null)
@@ -363,6 +360,24 @@ public static class PawnLifecycleEnforcementUtility
         }
     }
 
+    public static bool IsWorkTypeAllowed(PawnLifecycleExtension extension, WorkTypeDef workTypeDef)
+    {
+        if (extension == null || workTypeDef == null)
+        {
+            return true;
+        }
+
+        string defName = workTypeDef.defName;
+        return extension.workPolicy switch
+        {
+            PawnLifecycleWorkPolicy.None => false,
+            PawnLifecycleWorkPolicy.CombatOnly => false,
+            PawnLifecycleWorkPolicy.HaulingCleaningOnly => defName is "Hauling" or "Cleaning",
+            PawnLifecycleWorkPolicy.MundaneLabor => defName is "Hauling" or "Cleaning" or "BasicWorker" or "Firefighter",
+            _ => true
+        };
+    }
+
     public static void NormalizeLifeStage(Pawn pawn)
     {
         if (pawn?.ageTracker == null)
@@ -370,7 +385,7 @@ public static class PawnLifecycleEnforcementUtility
             return;
         }
 
-        pawn.ageTracker.AgeBiologicalTicks = 0L;
+        pawn.ageTracker.AgeBiologicalTicks = (long)DefaultLifecycleBiologicalAgeYears * GenDate.TicksPerYear;
         pawn.ageTracker.AgeChronologicalTicks = 0L;
         LockedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
         CachedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
@@ -418,6 +433,28 @@ public static class PawnLifecycleEnforcementUtility
         }
     }
 
+    public static void EnforceLifecycleTraits(Pawn pawn, PawnLifecycleExtension extension = null)
+    {
+        if (pawn?.story?.traits == null)
+        {
+            return;
+        }
+
+        extension ??= PawnLifecycleUtility.GetLifecycle(pawn);
+        if (extension?.lifecycleTraits == null)
+        {
+            return;
+        }
+
+        foreach (TraitDef traitDef in extension.lifecycleTraits)
+        {
+            if (traitDef != null && !pawn.story.traits.HasTrait(traitDef))
+            {
+                pawn.story.traits.GainTrait(new Trait(traitDef, 0, true), suppressConflicts: true);
+            }
+        }
+    }
+
     private static void RemoveNonFoodRestNeeds(Pawn pawn)
     {
         foreach (string defName in NonFoodRestNeedDefNames)
@@ -459,26 +496,6 @@ public static class PawnLifecycleEnforcementUtility
         }
 
         RemoveNeedMethod?.Invoke(pawn.needs, new object[] { needDef });
-    }
-
-    private static void SetAllowedWork(Pawn pawn, params (string defName, int priority)[] allowedWork)
-    {
-        if (pawn?.workSettings == null)
-        {
-            return;
-        }
-
-        pawn.workSettings.EnableAndInitializeIfNotAlreadyInitialized();
-        pawn.workSettings.DisableAll();
-
-        foreach ((string defName, int priority) in allowedWork)
-        {
-            WorkTypeDef workTypeDef = DefDatabase<WorkTypeDef>.GetNamedSilentFail(defName);
-            if (workTypeDef != null && !pawn.WorkTypeIsDisabled(workTypeDef))
-            {
-                pawn.workSettings.SetPriority(workTypeDef, priority);
-            }
-        }
     }
 
     private static void ApplyMasterSettings(Pawn pawn, Pawn master, CompPawnLifecycleEnforcer lifecycleComp)

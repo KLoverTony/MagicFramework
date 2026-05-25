@@ -53,6 +53,8 @@ namespace AeternusFaith
 
     public static class SkeletonUndeadUtility
     {
+        private const int DefaultUndeadBiologicalAgeYears = 30;
+
         private static readonly string[] RemovedNeedDefNames =
         {
             "Food",
@@ -388,7 +390,7 @@ namespace AeternusFaith
                 (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
                 return;
 
-            pawn.ageTracker.AgeBiologicalTicks = 0L;
+            pawn.ageTracker.AgeBiologicalTicks = (long)DefaultUndeadBiologicalAgeYears * GenDate.TicksPerYear;
             pawn.ageTracker.AgeChronologicalTicks = 0L;
             LockedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
             CachedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
