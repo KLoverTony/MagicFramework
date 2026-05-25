@@ -55,15 +55,8 @@ namespace AeternusFaith.Undead.Spectral
                 return false;
             }
 
-            foreach (IntVec3 cell in GenAdj.CardinalDirections.Select(offset => parent.Position + offset))
-            {
-                if (!cell.InBounds(parent.Map))
-                    continue;
-
-                circle = cell.GetThingList(parent.Map).FirstOrDefault(t => t.def == Props.circleDef);
-                if (circle != null)
-                    return true;
-            }
+            if (RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out circle))
+                return true;
 
             failReason = "Requires an orthogonally adjacent Shroudhymn ritual center.";
             return false;

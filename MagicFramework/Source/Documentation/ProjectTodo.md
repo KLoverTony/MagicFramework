@@ -104,6 +104,7 @@ AeternusFaith remains important, but it is no longer the main active release ban
 School identity and advanced magic after the MFVanilla completion pass:
 - MF-051 Forbidden Lore expansion beyond Dominate Will and Forbidden Plague.
 - MF-052 Illusionary pawns.
+- MF-063 Shared undead and construct pawn foundations before deeper Necromancy, Fleshcraft, and Soulcraft creature work.
 - MF-053 Necromancy undead pawns.
 - MF-054 Fleshcraft golems.
 - MF-055 Planar exploration expansion beyond the current gate/pocket foundation.

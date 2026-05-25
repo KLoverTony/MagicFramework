@@ -19,10 +19,45 @@
     </genericWounds>
   </FleshTypeDef>
 
+  <LifeStageDef>
+    <defName>AF_UndeadFullyFormed</defName>
+    <label>fully formed</label>
+    <visible>false</visible>
+  </LifeStageDef>
+
   <ThingDef ParentName="BasePawn">
     <defName>AF_SkeletonRace</defName>
     <label>skeleton</label>
     <description>A ritually bound skeleton animated by Ossanith bone rites. It has no living appetites, no breath, and only enough will to obey its binder.</description>
+    <modExtensions>
+      <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
+        <bodyForm>Skeletal</bodyForm>
+        <intelligence>Mindless</intelligence>
+        <needsPolicy>None</needsPolicy>
+        <socialPolicy>None</socialPolicy>
+        <gearPolicy>StripAll</gearPolicy>
+        <controlPolicy>MasterBoundMinion</controlPolicy>
+        <workPolicy>MundaneLabor</workPolicy>
+        <recoveryPolicy>None</recoveryPolicy>
+        <deathPolicy>LeaveRemains</deathPolicy>
+        <soulPolicy>ReleasedSourceSoul</soulPolicy>
+        <durationPolicy>Permanent</durationPolicy>
+        <isUndead>true</isUndead>
+        <enforceNeeds>true</enforceNeeds>
+        <enforceSocialPolicy>true</enforceSocialPolicy>
+        <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceWorkPolicy>true</enforceWorkPolicy>
+        <enforceIdentityPolicy>true</enforceIdentityPolicy>
+        <clearGeneratedHealthState>true</clearGeneratedHealthState>
+        <enforceLifeStage>true</enforceLifeStage>
+      </li>
+    </modExtensions>
+    <inspectorTabs Inherit="False">
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_FormingCaravan</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Log</li>
+    </inspectorTabs>
     <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
     <statBases>
       <MarketValue>0</MarketValue>
@@ -120,7 +155,7 @@
       </ageGenerationCurve>
       <lifeStageAges>
         <li>
-          <def>HumanlikeAdult</def>
+          <def>AF_UndeadFullyFormed</def>
           <minAge>0</minAge>
         </li>
       </lifeStageAges>

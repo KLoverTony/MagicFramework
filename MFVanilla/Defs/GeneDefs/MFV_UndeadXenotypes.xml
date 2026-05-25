@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <XenotypeDef MayRequire="Ludeon.RimWorld.Biotech">
+    <defName>MFV_SkeletonXenotype</defName>
+    <label>skeleton</label>
+    <description>An animated skeletal undead state.</description>
+    <descriptionShort>An animated skeletal undead state.</descriptionShort>
+    <iconPath>UI/Icons/Xenotypes/Baseliner</iconPath>
+    <displayPriority>2200</displayPriority>
+  </XenotypeDef>
+
+</Defs>

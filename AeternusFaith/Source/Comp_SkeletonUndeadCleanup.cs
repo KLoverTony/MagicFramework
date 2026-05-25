@@ -22,6 +22,7 @@ namespace AeternusFaith
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
+            SkeletonUndeadUtility.RepairUndeadRenderingState(Pawn);
             SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
@@ -32,6 +33,7 @@ namespace AeternusFaith
             base.PostExposeData();
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
+                SkeletonUndeadUtility.RepairUndeadRenderingState(Pawn);
                 SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
@@ -41,6 +43,7 @@ namespace AeternusFaith
         public override void CompTickRare()
         {
             base.CompTickRare();
+            SkeletonUndeadUtility.RepairUndeadRenderingState(Pawn);
             SkeletonUndeadUtility.EnforceUndeadNeeds(Pawn);
             SkeletonUndeadUtility.SuppressUndeadSocialInteractions(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
@@ -111,6 +114,46 @@ namespace AeternusFaith
             ClearHumanIdentity(pawn);
             if (resetSkills)
                 ResetSkills(pawn);
+        }
+
+        public static void ConvertPawnToSkeleton(Pawn pawn, PawnKindDef skeletonKindDef, string name = "skeleton", bool resetSkills = true)
+        {
+            if (pawn == null || skeletonKindDef?.race == null)
+                return;
+
+            pawn.def = skeletonKindDef.race;
+            pawn.kindDef = skeletonKindDef;
+            pawn.gender = Gender.Male;
+            if (!name.NullOrEmpty())
+                pawn.Name = new NameSingle(name);
+
+            ResetPawnRenderer(pawn);
+            NormalizeSkeletonLifeStage(pawn);
+            EnsureUndeadCleanupComp(pawn);
+            ApplySkeletonAppearance(pawn);
+            RemoveLivingResurrectionHediffs(pawn);
+            EnforceUndeadState(pawn, resetSkills);
+            RemoveNonUndeadHediffs(pawn);
+            ApplyRaceBasedUndeadHediffs(pawn);
+            ApplyRaceBasedUndeadXenotype(pawn);
+            SuppressUndeadSocialInteractions(pawn);
+            ResetPawnRenderer(pawn);
+            TryInitializeRenderer(pawn);
+        }
+
+        public static void RepairUndeadRenderingState(Pawn pawn)
+        {
+            if (!IsUndeadRace(pawn))
+                return;
+
+            pawn.gender = Gender.Male;
+
+            if (pawn.def?.defName == "AF_SkeletonRace")
+            {
+                ApplySkeletonAppearance(pawn);
+            }
+
+            ResetPawnRenderer(pawn);
         }
 
         public static void ApplyUndeadHediffs(Pawn pawn, string specializedHediffDefName)
@@ -293,12 +336,14 @@ namespace AeternusFaith
             if (pawn == null)
                 return;
 
-            pawn.gender = Gender.None;
+            pawn.gender = Gender.Male;
             pawn.relations?.ClearAllRelations();
 
             if (pawn.story == null)
                 return;
 
+            ChildhoodField?.SetValue(pawn.story, null);
+            AdulthoodField?.SetValue(pawn.story, null);
             TitleField?.SetValue(pawn.story, null);
             BirthLastNameField?.SetValue(pawn.story, null);
 
@@ -343,6 +388,8 @@ namespace AeternusFaith
                 (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
                 return;
 
+            pawn.ageTracker.AgeBiologicalTicks = 0L;
+            pawn.ageTracker.AgeChronologicalTicks = 0L;
             LockedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
             CachedLifeStageIndexField?.SetValue(pawn.ageTracker, 0);
         }
@@ -369,6 +416,51 @@ namespace AeternusFaith
                 skill.passion = Passion.None;
                 skill.xpSinceLastLevel = 0f;
                 skill.xpSinceMidnight = 0f;
+            }
+        }
+
+        public static void ApplySkeletonAppearance(Pawn skeleton)
+        {
+            if (skeleton?.story == null)
+                return;
+
+            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("AF_SkeletonThin") ??
+                                      DefDatabase<BodyTypeDef>.GetNamedSilentFail("Thin");
+            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("AF_SkeletonHead") ??
+                                      DefDatabase<HeadTypeDef>.GetNamedSilentFail("Skull");
+            HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
+
+            if (bodyTypeDef != null)
+                skeleton.story.bodyType = bodyTypeDef;
+            if (headTypeDef != null)
+                skeleton.story.headType = headTypeDef;
+            if (hairDef != null)
+                skeleton.story.hairDef = hairDef;
+
+            BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
+            if (beardDef != null && skeleton.style != null)
+                skeleton.style.beardDef = beardDef;
+        }
+
+        public static void ResetPawnRenderer(Pawn pawn)
+        {
+            if (pawn?.Drawer?.renderer == null)
+                return;
+
+            pawn.Drawer.renderer = new PawnRenderer(pawn);
+            pawn.Drawer.renderer.renderTree = new PawnRenderTree(pawn);
+            pawn.Drawer.renderer.SetAllGraphicsDirty();
+        }
+
+        public static void TryInitializeRenderer(Pawn pawn)
+        {
+            try
+            {
+                pawn?.Drawer?.renderer?.EnsureGraphicsInitialized();
+            }
+            catch (System.Exception ex)
+            {
+                Log.Warning("[AeternusFaith] Could not initialize undead renderer for " + (pawn?.LabelShort ?? "<null>") + ": " + ex);
             }
         }
 

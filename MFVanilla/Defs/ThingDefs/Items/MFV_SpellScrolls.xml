@@ -21,7 +21,7 @@
     <alwaysHaulable>true</alwaysHaulable>
     <stackLimit>1</stackLimit>
     <thingCategories>
-      <li>ItemsMisc</li>
+      <li>MFV_SpellScrolls</li>
     </thingCategories>
     <tradeTags>
       <li>MFV_SpellScroll</li>

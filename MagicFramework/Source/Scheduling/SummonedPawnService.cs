@@ -3,6 +3,7 @@ using MagicFramework.Context;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
 using MagicFramework.Execution;
+using MagicFramework.PawnLifecycle;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -173,7 +174,10 @@ public sealed class SummonedPawnService
             return;
         }
 
-        if (summonedPawn.training == null || !summonedPawn.training.HasLearned(TrainableDefOf.Obedience))
+        bool isMasterBoundLifecyclePawn = PawnLifecycleUtility.TryGetLifecycle(summonedPawn, out PawnLifecycleExtension extension, out _)
+            && extension.controlPolicy == PawnLifecycleControlPolicy.MasterBoundMinion;
+        if (!isMasterBoundLifecyclePawn
+            && (summonedPawn.training == null || !summonedPawn.training.HasLearned(TrainableDefOf.Obedience)))
         {
             return;
         }

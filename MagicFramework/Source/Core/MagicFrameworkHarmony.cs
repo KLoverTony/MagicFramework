@@ -3,6 +3,7 @@ using System.Reflection;
 using HarmonyLib;
 using MagicFramework.Definitions;
 using MagicFramework.Debug;
+using MagicFramework.PawnLifecycle;
 using MagicFramework.Scheduling;
 using RimWorld;
 using UnityEngine;
@@ -302,6 +303,122 @@ public static class MagicFrameworkInfoCardImagePatch
 
         float width = container.height * textureRatio;
         return new Rect(container.x + ((container.width - width) / 2f), container.y, width, container.height);
+    }
+}
+
+[HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
+public static class MagicFrameworkPawnInteractionsTryInteractWithPatch
+{
+    public static bool Prefix(Pawn ___pawn, Pawn recipient, ref bool __result)
+    {
+        if (ShouldSuppressLifecycleInteraction(___pawn) || ShouldSuppressLifecycleInteraction(recipient))
+        {
+            __result = false;
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool ShouldSuppressLifecycleInteraction(Pawn pawn)
+    {
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+        return extension?.enforceSocialPolicy == true
+            && extension.socialPolicy is PawnLifecycleSocialPolicy.None or PawnLifecycleSocialPolicy.SuppressedBothWays;
+    }
+}
+
+[HarmonyPatch(typeof(Pawn_InteractionsTracker), "TryInteractRandomly")]
+public static class MagicFrameworkPawnInteractionsTryInteractRandomlyPatch
+{
+    public static bool Prefix(Pawn ___pawn, ref bool __result)
+    {
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(___pawn);
+        if (extension?.enforceSocialPolicy != true
+            || extension.socialPolicy is not (PawnLifecycleSocialPolicy.None or PawnLifecycleSocialPolicy.SuppressedBothWays))
+        {
+            return true;
+        }
+
+        __result = false;
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(Apparel), nameof(Apparel.PawnCanWear))]
+public static class MagicFrameworkApparelPawnCanWearPatch
+{
+    public static bool Prefix(Pawn pawn, ref bool __result)
+    {
+        if (!MagicFrameworkLifecycleGearPolicyPatchUtility.BlocksApparel(pawn))
+        {
+            return true;
+        }
+
+        __result = false;
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(Pawn_ApparelTracker), nameof(Pawn_ApparelTracker.Wear))]
+public static class MagicFrameworkPawnApparelWearPatch
+{
+    public static bool Prefix(Pawn_ApparelTracker __instance, Apparel newApparel)
+    {
+        Pawn pawn = MagicFrameworkLifecycleGearPolicyPatchUtility.ResolvePawn(__instance);
+        if (!MagicFrameworkLifecycleGearPolicyPatchUtility.BlocksApparel(pawn))
+        {
+            return true;
+        }
+
+        newApparel?.Destroy(DestroyMode.Vanish);
+        return false;
+    }
+}
+
+[HarmonyPatch(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.AddEquipment))]
+public static class MagicFrameworkPawnEquipmentAddEquipmentPatch
+{
+    public static bool Prefix(Pawn_EquipmentTracker __instance, ThingWithComps newEq)
+    {
+        Pawn pawn = MagicFrameworkLifecycleGearPolicyPatchUtility.ResolvePawn(__instance);
+        if (!MagicFrameworkLifecycleGearPolicyPatchUtility.BlocksEquipment(pawn))
+        {
+            return true;
+        }
+
+        newEq?.Destroy(DestroyMode.Vanish);
+        return false;
+    }
+}
+
+internal static class MagicFrameworkLifecycleGearPolicyPatchUtility
+{
+    private static readonly FieldInfo ApparelTrackerPawnField = AccessTools.Field(typeof(Pawn_ApparelTracker), "pawn");
+    private static readonly FieldInfo EquipmentTrackerPawnField = AccessTools.Field(typeof(Pawn_EquipmentTracker), "pawn");
+
+    public static Pawn ResolvePawn(Pawn_ApparelTracker tracker)
+    {
+        return ApparelTrackerPawnField?.GetValue(tracker) as Pawn;
+    }
+
+    public static Pawn ResolvePawn(Pawn_EquipmentTracker tracker)
+    {
+        return EquipmentTrackerPawnField?.GetValue(tracker) as Pawn;
+    }
+
+    public static bool BlocksApparel(Pawn pawn)
+    {
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+        return extension?.enforceGearPolicy == true
+            && extension.gearPolicy is PawnLifecycleGearPolicy.None or PawnLifecycleGearPolicy.StripAll or PawnLifecycleGearPolicy.WeaponsOnly;
+    }
+
+    public static bool BlocksEquipment(Pawn pawn)
+    {
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+        return extension?.enforceGearPolicy == true
+            && extension.gearPolicy is PawnLifecycleGearPolicy.None or PawnLifecycleGearPolicy.StripAll or PawnLifecycleGearPolicy.ApparelOnly;
     }
 }
 

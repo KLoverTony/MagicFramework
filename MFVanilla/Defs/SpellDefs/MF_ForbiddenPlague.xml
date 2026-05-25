@@ -41,9 +41,6 @@
 
     <power>
       <casterLevelFactor>1</casterLevelFactor>
-      <scaledAttributes>
-        <li>Severity</li>
-      </scaledAttributes>
     </power>
 
     <targeting>

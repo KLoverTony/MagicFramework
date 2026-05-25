@@ -56,13 +56,9 @@ namespace AeternusFaith
                 return false;
             }
 
-            IntVec3[] adjacentCells = GenAdj.CardinalDirections.Select(offset => parent.Position + offset).ToArray();
-            foreach (IntVec3 cell in adjacentCells)
+            foreach (Thing candidateCircle in AdjacentRitualTargets())
             {
-                if (!cell.InBounds(parent.Map))
-                    continue;
-
-                circle = cell.GetThingList(parent.Map).FirstOrDefault(t => t.def == Props.circleDef);
+                circle = candidateCircle;
                 if (circle == null)
                     continue;
 
@@ -73,6 +69,14 @@ namespace AeternusFaith
 
             failReason = "Requires an orthogonally adjacent Ossanith circle with an empty ossuary bone box in its center.";
             return false;
+        }
+
+        private IEnumerable<Thing> AdjacentRitualTargets()
+        {
+            if (RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out Thing circle))
+            {
+                yield return circle;
+            }
         }
 
         private void OpenRitualDialog()

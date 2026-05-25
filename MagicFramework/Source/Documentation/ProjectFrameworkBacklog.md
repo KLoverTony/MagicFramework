@@ -98,6 +98,84 @@ Remaining capabilities:
 - clearer UI/status indication for temporary summons
 
 
+### MF-063 Shared Undead And Construct Pawn Foundations
+
+Goal: move reusable undead, spirit, and magical construct lifecycle behavior into MagicFramework so AeternusFaith, MFVanilla, and future content packs can define custom creature types without copying brittle race-specific cleanup code.
+
+Design direction:
+- keep MagicFramework responsible for neutral infrastructure: lifecycle policy, needs control, social/interaction policy, apparel/equipment policy, player control policy, corpse/soul hooks, save/load cleanup, and readable status markers
+- keep content mods responsible for doctrine, art, ritual flavor, research gates, named hediffs/xenotypes, pawn kinds, and balance
+- distinguish undead, spirits, and constructs even when they share implementation hooks
+- prefer data-driven profiles or mod extensions over hardcoded race def names such as AeternusFaith's current skeleton/spectre checks
+- build the foundation around explicit behavioral qualities instead of assuming all undead behave like skeletons
+
+Current source examples:
+- AeternusFaith has the richest undead lifecycle today: Ossanith skeletons, Shroudhymn/spectral pawns, undead hediff markers, xenotype application, need removal, social suppression, corpse consumption, and soul-state interaction.
+- MFVanilla has spell/content creatures that should eventually consume the same framework surface: temporary necromancy skeletons, flesh golems, arcane automata, stone golems, and future lich or revenant content.
+- MFVanilla's current constructs intentionally lean on reliable mechanoid-style bases, which is acceptable for hostile site defenders but should not become the only foundation for soul-aware undead.
+
+Current state:
+- Initial framework-only XML/API surface exists under `MagicFramework.PawnLifecycle`.
+- `PawnLifecycleExtension` can be attached to a pawn race `ThingDef` or `PawnKindDef`; pawn-kind policy overrides race policy.
+- The first policy axes are body form, intelligence, needs, social behavior, gear, control, work, recovery, death cleanup, soul contract, and duration/upkeep.
+- `PawnLifecycleUtility` provides read-only query helpers for lifecycle detection, undead/spirit/construct classification, lifecycle tags, marker hediffs, and debug summaries.
+- `CompPawnLifecycleEnforcer` and `PawnLifecycleEnforcementUtility` provide the first opt-in runtime enforcement layer for needs, social suppression, gear stripping, life-stage normalization, and marker hediffs.
+- Dev actions can log a selected pawn's lifecycle profile or all profiled pawns on the current map.
+- XML examples live in [PawnLifecycleProfiles.md](PawnLifecycleProfiles.md).
+- MFVanilla's temporary `MFV_Skeleton` now has the first real lifecycle profile and enforcer attachment for smoke testing.
+- Recovery, death cleanup, control, work behavior, soul contracts, duration/upkeep, and advanced interaction policies are still definition/query-only.
+
+Behavioral qualities to model:
+- hunger/eating: none, ordinary food, corpse/flesh consumption, mana upkeep, essence drain, or content-defined feeding
+- sleep/rest: none, ordinary rest, periodic dormancy, phylactery/anchor recharge, daylight dormancy, or content-defined rest
+- mood/joy/comfort: removed, suppressed, ordinary, anchor-driven, master-driven, or special spirit-emotion behavior
+- social interaction: none, suppressed both ways, limited non-social presence, eerie/aura-only impact, ordinary conversation, pseudo-relationship memory, or full living-style relationships
+- apparel and equipment: stripped, no apparel, equipment-only, apparel-only, full clothing/weapon use, restricted loadout, or content-defined ritual gear
+- player control: hostile only, autonomous guest, allied non-controllable, drafted follower, full colonist-like pawn, master-bound minion, temporary spell summon, or event-controlled entity
+- work behavior: no work, hauling/cleaning only, combat only, limited labor set, full work tab, ritual-only duties, or content-defined work settings
+- medical/repair: cannot heal, ordinary medicine, repair job, regeneration, reassembly, corpse replacement, phylactery reform, or content-defined recovery
+- death/despawn cleanup: corpse remains, ash/bone pile, vanishes, returns to anchor, releases soul, corrupts soul, creates haunting risk, drops construct materials, or triggers content actions
+- soul/corpse contract: no soul, corpse-only husk, released source soul, bound source soul, active spirit, split echo, consumed soul, corrupted soul, phylactery-anchored soul, or constructed non-soul core
+- duration/upkeep: permanent, temporary timer, maintained spell, master/conductor upkeep, anchor upkeep, map/site bound, or content-defined expiry
+
+Type policy examples:
+- skeletons: no hunger, no sleep, no ordinary social interaction, usually stripped/no apparel unless explicitly authored, limited work/combat roles, usually corpse-only husks with released souls
+- spectres/shades: no hunger or sleep, limited or aura-style interaction, normally no apparel/equipment, often autonomous guest or duty-bound rather than player-managed, can be active spirits rather than corpse husks
+- revenants: may retain partial identity, may interact socially in limited ways, may use gear, often bound to a memory/soul contract, likely not ordinary full colonists by default
+- liches: no ordinary hunger/sleep, full intelligence, likely full apparel/equipment and strong player control, explicit phylactery identity, death/reform lifecycle, and careful relationship/magic-state preservation
+- flesh golems: no soul or unstable body-soul contract depending on content, may have no hunger/sleep, usually no social interaction, repair/regeneration rather than medicine, limited control
+- arcane constructs: no soul, no hunger/sleep/mood/social, no apparel, equipment only if built into the pawn kind, repair/material drops, command-core or faction control rather than undead soul behavior
+
+First implementation pass:
+1. Audit current AeternusFaith and MFVanilla creature behavior and write a small matrix of existing values for hunger, sleep, mood, social, apparel, equipment, control, work, healing, death cleanup, soul state, and duration.
+2. Define a framework data shape, likely `UndeadLifecycleExtension`, `ConstructLifecycleExtension`, or one shared `PawnLifecycleExtension`, with conservative defaults and explicit opt-ins for risky behavior.
+3. Add framework helpers for detecting lifecycle categories and querying policy by pawn/race/kind instead of checking content def names directly.
+4. Extract the generic parts of AeternusFaith's undead cleanup into MagicFramework: need removal, life-stage normalization, social suppression, gear stripping, marker application, and save/load re-enforcement.
+5. Keep AeternusFaith-specific marker defs, xenotype defs, Bonewright rules, cathedra rules, and ritual messages in AeternusFaith, but make them call framework helpers.
+6. Add XML parent defs or example profiles for base skeletal undead, spectral undead, revenant-like undead, flesh construct, and arcane construct.
+7. Migrate AeternusFaith skeletons and spectres to use the framework lifecycle profile while preserving current gameplay and save/load behavior.
+8. Decide whether MFVanilla's spell skeleton should remain a simple temporary mechanoid-style pawn or move to the shared skeletal undead profile.
+9. Decide whether MFVanilla automata stay on construct-only profiles and whether the flesh golem needs a hybrid flesh-construct profile.
+10. Add debug/readout support that explains a pawn's lifecycle profile: hunger, sleep, interaction, apparel/equipment, control, work, death cleanup, soul contract, and duration/upkeep.
+
+Iteration slices:
+1. Documentation and audit only: no code, just the behavior matrix and target profiles. - started through this plan
+2. Read-only framework query helpers and lifecycle profile definitions. - initial `PawnLifecycleExtension` and `PawnLifecycleUtility` added
+3. Generic cleanup comp/helper implementation with no content migration. - initial opt-in enforcer added for needs, social, gear, life-stage, and marker hediffs
+4. AeternusFaith skeleton migration and smoke test.
+5. AeternusFaith spectre migration and smoke test.
+6. MFVanilla skeleton/necromancy decision and migration if approved. - `MFV_Skeleton` converted first for smoke testing
+7. Construct/flesh-golem profile pass after undead migration is stable.
+8. Advanced identity pass for revenants, liches, pseudo-relationship memory, and phylactery-style reform.
+
+Success criteria:
+- content mods can author new undead or constructs by choosing explicit lifecycle policies instead of copying cleanup code
+- skeletons, spectres, revenants, liches, flesh golems, and constructs can differ meaningfully in hunger, sleep, social behavior, gear use, controllability, work, healing, and death cleanup
+- AeternusFaith keeps its doctrine-specific identity while MagicFramework owns the reusable lifecycle surface
+- MFVanilla can add Necromancy, Fleshcraft, and Soulcraft creatures without turning each one into a one-off pawn hack
+- save/load, despawn, death, map removal, and soul/corpse state are testable per profile
+
+
 ### MF-016 Spell Details UI
 
 Goal: let players inspect spell metadata and active modifiers without dev logs.

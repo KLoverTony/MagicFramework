@@ -42,6 +42,9 @@ First implementation pass:
 
 Goal: add undead pawns under Necromancy research as the first MFVanilla necromantic creature feature.
 
+Framework dependency:
+- Use the shared lifecycle foundation in [MF-063 Shared Undead And Construct Pawn Foundations](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations) before expanding beyond the current temporary skeleton spell pattern.
+
 Design direction:
 - distinguish MFVanilla undead from AeternusFaith ritual undead; MFVanilla should be spell/research driven, while AeternusFaith remains ideology/rite driven
 - begin with temporary or limited-control undead before persistent colony members

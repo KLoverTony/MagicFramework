@@ -17,6 +17,13 @@
     <leaderTitle>thrall</leaderTitle>
     <techLevel>Neolithic</techLevel>
     <basicMemberKind>Villager</basicMemberKind>
+    <backstoryFilters>
+      <li>
+        <categories>
+          <li>Outlander</li>
+        </categories>
+      </li>
+    </backstoryFilters>
     <colorSpectrum>
       <li>(0.35, 0.18, 0.55)</li>
       <li>(0.55, 0.25, 0.75)</li>

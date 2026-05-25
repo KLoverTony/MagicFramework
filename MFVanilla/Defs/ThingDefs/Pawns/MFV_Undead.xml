@@ -1,28 +1,110 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <ThingDef ParentName="BaseMechanoidWalker">
+  <FleshTypeDef>
+    <defName>MFV_Bone</defName>
+    <corpseCategory>CorpsesAnimal</corpseCategory>
+    <damageEffecter>Damage_HitMechanoid</damageEffecter>
+    <isOrganic>false</isOrganic>
+    <genericWounds>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechA</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechB</texture>
+      </li>
+      <li>
+        <texture>Things/Pawn/Wounds/WoundMechC</texture>
+      </li>
+    </genericWounds>
+  </FleshTypeDef>
+
+  <BodyTypeDef>
+    <defName>MFV_SkeletonThin</defName>
+    <headOffset>(0.09, 0.34)</headOffset>
+    <bodyNakedGraphicPath>Things/Pawn/Undead/SkeletonHumanlike/Skeleton_Body</bodyNakedGraphicPath>
+    <bodyDessicatedGraphicPath>Things/Pawn/Undead/SkeletonHumanlike/Skeleton_Body</bodyDessicatedGraphicPath>
+    <bodyGraphicScale>(0.6, 1)</bodyGraphicScale>
+    <woundAnchors />
+  </BodyTypeDef>
+
+  <HeadTypeDef ParentName="AverageBase">
+    <defName>MFV_SkeletonHead</defName>
+    <graphicPath>Things/Pawn/Undead/SkeletonHumanlike/Skeleton_Head</graphicPath>
+    <selectionWeight>0</selectionWeight>
+    <randomChosen>false</randomChosen>
+    <gender>Male</gender>
+  </HeadTypeDef>
+
+  <LifeStageDef>
+    <defName>MFV_UndeadFullyFormed</defName>
+    <label>fully formed</label>
+    <visible>false</visible>
+  </LifeStageDef>
+
+  <ThingDef ParentName="BasePawn">
     <defName>MFV_Skeleton</defName>
     <label>skeleton</label>
     <description>A brittle undead servant assembled from grave-bone and held upright by necromantic command. It has no hunger, fear, or comfort, but the spell sustaining it eventually collapses.</description>
+    <modExtensions>
+      <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
+        <bodyForm>Skeletal</bodyForm>
+        <intelligence>Mindless</intelligence>
+        <needsPolicy>None</needsPolicy>
+        <socialPolicy>None</socialPolicy>
+        <gearPolicy>StripAll</gearPolicy>
+        <controlPolicy>MasterBoundMinion</controlPolicy>
+        <workPolicy>MundaneLabor</workPolicy>
+        <recoveryPolicy>None</recoveryPolicy>
+        <deathPolicy>LeaveRemains</deathPolicy>
+        <soulPolicy>CorpseOnlyHusk</soulPolicy>
+        <durationPolicy>TemporaryTimer</durationPolicy>
+        <isUndead>true</isUndead>
+        <enforceNeeds>true</enforceNeeds>
+        <enforceSocialPolicy>true</enforceSocialPolicy>
+        <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceWorkPolicy>true</enforceWorkPolicy>
+        <enforceIdentityPolicy>true</enforceIdentityPolicy>
+        <clearGeneratedHealthState>true</clearGeneratedHealthState>
+        <enforceLifeStage>true</enforceLifeStage>
+        <enforceMarkers>true</enforceMarkers>
+        <markerHediffs>
+          <li>MFV_UndeadNature</li>
+          <li>MFV_SkeletalBody</li>
+          <li>MFV_SkeletalLimitations</li>
+        </markerHediffs>
+      </li>
+    </modExtensions>
+    <inspectorTabs Inherit="False">
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_FormingCaravan</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Log</li>
+    </inspectorTabs>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
     <statBases>
       <MarketValue>450</MarketValue>
+      <Mass>42</Mass>
       <MoveSpeed>3.7</MoveSpeed>
       <ArmorRating_Blunt>0.12</ArmorRating_Blunt>
       <ArmorRating_Sharp>0.42</ArmorRating_Sharp>
       <ArmorRating_Heat>0.15</ArmorRating_Heat>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>100</ComfyTemperatureMax>
       <PsychicSensitivity>0</PsychicSensitivity>
       <ToxicResistance>1</ToxicResistance>
       <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
       <Flammability>0.25</Flammability>
+      <GlobalLearningFactor>0</GlobalLearningFactor>
+      <MeatAmount>0</MeatAmount>
+      <LeatherAmount>0</LeatherAmount>
     </statBases>
     <tools>
       <li>
-        <label>left claw</label>
-        <labelNoLocation>claw</labelNoLocation>
+        <label>left fist</label>
+        <labelNoLocation>fist</labelNoLocation>
         <capacities>
-          <li>Scratch</li>
-          <li>Stab</li>
+          <li>Blunt</li>
         </capacities>
         <power>10</power>
         <cooldownTime>1.75</cooldownTime>
@@ -30,11 +112,10 @@
         <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
       </li>
       <li>
-        <label>right claw</label>
-        <labelNoLocation>claw</labelNoLocation>
+        <label>right fist</label>
+        <labelNoLocation>fist</labelNoLocation>
         <capacities>
-          <li>Scratch</li>
-          <li>Stab</li>
+          <li>Blunt</li>
         </capacities>
         <power>10</power>
         <cooldownTime>1.75</cooldownTime>
@@ -54,36 +135,67 @@
       </li>
     </tools>
     <race>
+      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
+      <intelligence>Humanlike</intelligence>
+      <renderTree>Humanlike</renderTree>
       <body>Human</body>
       <baseBodySize>0.85</baseBodySize>
       <baseHealthScale>0.72</baseHealthScale>
+      <foodType>None</foodType>
+      <baseHungerRate>0</baseHungerRate>
+      <needsRest>false</needsRest>
+      <hasMeat>false</hasMeat>
+      <hasGenders>true</hasGenders>
+      <nameCategory>NoName</nameCategory>
+      <alwaysAwake>true</alwaysAwake>
+      <isImmuneToInfections>true</isImmuneToInfections>
+      <bleedRateFactor>0</bleedRateFactor>
+      <lifeExpectancy>2000</lifeExpectancy>
+      <fleshType>MFV_Bone</fleshType>
+      <makesFootprints>true</makesFootprints>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
+      <specialShadowData>
+        <volume>(0.25, 0.65, 0.32)</volume>
+        <offset>(0,0,-0.3)</offset>
+      </specialShadowData>
       <lifeStageAges Inherit="False">
         <li>
-          <def>MechanoidFullyFormed</def>
+          <def>MFV_UndeadFullyFormed</def>
           <minAge>0</minAge>
-          <soundWounded>Pawn_Mech_Scyther_Wounded</soundWounded>
-          <soundDeath>Pawn_Mech_Scyther_Death</soundDeath>
-          <soundCall>Pawn_Mech_Scyther_Call</soundCall>
         </li>
       </lifeStageAges>
-      <soundMeleeHitPawn>Pawn_Melee_MechanoidSlash_HitPawn</soundMeleeHitPawn>
-      <soundMeleeHitBuilding>Pawn_Melee_MechanoidSlash_HitBuilding</soundMeleeHitBuilding>
-      <soundMeleeMiss>Pawn_Melee_MechanoidSlash_Miss</soundMeleeMiss>
-      <detritusLeavings />
+      <lifeStageWorkSettings>
+        <Firefighter>3</Firefighter>
+        <Patient>0</Patient>
+        <PatientBedRest>0</PatientBedRest>
+        <BasicWorker>3</BasicWorker>
+        <Hauling>3</Hauling>
+        <Cleaning>3</Cleaning>
+      </lifeStageWorkSettings>
     </race>
     <butcherProducts Inherit="False">
       <MFV_GemstoneDust>1</MFV_GemstoneDust>
     </butcherProducts>
+    <comps>
+      <li Class="MagicFramework.PawnLifecycle.CompProperties_PawnLifecycleEnforcer" />
+    </comps>
   </ThingDef>
 
-  <PawnKindDef ParentName="BaseMechanoidKind">
+  <PawnKindDef ParentName="BasePlayerPawnKind">
     <defName>MFV_Skeleton</defName>
     <label>skeleton</label>
     <labelPlural>skeletons</labelPlural>
     <race>MFV_Skeleton</race>
+    <defaultFactionDef>PlayerColony</defaultFactionDef>
     <combatPower>55</combatPower>
+    <isFighter>true</isFighter>
     <lifeStages>
       <li>
+        <label>skeleton</label>
+        <labelPlural>skeletons</labelPlural>
         <bodyGraphicData>
           <texPath>Things/Pawn/Undead/Skeleton/Skeleton</texPath>
           <graphicClass>Graphic_Multi</graphicClass>
@@ -94,6 +206,13 @@
         </bodyGraphicData>
       </li>
     </lifeStages>
+    <apparelMoney>0~0</apparelMoney>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <destroyGearOnDrop>true</destroyGearOnDrop>
+    <canStrip>false</canStrip>
+    <initialResistanceRange>0~0</initialResistanceRange>
+    <initialWillRange>0~0</initialWillRange>
     <weaponMoney>0~0</weaponMoney>
     <defendPointRadius>0</defendPointRadius>
     <weaponTags />

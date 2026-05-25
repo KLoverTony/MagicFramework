@@ -191,25 +191,10 @@ namespace AeternusFaith
                     skeleton.ideo.SetIdeo(ideoToApply);
             }
 
-            skeleton.def = pawnKindDef.race;
-            skeleton.kindDef = pawnKindDef;
-            SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
-            AttachSkeletonCleanupComp(skeleton);
-            ApplySkeletonAppearance(skeleton);
-            SkeletonUndeadUtility.RemoveLivingResurrectionHediffs(skeleton);
-            SkeletonUndeadUtility.EnforceUndeadState(skeleton, resetSkills: true);
-            SkeletonUndeadUtility.CopyBackstoriesFromSource(sourcePawn, skeleton);
-            SkeletonUndeadUtility.CopySkillsFromSource(sourcePawn, skeleton);
-            SkeletonUndeadUtility.RemoveNonUndeadHediffs(skeleton);
-            skeleton.def = pawnKindDef.race;
-            skeleton.kindDef = pawnKindDef;
-            SkeletonUndeadUtility.NormalizeSkeletonLifeStage(skeleton);
-            SkeletonUndeadUtility.ApplyUndeadHediffs(skeleton, "AF_SkeletalBody");
-            SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(skeleton);
-            SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(skeleton);
-            SkeletonUndeadUtility.SuppressUndeadSocialInteractions(skeleton);
+            SkeletonUndeadUtility.ConvertPawnToSkeleton(skeleton, pawnKindDef, resetSkills: true);
             skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
-            skeleton.Drawer?.renderer?.SetAllGraphicsDirty();
+            SkeletonUndeadUtility.RepairUndeadRenderingState(skeleton);
+            SkeletonUndeadUtility.TryInitializeRenderer(skeleton);
             Log.Message("[AeternusFaith] Raised skeleton conversion result: def=" + skeleton.def?.defName +
                         ", kindDef=" + skeleton.kindDef?.defName +
                         ", xenotype=" + (ModsConfig.BiotechActive ? skeleton.genes?.Xenotype?.defName : "BiotechInactive") +

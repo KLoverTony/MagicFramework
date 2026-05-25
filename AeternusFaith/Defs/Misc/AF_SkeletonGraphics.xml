@@ -15,7 +15,7 @@
     <graphicPath>Things/Undead/Skeleton_Head</graphicPath>
     <selectionWeight>0</selectionWeight>
     <randomChosen>false</randomChosen>
-    <gender>None</gender>
+    <gender>Male</gender>
   </HeadTypeDef>
 
 </Defs>

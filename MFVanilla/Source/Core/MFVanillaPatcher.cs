@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.PawnLifecycle;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -115,6 +116,7 @@ public static class MFVanillaPatcher
 
         harmony.Patch(
             AccessTools.Method(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), new[] { typeof(PawnGenerationRequest) }),
+            prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Prefix)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Postfix))
         );
 
@@ -488,8 +490,56 @@ public static class MFVanillaPatcher
         return false;
     }
 
+    private static bool PawnGenerator_GeneratePawn_Prefix(ref PawnGenerationRequest request, ref Pawn __result)
+    {
+        if (request.KindDef?.defName != "MFV_Skeleton")
+        {
+            return true;
+        }
+
+        PawnKindDef skeletonKindDef = request.KindDef;
+        PawnGenerationRequest baseRequest = new PawnGenerationRequest(
+            kind: PawnKindDefOf.Colonist,
+            faction: request.Faction ?? Faction.OfPlayer,
+            context: request.Context,
+            tile: request.Tile,
+            forceGenerateNewPawn: true,
+            allowDead: false,
+            allowDowned: false,
+            canGeneratePawnRelations: false,
+            mustBeCapableOfViolence: false,
+            colonistRelationChanceFactor: 0f,
+            allowPregnant: false,
+            allowFood: false,
+            allowAddictions: false,
+            fixedGender: Gender.Male,
+            forceNoIdeo: true,
+            forceNoBackstory: true,
+            developmentalStages: DevelopmentalStage.Adult,
+            dontGiveWeapon: true,
+            maximumAgeTraits: 0,
+            minimumAgeTraits: 0,
+            forceNoGear: true);
+
+        Pawn skeleton = PawnGenerator.GeneratePawn(baseRequest);
+        if (skeleton == null)
+        {
+            __result = null;
+            return false;
+        }
+
+        ConvertGeneratedPawnToMFVSkeleton(skeleton, skeletonKindDef);
+        __result = skeleton;
+        return false;
+    }
+
     private static void PawnGenerator_GeneratePawn_Postfix(Pawn __result, PawnGenerationRequest request)
     {
+        if (__result?.kindDef?.defName == "MFV_Skeleton" || __result?.def?.defName == "MFV_Skeleton")
+        {
+            ApplyMFVSkeletonAppearance(__result);
+        }
+
         if (__result?.Faction?.def?.defName != "MFV_ElementalistTribe"
             || Faction.OfPlayer == null
             || !__result.Faction.HostileTo(Faction.OfPlayer)
@@ -500,6 +550,62 @@ public static class MFVanillaPatcher
         }
 
         AssignElementalistAISpells(__result);
+    }
+
+    private static void ConvertGeneratedPawnToMFVSkeleton(Pawn pawn, PawnKindDef skeletonKindDef)
+    {
+        if (pawn == null || skeletonKindDef?.race == null)
+        {
+            return;
+        }
+
+        pawn.def = skeletonKindDef.race;
+        pawn.kindDef = skeletonKindDef;
+        pawn.gender = Gender.Male;
+        pawn.Name = new NameSingle("skeleton");
+        ResetPawnRenderer(pawn);
+        AttachPawnLifecycleComp(pawn);
+        PawnLifecycleEnforcementUtility.NormalizeLifeStage(pawn);
+        ApplyMFVSkeletonAppearance(pawn);
+        ApplyMFVSkeletonXenotype(pawn);
+        PawnLifecycleEnforcementUtility.EnforceAll(pawn);
+        ResetPawnRenderer(pawn);
+        pawn.Drawer?.renderer?.EnsureGraphicsInitialized();
+    }
+
+    private static void ResetPawnRenderer(Pawn pawn)
+    {
+        if (pawn?.Drawer?.renderer == null)
+        {
+            return;
+        }
+
+        pawn.Drawer.renderer = new PawnRenderer(pawn);
+        pawn.Drawer.renderer.renderTree = new PawnRenderTree(pawn);
+        pawn.Drawer.renderer.SetAllGraphicsDirty();
+    }
+
+    private static void AttachPawnLifecycleComp(Pawn pawn)
+    {
+        if (pawn?.AllComps == null || pawn.GetComp<CompPawnLifecycleEnforcer>() != null)
+        {
+            return;
+        }
+
+        CompProperties_PawnLifecycleEnforcer compProperties = pawn.def?.comps?
+            .OfType<CompProperties_PawnLifecycleEnforcer>()
+            .FirstOrDefault();
+        if (compProperties == null)
+        {
+            return;
+        }
+
+        CompPawnLifecycleEnforcer comp = new CompPawnLifecycleEnforcer
+        {
+            parent = pawn
+        };
+        comp.Initialize(compProperties);
+        pawn.AllComps.Add(comp);
     }
 
     private static void AssignElementalistAISpells(Pawn pawn)
@@ -549,6 +655,67 @@ public static class MFVanillaPatcher
 
         ApplyElementalistCasterGarb(pawn, selected);
         aiManager.RegisterPawn(pawn, selected);
+    }
+
+    private static void ApplyMFVSkeletonAppearance(Pawn pawn)
+    {
+        if (pawn?.story == null)
+        {
+            return;
+        }
+
+        BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("MFV_SkeletonThin");
+        HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("MFV_SkeletonHead");
+        HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
+
+        if (bodyTypeDef != null)
+        {
+            pawn.story.bodyType = bodyTypeDef;
+        }
+
+        if (headTypeDef != null)
+        {
+            pawn.story.headType = headTypeDef;
+        }
+
+        if (hairDef != null)
+        {
+            pawn.story.hairDef = hairDef;
+        }
+
+        BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
+        if (beardDef != null && pawn.style != null)
+        {
+            pawn.style.beardDef = beardDef;
+        }
+
+        pawn.gender = Gender.Male;
+        pawn.Drawer?.renderer?.SetAllGraphicsDirty();
+    }
+
+    private static void ApplyMFVSkeletonXenotype(Pawn pawn)
+    {
+        if (!ModsConfig.BiotechActive || pawn?.genes == null)
+        {
+            return;
+        }
+
+        XenotypeDef skeletonXenotype = DefDatabase<XenotypeDef>.GetNamedSilentFail("MFV_SkeletonXenotype");
+        if (skeletonXenotype == null)
+        {
+            return;
+        }
+
+        foreach (Gene gene in pawn.genes.GenesListForReading.ToList())
+        {
+            pawn.genes.RemoveGene(gene);
+        }
+
+        pawn.genes.ClearXenogenes();
+        if (pawn.genes.Xenotype != skeletonXenotype)
+        {
+            pawn.genes.SetXenotypeDirect(skeletonXenotype);
+        }
     }
 
     private static SpellAIEntry Entry(string spellDefName, SpellAIIntent intent)

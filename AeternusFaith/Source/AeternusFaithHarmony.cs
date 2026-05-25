@@ -32,6 +32,51 @@ namespace AeternusFaith
         }
     }
 
+    [HarmonyPatch(typeof(PawnGenerator), nameof(PawnGenerator.GeneratePawn), typeof(PawnGenerationRequest))]
+    public static class PawnGenerator_GeneratePawn_AFSkeletonPatch
+    {
+        public static bool Prefix(ref PawnGenerationRequest request, ref Pawn __result)
+        {
+            if (request.KindDef?.defName != "AF_Skeleton")
+                return true;
+
+            PawnKindDef skeletonKindDef = request.KindDef;
+            PawnGenerationRequest baseRequest = new PawnGenerationRequest(
+                kind: PawnKindDefOf.Colonist,
+                faction: request.Faction ?? Faction.OfPlayer,
+                context: request.Context,
+                tile: request.Tile,
+                forceGenerateNewPawn: true,
+                allowDead: false,
+                allowDowned: false,
+                canGeneratePawnRelations: false,
+                mustBeCapableOfViolence: false,
+                colonistRelationChanceFactor: 0f,
+                allowPregnant: false,
+                allowFood: false,
+                allowAddictions: false,
+                fixedGender: Gender.Male,
+                forceNoIdeo: true,
+                forceNoBackstory: true,
+                developmentalStages: DevelopmentalStage.Adult,
+                dontGiveWeapon: true,
+                maximumAgeTraits: 0,
+                minimumAgeTraits: 0,
+                forceNoGear: true);
+
+            Pawn skeleton = PawnGenerator.GeneratePawn(baseRequest);
+            if (skeleton == null)
+            {
+                __result = null;
+                return false;
+            }
+
+            SkeletonUndeadUtility.ConvertPawnToSkeleton(skeleton, skeletonKindDef);
+            __result = skeleton;
+            return false;
+        }
+    }
+
     [HarmonyPatch(typeof(JobGiver_Nuzzle), "TryGiveJob")]
     public static class JobGiverNuzzle_TryGiveJob_Patch
     {
