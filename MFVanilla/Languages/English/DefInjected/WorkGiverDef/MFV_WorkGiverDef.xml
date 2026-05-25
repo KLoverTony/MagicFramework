@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ArcaneApprenticeship.label>apprentice to arcane mentor</MFV_ArcaneApprenticeship.label>
+  <MFV_ArcaneApprenticeship.gerund>learning from</MFV_ArcaneApprenticeship.gerund>
+  <MFV_ArcaneApprenticeship.verb>learn from</MFV_ArcaneApprenticeship.verb>
+  <MFV_DoBillsPapyrusPress.label>make papyrus</MFV_DoBillsPapyrusPress.label>
+  <MFV_DoBillsPapyrusPress.gerund>making papyrus at</MFV_DoBillsPapyrusPress.gerund>
+  <MFV_DoBillsPapyrusPress.verb>make papyrus at</MFV_DoBillsPapyrusPress.verb>
+  <MFV_DoBillsParchmenteryBench.label>make parchment</MFV_DoBillsParchmenteryBench.label>
+  <MFV_DoBillsParchmenteryBench.gerund>making parchment at</MFV_DoBillsParchmenteryBench.gerund>
+  <MFV_DoBillsParchmenteryBench.verb>make parchment at</MFV_DoBillsParchmenteryBench.verb>
+  <MFV_DoBillsScribingTable.label>scribe spell scrolls</MFV_DoBillsScribingTable.label>
+  <MFV_DoBillsScribingTable.gerund>scribing at</MFV_DoBillsScribingTable.gerund>
+  <MFV_DoBillsScribingTable.verb>scribe at</MFV_DoBillsScribingTable.verb>
+  <MFV_DoBillsAlchemyTable.label>make alchemical reagents</MFV_DoBillsAlchemyTable.label>
+  <MFV_DoBillsAlchemyTable.gerund>working at</MFV_DoBillsAlchemyTable.gerund>
+  <MFV_DoBillsAlchemyTable.verb>work at</MFV_DoBillsAlchemyTable.verb>
+  <MFV_DoBillsLapidaryBench.label>cut gemstones</MFV_DoBillsLapidaryBench.label>
+  <MFV_DoBillsLapidaryBench.gerund>working at</MFV_DoBillsLapidaryBench.gerund>
+  <MFV_DoBillsLapidaryBench.verb>work at</MFV_DoBillsLapidaryBench.verb>
+  <MFV_DoBillsArcaneForge.label>forge magic items</MFV_DoBillsArcaneForge.label>
+  <MFV_DoBillsArcaneForge.gerund>enchanting at</MFV_DoBillsArcaneForge.gerund>
+  <MFV_DoBillsArcaneForge.verb>enchant at</MFV_DoBillsArcaneForge.verb>
+</LanguageData>

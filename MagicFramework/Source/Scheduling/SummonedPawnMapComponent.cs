@@ -63,6 +63,27 @@ public sealed class SummonedPawnMapComponent : MapComponent
         }
     }
 
+    public bool TryGetRecord(Pawn summonedPawn, out SummonedPawnRecord record)
+    {
+        record = null;
+        if (summonedPawn == null || summonedPawns == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < summonedPawns.Count; i++)
+        {
+            SummonedPawnRecord candidate = summonedPawns[i];
+            if (candidate?.SummonedPawn == summonedPawn)
+            {
+                record = candidate;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public override void MapComponentTick()
     {
         if (summonedPawns == null || summonedPawns.Count == 0)

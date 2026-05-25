@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_PlanarTileA.label>planar glass</MFV_PlanarTileA.label>
+  <MFV_PlanarTileA.description>A smooth ground plane from a folded pocket of unstable space.</MFV_PlanarTileA.description>
+  <MFV_PlanarTileB.label>planar shale</MFV_PlanarTileB.label>
+  <MFV_PlanarTileB.description>A darker plate of condensed planar matter.</MFV_PlanarTileB.description>
+  <MFV_PlanarTileC.label>planar bloomstone</MFV_PlanarTileC.label>
+  <MFV_PlanarTileC.description>A translucent planar surface threaded with soft arcane color.</MFV_PlanarTileC.description>
+  <MFV_PlanarTileD.label>planar duskplate</MFV_PlanarTileD.label>
+  <MFV_PlanarTileD.description>A dense planar plate that drinks in ordinary light.</MFV_PlanarTileD.description>
+  <MFV_ManaRiverDeep.label>deep mana current</MFV_ManaRiverDeep.label>
+  <MFV_ManaRiverDeep.description>A luminous stream of condensed planar mana. Its surface moves like water, but the current carries arcane charge instead of ordinary silt.</MFV_ManaRiverDeep.description>
+  <MFV_ManaRiverShallow.label>shallow mana current</MFV_ManaRiverShallow.label>
+  <MFV_ManaRiverShallow.description>A thin layer of moving planar mana, bright enough to stain nearby ground with violet-blue light.</MFV_ManaRiverShallow.description>
+  <MFV_ManaRiverBank.label>mana-washed bank</MFV_ManaRiverBank.label>
+  <MFV_ManaRiverBank.description>Planar stone washed smooth by nearby mana currents.</MFV_ManaRiverBank.description>
+</LanguageData>

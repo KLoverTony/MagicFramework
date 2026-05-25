@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_AirBlast.label>air blast</MF_AirBlast.label>
+  <MF_AirBlast.description>Unleashes a cone of compressed air, battering hostile pawns and knocking them away from the caster.</MF_AirBlast.description>
+  <MF_ArcSeeker.label>arc seeker</MF_ArcSeeker.label>
+  <MF_ArcSeeker.description>Releases unstable lightning from the caster that leaps to the nearest hostile pawn nearby.</MF_ArcSeeker.description>
+  <MF_BlessingOfVigor.label>blessing of vigor</MF_BlessingOfVigor.label>
+  <MF_BlessingOfVigor.description>Releases a bright blessing that invigorates nearby allies, excluding the caster.</MF_BlessingOfVigor.description>
+  <MF_BlinkStep.label>blink step</MF_BlinkStep.label>
+  <MF_BlinkStep.description>Instantly teleports the caster to a visible nearby cell.</MF_BlinkStep.description>
+  <MF_ChainLightning.label>chain lightning</MF_ChainLightning.label>
+  <MF_ChainLightning.description>Strikes a foe with arcing lightning that jumps forward through nearby enemies, sometimes stunning those it hits.</MF_ChainLightning.description>
+  <MF_CreateFood.label>create food</MF_CreateFood.label>
+  <MF_CreateFood.description>Conjures a simple meal that fades if left uneaten.</MF_CreateFood.description>
+  <MF_CureDisease.label>cure disease</MF_CureDisease.label>
+  <MF_CureDisease.description>Maintains a vital charm on an allied pawn, periodically treating disease and infection with overwhelming magical care.</MF_CureDisease.description>
+  <MF_DelayedBlastRune.label>delayed blast rune</MF_DelayedBlastRune.label>
+  <MF_DelayedBlastRune.description>Places a glowing magical rune on a target cell, then detonates after a short delay.</MF_DelayedBlastRune.description>
+  <MF_Deluge.label>deluge</MF_Deluge.label>
+  <MF_Deluge.description>Calls down a violent surge of water that douses fires, drenches pawns, and pushes them away from the center.</MF_Deluge.description>
+  <MF_Dig.label>dig</MF_Dig.label>
+  <MF_Dig.description>Splits nearby rock with geomantic force, mining a small cluster of stone around the chosen block.</MF_Dig.description>
+  <MF_Disintegrate.label>disintegrate</MF_Disintegrate.label>
+  <MF_Disintegrate.description>Unmakes light objects outright and tears larger targets apart with concentrated destructive force.</MF_Disintegrate.description>
+  <MF_DominateWill.label>dominate will</MF_DominateWill.label>
+  <MF_DominateWill.description>Seizes an enemy's will for a short time, forcing them to fight as a temporary ally while the caster maintains concentration.</MF_DominateWill.description>
+  <MF_EarthCall.label>earth call</MF_EarthCall.label>
+  <MF_EarthCall.description>Calls nearby stone chunks to roll toward a chosen point for a short time.</MF_EarthCall.description>
+  <MF_EarthWall.label>earth wall</MF_EarthWall.label>
+  <MF_EarthWall.description>Raises a short-lived wall of stone from open ground, blocking movement and line of fire until it crumbles away.</MF_EarthWall.description>
+  <MF_Extinguish.label>extinguish</MF_Extinguish.label>
+  <MF_Extinguish.description>Douses nearby flames in a burst of controlled water magic. Radius improves with caster level.</MF_Extinguish.description>
+  <MF_Fireball.label>fireball</MF_Fireball.label>
+  <MF_Fireball.description>A fiery explosive spell that detonates at the chosen point and burns creatures nearby.</MF_Fireball.description>
+  <MF_Firebolt.label>firebolt</MF_Firebolt.label>
+  <MF_Firebolt.description>A basic offensive spell that launches a bolt of fire at one hostile target.</MF_Firebolt.description>
+  <MF_FlameField.label>flame field</MF_FlameField.label>
+  <MF_FlameField.description>Creates a persistent circular field of magical fire that burns creatures standing within it.</MF_FlameField.description>
+  <MF_ForbiddenPlague.label>forbidden plague</MF_ForbiddenPlague.label>
+  <MF_ForbiddenPlague.description>Infects an enemy with a magical plague that spreads to nearby people and raises painful lesions until the disease is treated and overcome.</MF_ForbiddenPlague.description>
+  <MF_ForceField.label>force field</MF_ForceField.label>
+  <MF_ForceField.description>Maintains a defensive field around an allied pawn, reducing incoming damage while the caster keeps focus.</MF_ForceField.description>
+  <MF_ForcePull.label>force pull</MF_ForcePull.label>
+  <MF_ForcePull.description>Grabs one hostile target with telekinetic force and drags it toward the caster.</MF_ForcePull.description>
+  <MF_ForcePush.label>force push</MF_ForcePush.label>
+  <MF_ForcePush.description>Unleashes a burst of force that shoves one hostile target away from the caster.</MF_ForcePush.description>
+  <MF_Freeze.label>freeze</MF_Freeze.label>
+  <MF_Freeze.description>Unleashes a frost burst that chills the ground, freezes water, and slows enemies caught in the lingering cold.</MF_Freeze.description>
+  <MF_Haste.label>haste</MF_Haste.label>
+  <MF_Haste.description>Accelerates an allied pawn for a short time, increasing movement speed.</MF_Haste.description>
+  <MF_Heal.label>heal</MF_Heal.label>
+  <MF_Heal.description>Restores an allied pawn by dividing healing evenly across their current wounds.</MF_Heal.description>
+  <MF_Heat.label>heat</MF_Heat.label>
+  <MF_Heat.description>Maintains a warming field around a target cell, steadily pushing heat into the room like a magical heater while the caster sustains the spell.</MF_Heat.description>
+  <MF_ManaShield.label>mana shield</MF_ManaShield.label>
+  <MF_ManaShield.description>Maintains a shield around an allied pawn that spends the caster's mana to fully absorb incoming damage.</MF_ManaShield.description>
+  <MF_Might.label>might</MF_Might.label>
+  <MF_Might.description>Maintains a strengthening enchantment on an allied pawn, improving melee damage and carrying capacity while the caster keeps focus.</MF_Might.description>
+  <MF_RaiseSkeleton.label>raise skeleton</MF_RaiseSkeleton.label>
+  <MF_RaiseSkeleton.description>Consumes a corpse and raises a temporary skeletal guardian that fights for and protects the caster for several hours.</MF_RaiseSkeleton.description>
+  <MF_Regeneration.label>regeneration</MF_Regeneration.label>
+  <MF_Regeneration.description>Restores an allied pawn gradually, sending repeated healing pulses through their wounds.</MF_Regeneration.description>
+  <MF_RepulsionWard.label>repulsion ward</MF_RepulsionWard.label>
+  <MF_RepulsionWard.description>Maintains a compact arcane ward that periodically blinks nearby enemies away from its anchor point.</MF_RepulsionWard.description>
+  <MF_RescueRecall.label>rescue recall</MF_RescueRecall.label>
+  <MF_RescueRecall.description>Searches nearby allies for the most badly hurt downed pawns and teleports them to safe ground beside the caster.</MF_RescueRecall.description>
+  <MF_Resurrection.label>resurrection</MF_Resurrection.label>
+  <MF_Resurrection.description>Returns a dead humanlike pawn to life if the body remains viable and the spirit has not moved on. The spell does not restore ruined limbs or old wounds beyond what is needed to live, and it temporarily binds the caster and resurrected pawn in shared essence.</MF_Resurrection.description>
+  <MF_RuneTrap.label>rune trap</MF_RuneTrap.label>
+  <MF_RuneTrap.description>Places an armed rune that waits for a hostile pawn to enter range before detonating.</MF_RuneTrap.description>
+  <MF_Stoneskin.label>stoneskin</MF_Stoneskin.label>
+  <MF_Stoneskin.description>Hardens an allied pawn's skin with earth magic, improving armor at the cost of movement speed.</MF_Stoneskin.description>
+  <MF_SummonDog.label>summon dog</MF_SummonDog.label>
+  <MF_SummonDog.description>Summons a loyal dog for a short time to aid the caster.</MF_SummonDog.description>
+  <MF_ThreatSpike.label>threat spike</MF_ThreatSpike.label>
+  <MF_ThreatSpike.description>Launches a sharp arcane pulse at the most dangerous nearby foe.</MF_ThreatSpike.description>
+  <MF_Tornado.label>Tornado</MF_Tornado.label>
+  <MF_Tornado.description>A magical new spell.</MF_Tornado.description>
+  <MF_Transposition.label>transposition</MF_Transposition.label>
+  <MF_Transposition.description>Swaps the caster's position with a nearby pawn, preserving combat readiness while briefly disorienting both pawns.</MF_Transposition.description>
+  <MF_TriagePulse.label>triage pulse</MF_TriagePulse.label>
+  <MF_TriagePulse.description>Sends a quick pulse of restorative magic to the most wounded nearby ally.</MF_TriagePulse.description>
+  <MF_WallOfFire.label>wall of fire</MF_WallOfFire.label>
+  <MF_WallOfFire.description>Creates a persistent wall of magical flame that burns creatures standing too close.</MF_WallOfFire.description>
+  <MF_Warmth.label>warmth</MF_Warmth.label>
+  <MF_Warmth.description>Maintains a gentle warming aura around an allied pawn, keeping them and nearby allies comfortable in cold weather without making them tolerate heat better or warming the room.</MF_Warmth.description>
+  <MF_WatersEmbrace.label>water's embrace</MF_WatersEmbrace.label>
+  <MF_WatersEmbrace.description>Animates a body of water into a hostile grasp that slows enemies near the chosen water.</MF_WatersEmbrace.description>
+  <MFV_TidebreakerExtinguish.label>Tidebreaker extinguish</MFV_TidebreakerExtinguish.label>
+  <MFV_TidebreakerExtinguish.description>Releases a surge of bound water magic that extinguishes nearby flames.</MFV_TidebreakerExtinguish.description>
+</LanguageData>

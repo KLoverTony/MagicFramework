@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_Tag_Projectile.label>projectile</MF_Tag_Projectile.label>
+  <MF_Tag_Area.label>area</MF_Tag_Area.label>
+  <MF_Tag_Touch.label>touch</MF_Tag_Touch.label>
+  <MF_Tag_Self.label>self</MF_Tag_Self.label>
+  <MF_Tag_Hostile.label>hostile</MF_Tag_Hostile.label>
+  <MF_Tag_Beneficial.label>beneficial</MF_Tag_Beneficial.label>
+  <MF_Tag_Summon.label>summon</MF_Tag_Summon.label>
+  <MF_Tag_CorpseRequired.label>corpse required</MF_Tag_CorpseRequired.label>
+  <MF_Tag_WeatherSensitive.label>weather sensitive</MF_Tag_WeatherSensitive.label>
+  <MF_Tag_Channelled.label>channelled</MF_Tag_Channelled.label>
+  <MF_Tag_RitualSpell.label>ritual spell</MF_Tag_RitualSpell.label>
+  <MF_Tag_Buff.label>buff</MF_Tag_Buff.label>
+  <MF_Tag_Debuff.label>debuff</MF_Tag_Debuff.label>
+  <MF_Tag_DirectDamage.label>direct damage</MF_Tag_DirectDamage.label>
+  <MF_Tag_Transformation.label>transformation</MF_Tag_Transformation.label>
+</LanguageData>

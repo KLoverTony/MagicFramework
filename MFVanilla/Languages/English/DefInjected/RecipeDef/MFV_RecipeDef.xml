@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_MakeArcaneInk.label>make arcane ink</MFV_MakeArcaneInk.label>
+  <MFV_MakeArcaneInk.description>Steep exotic herbs with gemstone dust into a concentrated ink suitable for magical writing.</MFV_MakeArcaneInk.description>
+  <MFV_MakeArcaneInk.jobString>Making arcane ink.</MFV_MakeArcaneInk.jobString>
+  <MFV_EnchantFlamingLongsword.label>enchant flaming longsword</MFV_EnchantFlamingLongsword.label>
+  <MFV_EnchantFlamingLongsword.description>Bind a fire arcane focus into a longsword, creating a flaming longsword.</MFV_EnchantFlamingLongsword.description>
+  <MFV_EnchantFlamingLongsword.jobString>Enchanting flaming longsword.</MFV_EnchantFlamingLongsword.jobString>
+  <MFV_EnchantZephyrSpear.label>enchant Zephyr Spear</MFV_EnchantZephyrSpear.label>
+  <MFV_EnchantZephyrSpear.description>Bind an air arcane focus into a spear, creating Zephyr Spear.</MFV_EnchantZephyrSpear.description>
+  <MFV_EnchantZephyrSpear.jobString>Enchanting Zephyr Spear.</MFV_EnchantZephyrSpear.jobString>
+  <MFV_EnchantTidebreakerMace.label>enchant Tidebreaker Mace</MFV_EnchantTidebreakerMace.label>
+  <MFV_EnchantTidebreakerMace.description>Bind a water arcane focus into a mace, creating Tidebreaker Mace.</MFV_EnchantTidebreakerMace.description>
+  <MFV_EnchantTidebreakerMace.jobString>Enchanting Tidebreaker Mace.</MFV_EnchantTidebreakerMace.jobString>
+  <MFV_EnchantStonefallMace.label>enchant Stonefall Mace</MFV_EnchantStonefallMace.label>
+  <MFV_EnchantStonefallMace.description>Bind an earth arcane focus into a mace, creating Stonefall Mace.</MFV_EnchantStonefallMace.description>
+  <MFV_EnchantStonefallMace.jobString>Enchanting Stonefall Mace.</MFV_EnchantStonefallMace.jobString>
+  <MFV_BreakGemstoneChunk.label>break gemstone chunk</MFV_BreakGemstoneChunk.label>
+  <MFV_BreakGemstoneChunk.description>Break a rough gemstone chunk into raw pieces.</MFV_BreakGemstoneChunk.description>
+  <MFV_BreakGemstoneChunk.jobString>Breaking gemstone chunk.</MFV_BreakGemstoneChunk.jobString>
+  <MFV_BreakDenseGemstoneChunk.label>break dense gemstone chunk</MFV_BreakDenseGemstoneChunk.label>
+  <MFV_BreakDenseGemstoneChunk.description>Break a dense gemstone chunk into raw pieces.</MFV_BreakDenseGemstoneChunk.description>
+  <MFV_BreakDenseGemstoneChunk.jobString>Breaking dense gemstone chunk.</MFV_BreakDenseGemstoneChunk.jobString>
+  <MFV_CutGemstone.label>cut gemstone</MFV_CutGemstone.label>
+  <MFV_CutGemstone.description>Cut and polish a raw gemstone piece into a finished gemstone, collecting more usable gemstone dust when more of the stone is ground away.</MFV_CutGemstone.description>
+  <MFV_CutGemstone.jobString>Cutting gemstone.</MFV_CutGemstone.jobString>
+  <MFV_MakeFireArcaneFocus.label>make fire arcane focus</MFV_MakeFireArcaneFocus.label>
+  <MFV_MakeFireArcaneFocus.description>Set cut rubies into a simple conductive frame to make a fire arcane focus.</MFV_MakeFireArcaneFocus.description>
+  <MFV_MakeFireArcaneFocus.jobString>Making fire arcane focus.</MFV_MakeFireArcaneFocus.jobString>
+  <MFV_MakeWaterArcaneFocus.label>make water arcane focus</MFV_MakeWaterArcaneFocus.label>
+  <MFV_MakeWaterArcaneFocus.description>Set cut sapphires into a simple conductive frame to make a water arcane focus.</MFV_MakeWaterArcaneFocus.description>
+  <MFV_MakeWaterArcaneFocus.jobString>Making water arcane focus.</MFV_MakeWaterArcaneFocus.jobString>
+  <MFV_MakeEarthArcaneFocus.label>make earth arcane focus</MFV_MakeEarthArcaneFocus.label>
+  <MFV_MakeEarthArcaneFocus.description>Set cut emeralds into a simple conductive frame to make an earth arcane focus.</MFV_MakeEarthArcaneFocus.description>
+  <MFV_MakeEarthArcaneFocus.jobString>Making earth arcane focus.</MFV_MakeEarthArcaneFocus.jobString>
+  <MFV_MakeAirArcaneFocus.label>make air arcane focus</MFV_MakeAirArcaneFocus.label>
+  <MFV_MakeAirArcaneFocus.description>Set cut topazes into a simple conductive frame to make an air arcane focus.</MFV_MakeAirArcaneFocus.description>
+  <MFV_MakeAirArcaneFocus.jobString>Making air arcane focus.</MFV_MakeAirArcaneFocus.jobString>
+  <MFV_MakePapyrus.label>make papyrus</MFV_MakePapyrus.label>
+  <MFV_MakePapyrus.description>Press wood pulp, hay, or other plant fibers into simple papyrus sheets for notes, formulae, and low-order scrollwork.</MFV_MakePapyrus.description>
+  <MFV_MakePapyrus.jobString>Making papyrus.</MFV_MakePapyrus.jobString>
+  <MFV_MakeParchment.label>make parchment</MFV_MakeParchment.label>
+  <MFV_MakeParchment.description>Scrape, stretch, and dry leather into durable parchment sheets for formal scrollwork.</MFV_MakeParchment.description>
+  <MFV_MakeParchment.jobString>Making parchment.</MFV_MakeParchment.jobString>
+</LanguageData>

@@ -25,6 +25,7 @@ Current local development after the uploaded band:
 - Planar Magic now has a concrete foundation: planar gates, temporary pocket maps, planar terrain/plants/materials, return handling, transport blocking, debug actions, and XML-authored planar dimension/site support.
 - Initial planar smoke testing indicates the core gate/pocket/return loop is functional and fun; treat the feature as MFVanilla completion content that needs tuning, documentation, release hygiene, and carefully chosen follow-up opportunities rather than as a distant exploratory item.
 - Forbidden Lore now has two validation spells: Dominate Will, a short-range maintained mind-control spell backed by temporary allegiance support, and Forbidden Plague, a contagious treated-disease spell that raises lesions/blisters over time.
+- Shared lifecycle undead work now has two verified skeleton baselines: AF skeletons are selectable autonomous servants with natural RimWorld work restrictions and no drafting, while MFV raised skeletons remain temporary master-bound combat minions.
 
 Playtest status:
 - The research mystery-scroll drop was tested in game and works well.
@@ -37,6 +38,7 @@ Playtest status:
 - Automata are working fairly well in current testing.
 - Planar Magic first-pass smoke testing looks functional and has clear expansion opportunities.
 - Dominate Will and Forbidden Plague build and deploy with generated scroll/recipe coverage; Forbidden Lore scrolls are excluded from research-completion mystery aid drops so initial acquisition must come from finding or trade. Dominate Will needs hostile-pawn allegiance smoke testing, while Forbidden Plague needs contagion, treatment, wound pulse, cure, and save/load validation.
+- AF_Skeleton and MFV_Skeleton smoke tests confirm the composable lifecycle split: AF servants are selectable but not draftable, MFV skeletons are manageable combat minions, lifecycle traits drive disabled work through vanilla RimWorld behavior, and lifecycle inspect strings now surface control/work/expiry state.
 - Ruined Sanctum and Sealed Vault remain observation items, but the shared mission loop is provisionally trusted unless variant-specific issues appear.
 
 ## Release Gate
@@ -85,6 +87,7 @@ AeternusFaith remains important, but it is no longer the main active release ban
 | MF-037 | P1 | S | MFVanilla/Economy | Watch | Production loop is provisionally accepted; only reopen for concrete issues in pacing, player clarity, scroll access, apprenticeship, or gemstone/reward economy. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-037-mfvanilla-production-and-progression). |
 | MF-031 | P2 | M | Framework/Docs | Support | Continue the Spell Design Guide where it helps stabilize the MFVanilla authoring surface and future content packs. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-031-spell-design-guide). |
 | MF-032 | P2 | M | Framework/Compatibility | Support | Keep deterministic/save-load/multiplayer risks visible, especially around planar transfer, missions, item abilities, AI casting, and random production outcomes. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-032-compatibility). |
+| MF-063 | P2 | M | Framework/Lifecycle | Active slice | Shared undead lifecycle foundations now have verified AF servant and MFV master-bound skeleton profiles; AF spectres have a first lifecycle profile and need Shroudhymn/debug manifestation smoke testing. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations). |
 | MF-039 | P2 | M | AeternusFaith | Side track | Prepare the AeternusFaith first-edition release candidate in small slices while MFVanilla remains the main focus. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-039-aeternusfaith-first-edition). |
 | MF-019 | P2 | S | AeternusFaith/UI | Side track | Polish ritual dialogs and smoke test small-resolution participant selection when working an Aeternus slice. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
 

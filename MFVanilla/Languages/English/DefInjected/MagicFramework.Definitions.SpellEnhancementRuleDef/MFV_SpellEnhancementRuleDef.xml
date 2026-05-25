@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_SolarFlareEmpowersFireMagic.label>solar flare empowers fire magic</MFV_SolarFlareEmpowersFireMagic.label>
+  <MFV_SolarFlareEmpowersFireMagic.description>Fire spells resonate with solar flare conditions, reducing mana cost and cooldown.</MFV_SolarFlareEmpowersFireMagic.description>
+  <MFV_RainEmpowersAquamancy.label>rain empowers aquamancy</MFV_RainEmpowersAquamancy.label>
+  <MFV_RainEmpowersAquamancy.description>Aquamancy spells draw strength from active rainfall.</MFV_RainEmpowersAquamancy.description>
+  <MFV_HillsEmpowerGeomancy.label>hills empower geomancy</MFV_HillsEmpowerGeomancy.label>
+  <MFV_HillsEmpowerGeomancy.description>Geomancy spells are steadier and cheaper on rugged stone-rich maps.</MFV_HillsEmpowerGeomancy.description>
+</LanguageData>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_Domain_Pyromancy.label>pyromancy</MF_Domain_Pyromancy.label>
+  <MF_Domain_Cryomancy.label>cryomancy</MF_Domain_Cryomancy.label>
+  <MF_Domain_Aeromancy.label>aeromancy</MF_Domain_Aeromancy.label>
+  <MF_Domain_Geomancy.label>geomancy</MF_Domain_Geomancy.label>
+  <MF_Domain_Aquamancy.label>aquamancy</MF_Domain_Aquamancy.label>
+  <MF_Domain_Vitalism.label>vitalism</MF_Domain_Vitalism.label>
+  <MF_Domain_Necromancy.label>necromancy</MF_Domain_Necromancy.label>
+  <MF_Domain_Summoning.label>summoning</MF_Domain_Summoning.label>
+  <MF_Domain_Warding.label>warding</MF_Domain_Warding.label>
+  <MF_Domain_Illusion.label>illusion</MF_Domain_Illusion.label>
+  <MF_Domain_Transformation.label>transformation</MF_Domain_Transformation.label>
+  <MF_Domain_Divination.label>divination</MF_Domain_Divination.label>
+  <MF_Domain_Soulcraft.label>soulcraft</MF_Domain_Soulcraft.label>
+  <MF_Domain_ForbiddenLore.label>forbidden lore</MF_Domain_ForbiddenLore.label>
+</LanguageData>

@@ -122,8 +122,13 @@ Current state:
 - `CompPawnLifecycleEnforcer` and `PawnLifecycleEnforcementUtility` provide the first opt-in runtime enforcement layer for needs, social suppression, gear stripping, life-stage normalization, and marker hediffs.
 - Dev actions can log a selected pawn's lifecycle profile or all profiled pawns on the current map.
 - XML examples live in [PawnLifecycleProfiles.md](PawnLifecycleProfiles.md).
-- MFVanilla's temporary `MFV_Skeleton` now has the first real lifecycle profile and enforcer attachment for smoke testing.
-- Recovery, death cleanup, control, work behavior, soul contracts, duration/upkeep, and advanced interaction policies are still definition/query-only.
+- Lifecycle traits can now be injected from XML profiles so RimWorld's native disabled-work system governs simple worker/combat limitations instead of framework priority forcing.
+- Autonomous lifecycle pawns can be made selectable but non-draftable, with direct draft attempts blocked while master-bound minions remain manageable.
+- Lifecycle pawns now expose a compact inspect-string readout for control/work profile, master binding, and temporary summon expiry when tracked by the summon runtime.
+- MFVanilla's temporary `MFV_Skeleton` has a verified master-bound combat-minion profile.
+- AeternusFaith's `AF_SkeletonRace` has a verified autonomous servant profile.
+- AeternusFaith's `AF_SpectreRace` now has a spectral lifecycle profile layered around its existing Shroudhymn manifestation system: no needs, no gear, no work, guest/non-draftable control, active-spirit soul policy, and AF spectral marker hediffs.
+- Recovery, death cleanup, soul contracts, deeper duration/upkeep policies, and advanced interaction policies are still early or definition/query-only.
 
 Behavioral qualities to model:
 - hunger/eating: none, ordinary food, corpse/flesh consumption, mana upkeep, essence drain, or content-defined feeding
@@ -162,9 +167,9 @@ Iteration slices:
 1. Documentation and audit only: no code, just the behavior matrix and target profiles. - started through this plan
 2. Read-only framework query helpers and lifecycle profile definitions. - initial `PawnLifecycleExtension` and `PawnLifecycleUtility` added
 3. Generic cleanup comp/helper implementation with no content migration. - initial opt-in enforcer added for needs, social, gear, life-stage, and marker hediffs
-4. AeternusFaith skeleton migration and smoke test.
-5. AeternusFaith spectre migration and smoke test.
-6. MFVanilla skeleton/necromancy decision and migration if approved. - `MFV_Skeleton` converted first for smoke testing
+4. AeternusFaith skeleton migration and smoke test. - verified as selectable autonomous servant, not draftable
+5. AeternusFaith spectre migration and smoke test. - lifecycle profile added; needs in-game Shroudhymn rite/debug manifestation smoke test
+6. MFVanilla skeleton/necromancy decision and migration if approved. - `MFV_Skeleton` converted and verified as temporary master-bound combat minion
 7. Construct/flesh-golem profile pass after undead migration is stable.
 8. Advanced identity pass for revenants, liches, pseudo-relationship memory, and phylactery-style reform.
 

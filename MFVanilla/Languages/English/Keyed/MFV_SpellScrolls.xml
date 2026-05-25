@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_SpellScrollLabel>spell scroll ({0})</MFV_SpellScrollLabel>
+  <MFV_SpellScrollDescription>A prepared arcane scroll that teaches a pawn how to cast {0}.</MFV_SpellScrollDescription>
+  <MFV_ReadSpellScroll>Read scroll</MFV_ReadSpellScroll>
+
+  <MFV_ScribeSpellScrollLabel>scribe scroll ({0})</MFV_ScribeSpellScrollLabel>
+  <MFV_ScribeSpellScrollDescription>Prepare a spell scroll that teaches a pawn how to cast {0}. The scribe must have the Arcane Gift and already know {0}.</MFV_ScribeSpellScrollDescription>
+  <MFV_ScribeSpellScrollJobString>Scribing scroll ({0}).</MFV_ScribeSpellScrollJobString>
+
+  <MFV_PawnLearnedSpellFromScroll>{0} learned {1}.</MFV_PawnLearnedSpellFromScroll>
+  <MFV_NoPawnSelected>No pawn selected.</MFV_NoPawnSelected>
+  <MFV_PawnCannotUseThis>{0} cannot use this.</MFV_PawnCannotUseThis>
+  <MFV_PawnCannotLearnSpells>{0} cannot learn spells.</MFV_PawnCannotLearnSpells>
+  <MFV_MagicFrameworkRuntimeUnavailable>Magic Framework runtime was unavailable.</MFV_MagicFrameworkRuntimeUnavailable>
+  <MFV_PawnDoesNotHaveArcaneGift>{0} does not have the Arcane Gift.</MFV_PawnDoesNotHaveArcaneGift>
+  <MFV_ScrollNotLinkedToSpell>This scroll is not linked to a spell.</MFV_ScrollNotLinkedToSpell>
+  <MFV_RequiresCompletedResearch>Requires completed research: {0}.</MFV_RequiresCompletedResearch>
+</LanguageData>

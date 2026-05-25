@@ -225,13 +225,14 @@ namespace AeternusFaith.Undead.Spectral
                 }
 
                 SkeletonUndeadUtility.EnforceUndeadState(cachedPawn, resetSkills: true);
+                SkeletonUndeadUtility.EnsureFrameworkLifecycleComp(cachedPawn);
                 SkeletonUndeadUtility.CopyBackstoriesFromSource(sourcePawn, cachedPawn);
                 SkeletonUndeadUtility.CopySkillsFromSource(sourcePawn, cachedPawn);
                 SkeletonUndeadUtility.RemoveNonUndeadHediffs(cachedPawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(cachedPawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(cachedPawn);
                 SkeletonUndeadUtility.SuppressUndeadSocialInteractions(cachedPawn);
-                ApplySpectreAppearance(cachedPawn);
+                SkeletonUndeadUtility.ApplySpectreAppearance(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
                 Log.Message("[AeternusFaith] Manifested spectre conversion result: def=" + cachedPawn.def?.defName +
                             ", kindDef=" + cachedPawn.kindDef?.defName +
@@ -276,29 +277,6 @@ namespace AeternusFaith.Undead.Spectral
             cachedPawn.guest?.SetGuestStatus(Faction.OfPlayer, GuestStatus.Guest);
             if (cachedPawn.Drafted)
                 cachedPawn.drafter.Drafted = false;
-        }
-
-        private void ApplySpectreAppearance(Pawn spectre)
-        {
-            if (spectre?.story == null)
-                return;
-
-            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("AF_SpectreBody");
-            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("AF_SpectreHead");
-            HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
-
-            if (bodyTypeDef != null)
-                spectre.story.bodyType = bodyTypeDef;
-            if (headTypeDef != null)
-                spectre.story.headType = headTypeDef;
-            if (hairDef != null)
-                spectre.story.hairDef = hairDef;
-
-            BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
-            if (beardDef != null && spectre.style != null)
-                spectre.style.beardDef = beardDef;
-
-            spectre.Drawer?.renderer?.SetAllGraphicsDirty();
         }
 
         public void Despawn()

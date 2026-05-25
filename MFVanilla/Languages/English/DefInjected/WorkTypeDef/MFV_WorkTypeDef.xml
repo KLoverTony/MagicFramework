@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_Arcane.label>arcane</MFV_Arcane.label>
+  <MFV_Arcane.labelShort>Arcane</MFV_Arcane.labelShort>
+  <MFV_Arcane.description>Study magic by observing more experienced gifted pawns during arcane research, scribing, alchemy, and enchantment work.</MFV_Arcane.description>
+  <MFV_Arcane.verb>learn arcana</MFV_Arcane.verb>
+</LanguageData>

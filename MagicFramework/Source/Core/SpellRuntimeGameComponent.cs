@@ -7,6 +7,7 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 using Verse.AI;
+using Verse.AI.Group;
 using Verse.Sound;
 
 namespace MagicFramework.Core;
@@ -17,6 +18,7 @@ namespace MagicFramework.Core;
 public sealed class SpellRuntimeGameComponent : GameComponent
 {
     private const float DefaultStartingMana = 100f;
+    private const int StartingCasterLevel = 1;
     private const int MaxCasterLevel = 20;
     private List<CasterRuntimeState> casterStates = new();
     private List<ActiveSpellStatModifier> activeStatModifiers = new();
@@ -53,7 +55,12 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return;
         }
 
-        GetOrCreateState(pawn).hasArcaneGift = value;
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        state.hasArcaneGift = value;
+        if (value)
+        {
+            EnsureStartingCasterLevel(state);
+        }
     }
 
     public ArcaneDisciplineDef GetArcaneDiscipline(Pawn pawn)
@@ -88,7 +95,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             return 0;
         }
 
-        return GetOrCreateState(pawn).casterLevel;
+        CasterRuntimeState state = GetOrCreateState(pawn);
+        if (state.hasArcaneGift)
+        {
+            EnsureStartingCasterLevel(state);
+        }
+
+        return state.casterLevel;
     }
 
     public void SetCasterLevel(Pawn pawn, int level)
@@ -224,6 +237,18 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         }
 
         return total;
+    }
+
+    private static void EnsureStartingCasterLevel(CasterRuntimeState state)
+    {
+        if (state == null || state.casterLevel >= StartingCasterLevel)
+        {
+            return;
+        }
+
+        state.casterLevel = StartingCasterLevel;
+        state.casterExperience = Mathf.Max(state.casterExperience, TotalExperienceForLevel(state.casterLevel));
+        state.debugCasterLevel = state.casterLevel;
     }
 
     public bool HasEnoughMana(Thing caster, float amount)
@@ -611,12 +636,81 @@ public sealed class SpellRuntimeGameComponent : GameComponent
         if (caster is Pawn casterPawn && target.mindState != null)
         {
             float defendRadius = maxRange > 0f ? maxRange : 8f;
+            InterruptPawnForTemporaryAllegiance(target);
             target.mindState.duty = new PawnDuty(DutyDefOf.Defend, casterPawn, defendRadius);
+            TryStartImmediateTemporaryAllegianceAttack(target);
         }
 
         activeTemporaryAllegiances.Add(allegiance);
         EnsureTemporaryAllegianceIndicatorApplied(allegiance);
         Messages.Message($"{target.LabelShortCap} is compelled to fight as an ally.", target, MessageTypeDefOf.NeutralEvent, false);
+    }
+
+    private static void InterruptPawnForTemporaryAllegiance(Pawn pawn)
+    {
+        if (pawn == null || pawn.Destroyed)
+        {
+            return;
+        }
+
+        Lord lord = pawn.GetLord();
+        lord?.Notify_PawnLost(pawn, PawnLostCondition.ForcedByPlayerAction);
+
+        if (pawn.mindState != null)
+        {
+            pawn.mindState.enemyTarget = null;
+            pawn.mindState.meleeThreat = null;
+        }
+
+        if (pawn.jobs != null)
+        {
+            pawn.jobs.StopAll();
+        }
+    }
+
+    private static void TryStartImmediateTemporaryAllegianceAttack(Pawn pawn)
+    {
+        if (pawn?.Map == null || pawn.jobs == null)
+        {
+            return;
+        }
+
+        Pawn bestTarget = null;
+        float bestDistanceSquared = float.MaxValue;
+        IReadOnlyList<Pawn> spawnedPawns = pawn.Map.mapPawns?.AllPawnsSpawned;
+        if (spawnedPawns == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < spawnedPawns.Count; i++)
+        {
+            Pawn candidate = spawnedPawns[i];
+            if (candidate == null
+                || candidate == pawn
+                || candidate.Dead
+                || candidate.Downed
+                || !candidate.Spawned
+                || !pawn.HostileTo(candidate))
+            {
+                continue;
+            }
+
+            float distanceSquared = pawn.Position.DistanceToSquared(candidate.Position);
+            if (distanceSquared < bestDistanceSquared)
+            {
+                bestTarget = candidate;
+                bestDistanceSquared = distanceSquared;
+            }
+        }
+
+        if (bestTarget == null)
+        {
+            return;
+        }
+
+        Job job = JobMaker.MakeJob(JobDefOf.AttackMelee, bestTarget);
+        pawn.jobs.StartJob(job, JobCondition.InterruptForced, null, resumeCurJobAfterwards: false, cancelBusyStances: true);
     }
 
     public void ApplyForceFieldDamageReduction(Thing thing, ref DamageInfo dinfo, ref bool absorbed)
@@ -2393,7 +2487,13 @@ public sealed class SpellRuntimeGameComponent : GameComponent
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
                 casterLevel = Mathf.Clamp(casterLevel, 0, MaxCasterLevel);
+                if (hasArcaneGift && casterLevel < StartingCasterLevel)
+                {
+                    casterLevel = StartingCasterLevel;
+                }
+
                 casterExperience = Mathf.Max(casterExperience, TotalExperienceForLevel(casterLevel));
+                debugCasterLevel = Mathf.Max(debugCasterLevel, casterLevel);
             }
         }
 

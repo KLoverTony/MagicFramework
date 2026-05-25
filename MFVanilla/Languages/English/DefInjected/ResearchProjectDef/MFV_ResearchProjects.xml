@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ArcaneTheory.label>arcane theory</MFV_ArcaneTheory.label>
+  <MFV_ArcaneTheory.description>Study the first principles of mana, spell structure, and occult practice.</MFV_ArcaneTheory.description>
+  <MFV_LeylineSensitivity.label>leyline sensitivity</MFV_LeylineSensitivity.label>
+  <MFV_LeylineSensitivity.description>Learn to perceive the subtle currents of mana that move through land, stone, and living things. Reveals hidden leylines on colony maps, helps gifted pawns recover mana faster near strong currents, and lets Arcane Forges resonate with nearby leyline power for a chance to improve enchanted weapon quality.</MFV_LeylineSensitivity.description>
+  <MFV_LeylineSensitivity.customUnlockTexts.0>Arcane Discipline: Medium</MFV_LeylineSensitivity.customUnlockTexts.0>
+  <MFV_Lapidary.label>lapidary</MFV_Lapidary.label>
+  <MFV_Lapidary.description>Study the careful cutting and polishing of gemstones for trade, decoration, and magical craftsmanship.</MFV_Lapidary.description>
+  <MFV_Lapidary.customUnlockTexts.0>Gemstone chunk breaking</MFV_Lapidary.customUnlockTexts.0>
+  <MFV_Lapidary.customUnlockTexts.1>Gemstone cutting</MFV_Lapidary.customUnlockTexts.1>
+  <MFV_Alchemy.label>alchemy</MFV_Alchemy.label>
+  <MFV_Alchemy.description>Refine plants, minerals, and reagents into magical compounds and restorative draughts.</MFV_Alchemy.description>
+  <MFV_Papyrus.label>papyrus</MFV_Papyrus.label>
+  <MFV_Papyrus.description>Study early sheet-making methods for preserving notes, formulae, and ritual observations.</MFV_Papyrus.description>
+  <MFV_Spellcraft.label>spellcraft</MFV_Spellcraft.label>
+  <MFV_Spellcraft.description>Organize practical spellcasting into teachable schools of elemental, vital, shadow, and death magic.</MFV_Spellcraft.description>
+  <MFV_ForbiddenLore.label>forbidden lore</MFV_ForbiddenLore.label>
+  <MFV_ForbiddenLore.description>Record the first principles of magic that most traditions refuse to teach openly.</MFV_ForbiddenLore.description>
+  <MFV_ForbiddenLore.customUnlockTexts.0>Arcane Discipline: Heretic</MFV_ForbiddenLore.customUnlockTexts.0>
+  <MFV_Elementalism.label>elementalism</MFV_Elementalism.label>
+  <MFV_Elementalism.description>Study the fundamental forces of nature and their magical manipulation.</MFV_Elementalism.description>
+  <MFV_Elementalism.customUnlockTexts.0>Arcane Discipline: Elementalist</MFV_Elementalism.customUnlockTexts.0>
+  <MFV_Enchantment.label>enchantment</MFV_Enchantment.label>
+  <MFV_Enchantment.description>Bind persistent magical effects into tools, clothing, weapons, and ritual implements.</MFV_Enchantment.description>
+  <MFV_Enchantment.customUnlockTexts.0>Arcane Discipline: Enchanter</MFV_Enchantment.customUnlockTexts.0>
+  <MFV_Summoning.label>summoning</MFV_Summoning.label>
+  <MFV_Summoning.description>Study the art of calling forth and commanding otherworldly entities.</MFV_Summoning.description>
+  <MFV_Summoning.customUnlockTexts.0>Arcane Discipline: Summoner</MFV_Summoning.customUnlockTexts.0>
+  <MFV_Transformation.label>transformation</MFV_Transformation.label>
+  <MFV_Transformation.description>Study the art of changing one thing into another through magical means.</MFV_Transformation.description>
+  <MFV_Transformation.customUnlockTexts.0>Arcane Discipline: Transmuter</MFV_Transformation.customUnlockTexts.0>
+  <MFV_Illusion.label>illusion</MFV_Illusion.label>
+  <MFV_Illusion.description>Study the art of creating deceptive images and sensory experiences through magical means.</MFV_Illusion.description>
+  <MFV_Illusion.customUnlockTexts.0>Arcane Discipline: Illusionist</MFV_Illusion.customUnlockTexts.0>
+  <MFV_Vitalism.label>vitalism</MFV_Vitalism.label>
+  <MFV_Vitalism.description>Work with growth, healing, resilience, and the magical rhythms of living bodies.</MFV_Vitalism.description>
+  <MFV_Vitalism.customUnlockTexts.0>Arcane Discipline: Vitalist</MFV_Vitalism.customUnlockTexts.0>
+  <MFV_Parchmentry.label>parchmentry</MFV_Parchmentry.label>
+  <MFV_Parchmentry.description>Develop durable prepared sheets for arcane notation, scrollwork, and practical magical records.</MFV_Parchmentry.description>
+  <MFV_Pyromancy.label>pyromancy</MFV_Pyromancy.label>
+  <MFV_Pyromancy.description>Study heat, combustion, and the deliberate shaping of magical flame.</MFV_Pyromancy.description>
+  <MFV_Pyromancy.customUnlockTexts.0>Arcane Discipline: Pyromancer</MFV_Pyromancy.customUnlockTexts.0>
+  <MFV_Aquamancy.label>aquamancy</MFV_Aquamancy.label>
+  <MFV_Aquamancy.description>Shape water into protective and hostile magic.</MFV_Aquamancy.description>
+  <MFV_Aquamancy.customUnlockTexts.0>Arcane Discipline: Aquamancer</MFV_Aquamancy.customUnlockTexts.0>
+  <MFV_Aeromancy.label>aeromancy</MFV_Aeromancy.label>
+  <MFV_Aeromancy.description>Harness pressure, wind, lightning, and sudden motion through disciplined spellcraft.</MFV_Aeromancy.description>
+  <MFV_Aeromancy.customUnlockTexts.0>Arcane Discipline: Aeromancer</MFV_Aeromancy.customUnlockTexts.0>
+  <MFV_Geomancy.label>geomancy</MFV_Geomancy.label>
+  <MFV_Geomancy.description>Study stone, soil, metal, and the patient strength of the earth.</MFV_Geomancy.description>
+  <MFV_Geomancy.customUnlockTexts.0>Arcane Discipline: Geomancer</MFV_Geomancy.customUnlockTexts.0>
+  <MFV_ArcaneSecrets.label>arcane secrets</MFV_ArcaneSecrets.label>
+  <MFV_ArcaneSecrets.description>Unify several apprentice disciplines into deeper schools of colony-scale magic.</MFV_ArcaneSecrets.description>
+  <MFV_Necromancy.label>necromancy</MFV_Necromancy.label>
+  <MFV_Necromancy.description>Examine death, decay, lingering spirits, and the difficult border between body and soul.</MFV_Necromancy.description>
+  <MFV_Necromancy.customUnlockTexts.0>Arcane Discipline: Necromancer</MFV_Necromancy.customUnlockTexts.0>
+  <MFV_Necromancy.customUnlockTexts.1>Spell: Raise Skeleton</MFV_Necromancy.customUnlockTexts.1>
+  <MFV_Fleshcraft.label>fleshcraft</MFV_Fleshcraft.label>
+  <MFV_Fleshcraft.description>Alter living tissue through invasive magic, trading stability for power and survival.</MFV_Fleshcraft.description>
+  <MFV_Fleshcraft.customUnlockTexts.0>Arcane Discipline: Golemancer</MFV_Fleshcraft.customUnlockTexts.0>
+  <MFV_Soulcraft.label>soulcraft</MFV_Soulcraft.label>
+  <MFV_Soulcraft.description>Bind, preserve, wound, and strengthen souls through precise and dangerous rites.</MFV_Soulcraft.description>
+  <MFV_Soulcraft.customUnlockTexts.0>Arcane Discipline: Animus Domini</MFV_Soulcraft.customUnlockTexts.0>
+  <MFV_PlanarMagic.label>planar magic</MFV_PlanarMagic.label>
+  <MFV_PlanarMagic.description>Reach beyond local space into other planes, hostile dimensions, and distant thresholds.</MFV_PlanarMagic.description>
+  <MFV_PlanarMagic.customUnlockTexts.0>Arcane Discipline: Planar Mage</MFV_PlanarMagic.customUnlockTexts.0>
+  <MFV_InfernalPact.label>infernal pact</MFV_InfernalPact.label>
+  <MFV_InfernalPact.description>Study binding bargains, sacrificial power, and the summoning of infernal allies.</MFV_InfernalPact.description>
+  <MFV_InfernalPact.customUnlockTexts.0>Arcane Discipline: Warlock</MFV_InfernalPact.customUnlockTexts.0>
+  <MFV_GrandSorcery.label>grand sorcery</MFV_GrandSorcery.label>
+  <MFV_GrandSorcery.description>Perform large rituals and endgame spells whose effects can reshape a whole colony.</MFV_GrandSorcery.description>
+  <MFV_GrandSorcery.customUnlockTexts.0>Arcane Discipline: Archmage</MFV_GrandSorcery.customUnlockTexts.0>
+  <MFV_Chronomancy.label>chronomancy</MFV_Chronomancy.label>
+  <MFV_Chronomancy.description>Attempt the near-impossible discipline of stasis, acceleration, age, and altered time.</MFV_Chronomancy.description>
+  <MFV_Chronomancy.customUnlockTexts.0>Arcane Discipline: Chronomancer</MFV_Chronomancy.customUnlockTexts.0>
+</LanguageData>

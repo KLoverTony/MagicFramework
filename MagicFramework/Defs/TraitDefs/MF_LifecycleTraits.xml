@@ -40,4 +40,18 @@
     </degreeDatas>
   </TraitDef>
 
+  <TraitDef>
+    <defName>MF_Lifecycle_NoWork</defName>
+    <commonality>0</commonality>
+    <disabledWorkTags>
+      <li>AllWork</li>
+    </disabledWorkTags>
+    <degreeDatas>
+      <li>
+        <label>workless manifestation</label>
+        <description>{PAWN_nameDef} has no living vocation and cannot perform ordinary colony labor.</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
 </Defs>

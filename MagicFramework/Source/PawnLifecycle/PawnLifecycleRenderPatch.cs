@@ -36,7 +36,7 @@ public static class PawnLifecycleRenderPatch
 
         Pawn pawn = PawnField?.GetValue(__instance) as Pawn;
         if (!PawnLifecycleUtility.TryGetLifecycle(pawn, out PawnLifecycleExtension extension, out _)
-            || extension.bodyForm != PawnLifecycleBodyForm.Skeletal)
+            || extension.bodyForm is not (PawnLifecycleBodyForm.Skeletal or PawnLifecycleBodyForm.Spectral))
         {
             return __exception;
         }
@@ -44,10 +44,11 @@ public static class PawnLifecycleRenderPatch
         string pawnId = pawn?.ThingID ?? "<null>";
         if (LoggedPawnIds.Add(pawnId))
         {
-            Log.Warning("[MagicFramework] Suppressed skeletal pawn render exception for " +
+            Log.Warning("[MagicFramework] Suppressed lifecycle pawn render exception for " +
                 (pawn?.LabelShort ?? "<null>") +
                 " def=" + (pawn?.def?.defName ?? "<null>") +
                 " kind=" + (pawn?.kindDef?.defName ?? "<null>") +
+                " bodyForm=" + extension.bodyForm +
                 " gender=" + (pawn?.gender.ToString() ?? "<null>") +
                 " bodyType=" + (pawn?.story?.bodyType?.defName ?? "<null>") +
                 " headType=" + (pawn?.story?.headType?.defName ?? "<null>") +

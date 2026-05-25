@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ArcaneDisciplineMarker.label>arcane discipline marker</MFV_ArcaneDisciplineMarker.label>
+  <MFV_ArcaneDisciplineMarker.description>A simple ritual focus where gifted pawns can embrace an unlocked Arcane Discipline.</MFV_ArcaneDisciplineMarker.description>
+  <MFV_ArcaneSiteDecoration_A.label>arcane site decoration a</MFV_ArcaneSiteDecoration_A.label>
+  <MFV_ArcaneSiteDecoration_AA.label>arcane site decoration aa</MFV_ArcaneSiteDecoration_AA.label>
+  <MFV_ArcaneSiteDecoration_B.label>arcane site decoration b</MFV_ArcaneSiteDecoration_B.label>
+  <MFV_ArcaneSiteDecoration_C.label>arcane site decoration c</MFV_ArcaneSiteDecoration_C.label>
+  <MFV_ArcaneSiteDecoration_D.label>arcane site decoration d</MFV_ArcaneSiteDecoration_D.label>
+  <MFV_ArcaneSiteDecoration_E.label>arcane site decoration e</MFV_ArcaneSiteDecoration_E.label>
+  <MFV_ArcaneSiteDecoration_F.label>arcane site decoration f</MFV_ArcaneSiteDecoration_F.label>
+  <MFV_ArcaneSiteDecoration_G.label>arcane site decoration g</MFV_ArcaneSiteDecoration_G.label>
+  <MFV_ArcaneSiteDecoration_H.label>arcane site decoration h</MFV_ArcaneSiteDecoration_H.label>
+  <MFV_ArcaneSiteDecoration_I.label>arcane site decoration i</MFV_ArcaneSiteDecoration_I.label>
+  <MFV_ArcaneSiteDecoration_J.label>arcane site decoration j</MFV_ArcaneSiteDecoration_J.label>
+  <MFV_ArcaneSiteDecoration_K.label>arcane site decoration k</MFV_ArcaneSiteDecoration_K.label>
+  <MFV_ArcaneSiteDecoration_L.label>arcane site decoration l</MFV_ArcaneSiteDecoration_L.label>
+  <MFV_ArcaneSiteDecoration_M.label>arcane site decoration m</MFV_ArcaneSiteDecoration_M.label>
+  <MFV_ArcaneSiteDecoration_N.label>arcane site decoration n</MFV_ArcaneSiteDecoration_N.label>
+  <MFV_ArcaneSiteDecoration_O.label>arcane site decoration o</MFV_ArcaneSiteDecoration_O.label>
+  <MFV_ArcaneSiteDecoration_P.label>arcane site decoration p</MFV_ArcaneSiteDecoration_P.label>
+  <MFV_ArcaneSiteDecoration_Q.label>arcane site decoration q</MFV_ArcaneSiteDecoration_Q.label>
+  <MFV_ArcaneSiteDecoration_R.label>arcane site decoration r</MFV_ArcaneSiteDecoration_R.label>
+  <MFV_ArcaneSiteDecoration_S.label>arcane site decoration s</MFV_ArcaneSiteDecoration_S.label>
+  <MFV_ArcaneSiteDecoration_T.label>arcane site decoration t</MFV_ArcaneSiteDecoration_T.label>
+  <MFV_ArcaneSiteDecoration_U.label>arcane site decoration u</MFV_ArcaneSiteDecoration_U.label>
+  <MFV_ArcaneSiteDecoration_V.label>arcane site decoration v</MFV_ArcaneSiteDecoration_V.label>
+  <MFV_ArcaneSiteDecoration_W.label>arcane site decoration w</MFV_ArcaneSiteDecoration_W.label>
+  <MFV_ArcaneSiteDecoration_X.label>arcane site decoration x</MFV_ArcaneSiteDecoration_X.label>
+  <MFV_ArcaneSiteDecoration_Y.label>arcane site decoration y</MFV_ArcaneSiteDecoration_Y.label>
+  <MFV_ArcaneSiteDecoration_Z.label>arcane site decoration z</MFV_ArcaneSiteDecoration_Z.label>
+  <MFV_MagicTorchLamp.label>magic torch lamp</MFV_MagicTorchLamp.label>
+  <MFV_MagicTorchLamp.description>An enchanted torch built around a fire arcane focus. It lights an area without needing refueling, and produces a small amount of heat.</MFV_MagicTorchLamp.description>
+  <MFV_MagicTorchWallLamp.label>magic wall torch lamp</MFV_MagicTorchWallLamp.label>
+  <MFV_MagicTorchWallLamp.description>An enchanted wall-mounted torch built around a fire arcane focus. It lights an area without needing refueling, and produces a small amount of heat.</MFV_MagicTorchWallLamp.description>
+  <MFV_PlanarGate.label>planar gate</MFV_PlanarGate.label>
+  <MFV_PlanarGate.description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into a planar pocket.</MFV_PlanarGate.description>
+  <MFV_GemstoneVein.label>gemstone vein</MFV_GemstoneVein.label>
+  <MFV_GemstoneVein.description>A small mixed seam of crystalline material. Mining it may produce rough gemstone chunks.</MFV_GemstoneVein.description>
+  <MFV_PhaseStone.label>phase stone</MFV_PhaseStone.label>
+  <MFV_PhaseStone.description>A pale planar stone that seems to sit slightly out of alignment with ordinary space. Mining it leaves behind phase stone chunks.</MFV_PhaseStone.description>
+  <MFV_Voidglass.label>voidglass</MFV_Voidglass.label>
+  <MFV_Voidglass.description>A dark, glassy planar formation that bends light along its facets. Mining it leaves behind voidglass chunks.</MFV_Voidglass.description>
+  <MFV_AdvancedArcaneResearchBench.label>advanced arcane research bench</MFV_AdvancedArcaneResearchBench.label>
+  <MFV_AdvancedArcaneResearchBench.description>An elaborate arcane laboratory bench with stabilized instruments for higher-order ritual, planar, and enchantment research.</MFV_AdvancedArcaneResearchBench.description>
+  <MFV_AlchemyTable.label>alchemy table</MFV_AlchemyTable.label>
+  <MFV_AlchemyTable.description>A practical worktable for steeping herbs, grinding reagents, and preparing simple magical compounds.</MFV_AlchemyTable.description>
+  <MFV_ArcaneForge.label>arcane forge</MFV_ArcaneForge.label>
+  <MFV_ArcaneForge.description>An enchantment bench with stabilizing clamps, focusing channels, and warded toolheads for binding durable magic into weapons, armor, and other high-value gear.</MFV_ArcaneForge.description>
+  <MFV_ArcaneResearchBench.label>arcane research bench</MFV_ArcaneResearchBench.label>
+  <MFV_ArcaneResearchBench.description>A simple workbench for recording arcane observations, comparing spell structures, and conducting early magical research.</MFV_ArcaneResearchBench.description>
+  <MFV_ArcaneSpire.label>arcane spire</MFV_ArcaneSpire.label>
+  <MFV_ArcaneSpire.description>A resonant arcane conductor that stabilizes enchantment work when arranged around an arcane forge.</MFV_ArcaneSpire.description>
+  <MFV_LapidaryBench.label>lapidary bench</MFV_LapidaryBench.label>
+  <MFV_LapidaryBench.description>A compact workbench with clamps, abrasives, and polishing tools for breaking and cutting rough gemstones.</MFV_LapidaryBench.description>
+  <MFV_PapyrusPress.label>papyrus press</MFV_PapyrusPress.label>
+  <MFV_PapyrusPress.description>A simple pressing station for soaking, flattening, and drying plant fibers into papyrus sheets.</MFV_PapyrusPress.description>
+  <MFV_ParchmenteryBench.label>parchmentery bench</MFV_ParchmenteryBench.label>
+  <MFV_ParchmenteryBench.description>A prepared workbench for scraping, stretching, and drying leather into durable parchment sheets.</MFV_ParchmenteryBench.description>
+  <MFV_ScribingTable.label>scribing table</MFV_ScribingTable.label>
+  <MFV_ScribingTable.description>A careful writing station for preparing spell scrolls from papyrus and parchment.</MFV_ScribingTable.description>
+  <MFV_MagicHeater.label>magic heater</MFV_MagicHeater.label>
+  <MFV_MagicHeater.description>An enchanted heater built around a fire arcane focus. It warms indoor spaces without electricity and stops pushing heat once the room is comfortable.</MFV_MagicHeater.description>
+  <MFV_FineMagicHeater.label>fine magic heater</MFV_FineMagicHeater.label>
+  <MFV_FineMagicHeater.description>An enchanted heater built around fire-aspected fittings. It warms indoor spaces faster than a standard magic heater, while still stopping once the room is comfortable.</MFV_FineMagicHeater.description>
+  <MFV_ExquisiteMagicHeater.label>exquisite magic heater</MFV_ExquisiteMagicHeater.label>
+  <MFV_ExquisiteMagicHeater.description>An enchanted heater built around reinforced fire-aspected fittings. It strongly warms indoor spaces, while still stopping once the room is comfortable.</MFV_ExquisiteMagicHeater.description>
+  <MFV_MagicPassiveCooler.label>magic passive cooler</MFV_MagicPassiveCooler.label>
+  <MFV_MagicPassiveCooler.description>An enchanted cooler built around a water arcane focus. It cools indoor spaces without electricity or refueling, though it is not efficient enough to refrigerate food.</MFV_MagicPassiveCooler.description>
+  <MFV_FineMagicPassiveCooler.label>fine magic passive cooler</MFV_FineMagicPassiveCooler.label>
+  <MFV_FineMagicPassiveCooler.description>An enchanted cooler built around water-aspected fittings. It cools indoor spaces without electricity or refueling, and can draw the air colder than a standard passive cooler.</MFV_FineMagicPassiveCooler.description>
+  <MFV_ExquisiteMagicPassiveCooler.label>exquisite magic passive cooler</MFV_ExquisiteMagicPassiveCooler.label>
+  <MFV_ExquisiteMagicPassiveCooler.description>An enchanted cooler built around reinforced water-aspected fittings. It cools indoor spaces without electricity or refueling, and can keep a room below freezing in favorable conditions.</MFV_ExquisiteMagicPassiveCooler.description>
+  <MFV_ArcaneInk.label>arcane ink</MFV_ArcaneInk.label>
+  <MFV_ArcaneInk.description>A concentrated magical ink prepared from exotic herbs. It holds runic notation cleanly enough for scrollwork and other ritual writing.</MFV_ArcaneInk.description>
+  <MFV_ArcaneTreasureChest.label>arcane treasure chest</MFV_ArcaneTreasureChest.label>
+  <MFV_GreaterArcaneTreasureChest.label>greater arcane treasure chest</MFV_GreaterArcaneTreasureChest.label>
+  <MFV_GrandArcaneTreasureChest.label>grand arcane treasure chest</MFV_GrandArcaneTreasureChest.label>
+  <MFV_GrandArcaneTreasureChest.description>A sealed cache of unusually dense magical spoils. The bindings around it hum with layered promise and risk.</MFV_GrandArcaneTreasureChest.description>
+  <MFV_ExoticHerbs.label>exotic herbs</MFV_ExoticHerbs.label>
+  <MFV_ExoticHerbs.description>Freshly cut magical herbs with pungent oils and useful occult properties. They can be refined into alchemical reagents and arcane inks.</MFV_ExoticHerbs.description>
+  <MFV_GemstoneDust.label>gemstone dust</MFV_GemstoneDust.label>
+  <MFV_GemstoneDust.description>Fine crystalline dust collected while cutting gemstones. Alchemists use it to stabilize arcane ink for scrollwork.</MFV_GemstoneDust.description>
+  <MFV_FireArcaneFocus.label>fire arcane focus</MFV_FireArcaneFocus.label>
+  <MFV_FireArcaneFocus.description>A ruby focus prepared to hold stable fire-aspected arcane charge. It is useful for heat, flame, light, and fire enchantments.</MFV_FireArcaneFocus.description>
+  <MFV_WaterArcaneFocus.label>water arcane focus</MFV_WaterArcaneFocus.label>
+  <MFV_WaterArcaneFocus.description>A sapphire focus prepared to hold stable water-aspected arcane charge. It is useful for cooling, flow, protection, and water enchantments.</MFV_WaterArcaneFocus.description>
+  <MFV_EarthArcaneFocus.label>earth arcane focus</MFV_EarthArcaneFocus.label>
+  <MFV_EarthArcaneFocus.description>An emerald focus prepared to hold stable earth-aspected arcane charge. It is useful for stone, growth, stability, and earth enchantments.</MFV_EarthArcaneFocus.description>
+  <MFV_AirArcaneFocus.label>air arcane focus</MFV_AirArcaneFocus.label>
+  <MFV_AirArcaneFocus.description>A topaz focus prepared to hold stable air-aspected arcane charge. It is useful for wind, lightning, conduction, and air enchantments.</MFV_AirArcaneFocus.description>
+  <MFV_RubyChunk.label>ruby chunk</MFV_RubyChunk.label>
+  <MFV_DenseRubyChunk.label>dense ruby chunk</MFV_DenseRubyChunk.label>
+  <MFV_RawRubyPiece.label>raw ruby piece</MFV_RawRubyPiece.label>
+  <MFV_CommonRuby.label>common ruby</MFV_CommonRuby.label>
+  <MFV_FineRuby.label>fine ruby</MFV_FineRuby.label>
+  <MFV_ExquisiteRuby.label>exquisite ruby</MFV_ExquisiteRuby.label>
+  <MFV_SapphireChunk.label>sapphire chunk</MFV_SapphireChunk.label>
+  <MFV_DenseSapphireChunk.label>dense sapphire chunk</MFV_DenseSapphireChunk.label>
+  <MFV_RawSapphirePiece.label>raw sapphire piece</MFV_RawSapphirePiece.label>
+  <MFV_CommonSapphire.label>common sapphire</MFV_CommonSapphire.label>
+  <MFV_FineSapphire.label>fine sapphire</MFV_FineSapphire.label>
+  <MFV_ExquisiteSapphire.label>exquisite sapphire</MFV_ExquisiteSapphire.label>
+  <MFV_EmeraldChunk.label>emerald chunk</MFV_EmeraldChunk.label>
+  <MFV_DenseEmeraldChunk.label>dense emerald chunk</MFV_DenseEmeraldChunk.label>
+  <MFV_RawEmeraldPiece.label>raw emerald piece</MFV_RawEmeraldPiece.label>
+  <MFV_CommonEmerald.label>common emerald</MFV_CommonEmerald.label>
+  <MFV_FineEmerald.label>fine emerald</MFV_FineEmerald.label>
+  <MFV_ExquisiteEmerald.label>exquisite emerald</MFV_ExquisiteEmerald.label>
+  <MFV_DiamondChunk.label>diamond chunk</MFV_DiamondChunk.label>
+  <MFV_DenseDiamondChunk.label>dense diamond chunk</MFV_DenseDiamondChunk.label>
+  <MFV_RawDiamondPiece.label>raw diamond piece</MFV_RawDiamondPiece.label>
+  <MFV_CommonDiamond.label>common diamond</MFV_CommonDiamond.label>
+  <MFV_FineDiamond.label>fine diamond</MFV_FineDiamond.label>
+  <MFV_ExquisiteDiamond.label>exquisite diamond</MFV_ExquisiteDiamond.label>
+  <MFV_AmethystChunk.label>amethyst chunk</MFV_AmethystChunk.label>
+  <MFV_DenseAmethystChunk.label>dense amethyst chunk</MFV_DenseAmethystChunk.label>
+  <MFV_RawAmethystPiece.label>raw amethyst piece</MFV_RawAmethystPiece.label>
+  <MFV_CommonAmethyst.label>common amethyst</MFV_CommonAmethyst.label>
+  <MFV_FineAmethyst.label>fine amethyst</MFV_FineAmethyst.label>
+  <MFV_ExquisiteAmethyst.label>exquisite amethyst</MFV_ExquisiteAmethyst.label>
+  <MFV_TopazChunk.label>topaz chunk</MFV_TopazChunk.label>
+  <MFV_DenseTopazChunk.label>dense topaz chunk</MFV_DenseTopazChunk.label>
+  <MFV_RawTopazPiece.label>raw topaz piece</MFV_RawTopazPiece.label>
+  <MFV_CommonTopaz.label>common topaz</MFV_CommonTopaz.label>
+  <MFV_FineTopaz.label>fine topaz</MFV_FineTopaz.label>
+  <MFV_ExquisiteTopaz.label>exquisite topaz</MFV_ExquisiteTopaz.label>
+  <MFV_FlamingLongsword.label>flaming longsword</MFV_FlamingLongsword.label>
+  <MFV_FlamingLongsword.description>A longsword carrying a bound flame enchantment. Its edge burns hot enough to sear flesh and kindle targets while remaining stable in its wielder's hand.</MFV_FlamingLongsword.description>
+  <MFV_ZephyrSpear.label>Zephyr Spear</MFV_ZephyrSpear.label>
+  <MFV_ZephyrSpear.description>A spear carrying a bound air enchantment. Its point rides sudden pressure shifts, striking with uncanny reach and snapping gusts.</MFV_ZephyrSpear.description>
+  <MFV_TidebreakerMace.label>Tidebreaker Mace</MFV_TidebreakerMace.label>
+  <MFV_TidebreakerMace.description>A mace carrying a bound water enchantment. Each impact lands with a cold, crashing weight that chills armor and flesh alike.</MFV_TidebreakerMace.description>
+  <MFV_StonefallMace.label>Stonefall Mace</MFV_StonefallMace.label>
+  <MFV_StonefallMace.description>A mace carrying a bound earth enchantment. Its head falls with unnatural certainty, adding crushing force to clean hits.</MFV_StonefallMace.description>
+  <MFV_Papyrus.label>papyrus</MFV_Papyrus.label>
+  <MFV_Papyrus.description>Pressed plant fiber sheets suitable for simple notes, formulae, and low-order scrollwork.</MFV_Papyrus.description>
+  <MFV_Parchment.label>parchment</MFV_Parchment.label>
+  <MFV_Parchment.description>Pressed and dried sheets prepared for magical notation, ritual drafts, and scrollwork.</MFV_Parchment.description>
+  <MFV_ChunkPhaseStone.label>phase stone chunk</MFV_ChunkPhaseStone.label>
+  <MFV_ChunkPhaseStone.description>A chunk of phase stone from a planar pocket. It can be ground into gemstone dust.</MFV_ChunkPhaseStone.description>
+  <MFV_ChunkVoidglass.label>voidglass chunk</MFV_ChunkVoidglass.label>
+  <MFV_ChunkVoidglass.description>A chunk of dark planar glass. It can be ground into gemstone dust.</MFV_ChunkVoidglass.description>
+  <MFV_Gun_CrystalLance.label>crystal graser</MFV_Gun_CrystalLance.label>
+  <MFV_Gun_CrystalLance.description>A faceted crystal emitter grown into the frame of an arcane sentinel. It releases a sweeping, high-energy beam that burns through armor and shield fields.</MFV_Gun_CrystalLance.description>
+  <MFV_Gun_RuneBallista.label>stone hurling core</MFV_Gun_RuneBallista.label>
+  <MFV_Gun_RuneBallista.description>A geomantic core fixed into a stone golem's frame. Before each shot, it tears chunks from the ground and hurls one as a crushing boulder.</MFV_Gun_RuneBallista.description>
+  <MFV_Projectile_StoneGolemBoulder.label>hurled boulder</MFV_Projectile_StoneGolemBoulder.label>
+  <MFV_ClayAutomaton.label>clay automaton</MFV_ClayAutomaton.label>
+  <MFV_ClayAutomaton.description>A blunt clay guardian shaped by old warding rites. Its rune-core is simple, but the body is tireless, obedient, and dangerously strong at close range.</MFV_ClayAutomaton.description>
+  <MFV_RuneSlasherAutomaton.label>rune-slasher automaton</MFV_RuneSlasherAutomaton.label>
+  <MFV_RuneSlasherAutomaton.description>A fast guardian frame fitted with crescent blades and guiding runes. It closes distance quickly, then tears at anything that violates its sealed charge.</MFV_RuneSlasherAutomaton.description>
+  <MFV_FleshGolem.label>flesh golem</MFV_FleshGolem.label>
+  <MFV_FleshGolem.description>A stitched guardian animated by vital magic and crude command runes. It lumbers into melee, absorbs punishment, and knits torn flesh back together while the fight continues.</MFV_FleshGolem.description>
+  <MFV_CrystalSentinel.label>crystal sentinel</MFV_CrystalSentinel.label>
+  <MFV_CrystalSentinel.description>A narrow guardian automaton built around a charged crystal heart. Its polished focus sweeps a burning crystal beam across intruders before the sentinel advances.</MFV_CrystalSentinel.description>
+  <MFV_RuneBallistaConstruct.label>stone golem</MFV_RuneBallistaConstruct.label>
+  <MFV_RuneBallistaConstruct.description>A heavy stone guardian designed to hold a corridor or vault approach. It digs chunks from the ground around itself, then hurls the raised stone with crushing force.</MFV_RuneBallistaConstruct.description>
+  <MFV_DeepIronGolem.label>deep iron golem</MFV_DeepIronGolem.label>
+  <MFV_DeepIronGolem.description>A towering construct forged from dark deep iron and animated by a bound force rune. It is slow and ponderous, but its rune drinks in violent energy until it can harden into a shield or erupt in a crushing wave.</MFV_DeepIronGolem.description>
+  <MFV_Skeleton.label>skeleton</MFV_Skeleton.label>
+  <MFV_Skeleton.description>A brittle undead guardian assembled from grave-bone and held upright by necromantic command. It has no hunger, fear, or comfort, and exists only briefly to fight for its summoner.</MFV_Skeleton.description>
+  <Plant_MFV_ExoticHerbs.label>exotic herbs</Plant_MFV_ExoticHerbs.label>
+  <Plant_MFV_ExoticHerbs.description>A cultivated magical herb used as a flexible organic base for alchemical preparations, inks, and other arcane reagents.</Plant_MFV_ExoticHerbs.description>
+  <Plant_MFV_PlanarA.label>planar frond</Plant_MFV_PlanarA.label>
+  <Plant_MFV_PlanarB.label>planar bristle</Plant_MFV_PlanarB.label>
+  <Plant_MFV_PlanarC.label>planar reed</Plant_MFV_PlanarC.label>
+  <Plant_MFV_PlanarD.label>planar bloom</Plant_MFV_PlanarD.label>
+  <Plant_MFV_PlanarE.label>planar thorn</Plant_MFV_PlanarE.label>
+  <Plant_MFV_PlanarF.label>planar tuft</Plant_MFV_PlanarF.label>
+  <Plant_MFV_PlanarG.label>planar sprout</Plant_MFV_PlanarG.label>
+  <Plant_MFV_PlanarH.label>planar fern</Plant_MFV_PlanarH.label>
+  <Plant_MFV_PlanarI.label>planar stem</Plant_MFV_PlanarI.label>
+  <Plant_MFV_PlanarJ.label>planar cluster</Plant_MFV_PlanarJ.label>
+</LanguageData>

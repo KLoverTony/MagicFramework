@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ClayAutomaton.label>clay automaton</MFV_ClayAutomaton.label>
+  <MFV_RuneSlasherAutomaton.label>rune-slasher automaton</MFV_RuneSlasherAutomaton.label>
+  <MFV_FleshGolem.label>flesh golem</MFV_FleshGolem.label>
+  <MFV_CrystalSentinel.label>crystal sentinel</MFV_CrystalSentinel.label>
+  <MFV_RuneBallistaConstruct.label>stone golem</MFV_RuneBallistaConstruct.label>
+  <MFV_DeepIronGolem.label>deep iron golem</MFV_DeepIronGolem.label>
+  <MFV_Skeleton.label>skeleton</MFV_Skeleton.label>
+</LanguageData>

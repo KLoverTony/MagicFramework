@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_CompelledPawns.label>compelled pawns</MFV_CompelledPawns.label>
+  <MFV_CompelledPawns.description>Temporary faction used by Magic Framework maintained allegiance effects. It should not appear as an ordinary world faction.</MFV_CompelledPawns.description>
+  <MFV_CompelledPawns.leaderTitle>thrall</MFV_CompelledPawns.leaderTitle>
+  <MFV_CompelledPawns.pawnSingular>compelled pawn</MFV_CompelledPawns.pawnSingular>
+  <MFV_CompelledPawns.pawnsPlural>compelled pawns</MFV_CompelledPawns.pawnsPlural>
+  <MFV_ElementalistTribe.label>elementalist tribe</MFV_ElementalistTribe.label>
+  <MFV_ElementalistTribe.description>An old confederation of clans, circles, and shrine-keepers who treat fire, water, earth, and air as the four living obligations of settlement life. They travel between seasonal camps, trade arcane reagents and elemental scrolls, and preserve practical magic through oral schools rather than formal academies.\n\nThey are not a single-element cult. Their strongest circles specialize, but the tribe as a whole values balance: fire for warmth and courage, water for mercy and survival, earth for shelter and memory, and air for motion and warning.</MFV_ElementalistTribe.description>
+  <MFV_ElementalistTribe.leaderTitle>circle elder</MFV_ElementalistTribe.leaderTitle>
+  <MFV_ElementalistTribe.pawnSingular>elementalist</MFV_ElementalistTribe.pawnSingular>
+  <MFV_ElementalistTribe.pawnsPlural>elementalists</MFV_ElementalistTribe.pawnsPlural>
+</LanguageData>

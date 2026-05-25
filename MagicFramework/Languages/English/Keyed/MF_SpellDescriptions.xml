@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_SpellDescriptionEffectsHeader>Effects:</MF_SpellDescriptionEffectsHeader>
+  <MF_SpellDescriptionCastFallback>Cast {0}.</MF_SpellDescriptionCastFallback>
+  <MF_SpellDescriptionTier>tier {0}</MF_SpellDescriptionTier>
+  <MF_SpellDescriptionClassification>Classification: {0}.</MF_SpellDescriptionClassification>
+  <MF_SpellDescriptionRequirements>Requirements: {0}.</MF_SpellDescriptionRequirements>
+  <MF_SpellDescriptionRequirementsNone>Requirements: none authored.</MF_SpellDescriptionRequirementsNone>
+  <MF_SpellDescriptionResearchMet>research {0} met</MF_SpellDescriptionResearchMet>
+  <MF_SpellDescriptionResearchUnmet>research {0} unmet</MF_SpellDescriptionResearchUnmet>
+  <MF_SpellDescriptionReadyForCaster>ready for {0}</MF_SpellDescriptionReadyForCaster>
+  <MF_SpellDescriptionTargeting>Targeting: {0}.</MF_SpellDescriptionTargeting>
+  <MF_SpellDescriptionActiveModifiers>Active modifiers: {0}.</MF_SpellDescriptionActiveModifiers>
+  <MF_SpellDescriptionActiveModifiersNone>Active modifiers: none.</MF_SpellDescriptionActiveModifiersNone>
+
+  <MF_SpellDescriptionMana>mana</MF_SpellDescriptionMana>
+  <MF_SpellDescriptionCooldown>cooldown</MF_SpellDescriptionCooldown>
+  <MF_SpellDescriptionSpellPower>spell power</MF_SpellDescriptionSpellPower>
+  <MF_SpellDescriptionDamage>damage</MF_SpellDescriptionDamage>
+  <MF_SpellDescriptionBlunt>blunt</MF_SpellDescriptionBlunt>
+  <MF_SpellDescriptionHeals>Heals</MF_SpellDescriptionHeals>
+  <MF_SpellDescriptionZero>0</MF_SpellDescriptionZero>
+  <MF_SpellDescriptionNone>none</MF_SpellDescriptionNone>
+  <MF_SpellDescriptionInstant>instant</MF_SpellDescriptionInstant>
+  <MF_SpellDescriptionBriefly>briefly</MF_SpellDescriptionBriefly>
+
+  <MF_SpellDescriptionScaledDamage>damage</MF_SpellDescriptionScaledDamage>
+  <MF_SpellDescriptionScaledHealing>healing</MF_SpellDescriptionScaledHealing>
+  <MF_SpellDescriptionScaledRadiusRange>radius/range</MF_SpellDescriptionScaledRadiusRange>
+  <MF_SpellDescriptionScaledDuration>duration</MF_SpellDescriptionScaledDuration>
+  <MF_SpellDescriptionScaledManaCost>mana cost</MF_SpellDescriptionScaledManaCost>
+  <MF_SpellDescriptionScaledCooldown>cooldown</MF_SpellDescriptionScaledCooldown>
+
+  <MF_SpellDescriptionRange>range {0}</MF_SpellDescriptionRange>
+  <MF_SpellDescriptionCellRadius>{0}-cell radius</MF_SpellDescriptionCellRadius>
+  <MF_SpellDescriptionCellLine>{0}-cell line</MF_SpellDescriptionCellLine>
+  <MF_SpellDescriptionCellCone>{0}-cell cone</MF_SpellDescriptionCellCone>
+  <MF_SpellDescriptionCellWall>{0}-cell wall</MF_SpellDescriptionCellWall>
+  <MF_SpellDescriptionCellMeasure>{0}-cell</MF_SpellDescriptionCellMeasure>
+  <MF_SpellDescriptionCells>{0} cell(s)</MF_SpellDescriptionCells>
+  <MF_SpellDescriptionTimes>{0} time(s)</MF_SpellDescriptionTimes>
+  <MF_SpellDescriptionLineOfSight>line of sight</MF_SpellDescriptionLineOfSight>
+  <MF_SpellDescriptionWaterLikeTerrain>water-like terrain</MF_SpellDescriptionWaterLikeTerrain>
+  <MF_SpellDescriptionRequiresLineOfSight>requires line of sight</MF_SpellDescriptionRequiresLineOfSight>
+  <MF_SpellDescriptionRequiresWaterLikeTerrain>requires water-like terrain</MF_SpellDescriptionRequiresWaterLikeTerrain>
+  <MF_SpellDescriptionTargets>Targets {0} ({1}).</MF_SpellDescriptionTargets>
+
+  <MF_SpellDescriptionCostsMana>Costs {0} {1}.</MF_SpellDescriptionCostsMana>
+  <MF_SpellDescriptionStartsCooldown>Starts a {0} {1}.</MF_SpellDescriptionStartsCooldown>
+  <MF_SpellDescriptionScalesWithSpellPower>Scales {0} with {1}.</MF_SpellDescriptionScalesWithSpellPower>
+  <MF_SpellDescriptionScalingWithSpellPower>{0}, scaling with spell power</MF_SpellDescriptionScalingWithSpellPower>
+
+  <MF_SpellDescriptionDealsDamage>Deals {0} {1} damage.</MF_SpellDescriptionDealsDamage>
+  <MF_SpellDescriptionHealsInjury>{0} up to {1} total injury damage.</MF_SpellDescriptionHealsInjury>
+  <MF_SpellDescriptionCreatesExplosion>Creates a {0}-cell {1} explosion for {2} damage.</MF_SpellDescriptionCreatesExplosion>
+  <MF_SpellDescriptionPushesHeat>Pushes {0} heat into the target room.</MF_SpellDescriptionPushesHeat>
+  <MF_SpellDescriptionAppliesEffect>Applies {0}{1}.</MF_SpellDescriptionAppliesEffect>
+  <MF_SpellDescriptionAppliesStatModifiers>Applies {0} for {1}.</MF_SpellDescriptionAppliesStatModifiers>
+  <MF_SpellDescriptionMaintainsEffect>Maintains {0}{1}.</MF_SpellDescriptionMaintainsEffect>
+  <MF_SpellDescriptionAppliesTimedStatusEffect>Applies a timed status effect for {0}.</MF_SpellDescriptionAppliesTimedStatusEffect>
+  <MF_SpellDescriptionCostsManaEveryWhileMaintained> Costs {0} {1} every {2} while maintained.</MF_SpellDescriptionCostsManaEveryWhileMaintained>
+  <MF_SpellDescriptionCostsManaPerAffectedPawn> Costs {0} {1} per affected pawn.</MF_SpellDescriptionCostsManaPerAffectedPawn>
+  <MF_SpellDescriptionMaintainsProtectiveForceField>Maintains a protective force field{0}.{1}</MF_SpellDescriptionMaintainsProtectiveForceField>
+  <MF_SpellDescriptionCreatesLingeringArea>Creates a lingering {0}-cell area for {1}.{2}{3}</MF_SpellDescriptionCreatesLingeringArea>
+  <MF_SpellDescriptionCreatesWallEffect>Creates a {0}-cell wall effect for {1}.</MF_SpellDescriptionCreatesWallEffect>
+  <MF_SpellDescriptionSummonsPawn>Summons {0} for {1}.</MF_SpellDescriptionSummonsPawn>
+  <MF_SpellDescriptionCreatesThing>Creates {0} {1}{2}.</MF_SpellDescriptionCreatesThing>
+  <MF_SpellDescriptionAfterDelay>After {0}:</MF_SpellDescriptionAfterDelay>
+  <MF_SpellDescriptionRepeatsEvery>Repeats {0}, every {1}.</MF_SpellDescriptionRepeatsEvery>
+  <MF_SpellDescriptionLaunchesProjectile>Launches {0}{1}.</MF_SpellDescriptionLaunchesProjectile>
+  <MF_SpellDescriptionCausesBriefDisorientation> Causes brief disorientation for {0}.</MF_SpellDescriptionCausesBriefDisorientation>
+  <MF_SpellDescriptionTeleportsSubject>Teleports the chosen subject to an authored destination.{0}</MF_SpellDescriptionTeleportsSubject>
+  <MF_SpellDescriptionCollisionsDealDamage> Collisions deal {0} {1} damage.</MF_SpellDescriptionCollisionsDealDamage>
+  <MF_SpellDescriptionPushesTargetBack>Pushes the target back up to {0}.{1}</MF_SpellDescriptionPushesTargetBack>
+  <MF_SpellDescriptionPullsTarget>Pulls the target up to {0} toward the caster.</MF_SpellDescriptionPullsTarget>
+  <MF_SpellDescriptionMovesTarget>Moves the target up to {0} toward the spell point.</MF_SpellDescriptionMovesTarget>
+  <MF_SpellDescriptionDrawsStoneChunks>Draws nearby stone chunks toward the spell point.</MF_SpellDescriptionDrawsStoneChunks>
+  <MF_SpellDescriptionHasConditionalEffect>Has a conditional effect.</MF_SpellDescriptionHasConditionalEffect>
+  <MF_SpellDescriptionHasConditionalEffectLabel>Has a conditional effect: {0}.</MF_SpellDescriptionHasConditionalEffectLabel>
+  <MF_SpellDescriptionAppliesToQueriedTargets>Applies effects to queried targets.</MF_SpellDescriptionAppliesToQueriedTargets>
+  <MF_SpellDescriptionChainsEffects>Chains effects through nearby targets.</MF_SpellDescriptionChainsEffects>
+  <MF_SpellDescriptionChanceToStun>Has a {0} chance to stun for {1}.</MF_SpellDescriptionChanceToStun>
+  <MF_SpellDescriptionExtinguishesFires>Extinguishes fires in a {0} radius.</MF_SpellDescriptionExtinguishesFires>
+  <MF_SpellDescriptionDestroysTarget>Destroys the target.</MF_SpellDescriptionDestroysTarget>
+  <MF_SpellDescriptionMinesRockCells>Mines up to {0} nearby rock cells.</MF_SpellDescriptionMinesRockCells>
+  <MF_SpellDescriptionTemporarilyCompelsTarget>Temporarily compels the target to fight as an ally{0}.{1}</MF_SpellDescriptionTemporarilyCompelsTarget>
+
+  <MF_SpellDescriptionACell>a cell</MF_SpellDescriptionACell>
+  <MF_SpellDescriptionAPawn>a pawn</MF_SpellDescriptionAPawn>
+  <MF_SpellDescriptionAThing>a thing</MF_SpellDescriptionAThing>
+  <MF_SpellDescriptionAPawnOrCell>a pawn or cell</MF_SpellDescriptionAPawnOrCell>
+  <MF_SpellDescriptionAPawnOrThing>a pawn or thing</MF_SpellDescriptionAPawnOrThing>
+  <MF_SpellDescriptionATarget>a target</MF_SpellDescriptionATarget>
+  <MF_SpellDescriptionAlliedTarget>an allied {0}</MF_SpellDescriptionAlliedTarget>
+  <MF_SpellDescriptionHostileTarget>a hostile {0}</MF_SpellDescriptionHostileTarget>
+  <MF_SpellDescriptionAStatusEffect>a status effect</MF_SpellDescriptionAStatusEffect>
+  <MF_SpellDescriptionACreature>a creature</MF_SpellDescriptionACreature>
+  <MF_SpellDescriptionItem>item</MF_SpellDescriptionItem>
+  <MF_SpellDescriptionAProjectile>a projectile</MF_SpellDescriptionAProjectile>
+  <MF_SpellDescriptionAStat>a stat</MF_SpellDescriptionAStat>
+  <MF_SpellDescriptionStatChanges>stat changes</MF_SpellDescriptionStatChanges>
+  <MF_SpellDescriptionReusableStatusEffect>a reusable status effect</MF_SpellDescriptionReusableStatusEffect>
+
+  <MF_SpellDescriptionChainLightningBranching>, branching {0}-{1} way(s)</MF_SpellDescriptionChainLightningBranching>
+  <MF_SpellDescriptionMayRevisitTargets>, may revisit targets</MF_SpellDescriptionMayRevisitTargets>
+  <MF_SpellDescriptionAvoidsPreviouslyHitTargets>, avoids previously hit targets</MF_SpellDescriptionAvoidsPreviouslyHitTargets>
+  <MF_SpellDescriptionChainsLightning>Chains lightning through nearby targets for up to {0} hop(s), within {1} cells{2}{3}.</MF_SpellDescriptionChainsLightning>
+  <MF_SpellDescriptionFromOrigin>from {0}</MF_SpellDescriptionFromOrigin>
+  <MF_SpellDescriptionTowardTargetSource>toward {0}</MF_SpellDescriptionTowardTargetSource>
+  <MF_SpellDescriptionCurrentTarget>the current target</MF_SpellDescriptionCurrentTarget>
+  <MF_SpellDescriptionSpellPoint>the spell point</MF_SpellDescriptionSpellPoint>
+  <MF_SpellDescriptionCaster>the caster</MF_SpellDescriptionCaster>
+  <MF_SpellDescriptionStatusIgnoredIfActive>; ignored if already active</MF_SpellDescriptionStatusIgnoredIfActive>
+  <MF_SpellDescriptionStatusDurationStacks>; duration stacks</MF_SpellDescriptionStatusDurationStacks>
+  <MF_SpellDescriptionStatusReplacesExisting>; replaces existing</MF_SpellDescriptionStatusReplacesExisting>
+
+  <MF_SpellDescriptionFreezes>freezes</MF_SpellDescriptionFreezes>
+  <MF_SpellDescriptionIce>ice</MF_SpellDescriptionIce>
+  <MF_SpellDescriptionSnow>snow</MF_SpellDescriptionSnow>
+  <MF_SpellDescriptionFreezesWaterTerrain>{0} water-like terrain</MF_SpellDescriptionFreezesWaterTerrain>
+  <MF_SpellDescriptionMeltsIce>melts {0}</MF_SpellDescriptionMeltsIce>
+  <MF_SpellDescriptionAddsSnow>adds {0}</MF_SpellDescriptionAddsSnow>
+  <MF_SpellDescriptionRemovesSnow>removes snow</MF_SpellDescriptionRemovesSnow>
+  <MF_SpellDescriptionChangesTerrainTo>changes terrain to {0}</MF_SpellDescriptionChangesTerrainTo>
+  <MF_SpellDescriptionChangesTerrain>Changes terrain</MF_SpellDescriptionChangesTerrain>
+  <MF_SpellDescriptionTerrainPatch>{0} in a {1}-cell radius.</MF_SpellDescriptionTerrainPatch>
+
+  <MF_SpellDescriptionRequirementMana>at least {0} mana</MF_SpellDescriptionRequirementMana>
+  <MF_SpellDescriptionRequirementCooldownReady>cooldown ready</MF_SpellDescriptionRequirementCooldownReady>
+  <MF_SpellDescriptionRequirementArcaneGift>Arcane Gift</MF_SpellDescriptionRequirementArcaneGift>
+  <MF_SpellDescriptionRequirementCasterLevel>caster level {0}+</MF_SpellDescriptionRequirementCasterLevel>
+  <MF_SpellDescriptionForDuration> for {0}</MF_SpellDescriptionForDuration>
+  <MF_SpellDescriptionForUpToDuration> for up to {0}</MF_SpellDescriptionForUpToDuration>
+  <MF_SpellDescriptionListTwo>{0} and {1}</MF_SpellDescriptionListTwo>
+  <MF_SpellDescriptionListMany>{0}, and {1}</MF_SpellDescriptionListMany>
+</LanguageData>

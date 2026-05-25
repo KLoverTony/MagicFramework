@@ -37,10 +37,11 @@ namespace AeternusFaith
     {
         public static bool Prefix(ref PawnGenerationRequest request, ref Pawn __result)
         {
-            if (request.KindDef?.defName != "AF_Skeleton")
+            string requestedKindDefName = request.KindDef?.defName;
+            if (requestedKindDefName != "AF_Skeleton" && requestedKindDefName != "AF_Spectre")
                 return true;
 
-            PawnKindDef skeletonKindDef = request.KindDef;
+            PawnKindDef undeadKindDef = request.KindDef;
             PawnGenerationRequest baseRequest = new PawnGenerationRequest(
                 kind: PawnKindDefOf.Colonist,
                 faction: request.Faction ?? Faction.OfPlayer,
@@ -64,15 +65,19 @@ namespace AeternusFaith
                 minimumAgeTraits: 0,
                 forceNoGear: true);
 
-            Pawn skeleton = PawnGenerator.GeneratePawn(baseRequest);
-            if (skeleton == null)
+            Pawn pawn = PawnGenerator.GeneratePawn(baseRequest);
+            if (pawn == null)
             {
                 __result = null;
                 return false;
             }
 
-            SkeletonUndeadUtility.ConvertPawnToSkeleton(skeleton, skeletonKindDef);
-            __result = skeleton;
+            if (requestedKindDefName == "AF_Spectre")
+                SkeletonUndeadUtility.ConvertPawnToSpectre(pawn, undeadKindDef);
+            else
+                SkeletonUndeadUtility.ConvertPawnToSkeleton(pawn, undeadKindDef);
+
+            __result = pawn;
             return false;
         }
     }

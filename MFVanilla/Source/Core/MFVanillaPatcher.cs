@@ -69,6 +69,11 @@ public static class MFVanillaPatcher
         );
 
         harmony.Patch(
+            AccessTools.Method(typeof(SpellRuntimeGameComponent), nameof(SpellRuntimeGameComponent.GetCasterLevel)),
+            postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(SpellRuntimeGameComponent_GetCasterLevel_Postfix))
+        );
+
+        harmony.Patch(
             AccessTools.Method(typeof(SpellRuntimeGameComponent), nameof(SpellRuntimeGameComponent.SetArcaneGift)),
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(SpellRuntimeGameComponent_SetArcaneGift_Postfix))
         );
@@ -324,7 +329,17 @@ public static class MFVanillaPatcher
     {
         if (!__result && ArcaneGiftUtility.HasArcaneGiftTrait(pawn))
         {
+            SpellRuntimeGameComponent.Instance?.SetArcaneGift(pawn, true);
             __result = true;
+        }
+    }
+
+    private static void SpellRuntimeGameComponent_GetCasterLevel_Postfix(SpellRuntimeGameComponent __instance, Pawn pawn, ref int __result)
+    {
+        if (__result < 1 && ArcaneGiftUtility.HasArcaneGiftTrait(pawn))
+        {
+            __instance?.SetArcaneGift(pawn, true);
+            __result = 1;
         }
     }
 

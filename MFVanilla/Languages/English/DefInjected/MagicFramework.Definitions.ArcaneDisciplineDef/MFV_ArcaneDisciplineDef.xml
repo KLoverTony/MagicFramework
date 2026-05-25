@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ArcaneDiscipline_Medium.label>medium</MFV_ArcaneDiscipline_Medium.label>
+  <MFV_ArcaneDiscipline_Elementalist.label>elementalist</MFV_ArcaneDiscipline_Elementalist.label>
+  <MFV_ArcaneDiscipline_Enchanter.label>enchanter</MFV_ArcaneDiscipline_Enchanter.label>
+  <MFV_ArcaneDiscipline_Summoner.label>summoner</MFV_ArcaneDiscipline_Summoner.label>
+  <MFV_ArcaneDiscipline_Transmuter.label>transmuter</MFV_ArcaneDiscipline_Transmuter.label>
+  <MFV_ArcaneDiscipline_Illusionist.label>illusionist</MFV_ArcaneDiscipline_Illusionist.label>
+  <MFV_ArcaneDiscipline_Vitalist.label>vitalist</MFV_ArcaneDiscipline_Vitalist.label>
+  <MFV_ArcaneDiscipline_Pyromancer.label>pyromancer</MFV_ArcaneDiscipline_Pyromancer.label>
+  <MFV_ArcaneDiscipline_Aquamancer.label>aquamancer</MFV_ArcaneDiscipline_Aquamancer.label>
+  <MFV_ArcaneDiscipline_Aeromancer.label>aeromancer</MFV_ArcaneDiscipline_Aeromancer.label>
+  <MFV_ArcaneDiscipline_Geomancer.label>geomancer</MFV_ArcaneDiscipline_Geomancer.label>
+  <MFV_ArcaneDiscipline_Necromancer.label>necromancer</MFV_ArcaneDiscipline_Necromancer.label>
+  <MFV_ArcaneDiscipline_Golemancer.label>golemancer</MFV_ArcaneDiscipline_Golemancer.label>
+  <MFV_ArcaneDiscipline_Warlock.label>warlock</MFV_ArcaneDiscipline_Warlock.label>
+  <MFV_ArcaneDiscipline_Heretic.label>heretic</MFV_ArcaneDiscipline_Heretic.label>
+  <MFV_ArcaneDiscipline_Chronomancer.label>chronomancer</MFV_ArcaneDiscipline_Chronomancer.label>
+  <MFV_ArcaneDiscipline_AnimusDomini.label>animus domini</MFV_ArcaneDiscipline_AnimusDomini.label>
+  <MFV_ArcaneDiscipline_PlanarMage.label>planar mage</MFV_ArcaneDiscipline_PlanarMage.label>
+  <MFV_ArcaneDiscipline_Archmage.label>archmage</MFV_ArcaneDiscipline_Archmage.label>
+</LanguageData>

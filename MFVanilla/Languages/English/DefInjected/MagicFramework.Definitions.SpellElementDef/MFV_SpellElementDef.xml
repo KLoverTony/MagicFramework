@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_Element_Fire.label>fire</MF_Element_Fire.label>
+  <MF_Element_Fire.labelShort>fire</MF_Element_Fire.labelShort>
+  <MF_Element_Frost.label>frost</MF_Element_Frost.label>
+  <MF_Element_Frost.labelShort>frost</MF_Element_Frost.labelShort>
+  <MF_Element_Lightning.label>lightning</MF_Element_Lightning.label>
+  <MF_Element_Lightning.labelShort>lightning</MF_Element_Lightning.labelShort>
+  <MF_Element_Earth.label>earth</MF_Element_Earth.label>
+  <MF_Element_Earth.labelShort>earth</MF_Element_Earth.labelShort>
+  <MF_Element_Water.label>water</MF_Element_Water.label>
+  <MF_Element_Water.labelShort>water</MF_Element_Water.labelShort>
+  <MF_Element_Air.label>air</MF_Element_Air.label>
+  <MF_Element_Air.labelShort>air</MF_Element_Air.labelShort>
+  <MF_Element_Life.label>life</MF_Element_Life.label>
+  <MF_Element_Life.labelShort>life</MF_Element_Life.labelShort>
+  <MF_Element_Death.label>death</MF_Element_Death.label>
+  <MF_Element_Death.labelShort>death</MF_Element_Death.labelShort>
+  <MF_Element_Spirit.label>spirit</MF_Element_Spirit.label>
+  <MF_Element_Spirit.labelShort>spirit</MF_Element_Spirit.labelShort>
+  <MF_Element_Arcane.label>arcane</MF_Element_Arcane.label>
+  <MF_Element_Arcane.labelShort>arcane</MF_Element_Arcane.labelShort>
+  <MF_Element_Shadow.label>shadow</MF_Element_Shadow.label>
+  <MF_Element_Shadow.labelShort>shadow</MF_Element_Shadow.labelShort>
+  <MF_Element_Light.label>light</MF_Element_Light.label>
+  <MF_Element_Light.labelShort>light</MF_Element_Light.labelShort>
+</LanguageData>

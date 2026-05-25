@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_GenericSpellStatusCue.label>affected by magic</MF_GenericSpellStatusCue.label>
+  <MF_GenericSpellStatusCue.description>This pawn is affected by a spell.</MF_GenericSpellStatusCue.description>
+  <MF_Hasted.label>hasted</MF_Hasted.label>
+  <MF_Hasted.description>This pawn's movement speed is increased by 35%.</MF_Hasted.description>
+  <MF_BlessedVigor.label>blessed with vigor</MF_BlessedVigor.label>
+  <MF_BlessedVigor.description>This pawn's movement speed is increased by 12%, and general labor speed is increased by 10%.</MF_BlessedVigor.description>
+  <MF_Mighty.label>mighty</MF_Mighty.label>
+  <MF_Mighty.description>This pawn's melee damage is increased by 35%, and carrying capacity is increased by 25 kg.</MF_Mighty.description>
+  <MF_Weakened.label>weakened</MF_Weakened.label>
+  <MF_Weakened.description>This pawn's melee damage is reduced by 25%, and carrying capacity is reduced by 15 kg.</MF_Weakened.description>
+  <MF_ForceFielded.label>force fielded</MF_ForceFielded.label>
+  <MF_ForceFielded.description>This pawn is protected by a maintained force field that reduces incoming damage by 50% while the caster keeps focus.</MF_ForceFielded.description>
+  <MF_ManaShielded.label>mana shielded</MF_ManaShielded.label>
+  <MF_ManaShielded.description>This pawn is protected by a shield that spends the caster's mana to fully absorb incoming damage, and costs upkeep while maintained.</MF_ManaShielded.description>
+  <MF_Regenerating.label>regenerating</MF_Regenerating.label>
+  <MF_Regenerating.description>This pawn's wounds are being gradually restored by vital magic.</MF_Regenerating.description>
+  <MF_CleansedBlood.label>cleansed blood</MF_CleansedBlood.label>
+  <MF_CleansedBlood.description>This pawn is under a maintained vital charm that periodically treats disease and infection.</MF_CleansedBlood.description>
+  <MF_SharedEssence.label>shared essence</MF_SharedEssence.label>
+  <MF_SharedEssence.description>This pawn's life force has been temporarily entwined with another through resurrection magic, leaving consciousness dimmed while the bond settles.</MF_SharedEssence.description>
+  <MF_Frozen.label>frozen</MF_Frozen.label>
+  <MF_Frozen.description>This pawn's movement speed is reduced by 45%.</MF_Frozen.description>
+  <MF_Waterbound.label>waterbound</MF_Waterbound.label>
+  <MF_Waterbound.description>This pawn's movement speed is reduced by 65% by animated water.</MF_Waterbound.description>
+  <MF_HeldUnder.label>held under</MF_HeldUnder.label>
+  <MF_HeldUnder.description>This pawn is being forced beneath animated water and is struggling to stay conscious.</MF_HeldUnder.description>
+  <MF_PlagueLesion.label>plague lesion</MF_PlagueLesion.label>
+  <MF_PlagueLesion.description>A raw lesion raised by forbidden plague magic.</MF_PlagueLesion.description>
+  <MF_PlagueBlister.label>plague blister</MF_PlagueBlister.label>
+  <MF_PlagueBlister.description>A swollen blister raised by forbidden plague magic.</MF_PlagueBlister.description>
+  <MF_ForbiddenPlague.label>forbidden plague</MF_ForbiddenPlague.label>
+  <MF_ForbiddenPlague.description>A magical contagion that spreads between people and periodically raises painful lesions and blisters unless treated.</MF_ForbiddenPlague.description>
+  <MFV_UndeadNature.label>undead nature</MFV_UndeadNature.label>
+  <MFV_UndeadNature.description>This pawn carries the shared metaphysical state of undeath.</MFV_UndeadNature.description>
+  <MFV_SkeletalBody.label>skeletal body</MFV_SkeletalBody.label>
+  <MFV_SkeletalBody.description>This pawn has a skeletal undead body.</MFV_SkeletalBody.description>
+  <MFV_SkeletalLimitations.label>skeletal limitations</MFV_SkeletalLimitations.label>
+  <MFV_SkeletalLimitations.description>This skeletal body has limited awareness and dexterity.</MFV_SkeletalLimitations.description>
+</LanguageData>

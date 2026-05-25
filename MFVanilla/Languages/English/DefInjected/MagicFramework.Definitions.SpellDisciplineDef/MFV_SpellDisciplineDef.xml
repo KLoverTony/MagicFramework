@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_Discipline_Combat.label>combat</MF_Discipline_Combat.label>
+  <MF_Discipline_Healing.label>healing</MF_Discipline_Healing.label>
+  <MF_Discipline_Utility.label>utility</MF_Discipline_Utility.label>
+  <MF_Discipline_Movement.label>movement</MF_Discipline_Movement.label>
+  <MF_Discipline_Summoning.label>summoning</MF_Discipline_Summoning.label>
+  <MF_Discipline_Warding.label>warding</MF_Discipline_Warding.label>
+  <MF_Discipline_Ritual.label>ritual</MF_Discipline_Ritual.label>
+  <MF_Discipline_Crafting.label>crafting</MF_Discipline_Crafting.label>
+  <MF_Discipline_Control.label>control</MF_Discipline_Control.label>
+</LanguageData>

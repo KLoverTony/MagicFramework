@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MagicFramework.PawnLifecycle;
 using RimWorld;
 using Verse;
 using Verse.AI;
@@ -135,6 +136,33 @@ namespace AeternusFaith
             ApplySkeletonAppearance(pawn);
             RemoveLivingResurrectionHediffs(pawn);
             EnforceUndeadState(pawn, resetSkills);
+            EnsureFrameworkLifecycleComp(pawn);
+            RemoveNonUndeadHediffs(pawn);
+            ApplyRaceBasedUndeadHediffs(pawn);
+            ApplyRaceBasedUndeadXenotype(pawn);
+            SuppressUndeadSocialInteractions(pawn);
+            ResetPawnRenderer(pawn);
+            TryInitializeRenderer(pawn);
+        }
+
+        public static void ConvertPawnToSpectre(Pawn pawn, PawnKindDef spectreKindDef, string name = "spectre", bool resetSkills = true)
+        {
+            if (pawn == null || spectreKindDef?.race == null)
+                return;
+
+            pawn.def = spectreKindDef.race;
+            pawn.kindDef = spectreKindDef;
+            pawn.gender = Gender.Male;
+            if (!name.NullOrEmpty())
+                pawn.Name = new NameSingle(name);
+
+            ResetPawnRenderer(pawn);
+            NormalizeSkeletonLifeStage(pawn);
+            EnsureUndeadCleanupComp(pawn);
+            ApplySpectreAppearance(pawn);
+            RemoveLivingResurrectionHediffs(pawn);
+            EnforceUndeadState(pawn, resetSkills);
+            EnsureFrameworkLifecycleComp(pawn);
             RemoveNonUndeadHediffs(pawn);
             ApplyRaceBasedUndeadHediffs(pawn);
             ApplyRaceBasedUndeadXenotype(pawn);
@@ -324,6 +352,26 @@ namespace AeternusFaith
             pawn.AllComps.Add(comp);
         }
 
+        public static void EnsureFrameworkLifecycleComp(Pawn pawn)
+        {
+            if (pawn == null || pawn.GetComp<CompPawnLifecycleEnforcer>() != null)
+                return;
+
+            CompProperties_PawnLifecycleEnforcer compProperties = pawn.def?.comps?
+                .OfType<CompProperties_PawnLifecycleEnforcer>()
+                .FirstOrDefault();
+            if (compProperties == null)
+                return;
+
+            CompPawnLifecycleEnforcer comp = new CompPawnLifecycleEnforcer
+            {
+                parent = pawn
+            };
+            comp.Initialize(compProperties);
+            pawn.AllComps.Add(comp);
+            PawnLifecycleEnforcementUtility.EnforceAll(pawn);
+        }
+
         public static void EnsureMindState(Pawn pawn)
         {
             if (pawn == null)
@@ -352,9 +400,13 @@ namespace AeternusFaith
             if (pawn.story.traits == null)
                 return;
 
+            PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
             List<Trait> traits = new List<Trait>(pawn.story.traits.TraitsSorted);
             foreach (Trait trait in traits)
-                pawn.story.traits.RemoveTrait(trait, false);
+            {
+                if (trait?.def == null || extension?.lifecycleTraits?.Contains(trait.def) != true)
+                    pawn.story.traits.RemoveTrait(trait, false);
+            }
         }
 
         public static void CopyBackstoriesFromSource(Pawn sourcePawn, Pawn targetPawn)
@@ -442,6 +494,27 @@ namespace AeternusFaith
             BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
             if (beardDef != null && skeleton.style != null)
                 skeleton.style.beardDef = beardDef;
+        }
+
+        public static void ApplySpectreAppearance(Pawn spectre)
+        {
+            if (spectre?.story == null)
+                return;
+
+            BodyTypeDef bodyTypeDef = DefDatabase<BodyTypeDef>.GetNamedSilentFail("AF_SpectreBody");
+            HeadTypeDef headTypeDef = DefDatabase<HeadTypeDef>.GetNamedSilentFail("AF_SpectreHead");
+            HairDef hairDef = DefDatabase<HairDef>.GetNamedSilentFail("Bald");
+
+            if (bodyTypeDef != null)
+                spectre.story.bodyType = bodyTypeDef;
+            if (headTypeDef != null)
+                spectre.story.headType = headTypeDef;
+            if (hairDef != null)
+                spectre.story.hairDef = hairDef;
+
+            BeardDef beardDef = DefDatabase<BeardDef>.GetNamedSilentFail("NoBeard");
+            if (beardDef != null && spectre.style != null)
+                spectre.style.beardDef = beardDef;
         }
 
         public static void ResetPawnRenderer(Pawn pawn)

@@ -24,6 +24,39 @@
     <label>spectre</label>
     <description>A disembodied spirit bound to the mortal world, made briefly visible through the Animara rite. It has no flesh, no hunger, and no will of its own — only an echo of the life it once carried.</description>
     <generateAllowChance>0</generateAllowChance>
+    <modExtensions>
+      <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
+        <bodyForm>Spectral</bodyForm>
+        <intelligence>PartialIdentity</intelligence>
+        <needsPolicy>None</needsPolicy>
+        <socialPolicy>SuppressedBothWays</socialPolicy>
+        <gearPolicy>StripAll</gearPolicy>
+        <controlPolicy>AutonomousGuest</controlPolicy>
+        <workPolicy>None</workPolicy>
+        <recoveryPolicy>None</recoveryPolicy>
+        <deathPolicy>Vanish</deathPolicy>
+        <soulPolicy>ActiveSpirit</soulPolicy>
+        <durationPolicy>AnchorUpkeep</durationPolicy>
+        <isUndead>true</isUndead>
+        <isSpirit>true</isSpirit>
+        <enforceNeeds>true</enforceNeeds>
+        <enforceSocialPolicy>true</enforceSocialPolicy>
+        <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceControlPolicy>true</enforceControlPolicy>
+        <enforceWorkPolicy>true</enforceWorkPolicy>
+        <clearGeneratedHealthState>true</clearGeneratedHealthState>
+        <enforceLifeStage>true</enforceLifeStage>
+        <enforceMarkers>true</enforceMarkers>
+        <markerHediffs>
+          <li>AF_UndeadNature</li>
+          <li>AF_SpectralForm</li>
+          <li>AF_SpectralLimitations</li>
+        </markerHediffs>
+        <lifecycleTraits>
+          <li>MF_Lifecycle_NoWork</li>
+        </lifecycleTraits>
+      </li>
+    </modExtensions>
 
     <!-- Humanlike pawns do not use this top-level graphicData for their body.
          The torso/body texture is supplied through a BodyTypeDef below. -->
@@ -83,7 +116,7 @@
       </ageGenerationCurve>
       <lifeStageAges>
         <li>
-          <def>HumanlikeAdult</def>
+          <def>AF_UndeadFullyFormed</def>
           <minAge>0</minAge>
         </li>
       </lifeStageAges>
@@ -92,6 +125,7 @@
     <!-- Spirits should not butcher into mechanoid resources. -->
 
     <comps>
+      <li Class="MagicFramework.PawnLifecycle.CompProperties_PawnLifecycleEnforcer" />
       <li Class="AeternusFaith.CompProperties_SkeletonUndeadCleanup" />
     </comps>
 
@@ -110,6 +144,8 @@
     <label>spectral body</label>
     <bodyNakedGraphicPath>Things/Undead/Spectre/SpectreBody</bodyNakedGraphicPath>
     <bodyDessicatedGraphicPath>Things/Undead/Spectre/SpectreBody</bodyDessicatedGraphicPath>
+    <bodyGraphicScale>(0.6, 1)</bodyGraphicScale>
+    <woundAnchors />
   </BodyTypeDef>
 
   <!--
@@ -127,7 +163,7 @@
     <graphicPath>Things/Undead/Spectre/SpectreHead</graphicPath>
     <selectionWeight>0</selectionWeight>
     <randomChosen>false</randomChosen>
-    <gender>None</gender>
+    <gender>Male</gender>
   </HeadTypeDef>
 
 </Defs>

@@ -49,7 +49,7 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
         if (SpellRuntimeGameComponent.Instance.LearnSpell(usedBy, spellDef))
         {
             ArcanePracticeUtility.NotifySpellLearnedFromScroll(usedBy, spellDef);
-            Messages.Message($"{usedBy.LabelShortCap} learned {spellDef.LabelCap}.", usedBy, MessageTypeDefOf.TaskCompletion, false);
+            Messages.Message("MFV_PawnLearnedSpellFromScroll".Translate(usedBy.LabelShortCap, spellDef.LabelCap), usedBy, MessageTypeDefOf.TaskCompletion, false);
         }
     }
 
@@ -71,40 +71,40 @@ public sealed class CompUseEffect_LearnSpell : CompUseEffect
     {
         if (pawn == null)
         {
-            return "No pawn selected.";
+            return "MFV_NoPawnSelected".Translate();
         }
 
         if (pawn.Dead || pawn.Destroyed)
         {
-            return $"{pawn.LabelShortCap} cannot use this.";
+            return "MFV_PawnCannotUseThis".Translate(pawn.LabelShortCap);
         }
 
         if (Props.requireHumanlike && !pawn.RaceProps.Humanlike)
         {
-            return $"{pawn.LabelShortCap} cannot learn spells.";
+            return "MFV_PawnCannotLearnSpells".Translate(pawn.LabelShortCap);
         }
 
         SpellRuntimeGameComponent runtime = SpellRuntimeGameComponent.Instance;
         if (runtime == null)
         {
-            return "Magic Framework runtime was unavailable.";
+            return "MFV_MagicFrameworkRuntimeUnavailable".Translate();
         }
 
         if (!runtime.HasArcaneGift(pawn))
         {
-            return $"{pawn.LabelShortCap} does not have the Arcane gift.";
+            return "MFV_PawnDoesNotHaveArcaneGift".Translate(pawn.LabelShortCap);
         }
 
         SpellDef spellDef = Props.spell;
         if (spellDef == null)
         {
-            return "This scroll is not linked to a spell.";
+            return "MFV_ScrollNotLinkedToSpell".Translate();
         }
 
         ResearchProjectDef missingResearch = FirstMissingResearch();
         if (missingResearch != null)
         {
-            return $"Requires completed research: {missingResearch.LabelCap}.";
+            return "MFV_RequiresCompletedResearch".Translate(missingResearch.LabelCap);
         }
 
         if (!SpellRequirementUtility.CanLearnSpell(pawn, spellDef, out string reason))

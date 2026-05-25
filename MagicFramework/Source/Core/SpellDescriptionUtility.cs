@@ -61,7 +61,7 @@ public static class SpellDescriptionUtility
         }
 
         string authored = string.IsNullOrWhiteSpace(spellDef.description)
-            ? $"Cast {spellDef.LabelCap}."
+            ? T("MF_SpellDescriptionCastFallback", spellDef.LabelCap)
             : spellDef.description.Trim();
         if (ContainsToken(authored))
         {
@@ -82,7 +82,7 @@ public static class SpellDescriptionUtility
         }
 
         string authored = string.IsNullOrWhiteSpace(spellDef.description)
-            ? $"Cast {spellDef.LabelCap}."
+            ? T("MF_SpellDescriptionCastFallback", spellDef.LabelCap)
             : spellDef.description.Trim();
         return ContainsToken(authored)
             ? ResolveDescriptionTokens(authored, spellDef, caster)
@@ -135,7 +135,7 @@ public static class SpellDescriptionUtility
         }
 
         StringBuilder builder = new();
-        builder.AppendLine("Effects:");
+        builder.AppendLine(T("MF_SpellDescriptionEffectsHeader"));
         for (int i = 0; i < lines.Count; i++)
         {
             builder.Append("- ");
@@ -161,7 +161,7 @@ public static class SpellDescriptionUtility
         List<string> parts = new();
         if (spellDef?.meta?.tier > 0)
         {
-            parts.Add("tier " + spellDef.meta.tier);
+            parts.Add(T("MF_SpellDescriptionTier", spellDef.meta.tier));
         }
 
         AddDefList(parts, spellDef?.meta?.elements);
@@ -169,7 +169,7 @@ public static class SpellDescriptionUtility
         AddDefList(parts, spellDef?.meta?.disciplines);
         AddDefList(parts, spellDef?.meta?.tags);
 
-        return parts.Count == 0 ? string.Empty : "Classification: " + string.Join(", ", parts) + ".";
+        return parts.Count == 0 ? string.Empty : T("MF_SpellDescriptionClassification", string.Join(", ", parts));
     }
 
     private static string BuildRequirementsText(SpellDef spellDef, Pawn caster)
@@ -187,7 +187,7 @@ public static class SpellDescriptionUtility
                 ResearchProjectDef project = research[i];
                 if (project != null)
                 {
-                    parts.Add("research " + project.LabelCap + (project.IsFinished ? " met" : " unmet"));
+                    parts.Add(T(project.IsFinished ? "MF_SpellDescriptionResearchMet" : "MF_SpellDescriptionResearchUnmet", project.LabelCap));
                 }
             }
         }
@@ -197,7 +197,7 @@ public static class SpellDescriptionUtility
             bool canCast = SpellRequirementUtility.CanCastSpell(SpellRequirementUtility.CreatePawnContext(caster, spellDef), spellDef, out string reason, true);
             if (canCast)
             {
-                parts.Add("ready for " + caster.LabelShortCap);
+                parts.Add(T("MF_SpellDescriptionReadyForCaster", caster.LabelShortCap));
             }
             else if (!string.IsNullOrWhiteSpace(reason))
             {
@@ -205,7 +205,7 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return parts.Count == 0 ? "Requirements: none authored." : "Requirements: " + string.Join("; ", parts) + ".";
+        return parts.Count == 0 ? T("MF_SpellDescriptionRequirementsNone") : T("MF_SpellDescriptionRequirements", string.Join("; ", parts));
     }
 
     private static string BuildTargetingText(SpellDef spellDef, Pawn caster)
@@ -225,15 +225,15 @@ public static class SpellDescriptionUtility
         AddNonEmpty(parts, BuildRadiusText(spellDef));
         if (targeting.requireLineOfSight)
         {
-            parts.Add("line of sight");
+            parts.Add(T("MF_SpellDescriptionLineOfSight"));
         }
 
         if (targeting.requireWaterCell)
         {
-            parts.Add("water-like terrain");
+            parts.Add(T("MF_SpellDescriptionWaterLikeTerrain"));
         }
 
-        return "Targeting: " + string.Join(", ", parts) + ".";
+        return T("MF_SpellDescriptionTargeting", string.Join(", ", parts));
     }
 
     private static string BuildActiveModifiersText(SpellDef spellDef, Pawn caster)
@@ -247,7 +247,7 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return rules.Count == 0 ? "Active modifiers: none." : "Active modifiers: " + string.Join(", ", rules) + ".";
+        return rules.Count == 0 ? T("MF_SpellDescriptionActiveModifiersNone") : T("MF_SpellDescriptionActiveModifiers", string.Join(", ", rules));
     }
 
     private static string BuildManaCostText(SpellDef spellDef, Pawn caster)
@@ -261,7 +261,7 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return "0";
+        return T("MF_SpellDescriptionZero");
     }
 
     private static string BuildCooldownText(SpellDef spellDef, Pawn caster)
@@ -275,7 +275,7 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return "none";
+        return T("MF_SpellDescriptionNone");
     }
 
     private static string BuildRangeText(SpellDef spellDef, Pawn caster)
@@ -287,20 +287,20 @@ public static class SpellDescriptionUtility
         }
 
         SpellContext context = SpellRequirementUtility.CreatePawnContext(caster, spellDef);
-        return "range " + FormatNumber(SpellEnhancementUtility.ResolveScalableRadius(context, targeting.range, targeting.scalableRange));
+        return T("MF_SpellDescriptionRange", FormatNumber(SpellEnhancementUtility.ResolveScalableRadius(context, targeting.range, targeting.scalableRange)));
     }
 
     private static string BuildRadiusText(SpellDef spellDef)
     {
         SpellTargetingDef targeting = spellDef?.targeting;
         return targeting != null && targeting.radius > 0f
-            ? FormatNumber(targeting.radius) + "-cell radius"
+            ? T("MF_SpellDescriptionCellRadius", FormatNumber(targeting.radius))
             : string.Empty;
     }
 
     private static string BuildCastTimeText(SpellDef spellDef)
     {
-        return spellDef?.castTimeTicks > 0 ? spellDef.castTimeTicks.ToStringTicksToPeriod() : "instant";
+        return spellDef?.castTimeTicks > 0 ? spellDef.castTimeTicks.ToStringTicksToPeriod() : T("MF_SpellDescriptionInstant");
     }
 
     private static string BuildPowerScalingText(SpellDef spellDef)
@@ -308,7 +308,7 @@ public static class SpellDescriptionUtility
         List<SpellScaledAttribute> scaledAttributes = spellDef?.power?.scaledAttributes;
         if (scaledAttributes == null || scaledAttributes.Count == 0)
         {
-            return "none";
+            return T("MF_SpellDescriptionNone");
         }
 
         List<string> parts = new();
@@ -316,12 +316,12 @@ public static class SpellDescriptionUtility
         {
             string label = scaledAttributes[i] switch
             {
-                SpellScaledAttribute.Damage => "damage",
-                SpellScaledAttribute.Healing => "healing",
-                SpellScaledAttribute.Radius => "radius/range",
-                SpellScaledAttribute.Duration => "duration",
-                SpellScaledAttribute.ManaCost => "mana cost",
-                SpellScaledAttribute.Cooldown => "cooldown",
+                SpellScaledAttribute.Damage => T("MF_SpellDescriptionScaledDamage"),
+                SpellScaledAttribute.Healing => T("MF_SpellDescriptionScaledHealing"),
+                SpellScaledAttribute.Radius => T("MF_SpellDescriptionScaledRadiusRange"),
+                SpellScaledAttribute.Duration => T("MF_SpellDescriptionScaledDuration"),
+                SpellScaledAttribute.ManaCost => T("MF_SpellDescriptionScaledManaCost"),
+                SpellScaledAttribute.Cooldown => T("MF_SpellDescriptionScaledCooldown"),
                 _ => null
             };
 
@@ -331,7 +331,7 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return parts.Count == 0 ? "none" : JoinList(parts);
+        return parts.Count == 0 ? T("MF_SpellDescriptionNone") : JoinList(parts);
     }
 
     private static void AddTargetingLine(List<string> lines, SpellDef spellDef)
@@ -345,39 +345,39 @@ public static class SpellDescriptionUtility
         List<string> parts = new();
         if (targeting.range > 0f)
         {
-            parts.Add("range " + FormatNumber(targeting.range));
+            parts.Add(T("MF_SpellDescriptionRange", FormatNumber(targeting.range)));
         }
 
         if (targeting.shape == SpellTargetShape.Radius && targeting.radius > 0f)
         {
-            parts.Add(FormatNumber(targeting.radius) + "-cell radius");
+            parts.Add(T("MF_SpellDescriptionCellRadius", FormatNumber(targeting.radius)));
         }
         else if (targeting.shape == SpellTargetShape.Line && targeting.lineLength > 0f)
         {
-            parts.Add(FormatNumber(targeting.lineLength) + "-cell line");
+            parts.Add(T("MF_SpellDescriptionCellLine", FormatNumber(targeting.lineLength)));
         }
         else if (targeting.shape == SpellTargetShape.Cone && targeting.lineLength > 0f)
         {
-            parts.Add(FormatNumber(targeting.lineLength) + "-cell cone");
+            parts.Add(T("MF_SpellDescriptionCellCone", FormatNumber(targeting.lineLength)));
         }
         else if (targeting.shape == SpellTargetShape.Wall && targeting.wallLength > 0)
         {
-            parts.Add(targeting.wallLength + "-cell wall");
+            parts.Add(T("MF_SpellDescriptionCellWall", targeting.wallLength));
         }
 
         if (targeting.requireLineOfSight)
         {
-            parts.Add("requires line of sight");
+            parts.Add(T("MF_SpellDescriptionRequiresLineOfSight"));
         }
 
         if (targeting.requireWaterCell)
         {
-            parts.Add("requires water-like terrain");
+            parts.Add(T("MF_SpellDescriptionRequiresWaterLikeTerrain"));
         }
 
         if (parts.Count > 0)
         {
-            lines.Add("Targets " + DescribePrimaryTarget(targeting) + " (" + string.Join(", ", parts) + ").");
+            lines.Add(T("MF_SpellDescriptionTargets", DescribePrimaryTarget(targeting), string.Join(", ", parts)));
         }
     }
 
@@ -394,10 +394,10 @@ public static class SpellDescriptionUtility
             switch (costs[i])
             {
                 case ManaCostDef manaCost:
-                    lines.Add("Costs " + FormatNumber(manaCost.amount) + " " + Colorize("mana", "#62b8ff") + ".");
+                    lines.Add(T("MF_SpellDescriptionCostsMana", FormatNumber(manaCost.amount), Colorize(T("MF_SpellDescriptionMana"), "#62b8ff")));
                     break;
                 case CooldownCostDef cooldownCost:
-                    lines.Add("Starts a " + FormatTicks(cooldownCost.cooldownTicks) + " " + Colorize("cooldown", "#ffd166") + ".");
+                    lines.Add(T("MF_SpellDescriptionStartsCooldown", FormatTicks(cooldownCost.cooldownTicks), Colorize(T("MF_SpellDescriptionCooldown"), "#ffd166")));
                     break;
             }
         }
@@ -416,12 +416,12 @@ public static class SpellDescriptionUtility
         {
             string label = scaledAttributes[i] switch
             {
-                SpellScaledAttribute.Damage => "damage",
-                SpellScaledAttribute.Healing => "healing",
-                SpellScaledAttribute.Radius => "radius/range",
-                SpellScaledAttribute.Duration => "duration",
-                SpellScaledAttribute.ManaCost => "mana cost",
-                SpellScaledAttribute.Cooldown => "cooldown",
+                SpellScaledAttribute.Damage => T("MF_SpellDescriptionScaledDamage"),
+                SpellScaledAttribute.Healing => T("MF_SpellDescriptionScaledHealing"),
+                SpellScaledAttribute.Radius => T("MF_SpellDescriptionScaledRadiusRange"),
+                SpellScaledAttribute.Duration => T("MF_SpellDescriptionScaledDuration"),
+                SpellScaledAttribute.ManaCost => T("MF_SpellDescriptionScaledManaCost"),
+                SpellScaledAttribute.Cooldown => T("MF_SpellDescriptionScaledCooldown"),
                 _ => null
             };
 
@@ -433,7 +433,7 @@ public static class SpellDescriptionUtility
 
         if (parts.Count > 0)
         {
-            lines.Add("Scales " + JoinList(parts) + " with " + Colorize("spell power", "#c69cff") + ".");
+            lines.Add(T("MF_SpellDescriptionScalesWithSpellPower", JoinList(parts), Colorize(T("MF_SpellDescriptionSpellPower"), "#c69cff")));
         }
     }
 
@@ -460,113 +460,117 @@ public static class SpellDescriptionUtility
                 AddActionLines(lines, sequence.actions, depth + 1);
                 break;
             case DamageActionDef damage:
-                lines.Add("Deals " + FormatNumber(damage.amount) + " " + ColorizeDamageLabel(ResolveDefLabel<DamageDef>(damage.damageDef, "damage")) + " damage.");
+                lines.Add(T("MF_SpellDescriptionDealsDamage", FormatNumber(damage.amount), ColorizeDamageLabel(ResolveDefLabel<DamageDef>(damage.damageDef, T("MF_SpellDescriptionDamage")))));
                 break;
             case HealActionDef heal:
-                lines.Add(Colorize("Heals", "#7fdc8a") + " up to " + FormatNumber(heal.amount) + " total injury damage.");
+                lines.Add(T("MF_SpellDescriptionHealsInjury", Colorize(T("MF_SpellDescriptionHeals"), "#7fdc8a"), FormatNumber(heal.amount)));
                 break;
             case ExplosionActionDef explosion:
-                lines.Add("Creates a " + FormatNumber(explosion.radius) + "-cell " + ColorizeDamageLabel(ResolveDefLabel<DamageDef>(explosion.damageDef, "damage")) + " explosion for " + FormatNumber(explosion.damageAmount) + " damage.");
+                lines.Add(T("MF_SpellDescriptionCreatesExplosion", FormatNumber(explosion.radius), ColorizeDamageLabel(ResolveDefLabel<DamageDef>(explosion.damageDef, T("MF_SpellDescriptionDamage"))), FormatNumber(explosion.damageAmount)));
                 break;
             case TemperaturePushActionDef temperature:
-                lines.Add("Pushes " + FormatNumber(temperature.heatEnergy) + " heat into the target room.");
+                lines.Add(T("MF_SpellDescriptionPushesHeat", FormatNumber(temperature.heatEnergy)));
                 break;
             case ApplyHediffActionDef hediff:
-                lines.Add("Applies " + ResolveDefLabel<HediffDef>(hediff.hediffDef, "a status effect") + DescribeDuration(hediff.durationTicks, hediff.removeAfterDuration) + ".");
+                lines.Add(T("MF_SpellDescriptionAppliesEffect", ResolveDefLabel<HediffDef>(hediff.hediffDef, T("MF_SpellDescriptionAStatusEffect")), DescribeDuration(hediff.durationTicks, hediff.removeAfterDuration)));
                 break;
             case ApplyStatModifierActionDef statModifier:
-                lines.Add("Applies " + DescribeStatModifiers(statModifier.modifiers) + " for " + FormatTicks(statModifier.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionAppliesStatModifiers", DescribeStatModifiers(statModifier.modifiers), FormatTicks(statModifier.durationTicks)));
                 break;
             case SustainedStatModifierActionDef sustained:
                 string sustainedEffect = !string.IsNullOrWhiteSpace(sustained.statusEffectDef)
                     ? DescribeStatusEffect(sustained.statusEffectDef)
                     : DescribeStatModifiers(sustained.modifiers);
-                lines.Add("Maintains " + sustainedEffect + DescribeOptionalMaxDuration(sustained.maxDurationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionMaintainsEffect", sustainedEffect, DescribeOptionalMaxDuration(sustained.maxDurationTicks)));
                 break;
             case TimedStatusEffectActionDef status:
-                lines.Add("Applies a timed status effect for " + FormatTicks(status.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionAppliesTimedStatusEffect", FormatTicks(status.durationTicks)));
                 AddActionLines(lines, status.onApplyActions, depth + 1);
                 break;
             case ApplyStatusEffectActionDef reusableStatus:
-                lines.Add("Applies " + DescribeStatusEffect(reusableStatus.statusEffectDef) + DescribeOptionalDuration(reusableStatus.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionAppliesEffect", DescribeStatusEffect(reusableStatus.statusEffectDef), DescribeOptionalDuration(reusableStatus.durationTicks)));
                 break;
             case ApplyForceFieldActionDef forceField:
-                string upkeepText = forceField.sustainedManaCost > 0f ? " Costs " + FormatNumber(forceField.sustainedManaCost) + " " + Colorize("mana", "#62b8ff") + " every " + FormatTicks(forceField.sustainedManaCostIntervalTicks) + " while maintained." : string.Empty;
-                lines.Add("Maintains a protective force field" + DescribeOptionalMaxDuration(forceField.maxDurationTicks) + "." + upkeepText);
+                string upkeepText = forceField.sustainedManaCost > 0f ? T("MF_SpellDescriptionCostsManaEveryWhileMaintained", FormatNumber(forceField.sustainedManaCost), Colorize(T("MF_SpellDescriptionMana"), "#62b8ff"), FormatTicks(forceField.sustainedManaCostIntervalTicks)) : string.Empty;
+                lines.Add(T("MF_SpellDescriptionMaintainsProtectiveForceField", DescribeOptionalMaxDuration(forceField.maxDurationTicks), upkeepText));
                 break;
             case PersistentAreaZoneActionDef area:
-                    string areaUpkeepText = area.sustainedManaCost > 0f ? " Costs " + FormatNumber(area.sustainedManaCost) + " " + Colorize("mana", "#62b8ff") + " every " + FormatTicks(area.sustainedManaCostIntervalTicks) + " while maintained." : string.Empty;
-                    string areaTargetCostText = area.manaCostPerAffectedPawn > 0f ? " Costs " + FormatNumber(area.manaCostPerAffectedPawn) + " " + Colorize("mana", "#62b8ff") + " per affected pawn." : string.Empty;
-                    lines.Add("Creates a lingering " + FormatNumber(area.zoneRadius) + "-cell area for " + FormatTicks(area.durationTicks) + "." + areaUpkeepText + areaTargetCostText);
+                    string areaUpkeepText = area.sustainedManaCost > 0f ? T("MF_SpellDescriptionCostsManaEveryWhileMaintained", FormatNumber(area.sustainedManaCost), Colorize(T("MF_SpellDescriptionMana"), "#62b8ff"), FormatTicks(area.sustainedManaCostIntervalTicks)) : string.Empty;
+                    string areaTargetCostText = area.manaCostPerAffectedPawn > 0f ? T("MF_SpellDescriptionCostsManaPerAffectedPawn", FormatNumber(area.manaCostPerAffectedPawn), Colorize(T("MF_SpellDescriptionMana"), "#62b8ff")) : string.Empty;
+                    lines.Add(T("MF_SpellDescriptionCreatesLingeringArea", FormatNumber(area.zoneRadius), FormatTicks(area.durationTicks), areaUpkeepText, areaTargetCostText));
                     AddActionLines(lines, area.actions, depth + 1);
                     break;
             case PersistentWallZoneActionDef wall:
-                lines.Add("Creates a " + wall.wallLength + "-cell wall effect for " + FormatTicks(wall.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionCreatesWallEffect", wall.wallLength, FormatTicks(wall.durationTicks)));
                 AddActionLines(lines, wall.actions, depth + 1);
                 break;
             case TerrainPatchActionDef terrain:
                 lines.Add(DescribeTerrainPatch(terrain));
                 break;
             case SummonPawnActionDef summon:
-                lines.Add("Summons " + ResolveDefLabel<PawnKindDef>(summon.pawnKindDef, "a creature") + " for " + FormatTicks(summon.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionSummonsPawn", ResolveDefLabel<PawnKindDef>(summon.pawnKindDef, T("MF_SpellDescriptionACreature")), FormatTicks(summon.durationTicks)));
                 break;
             case SpawnThingActionDef spawn:
-                lines.Add("Creates " + spawn.stackCount + " " + ResolveDefLabel<ThingDef>(spawn.thingDef, "item") + DescribeOptionalDuration(spawn.durationTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionCreatesThing", spawn.stackCount, ResolveDefLabel<ThingDef>(spawn.thingDef, T("MF_SpellDescriptionItem")), DescribeOptionalDuration(spawn.durationTicks)));
                 break;
             case DelayActionDef delay:
-                lines.Add("After " + FormatTicks(delay.delayTicks) + ":");
+                lines.Add(T("MF_SpellDescriptionAfterDelay", FormatTicks(delay.delayTicks)));
                 AddActionLines(lines, delay.actions, depth + 1);
                 break;
             case RepeatActionDef repeat:
-                lines.Add("Repeats " + DescribeScalableCount(repeat.repeatCount, repeat.scalableRepeatCount) + ", every " + DescribeScalableInterval(repeat.intervalTicks, repeat.scalableIntervalTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionRepeatsEvery", DescribeScalableCount(repeat.repeatCount, repeat.scalableRepeatCount), DescribeScalableInterval(repeat.intervalTicks, repeat.scalableIntervalTicks)));
                 AddActionLines(lines, repeat.actions, depth + 1);
                 break;
             case LaunchProjectileActionDef projectile:
-                lines.Add("Launches " + ResolveDefLabel<ThingDef>(projectile.projectileDef, "a projectile") + DescribeProjectileLaunch(projectile) + ".");
+                lines.Add(T("MF_SpellDescriptionLaunchesProjectile", ResolveDefLabel<ThingDef>(projectile.projectileDef, T("MF_SpellDescriptionAProjectile")), DescribeProjectileLaunch(projectile)));
                 AddActionLines(lines, projectile.onImpactActions, depth + 1);
                 break;
             case TeleportActionDef teleport:
-                string stunText = teleport.postTeleportStunTicks > 0 ? " Causes brief disorientation for " + FormatTicks(teleport.postTeleportStunTicks) + "." : string.Empty;
-                lines.Add("Teleports the chosen subject to an authored destination." + stunText);
+                string stunText = teleport.postTeleportStunTicks > 0 ? T("MF_SpellDescriptionCausesBriefDisorientation", FormatTicks(teleport.postTeleportStunTicks)) : string.Empty;
+                lines.Add(T("MF_SpellDescriptionTeleportsSubject", stunText));
                 break;
             case KnockbackActionDef knockback:
-                string impactText = knockback.impactDamageAmount > 0f ? " Collisions deal " + FormatNumber(knockback.impactDamageAmount) + " " + ColorizeDamageLabel(ResolveDefLabel<DamageDef>(knockback.impactDamageDef, "blunt")) + " damage." : string.Empty;
-                lines.Add("Pushes the target back up to " + DescribeScalableDistance(knockback.distance, knockback.scalableDistance) + "." + impactText);
+                string impactText = knockback.impactDamageAmount > 0f ? T("MF_SpellDescriptionCollisionsDealDamage", FormatNumber(knockback.impactDamageAmount), ColorizeDamageLabel(ResolveDefLabel<DamageDef>(knockback.impactDamageDef, T("MF_SpellDescriptionBlunt")))) : string.Empty;
+                lines.Add(T("MF_SpellDescriptionPushesTargetBack", DescribeScalableDistance(knockback.distance, knockback.scalableDistance), impactText));
                 break;
             case PullActionDef pull:
-                lines.Add("Pulls the target up to " + DescribeScalableDistance(pull.distance, pull.scalableDistance) + " toward the caster.");
+                lines.Add(T("MF_SpellDescriptionPullsTarget", DescribeScalableDistance(pull.distance, pull.scalableDistance)));
                 break;
             case MovePawnTowardPointActionDef movePawn:
-                lines.Add("Moves the target up to " + DescribeScalableDistance(movePawn.distance, movePawn.scalableDistance) + " toward the spell point.");
+                lines.Add(T("MF_SpellDescriptionMovesTarget", DescribeScalableDistance(movePawn.distance, movePawn.scalableDistance)));
                 break;
             case MoveStoneChunksActionDef chunks:
-                lines.Add("Draws nearby stone chunks toward the spell point.");
+                lines.Add(T("MF_SpellDescriptionDrawsStoneChunks"));
                 break;
             case ConditionalActionDef conditional:
-                lines.Add("Has a conditional effect" + (string.IsNullOrWhiteSpace(conditional.conditionLabel) ? "." : ": " + conditional.conditionLabel + "."));
+                lines.Add(string.IsNullOrWhiteSpace(conditional.conditionLabel) ? T("MF_SpellDescriptionHasConditionalEffect") : T("MF_SpellDescriptionHasConditionalEffectLabel", conditional.conditionLabel));
                 break;
             case ApplyToTargetsActionDef applyToTargets:
-                lines.Add("Applies effects to queried targets.");
+                lines.Add(T("MF_SpellDescriptionAppliesToQueriedTargets"));
                 AddActionLines(lines, applyToTargets.actions, depth + 1);
                 break;
             case ApplyChainTargetsActionDef chainTargets:
-                lines.Add("Chains effects through nearby targets.");
+                lines.Add(T("MF_SpellDescriptionChainsEffects"));
                 AddActionLines(lines, chainTargets.actions, depth + 1);
                 break;
             case ChainLightningActionDef chain:
                 lines.Add(DescribeChainLightning(chain));
                 break;
             case StunActionDef stun:
-                lines.Add("Has a " + FormatPercent(stun.chance) + " chance to stun for " + FormatTicks(stun.stunTicks) + ".");
+                lines.Add(T("MF_SpellDescriptionChanceToStun", FormatPercent(stun.chance), FormatTicks(stun.stunTicks)));
                 break;
             case ExtinguishFireActionDef extinguish:
-                lines.Add("Extinguishes fires in a " + DescribeScalableRadius(extinguish.radius, extinguish.scalableRadius) + " radius.");
+                lines.Add(T("MF_SpellDescriptionExtinguishesFires", DescribeScalableRadius(extinguish.radius, extinguish.scalableRadius)));
                 break;
             case DestroyThingActionDef:
-                lines.Add("Destroys the target.");
+                lines.Add(T("MF_SpellDescriptionDestroysTarget"));
                 break;
             case MineThingsActionDef mine:
-                lines.Add("Mines up to " + DescribeScalableCount(mine.count, mine.scalableCount) + " nearby rock cells.");
+                lines.Add(T("MF_SpellDescriptionMinesRockCells", DescribeScalableCount(mine.count, mine.scalableCount)));
+                break;
+            case TemporaryAllegianceActionDef allegiance:
+                string allegianceUpkeepText = allegiance.sustainedManaCost > 0f ? T("MF_SpellDescriptionCostsManaEveryWhileMaintained", FormatNumber(allegiance.sustainedManaCost), Colorize(T("MF_SpellDescriptionMana"), "#62b8ff"), FormatTicks(allegiance.sustainedManaCostIntervalTicks)) : string.Empty;
+                lines.Add(T("MF_SpellDescriptionTemporarilyCompelsTarget", DescribeOptionalMaxDuration(allegiance.maxDurationTicks), allegianceUpkeepText));
                 break;
         }
     }
@@ -575,18 +579,18 @@ public static class SpellDescriptionUtility
     {
         string target = targeting.primaryTargetType switch
         {
-            SpellPrimaryTargetType.Cell => "a cell",
-            SpellPrimaryTargetType.Pawn => "a pawn",
-            SpellPrimaryTargetType.Thing => "a thing",
-            SpellPrimaryTargetType.PawnOrCell => "a pawn or cell",
-            SpellPrimaryTargetType.PawnOrThing => "a pawn or thing",
-            _ => "a target"
+            SpellPrimaryTargetType.Cell => T("MF_SpellDescriptionACell"),
+            SpellPrimaryTargetType.Pawn => T("MF_SpellDescriptionAPawn"),
+            SpellPrimaryTargetType.Thing => T("MF_SpellDescriptionAThing"),
+            SpellPrimaryTargetType.PawnOrCell => T("MF_SpellDescriptionAPawnOrCell"),
+            SpellPrimaryTargetType.PawnOrThing => T("MF_SpellDescriptionAPawnOrThing"),
+            _ => T("MF_SpellDescriptionATarget")
         };
 
         return targeting.pawnAffinity switch
         {
-            SpellPawnAffinity.Ally => "an allied " + target,
-            SpellPawnAffinity.Foe => "a hostile " + target,
+            SpellPawnAffinity.Ally => T("MF_SpellDescriptionAlliedTarget", target),
+            SpellPawnAffinity.Foe => T("MF_SpellDescriptionHostileTarget", target),
             _ => target
         };
     }
@@ -595,7 +599,7 @@ public static class SpellDescriptionUtility
     {
         if (modifiers == null || modifiers.Count == 0)
         {
-            return "stat changes";
+            return T("MF_SpellDescriptionStatChanges");
         }
 
         List<string> parts = new();
@@ -607,7 +611,7 @@ public static class SpellDescriptionUtility
                 continue;
             }
 
-            string stat = ResolveDefLabel<StatDef>(modifier.statDef, modifier.statDef ?? "a stat");
+            string stat = ResolveDefLabel<StatDef>(modifier.statDef, modifier.statDef ?? T("MF_SpellDescriptionAStat"));
             if (Math.Abs(modifier.factor - 1f) > 0.001f)
             {
                 parts.Add(FormatPercentDelta(modifier.factor) + " " + stat);
@@ -619,47 +623,47 @@ public static class SpellDescriptionUtility
             }
         }
 
-        return parts.Count == 0 ? "stat changes" : string.Join(", ", parts);
+        return parts.Count == 0 ? T("MF_SpellDescriptionStatChanges") : string.Join(", ", parts);
     }
 
     private static string DescribeScalableDistance(int distance, ScalableFloatDef scalableDistance)
     {
-        string text = (distance > 0 ? distance : 1) + " cell(s)";
-        return scalableDistance == null ? text : text + ", scaling with spell power";
+        string text = T("MF_SpellDescriptionCells", distance > 0 ? distance : 1);
+        return scalableDistance == null ? text : T("MF_SpellDescriptionScalingWithSpellPower", text);
     }
 
     private static string DescribeScalableRadius(float radius, ScalableFloatDef scalableRadius)
     {
-        string text = FormatNumber(radius > 0f ? radius : 1f) + "-cell";
-        return scalableRadius == null ? text : text + ", scaling with spell power";
+        string text = T("MF_SpellDescriptionCellMeasure", FormatNumber(radius > 0f ? radius : 1f));
+        return scalableRadius == null ? text : T("MF_SpellDescriptionScalingWithSpellPower", text);
     }
 
     private static string DescribeScalableCount(int count, ScalableFloatDef scalableCount)
     {
-        string text = count + " time(s)";
-        return scalableCount == null ? text : text + ", scaling with spell power";
+        string text = T("MF_SpellDescriptionTimes", count);
+        return scalableCount == null ? text : T("MF_SpellDescriptionScalingWithSpellPower", text);
     }
 
     private static string DescribeScalableInterval(int intervalTicks, ScalableFloatDef scalableIntervalTicks)
     {
         string text = FormatTicks(intervalTicks);
-        return scalableIntervalTicks == null ? text : text + ", scaling with spell power";
+        return scalableIntervalTicks == null ? text : T("MF_SpellDescriptionScalingWithSpellPower", text);
     }
 
     private static string DescribeStatusEffect(string defName)
     {
         if (string.IsNullOrWhiteSpace(defName))
         {
-            return "a reusable status effect";
+            return T("MF_SpellDescriptionReusableStatusEffect");
         }
 
         SpellStatusEffectDef statusEffectDef = DefDatabase<SpellStatusEffectDef>.GetNamedSilentFail(defName);
         if (statusEffectDef == null)
         {
-            return "a reusable status effect";
+            return T("MF_SpellDescriptionReusableStatusEffect");
         }
 
-        string label = string.IsNullOrWhiteSpace(statusEffectDef.label) ? "a reusable status effect" : statusEffectDef.label;
+        string label = string.IsNullOrWhiteSpace(statusEffectDef.label) ? T("MF_SpellDescriptionReusableStatusEffect") : statusEffectDef.label;
         if (statusEffectDef.categories == null || statusEffectDef.categories.Count == 0)
         {
             return label + DescribeStatusRefreshPolicy(statusEffectDef.refreshPolicy);
@@ -682,12 +686,12 @@ public static class SpellDescriptionUtility
     private static string DescribeChainLightning(ChainLightningActionDef chain)
     {
         string branchText = chain.maxBranches > 1
-            ? ", branching " + Mathf.Max(1, chain.minBranches) + "-" + Mathf.Max(Mathf.Max(1, chain.minBranches), chain.maxBranches) + " way(s)"
+            ? T("MF_SpellDescriptionChainLightningBranching", Mathf.Max(1, chain.minBranches), Mathf.Max(Mathf.Max(1, chain.minBranches), chain.maxBranches))
             : string.Empty;
         string repeatText = chain.allowRepeatTargets && chain.visitedTargetPolicy == ChainVisitedTargetPolicy.AllowRepeats
-            ? ", may revisit targets"
-            : ", avoids previously hit targets";
-        return "Chains lightning through nearby targets for up to " + chain.maxHops + " hop(s), within " + FormatNumber(chain.jumpRadius) + " cells" + branchText + repeatText + ".";
+            ? T("MF_SpellDescriptionMayRevisitTargets")
+            : T("MF_SpellDescriptionAvoidsPreviouslyHitTargets");
+        return T("MF_SpellDescriptionChainsLightning", chain.maxHops, FormatNumber(chain.jumpRadius), branchText, repeatText);
     }
 
     private static string DescribeProjectileLaunch(LaunchProjectileActionDef projectile)
@@ -700,12 +704,12 @@ public static class SpellDescriptionUtility
         List<string> parts = new();
         if (projectile.launchOrigin != ProjectileLaunchOriginSource.Caster)
         {
-            parts.Add("from " + DescribeProjectileLaunchOrigin(projectile.launchOrigin));
+            parts.Add(T("MF_SpellDescriptionFromOrigin", DescribeProjectileLaunchOrigin(projectile.launchOrigin)));
         }
 
         if (projectile.targetSource != ProjectileTargetSource.CurrentTarget)
         {
-            parts.Add("toward " + DescribeProjectileTargetSource(projectile.targetSource));
+            parts.Add(T("MF_SpellDescriptionTowardTargetSource", DescribeProjectileTargetSource(projectile.targetSource)));
         }
 
         return parts.Count == 0 ? string.Empty : " " + string.Join(" ", parts);
@@ -715,9 +719,9 @@ public static class SpellDescriptionUtility
     {
         return launchOrigin switch
         {
-            ProjectileLaunchOriginSource.CurrentTarget => "the current target",
-            ProjectileLaunchOriginSource.CurrentCell => "the spell point",
-            _ => "the caster"
+            ProjectileLaunchOriginSource.CurrentTarget => T("MF_SpellDescriptionCurrentTarget"),
+            ProjectileLaunchOriginSource.CurrentCell => T("MF_SpellDescriptionSpellPoint"),
+            _ => T("MF_SpellDescriptionCaster")
         };
     }
 
@@ -725,9 +729,9 @@ public static class SpellDescriptionUtility
     {
         return targetSource switch
         {
-            ProjectileTargetSource.CurrentCell => "the spell point",
-            ProjectileTargetSource.Caster => "the caster",
-            _ => "the current target"
+            ProjectileTargetSource.CurrentCell => T("MF_SpellDescriptionSpellPoint"),
+            ProjectileTargetSource.Caster => T("MF_SpellDescriptionCaster"),
+            _ => T("MF_SpellDescriptionCurrentTarget")
         };
     }
 
@@ -735,9 +739,9 @@ public static class SpellDescriptionUtility
     {
         return refreshPolicy switch
         {
-            SpellStatusRefreshPolicy.IgnoreIfActive => "; ignored if already active",
-            SpellStatusRefreshPolicy.StackDuration => "; duration stacks",
-            SpellStatusRefreshPolicy.Replace => "; replaces existing",
+            SpellStatusRefreshPolicy.IgnoreIfActive => T("MF_SpellDescriptionStatusIgnoredIfActive"),
+            SpellStatusRefreshPolicy.StackDuration => T("MF_SpellDescriptionStatusDurationStacks"),
+            SpellStatusRefreshPolicy.Replace => T("MF_SpellDescriptionStatusReplacesExisting"),
             _ => string.Empty
         };
     }
@@ -747,30 +751,30 @@ public static class SpellDescriptionUtility
         List<string> parts = new();
         if (terrain.replaceWater)
         {
-            parts.Add(Colorize("freezes", "#9fdcff") + " water-like terrain");
+            parts.Add(T("MF_SpellDescriptionFreezesWaterTerrain", Colorize(T("MF_SpellDescriptionFreezes"), "#9fdcff")));
         }
 
         if (terrain.meltIce)
         {
-            parts.Add("melts " + Colorize("ice", "#9fdcff"));
+            parts.Add(T("MF_SpellDescriptionMeltsIce", Colorize(T("MF_SpellDescriptionIce"), "#9fdcff")));
         }
 
         if (terrain.addSnow)
         {
-            parts.Add("adds " + Colorize("snow", "#d7f2ff"));
+            parts.Add(T("MF_SpellDescriptionAddsSnow", Colorize(T("MF_SpellDescriptionSnow"), "#d7f2ff")));
         }
 
         if (terrain.removeSnow)
         {
-            parts.Add("removes snow");
+            parts.Add(T("MF_SpellDescriptionRemovesSnow"));
         }
 
         if (!string.IsNullOrWhiteSpace(terrain.replacementTerrainDef))
         {
-            parts.Add("changes terrain to " + ColorizeElementalTerm(ResolveDefLabel<TerrainDef>(terrain.replacementTerrainDef, terrain.replacementTerrainDef)));
+            parts.Add(T("MF_SpellDescriptionChangesTerrainTo", ColorizeElementalTerm(ResolveDefLabel<TerrainDef>(terrain.replacementTerrainDef, terrain.replacementTerrainDef))));
         }
 
-        return (parts.Count == 0 ? "Changes terrain" : Capitalize(string.Join(", ", parts))) + " in a " + FormatNumber(terrain.radius) + "-cell radius.";
+        return T("MF_SpellDescriptionTerrainPatch", parts.Count == 0 ? T("MF_SpellDescriptionChangesTerrain") : Capitalize(string.Join(", ", parts)), FormatNumber(terrain.radius));
     }
 
     private static List<SpellCostDef> GetCosts(SpellDef spellDef)
@@ -804,10 +808,10 @@ public static class SpellDescriptionUtility
     {
         return requirement switch
         {
-            ManaRequirementDef mana => "at least " + FormatNumber(mana.amount) + " mana",
-            CooldownRequirementDef => "cooldown ready",
-            ArcaneGiftRequirementDef => "Arcane gift",
-            CasterLevelRequirementDef casterLevel => "caster level " + casterLevel.minimumLevel + "+",
+            ManaRequirementDef mana => T("MF_SpellDescriptionRequirementMana", FormatNumber(mana.amount)),
+            CooldownRequirementDef => T("MF_SpellDescriptionRequirementCooldownReady"),
+            ArcaneGiftRequirementDef => T("MF_SpellDescriptionRequirementArcaneGift"),
+            CasterLevelRequirementDef casterLevel => T("MF_SpellDescriptionRequirementCasterLevel", casterLevel.minimumLevel),
             null => null,
             _ => requirement.GetType().Name
         };
@@ -845,23 +849,23 @@ public static class SpellDescriptionUtility
             return string.Empty;
         }
 
-        const string header = "Effects:\n";
+        string header = T("MF_SpellDescriptionEffectsHeader") + "\n";
         return details.StartsWith(header) ? details.Substring(header.Length) : details;
     }
 
     private static string DescribeDuration(int ticks, bool active)
     {
-        return active && ticks > 0 ? " for " + FormatTicks(ticks) : string.Empty;
+        return active && ticks > 0 ? T("MF_SpellDescriptionForDuration", FormatTicks(ticks)) : string.Empty;
     }
 
     private static string DescribeOptionalDuration(int ticks)
     {
-        return ticks > 0 ? " for " + FormatTicks(ticks) : string.Empty;
+        return ticks > 0 ? T("MF_SpellDescriptionForDuration", FormatTicks(ticks)) : string.Empty;
     }
 
     private static string DescribeOptionalMaxDuration(int ticks)
     {
-        return ticks > 0 ? " for up to " + FormatTicks(ticks) : string.Empty;
+        return ticks > 0 ? T("MF_SpellDescriptionForUpToDuration", FormatTicks(ticks)) : string.Empty;
     }
 
     private static string ResolveDefLabel<TDef>(string defName, string fallback)
@@ -923,7 +927,7 @@ public static class SpellDescriptionUtility
 
     private static string FormatTicks(int ticks)
     {
-        return ticks > 0 ? ticks.ToStringTicksToPeriod() : "briefly";
+        return ticks > 0 ? ticks.ToStringTicksToPeriod() : T("MF_SpellDescriptionBriefly");
     }
 
     private static string FormatNumber(float value)
@@ -956,11 +960,38 @@ public static class SpellDescriptionUtility
 
         if (parts.Count == 2)
         {
-            return parts[0] + " and " + parts[1];
+            return T("MF_SpellDescriptionListTwo", parts[0], parts[1]);
         }
 
-        return string.Join(", ", parts.GetRange(0, parts.Count - 1)) + ", and " + parts[parts.Count - 1];
+        return T("MF_SpellDescriptionListMany", string.Join(", ", parts.GetRange(0, parts.Count - 1)), parts[parts.Count - 1]);
     }
+
+#pragma warning disable CS0618
+    private static string T(string key)
+    {
+        return key.Translate().ToString();
+    }
+
+    private static string T(string key, object arg0)
+    {
+        return key.Translate(arg0).ToString();
+    }
+
+    private static string T(string key, object arg0, object arg1)
+    {
+        return key.Translate(arg0, arg1).ToString();
+    }
+
+    private static string T(string key, object arg0, object arg1, object arg2)
+    {
+        return key.Translate(arg0, arg1, arg2).ToString();
+    }
+
+    private static string T(string key, object arg0, object arg1, object arg2, object arg3)
+    {
+        return key.Translate(arg0, arg1, arg2, arg3).ToString();
+    }
+#pragma warning restore CS0618
 
     private static string Capitalize(string value)
     {
