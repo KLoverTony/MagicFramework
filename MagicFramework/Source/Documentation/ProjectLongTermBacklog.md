@@ -149,6 +149,38 @@ First implementation pass:
 4. Smoke test save/load, destroyed phylactery cases, missing corpse cases, hostile corpse/faction cases, map transfer, caravan/world-pawn references, relationship/name continuity, magic runtime state, and exploit paths.
 
 
+### MF-064 Magical Transcendence And Arcane Relics
+
+Goal: define a magic-native endgame arc so MFVanilla has a destination beyond ordinary colony survival or a spaceship-equivalent victory.
+
+Design direction:
+- treat Transcendence as the magical endgame umbrella: a colony-scale arc built from school mastery, planar materials, leyline control, arcane relics, and high-risk rituals
+- avoid implementing the final arc until planar rewards, advanced materials, relic behavior, and capstone transformations have enough foundation
+- use near-term work to plant prerequisites instead: exotic planar materials, relic fragments, high-tier research nodes, arcane sites, and map-scale magical infrastructure
+- distinguish Transcendence from lichdom: lichdom is a Soulcraft character transformation, while Transcendence should be a colony/endgame arc that may include or compete with lichdom
+
+Arcane relic direction:
+- arcane relics should be magical artifacts with noteworthy map-wide effects, not just ideology-style relic objects with flavor text
+- effects should be powerful but readable: mana recovery, disease suppression, planar gate stability, weather pressure, crop/plant changes, school empowerment, raid attraction, death protection, or ritual amplification
+- each relic should have a cost/risk axis so map-wide benefits create story pressure rather than passive permanent bonuses
+- relics can become rewards from planar expeditions, sealed vaults, grand rituals, or advanced research chains
+- relics are a good bridge between planar purpose and endgame: exotic materials can forge, awaken, repair, or stabilize them
+
+Possible Transcendence arc:
+1. Discover or craft arcane relics tied to major schools or planes.
+2. Gather exotic planar materials and advanced magical reagents.
+3. Stabilize a leyline/gate/relic network on the player map.
+4. Complete escalating ritual or site objectives while surviving magical consequences.
+5. Choose an outcome: ascension, permanent planar threshold, colony-wide transformation, or another high-magic finale.
+
+First planning pass:
+1. Define 3-5 candidate arcane relic effects and their risks.
+2. Identify which existing systems can host relic effects: buildings, comps, map components, enhancement rules, incidents, rituals, or planar gates.
+3. Tie at least one planar/exotic material to a relic or capstone recipe so planar travel gains practical purpose.
+4. Decide whether Transcendence should be a victory condition, a post-game state, or a repeatable endgame project.
+5. Keep lichdom as a related Soulcraft capstone, not the whole magic endgame.
+
+
 ### MF-060 Paintings And Platinum Consideration
 
 Goal: evaluate whether paintings as decoration and platinum as a trade good belong in the first-party content set.

@@ -4,6 +4,26 @@ This file tracks implemented framework and content milestones moved out of the a
 
 ## Implemented Recently
 
+- MFVanilla 0.9.0 / MagicFramework 1.4.0 feature release.
+  Uploaded:
+  - May 25, 2026.
+  Current state:
+  - Planar Magic has a playable foundation: buildable/useable planar gates, temporary pocket maps, planar terrain/plants/materials, return handling, off-map transport blocking, debug actions, and XML-authored planar dimension/site support.
+  - Planar smoke testing confirmed the core gate/pocket/return loop, and save/reload inside the planar dimension appeared to work as expected.
+  - Forbidden Lore gained its first validated spell identity pass: Dominate Will temporarily compels a hostile humanlike pawn through saved temporary allegiance runtime, while Forbidden Plague spreads through clustered hostile pawns as a treatable magical contagion with lesion/blister wound pulses.
+  - Dominate Will was fixed before upload by giving the hidden compelled-pawn faction normal name-generation data and hardening temporary faction creation.
+  - Vitalism gained Cure Disease, a maintained magical treatment spell that interacts with disease/tend state rather than deleting disease hediffs directly.
+  - Geomancy gained Dig and Earth Wall, backed by reusable framework mining and temporary wall-line action support.
+  - Spell and spell-scroll inspect text were fixed by deploying MagicFramework generated-description language data and adding generated summary coverage for temporary allegiance effects.
+  - The first Arcane Forge weapon set was smoke tested successfully: Zephyr Spear, Flaming Longsword, Tidebreaker Mace, and Stonefall Mace provide validated activated powers, passives, protections, and melee triggers.
+  Validation:
+  - Dominate Will, Forbidden Plague, Cure Disease, Dig, Earth Wall, planar travel/save-load, spell text, scroll inspect text, and magic weapon behavior all passed release smoke testing.
+  Follow-up posture:
+  - Treat 0.9.0 as the stable baseline for post-release MFVanilla completion work.
+  - Aquamancy is the next obvious school-content gap.
+  - Planar Magic should receive polish and possibly small hazards/rewards before deeper planar exploration.
+  - Keep Forbidden Lore, Cure Disease, and enchanted weapons on balance watch rather than immediately expanding them.
+
 - MFVanilla 0.8.2 / MagicFramework 1.3.1 progression QoL patch.
   Uploaded:
   - May 22, 2026.

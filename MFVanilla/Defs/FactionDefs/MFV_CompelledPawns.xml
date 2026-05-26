@@ -5,6 +5,9 @@
     <defName>MFV_CompelledPawns</defName>
     <label>compelled pawns</label>
     <description>Temporary faction used by Magic Framework maintained allegiance effects. It should not appear as an ordinary world faction.</description>
+    <fixedName>compelled pawns</fixedName>
+    <factionNameMaker>NamerFactionOutlander</factionNameMaker>
+    <settlementNameMaker>NamerSettlementOutlander</settlementNameMaker>
     <pawnSingular>compelled pawn</pawnSingular>
     <pawnsPlural>compelled pawns</pawnsPlural>
     <hidden>true</hidden>

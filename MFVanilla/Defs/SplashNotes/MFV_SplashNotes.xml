@@ -5,12 +5,19 @@
     <label>MF Vanilla</label>
     <modName>MF Vanilla</modName>
     <packageId>oracle.mfvanilla</packageId>
-    <versionKey>MFVanilla-0.8.2</versionKey>
+    <versionKey>MFVanilla-0.9.0</versionKey>
     <order>100</order>
     <notes>
       <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, arcane sites, and magical discoveries instead of the standard industrial path.</li>
       <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
-      <li>MF Vanilla 0.8.2 is a quality-of-life progression patch focused on making spell access and caster growth feel less bottlenecked.</li>
+      <li>MF Vanilla 0.9.0 is a feature release focused on advanced school identity, planar exploration, and release-candidate polish for the first-party content set.</li>
+      <li>Planar Magic now has a playable foundation: colonies can open planar gates, enter temporary pocket dimensions, gather strange materials, and return safely through the gate loop. Save and reload testing inside planar spaces passed during release smoke testing.</li>
+      <li>Forbidden Lore now has dangerous first spells. Dominate Will can temporarily compel a hostile humanlike pawn to fight as an ally, while Forbidden Plague spreads through clustered enemies until treated and overcome.</li>
+      <li>Vitalism gains Cure Disease, a maintained support spell that uses magical treatment instead of instantly deleting disease state.</li>
+      <li>Geomancy gains Dig and Earth Wall, giving earth magic practical mining and defensive battlefield tools.</li>
+      <li>The first Arcane Forge weapon set has been smoke tested: Zephyr Spear, Flaming Longsword, Tidebreaker Mace, and Stonefall Mace now provide validated activated powers, passives, protections, and melee triggers.</li>
+      <li>Spell and spell-scroll inspect text now uses the generated Magic Framework detail language correctly.</li>
+      <li>MF Vanilla 0.8.2 was a quality-of-life progression patch focused on making spell access and caster growth feel less bottlenecked.</li>
       <li>Completing spell-unlocking arcane research now calls down mysterious aid: one matching spell scroll appears for the colony, giving each new school an immediate playable payoff.</li>
       <li>Spell scrolls are easier to find through Elementalist traders and arcane treasure rewards, while scroll market value now scales with the depth of research needed to unlock the spell.</li>
       <li>Gifted pawns now gain caster experience when learning spells from scrolls and when successfully casting spells they know.</li>

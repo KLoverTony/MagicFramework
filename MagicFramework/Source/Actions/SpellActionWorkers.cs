@@ -1982,7 +1982,17 @@ public sealed class TemporaryAllegianceActionWorker : SpellActionWorker
             return existing;
         }
 
-        Faction generated = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms(factionDef));
+        Faction generated;
+        try
+        {
+            generated = FactionGenerator.NewGeneratedFaction(new FactionGeneratorParms(factionDef));
+        }
+        catch (System.Exception ex)
+        {
+            Log.Error($"[MagicFramework] Temporary allegiance could not generate utility faction '{factionDefName}'. Check that the FactionDef has a fixedName or factionNameMaker.\n{ex}");
+            return null;
+        }
+
         if (generated == null)
         {
             return null;

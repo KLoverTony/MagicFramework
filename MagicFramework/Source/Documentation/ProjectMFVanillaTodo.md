@@ -139,11 +139,11 @@ Follow-up opportunities:
 
 Goal: round out sparse earth and water schools after the current spell survey.
 
-Status: first Geomancy implementations added. Dig and Earth Wall need in-game smoke tests before tuning; Aquamancy still needs its next selected spell.
+Status: first Geomancy implementations added and smoke tested. Aquamancy still needs its next selected spell; the next bounded post-0.9 content slice should be Desiccate/Dessicate as a hostile attack spell.
 
 Design direction:
 - Geomancy needs the most help. Favor spells that make earth feel defensive, positional, and materially grounded rather than another generic damage school.
-- Aquamancy is less empty but still wants one or two more identity spells beyond Deluge, Extinguish, and Water's Embrace.
+- Aquamancy is less empty but still wants one or two more identity spells beyond Deluge, Extinguish, and Water's Embrace. It especially lacks a direct attack spell that feels like water magic rather than frost/lightning.
 - Prefer XML-first spells using existing primitives where possible; add framework hooks only when they clearly support multiple spells or items.
 
 Current state:
@@ -161,9 +161,17 @@ Candidate Geomancy spells:
 - Tremor: small area stagger/knockback/stun with low damage and strong positioning identity.
 
 Candidate Aquamancy spells:
+- Desiccate/Dessicate: offensive dehydration spell. Hostile pawn target, life/water-draining damage or a drying status, possible pain/movement/blood-filtration penalty, and later hooks against plants, wet pawns, or water-aspected creatures. Decide final spelling before implementation; "desiccate" is the standard spelling.
 - Riptide: directional pull/push around water or wet terrain.
 - Soothing Rain: area ally recovery or heat/fire mitigation with weather/water flavor.
 - Frost/Wet synergy pass: make Drenched matter more for cold, slow, or lightning-adjacent effects if the mechanics stay readable.
+
+Desiccate first-pass direction:
+1. Keep the spell narrow: one hostile humanlike/animal pawn target, research-gated by Aquamancy, generated scroll/recipe coverage, and a clear icon path.
+2. Prefer a readable drying status plus moderate direct damage over another explosion/cone spell.
+3. Use existing `DamageActionDef`, `ApplyHediffActionDef`, and/or reusable status support if possible; add a new framework primitive only if water-drain mechanics need repeated support.
+4. Consider a custom `MF_Desiccated` hediff/status cue with pain, movement, consciousness, blood filtration, or healing suppression tuning.
+5. Optional later synergies: stronger against Drenched targets, weaker in rain/water, plant damage, or interaction with Cure Disease/Forbidden Plague only if it remains intuitive.
 
 Success criteria:
 - earth and water each gain at least one spell that changes player decisions, not just another damage button
@@ -171,14 +179,14 @@ Success criteria:
 - any new framework primitive is justified by more than one plausible content use
 
 Dig validation checklist:
-1. Cast on natural rock, ore/resource mineables, gemstone veins, and invalid non-mineable buildings.
+1. Cast on natural rock, ore/resource mineables, gemstone veins, and invalid non-mineable buildings. - passed first smoke test for the current release pass
 2. Confirm base casts mine 3 cells and higher caster levels scale toward 7 cells.
 3. Confirm mined cells use normal mining yield behavior, including chunks/ore and MFVanilla gemstone yield handling.
 4. Confirm line-of-sight and range feel appropriate for a utility spell.
 5. Tune mana, cooldown, cast time, range, radius, and scaling after seeing whether it competes too strongly with pawn mining labor.
 
 Earth Wall validation checklist:
-1. Cast on open floor, soil, rough stone, bridges, doors/near buildings, occupied cells, and narrow corridors.
+1. Cast on open floor, soil, rough stone, bridges, doors/near buildings, occupied cells, and narrow corridors. - passed first smoke test for the current release pass
 2. Confirm the wall line faces perpendicular to the caster-target direction and only fills valid cells.
 3. Confirm enemies and colonists path around or interact with the wall as expected.
 4. Confirm wall faction/ownership is sensible and does not create hostile-player weirdness.
@@ -237,7 +245,7 @@ Validation checklist:
 
 Goal: turn the new Planar Magic foundation into a stable MFVanilla release feature rather than leaving it as exploratory long-term content.
 
-Status: first implementation exists, has passed an initial functional smoke test, and should now be treated as an active polish/opportunity surface for the MFVanilla completion pass.
+Status: first implementation shipped in MFVanilla 0.9.0 and passed functional smoke testing, including save/reload inside the planar dimension. It should now be treated as an active polish/opportunity surface for the MFVanilla completion pass.
 
 Current state:
 - Planar gates exist as buildable/useable content tied to the Planar Magic research path and arcane spire support.
@@ -247,20 +255,23 @@ Current state:
 - MFVanilla blocks off-map transport from planar pocket maps where ordinary transport would break the intended exit loop.
 - XML-authored planar dimension/site support now lives beside the MFVanilla site content, with first-pass planar terrain, plants, stone, and material hooks.
 - Initial smoke testing indicates the core loop is functional and fun.
+- Current concern: planar dimensions need practical purpose beyond novelty. Exotic materials are the first purpose hook, but they need real recipe/reward uses and possibly small hazards, guardians, or discoveries.
 
 Priority:
 - polish the complete player loop from research/building to entry, exploration, extraction, return, and cleanup
 - continue checking save/load behavior before entry, while inside the pocket, during forced return, after return, and after cleanup
 - tune alignment timing, gate range, spire/power contribution, pocket duration, return capacity, material abundance, and failure messaging
 - update player-facing documentation, splash notes, and release notes so Planar Magic reads as an intentional feature
-- decide whether the first release needs only resource/exploration payoff or also a small authored threat, hazard, or treasure beat
+- decide whether the first post-0.9 polish pass needs only resource/exploration payoff or also a small authored threat, hazard, or treasure beat
+- decide whether additional planes, especially a hellish planescape, belong inside MFVanilla as examples of the planar API or should become separate expansion mods once the core loop is mature
 
 Next steps:
 1. Keep targeted save/load checks at each lifecycle point: before opening, inside the pocket, after forced return is scheduled, after return, and after map cleanup.
 2. Tune gate alignment, spire contribution, pocket duration, return capacity, and failure text based on normal-play feel.
 3. Check whether planar materials enter the MFVanilla economy cleanly through mining, hauling, storage, tradeability, and recipe/value expectations.
-4. Update splash notes and completed-work notes now that `Mods/MFVanilla/Documentation/ModPlan.md` recognizes the feature as functional.
+4. Hook at least one planar/exotic material into a real MFVanilla recipe or reward path so planar trips have a concrete reason to exist.
 5. Pick one conservative first opportunity if the release needs more payoff: a rare resource cluster, small planar hazard, simple guardian beat, or minor treasure hook.
+6. Outline future plane ownership: first-party MFVanilla examples versus separate plane packs, with a hellish planescape as the leading candidate for a later Infernal/Planar expansion.
 
 Success criteria:
 - players can understand when and why the gate opens, what can enter, how to return, and what risks remain

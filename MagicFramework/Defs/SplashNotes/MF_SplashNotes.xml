@@ -5,11 +5,12 @@
     <label>Magic Framework</label>
     <modName>Magic Framework</modName>
     <packageId>oracle.magicframework</packageId>
-    <versionKey>MagicFramework-1.3.1</versionKey>
+    <versionKey>MagicFramework-1.4.0</versionKey>
     <order>0</order>
     <notes>
-      <li>Magic Framework 1.3.1 adds a small runtime support update for MF Vanilla caster progression: successful known-spell casts can now award caster experience.</li>
-      <li>The main player-facing changes are in MF Vanilla 0.8.2: improved scroll access, research scroll rewards, and arcane apprenticeship.</li>
+      <li>Magic Framework 1.4.0 expands the first-party authoring surface with planar travel support, temporary allegiance effects, magical disease/treatment support, temporary wall spawning, and mining actions.</li>
+      <li>Maintained spell warmups, generated spell details, and temporary faction handling have been hardened for the new MF Vanilla content.</li>
+      <li>The main player-facing changes are in MF Vanilla 0.9.0: Planar Magic, Forbidden Lore spells, Geomancy utility spells, Cure Disease, and validated enchanted weapon behavior.</li>
       <li>You can reopen the latest notes from the Magic Framework or MF Vanilla settings pages.</li>
     </notes>
   </MagicFramework.Core.SplashNoteDef>

@@ -92,13 +92,26 @@ public sealed class SpellWarmupGameComponent : GameComponent
         for (int i = pendingWarmups.Count - 1; i >= 0; i--)
         {
             PendingSpellWarmup pendingWarmup = pendingWarmups[i];
+            if (pendingWarmup == null)
+            {
+                pendingWarmups.RemoveAt(i);
+                continue;
+            }
+
             if (pendingWarmup.ExecuteAtTick > currentTick)
             {
                 continue;
             }
 
             pendingWarmups.RemoveAt(i);
-            pendingWarmup.Execute();
+            try
+            {
+                pendingWarmup.Execute();
+            }
+            catch (Exception ex)
+            {
+                Log.Error("[MagicFramework] Pending spell warmup failed during completion: " + pendingWarmup.DebugLabel + "\n" + ex);
+            }
         }
     }
 }
@@ -143,6 +156,17 @@ public sealed class PendingSpellWarmup
 
     public int ExecuteAtTick { get; }
 
+    public string DebugLabel
+    {
+        get
+        {
+            string casterLabel = caster?.LabelShortCap ?? "<null caster>";
+            string spellLabel = spellDef?.defName ?? "<null spell>";
+            string targetLabel = target.IsValid ? target.ToString() : "<invalid target>";
+            return spellLabel + " by " + casterLabel + " targeting " + targetLabel + " at tick " + ExecuteAtTick;
+        }
+    }
+
     public void Execute()
     {
         if (caster == null || caster.Destroyed || caster.Dead || caster.Downed || !caster.Spawned)
@@ -154,11 +178,23 @@ public sealed class PendingSpellWarmup
                 failedContext.executionState.failureReason = "Caster could not complete the spell.";
             }
 
-            onComplete?.Invoke(false, failedContext);
+            InvokeCompletion(false, failedContext);
             return;
         }
 
         bool completed = executor.TryExecute(spellDef, caster, target, out SpellContext context, false, configureContext);
-        onComplete?.Invoke(completed, context);
+        InvokeCompletion(completed, context);
+    }
+
+    private void InvokeCompletion(bool completed, SpellContext context)
+    {
+        try
+        {
+            onComplete?.Invoke(completed, context);
+        }
+        catch (Exception ex)
+        {
+            Log.Error("[MagicFramework] Spell warmup completion callback failed for " + DebugLabel + "\n" + ex);
+        }
     }
 }
