@@ -121,6 +121,16 @@ public sealed class TargetDeadConditionDef : SpellConditionDef
 }
 
 /// <summary>
+/// Returns true when the requested pawn target is authored as undead.
+/// </summary>
+public sealed class TargetUndeadConditionDef : SpellConditionDef
+{
+    public SpellConditionTargetSource targetSource = SpellConditionTargetSource.CurrentTarget;
+
+    public override SpellConditionWorker CreateWorker() => new TargetUndeadConditionWorker();
+}
+
+/// <summary>
 /// Returns true when the requested cell contains at least one thing.
 /// </summary>
 public sealed class CellOccupiedConditionDef : SpellConditionDef

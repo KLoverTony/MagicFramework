@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using MagicFramework.Context;
 using MagicFramework.Core;
 using MagicFramework.Definitions;
+using MagicFramework.PawnLifecycle;
 using MagicFramework.Targeting;
 using Verse;
 
@@ -145,6 +146,16 @@ public sealed class TargetDeadConditionWorker : SpellConditionWorker
         TargetDeadConditionDef deadDef = conditionDef as TargetDeadConditionDef;
         Pawn targetPawn = SpellConditionUtility.ResolvePawn(context, deadDef?.targetSource ?? SpellConditionTargetSource.CurrentTarget);
         return targetPawn != null && targetPawn.Dead;
+    }
+}
+
+public sealed class TargetUndeadConditionWorker : SpellConditionWorker
+{
+    public override bool Evaluate(SpellContext context, SpellConditionDef conditionDef)
+    {
+        TargetUndeadConditionDef undeadDef = conditionDef as TargetUndeadConditionDef;
+        Pawn targetPawn = SpellConditionUtility.ResolvePawn(context, undeadDef?.targetSource ?? SpellConditionTargetSource.CurrentTarget);
+        return PawnLifecycleUtility.IsUndead(targetPawn);
     }
 }
 

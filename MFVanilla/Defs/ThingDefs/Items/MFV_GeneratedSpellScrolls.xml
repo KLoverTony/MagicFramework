@@ -209,6 +209,29 @@
     </comps>
   </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
+    <defName>MFV_SpellScroll_MF_Desiccate</defName>
+    <label>spell scroll (desiccate)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast desiccate.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>1200</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Desiccate</spell>
+        <requiredResearch>
+          <li>MFV_Aquamancy</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_Dig</defName>
     <label>spell scroll (dig)</label>
     <description>A prepared arcane scroll that teaches a pawn how to cast dig.</description>

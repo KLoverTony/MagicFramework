@@ -18,6 +18,8 @@
   <MF_DelayedBlastRune.description>Places a glowing magical rune on a target cell, then detonates after a short delay.</MF_DelayedBlastRune.description>
   <MF_Deluge.label>deluge</MF_Deluge.label>
   <MF_Deluge.description>Calls down a violent surge of water that douses fires, drenches pawns, and pushes them away from the center.</MF_Deluge.description>
+  <MF_Desiccate.label>desiccate</MF_Desiccate.label>
+  <MF_Desiccate.description>Wrenches moisture from a living foe, inflicting withering damage and leaving the target's limbs stiff and brittle for a short time.</MF_Desiccate.description>
   <MF_Dig.label>dig</MF_Dig.label>
   <MF_Dig.description>Splits nearby rock with geomantic force, mining a small cluster of stone around the chosen block.</MF_Dig.description>
   <MF_Disintegrate.label>disintegrate</MF_Disintegrate.label>

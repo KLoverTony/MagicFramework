@@ -460,6 +460,57 @@
     <displayPriority>800</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_Desiccate</defName>
+    <label>scribe scroll (desiccate)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast desiccate. The scribe must have the Arcane Gift and already know desiccate.</description>
+    <jobString>Scribing scroll (desiccate).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Aquamancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_Desiccate>1</MFV_SpellScroll_MF_Desiccate>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_Desiccate</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_Dig</defName>
     <label>scribe scroll (dig)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast dig. The scribe must have the Arcane Gift and already know dig.</description>

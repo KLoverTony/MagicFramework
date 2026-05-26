@@ -26,6 +26,8 @@
   <MF_Waterbound.description>This pawn's movement speed is reduced by 65% by animated water.</MF_Waterbound.description>
   <MF_HeldUnder.label>held under</MF_HeldUnder.label>
   <MF_HeldUnder.description>This pawn is being forced beneath animated water and is struggling to stay conscious.</MF_HeldUnder.description>
+  <MF_Desiccated.label>desiccated</MF_Desiccated.label>
+  <MF_Desiccated.description>This pawn's tissues have been magically dried, making their limbs stiff and painful to use.</MF_Desiccated.description>
   <MF_PlagueLesion.label>plague lesion</MF_PlagueLesion.label>
   <MF_PlagueLesion.description>A raw lesion raised by forbidden plague magic.</MF_PlagueLesion.description>
   <MF_PlagueBlister.label>plague blister</MF_PlagueBlister.label>

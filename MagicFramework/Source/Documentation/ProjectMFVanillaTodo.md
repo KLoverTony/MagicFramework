@@ -139,7 +139,7 @@ Follow-up opportunities:
 
 Goal: round out sparse earth and water schools after the current spell survey.
 
-Status: first Geomancy implementations added and smoke tested. Aquamancy still needs its next selected spell; the next bounded post-0.9 content slice should be Desiccate/Dessicate as a hostile attack spell.
+Status: first Geomancy implementations added and smoke tested. Desiccate is now authored as the next Aquamancy hostile attack spell and needs focused in-game validation.
 
 Design direction:
 - Geomancy needs the most help. Favor spells that make earth feel defensive, positional, and materially grounded rather than another generic damage school.
@@ -161,16 +161,16 @@ Candidate Geomancy spells:
 - Tremor: small area stagger/knockback/stun with low damage and strong positioning identity.
 
 Candidate Aquamancy spells:
-- Desiccate/Dessicate: offensive dehydration spell. Hostile pawn target, life/water-draining damage or a drying status, possible pain/movement/blood-filtration penalty, and later hooks against plants, wet pawns, or water-aspected creatures. Decide final spelling before implementation; "desiccate" is the standard spelling.
+- Desiccate: offensive dehydration spell. Hostile pawn target, living-only damage, drying hediff with pain/manipulation penalty, and later hooks against plants, wet pawns, or water-aspected creatures.
 - Riptide: directional pull/push around water or wet terrain.
 - Soothing Rain: area ally recovery or heat/fire mitigation with weather/water flavor.
 - Frost/Wet synergy pass: make Drenched matter more for cold, slow, or lightning-adjacent effects if the mechanics stay readable.
 
 Desiccate first-pass direction:
-1. Keep the spell narrow: one hostile humanlike/animal pawn target, research-gated by Aquamancy, generated scroll/recipe coverage, and a clear icon path.
-2. Prefer a readable drying status plus moderate direct damage over another explosion/cone spell.
-3. Use existing `DamageActionDef`, `ApplyHediffActionDef`, and/or reusable status support if possible; add a new framework primitive only if water-drain mechanics need repeated support.
-4. Consider a custom `MF_Desiccated` hediff/status cue with pain, movement, consciousness, blood filtration, or healing suppression tuning.
+1. Implemented with final standard spelling `Desiccate`, icon path `UI/Gizmos/Spells/MF_Desiccate`, Aquamancy research gating, generated scroll/recipe eligibility, and hostile pawn targeting.
+2. Uses a living-target conditional: undead lifecycle pawns are exempt from the damage/debuff branch.
+3. Applies initial Burn damage as withering injury plus `MF_Desiccated`, a timed bad hediff with pain and a Manipulation capacity penalty.
+4. Smoke test against humanlike enemies, hostile animals, and skeletons/other undead; tune damage, mana, cooldown, duration, and whether undead should be rejected at targeting time rather than merely having no effect.
 5. Optional later synergies: stronger against Drenched targets, weaker in rain/water, plant damage, or interaction with Cure Disease/Forbidden Plague only if it remains intuitive.
 
 Success criteria:

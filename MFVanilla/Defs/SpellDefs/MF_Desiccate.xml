@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_Desiccate</defName>
+    <label>desiccate</label>
+    <description>Wrenches moisture from a living foe, inflicting withering damage and leaving the target's limbs stiff and brittle for a short time.</description>
+    <range>18</range>
+    <castTimeTicks>60</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Desiccate</gizmoIconPath>
+    <element>Water</element>
+    <delivery>Bolt</delivery>
+    <effectShape>Single</effectShape>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Water</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Aquamancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Combat</li>
+        <li>MF_Discipline_Control</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Hostile</li>
+        <li>MF_Tag_DirectDamage</li>
+        <li>MF_Tag_Debuff</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Aquamancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>3</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>Foe</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>false</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Desiccate</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Desiccate cooldown ready</debugLabel>
+        <cooldownTicks>360</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Desiccate</debugLabel>
+        <amount>18</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Desiccate cooldown</debugLabel>
+        <cooldownTicks>360</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Desiccate sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Desiccate cast effect</debugLabel>
+            <effectDef>PsycastPsychicEffect</effectDef>
+            <locationSource>CurrentTarget</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.ConditionalActionDef">
+            <debugLabel>Desiccate living target conditional</debugLabel>
+            <conditionLabel>If the target is not undead</conditionLabel>
+            <condition Class="MagicFramework.Definitions.NotConditionDef">
+              <condition Class="MagicFramework.Definitions.TargetUndeadConditionDef">
+                <targetSource>CurrentTarget</targetSource>
+              </condition>
+            </condition>
+            <thenActions>
+              <li Class="MagicFramework.Definitions.DamageActionDef">
+                <debugLabel>Desiccate withering damage</debugLabel>
+                <amount>14</amount>
+                <scalableAmount>
+                  <baseValue>14</baseValue>
+                  <perPower>0.6</perPower>
+                  <max>20</max>
+                </scalableAmount>
+                <damageDef>Burn</damageDef>
+                <armorPenetration>0.10</armorPenetration>
+              </li>
+              <li Class="MagicFramework.Definitions.ApplyHediffActionDef">
+                <debugLabel>Desiccate manipulation debuff</debugLabel>
+                <hediffDef>MF_Desiccated</hediffDef>
+                <severity>0.01</severity>
+                <addMode>SoftReplace</addMode>
+                <removeAfterDuration>true</removeAfterDuration>
+                <durationTicks>900</durationTicks>
+                <scalableDurationTicks>
+                  <baseValue>900</baseValue>
+                  <perPower>30</perPower>
+                  <max>1500</max>
+                </scalableDurationTicks>
+              </li>
+            </thenActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -177,6 +177,27 @@
     </stages>
   </HediffDef>
 
+  <HediffDef>
+    <defName>MF_Desiccated</defName>
+    <label>desiccated</label>
+    <description>This pawn's tissues have been magically dried, making their limbs stiff and painful to use.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <initialSeverity>0.01</initialSeverity>
+    <stages>
+      <li>
+        <painOffset>0.08</painOffset>
+        <capMods>
+          <li>
+            <capacity>Manipulation</capacity>
+            <offset>-0.20</offset>
+          </li>
+        </capMods>
+      </li>
+    </stages>
+  </HediffDef>
+
   <HediffDef ParentName="InjuryBase">
     <defName>MF_PlagueLesion</defName>
     <label>plague lesion</label>
