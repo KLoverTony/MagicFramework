@@ -253,6 +253,51 @@
     </waterDepthShaderParameters>
   </TerrainDef>
 
+  <TerrainDef ParentName="WaterChestDeepBase">
+    <defName>MFV_DeltaManaRiverDeep</defName>
+    <label>deep lava mana current</label>
+    <description>A molten red planar current, bright with heatless lava-light and unstable mana.</description>
+    <texturePath>Terrain/Surfaces/WaterChestDeepRamp</texturePath>
+    <waterDepthShader>Map/WaterDepth</waterDepthShader>
+    <renderPrecedence>399</renderPrecedence>
+    <color>(1,0.12,0.04)</color>
+    <pathCost>48</pathCost>
+    <affordances>
+      <li>MovingFluid</li>
+    </affordances>
+    <tags>
+      <li>River</li>
+    </tags>
+    <waterDepthShaderParameters>
+      <_UseWaterOffset>1</_UseWaterOffset>
+    </waterDepthShaderParameters>
+  </TerrainDef>
+
+  <TerrainDef ParentName="WaterShallowBase">
+    <defName>MFV_DeltaManaRiverShallow</defName>
+    <label>shallow lava mana current</label>
+    <description>A thin red wash of planar mana, glowing like lava where it spreads across the delta.</description>
+    <texturePath>Terrain/Surfaces/WaterShallowRamp</texturePath>
+    <waterDepthShader>Map/WaterDepth</waterDepthShader>
+    <renderPrecedence>398</renderPrecedence>
+    <color>(1,0.32,0.08)</color>
+    <pathCost>32</pathCost>
+    <affordances>
+      <li>MovingFluid</li>
+      <li>ShallowWater</li>
+      <li>Bridgeable</li>
+      <li>Walkable</li>
+    </affordances>
+    <tags>
+      <li>River</li>
+      <li>WaterFreshShallow</li>
+      <li>WaterFreshShallowMoving</li>
+    </tags>
+    <waterDepthShaderParameters>
+      <_UseWaterOffset>1</_UseWaterOffset>
+    </waterDepthShaderParameters>
+  </TerrainDef>
+
   <TerrainDef ParentName="NaturalTerrainBase">
     <defName>MFV_ManaRiverBank</defName>
     <label>mana-washed bank</label>

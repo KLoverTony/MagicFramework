@@ -2209,6 +2209,11 @@ public sealed class MapComponent_PlanarPocketRepair : MapComponent
 {
     private bool repaired;
     private const int FallbackReturnDelayTicks = 7500;
+    private const int LavaHazardIntervalTicks = 120;
+    private const float DeepLavaBurnDamage = 8f;
+    private const float ShallowLavaBurnDamage = 4f;
+    private const float DeepLavaIgniteChance = 0.28f;
+    private const float ShallowLavaIgniteChance = 0.12f;
     private int returnDueTick = -1;
     private bool returnPromptOpen;
     private bool returnCompleted;
@@ -2243,6 +2248,7 @@ public sealed class MapComponent_PlanarPocketRepair : MapComponent
         }
 
         EnsureReturnTimer();
+        ApplyDeltaLavaHazards();
         if (returnDueTick >= 0 && Find.TickManager.TicksGame >= returnDueTick && !returnPromptOpen)
         {
             OpenReturnDialog();
@@ -2291,6 +2297,66 @@ public sealed class MapComponent_PlanarPocketRepair : MapComponent
                 returnDueTick = Find.TickManager.TicksGame + 250;
             }
         }));
+    }
+
+    private void ApplyDeltaLavaHazards()
+    {
+        if (Find.TickManager.TicksGame % LavaHazardIntervalTicks != 0)
+        {
+            return;
+        }
+
+        IReadOnlyList<Pawn> pawns = map?.mapPawns?.AllPawnsSpawned;
+        if (pawns == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < pawns.Count; i++)
+        {
+            Pawn pawn = pawns[i];
+            if (pawn == null || pawn.Destroyed || pawn.Dead || !pawn.Spawned)
+            {
+                continue;
+            }
+
+            TerrainDef terrain = map.terrainGrid.TerrainAt(pawn.Position);
+            if (!TryResolveDeltaLavaHazard(terrain, out float damage, out float igniteChance, out float fireSize))
+            {
+                continue;
+            }
+
+            pawn.TakeDamage(new DamageInfo(DamageDefOf.Burn, damage));
+            if (!pawn.Destroyed && !pawn.Dead && Rand.Chance(igniteChance))
+            {
+                pawn.TryAttachFire(fireSize, null);
+            }
+        }
+    }
+
+    private static bool TryResolveDeltaLavaHazard(TerrainDef terrain, out float damage, out float igniteChance, out float fireSize)
+    {
+        damage = 0f;
+        igniteChance = 0f;
+        fireSize = 0f;
+        string defName = terrain?.defName;
+        if (defName == "MFV_DeltaManaRiverDeep")
+        {
+            damage = DeepLavaBurnDamage;
+            igniteChance = DeepLavaIgniteChance;
+            fireSize = 0.45f;
+            return true;
+        }
+
+        if (defName == "MFV_DeltaManaRiverShallow")
+        {
+            damage = ShallowLavaBurnDamage;
+            igniteChance = ShallowLavaIgniteChance;
+            fireSize = 0.25f;
+            return true;
+        }
+
+        return false;
     }
 }
 

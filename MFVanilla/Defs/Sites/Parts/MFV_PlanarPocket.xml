@@ -37,8 +37,8 @@
   <MagicFramework.Core.PlanarFlowFeatureDef>
     <defName>MFV_PlanarDeltaManaStream</defName>
     <label>delta mana stream</label>
-    <channelTerrain>MFV_ManaRiverDeep</channelTerrain>
-    <edgeTerrain>MFV_ManaRiverShallow</edgeTerrain>
+    <channelTerrain>MFV_DeltaManaRiverDeep</channelTerrain>
+    <edgeTerrain>MFV_DeltaManaRiverShallow</edgeTerrain>
     <bankTerrain>MFV_PlanarDeltaTileC</bankTerrain>
     <minWidth>2</minWidth>
     <maxWidth>4</maxWidth>
