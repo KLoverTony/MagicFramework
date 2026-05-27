@@ -85,6 +85,7 @@ public sealed class CompProperties_PlanarGate : CompProperties
 {
     public PlanarDimensionDef dimension;
     public string dimensionDefName;
+    public List<PlanarDimensionDef> dimensionOptions = new();
     public string sitePartDefName = PlanarMagicUtility.PlanarPocketSitePartDefName;
     public int minSiteDistance = 1;
     public int maxSiteDistance = 4;
@@ -120,6 +121,21 @@ public sealed class CompProperties_PlanarGate : CompProperties
             }
 
             return string.IsNullOrEmpty(dimensionDefName) ? null : DefDatabase<PlanarDimensionDef>.GetNamedSilentFail(dimensionDefName);
+        }
+    }
+
+    public List<PlanarDimensionDef> ResolvedDimensions
+    {
+        get
+        {
+            List<PlanarDimensionDef> resolved = dimensionOptions?.FindAll(def => def != null) ?? new List<PlanarDimensionDef>();
+            PlanarDimensionDef singleDimension = ResolvedDimension;
+            if (singleDimension != null && !resolved.Contains(singleDimension))
+            {
+                resolved.Insert(0, singleDimension);
+            }
+
+            return resolved;
         }
     }
 }
@@ -210,6 +226,8 @@ public sealed class CompPlanarGate : ThingComp
 {
     private int pocketParentId = -1;
     private int nextActiveFleckTick;
+    private string selectedDimensionDefName;
+    private Dictionary<string, int> pocketParentIdsByDimension = new();
 
     private CompProperties_PlanarGate Props => (CompProperties_PlanarGate)props;
 
@@ -248,13 +266,25 @@ public sealed class CompPlanarGate : ThingComp
             yield break;
         }
 
+        if (PlanarMagicUtility.IsPlanarPocketMap(parent.Map))
+        {
+            yield return new Command_Action
+            {
+                defaultLabel = "Return through gate",
+                defaultDesc = "Return selected travelers and supplies from this planar realm to the gate that opened it.",
+                icon = ContentFinder<Texture2D>.Get("UI/Gizmos/Planar/PlanarGateOpen", false),
+                action = ReturnSelectedFromPocket
+            };
+            yield break;
+        }
+
         float alignmentPower = AlignmentPower();
         PlanarAlignmentGameComponent alignment = PlanarAlignmentGameComponent.Instance;
         bool isAligned = alignment?.IsAligned(Props, alignmentPower) == true;
         Command_Action command = new()
         {
             defaultLabel = "Send selected through gate",
-            defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.\n\n{AlignmentStatusText(alignmentPower)}",
+            defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.\n\nDestination: {CurrentDimensionLabel()}.\n{AlignmentStatusText(alignmentPower)}",
             icon = ContentFinder<Texture2D>.Get("UI/Gizmos/Planar/PlanarGateOpen", false),
             action = TraverseSelectedPawns
         };
@@ -264,6 +294,18 @@ public sealed class CompPlanarGate : ThingComp
         }
 
         yield return command;
+
+        List<PlanarDimensionDef> dimensions = Props.ResolvedDimensions;
+        if (dimensions.Count > 1)
+        {
+            yield return new Command_Action
+            {
+                defaultLabel = "Tune planar gate",
+                defaultDesc = $"Choose which reachable realm this planar gate opens into.\n\nCurrent destination: {CurrentDimensionLabel()}.",
+                icon = ContentFinder<Texture2D>.Get("UI/Commands/DesirePower", false),
+                action = OpenDestinationMenu
+            };
+        }
     }
 
     public override IEnumerable<FloatMenuOption> CompFloatMenuOptions(Pawn pawn)
@@ -273,6 +315,24 @@ public sealed class CompPlanarGate : ThingComp
             yield return option;
         }
 
+        if (PlanarMagicUtility.IsPlanarPocketMap(parent?.Map))
+        {
+            if (pawn == null || pawn.Destroyed || !pawn.Spawned || pawn.Map != parent.Map)
+            {
+                yield return new FloatMenuOption("Return through planar gate (invalid pawn or gate)", null);
+                yield break;
+            }
+
+            yield return FloatMenuUtility.DecoratePrioritizedTask(
+                new FloatMenuOption("Return through planar gate", () =>
+                {
+                    PlanarMagicUtility.TryReturnSelectedFromPlanarPocket(parent.Map, new List<Thing> { pawn });
+                }),
+                pawn,
+                parent);
+            yield break;
+        }
+
         if (!CanPawnUseGate(pawn, out string failReason))
         {
             yield return new FloatMenuOption($"Use planar gate ({failReason})", null);
@@ -280,7 +340,7 @@ public sealed class CompPlanarGate : ThingComp
         }
 
         yield return FloatMenuUtility.DecoratePrioritizedTask(
-            new FloatMenuOption("Use planar gate", () =>
+            new FloatMenuOption($"Use planar gate to {CurrentDimensionLabel()}", () =>
             {
                 StartTraversalJobs(new List<Pawn> { pawn });
             }),
@@ -312,6 +372,20 @@ public sealed class CompPlanarGate : ThingComp
         StartTraversalJobs(pawns);
     }
 
+    private void ReturnSelectedFromPocket()
+    {
+        List<Thing> selectedThings = Find.Selector?.SelectedObjects?.OfType<Thing>()
+            .Where(thing => thing != null && !thing.Destroyed && thing.Spawned && thing.Map == parent.Map)
+            .ToList() ?? new List<Thing>();
+        if (selectedThings.Count == 0)
+        {
+            Messages.Message("Select one or more travelers or supplies in this planar realm.", MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        PlanarMagicUtility.TryReturnSelectedFromPlanarPocket(parent.Map, selectedThings);
+    }
+
     public bool TryTraversePawn(Pawn pawn)
     {
         if (!CanPawnUseGate(pawn, out string failReason))
@@ -329,7 +403,8 @@ public sealed class CompPlanarGate : ThingComp
 
         Map sourceMap = pawn.Map;
         float alignmentPower = AlignmentPower();
-        Map destinationMap = GetOrCreatePlanarPocketMap();
+        PlanarDimensionDef dimension = SelectedDimension();
+        Map destinationMap = GetOrCreatePlanarPocketMap(dimension);
         if (destinationMap == null)
         {
             if (sourceMap != null)
@@ -371,10 +446,22 @@ public sealed class CompPlanarGate : ThingComp
     {
         base.PostExposeData();
         Scribe_Values.Look(ref pocketParentId, "pocketParentId", -1);
+        Scribe_Values.Look(ref selectedDimensionDefName, "selectedDimensionDefName");
+        Scribe_Collections.Look(ref pocketParentIdsByDimension, "pocketParentIdsByDimension", LookMode.Value, LookMode.Value);
         if (Scribe.mode == LoadSaveMode.LoadingVars && pocketParentId < 0)
         {
             int legacySiteId = -1;
             Scribe_Values.Look(ref legacySiteId, "siteId", -1);
+        }
+
+        if (Scribe.mode == LoadSaveMode.PostLoadInit)
+        {
+            pocketParentIdsByDimension ??= new Dictionary<string, int>();
+            PlanarDimensionDef dimension = SelectedDimension();
+            if (dimension != null && pocketParentId >= 0 && !pocketParentIdsByDimension.ContainsKey(dimension.defName))
+            {
+                pocketParentIdsByDimension[dimension.defName] = pocketParentId;
+            }
         }
     }
 
@@ -415,18 +502,20 @@ public sealed class CompPlanarGate : ThingComp
         return started;
     }
 
-    private Map GetOrCreatePlanarPocketMap()
+    private Map GetOrCreatePlanarPocketMap(PlanarDimensionDef dimension)
     {
-        PlanarPocketParent pocketParent = PlanarMagicUtility.FindPlanarPocketParentById(pocketParentId);
+        string dimensionKey = dimension?.defName ?? "default";
+        int storedParentId = PocketParentIdFor(dimensionKey);
+        PlanarPocketParent pocketParent = PlanarMagicUtility.FindPlanarPocketParentById(storedParentId);
         if (pocketParent == null)
         {
             int cycleIndex = PlanarAlignmentGameComponent.Instance?.CurrentCycleIndex(Props) ?? 0;
-            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, parent.Position, Props.ResolvedDimension, cycleIndex, out pocketParent))
+            if (!PlanarMagicUtility.TryCreatePlanarPocketParent(parent.Map, parent.Position, dimension, cycleIndex, out pocketParent))
             {
                 return null;
             }
 
-            pocketParentId = pocketParent.ID;
+            SetPocketParentIdFor(dimensionKey, pocketParent.ID);
         }
 
         Map map = PlanarMagicUtility.GetOrGeneratePocketMap(pocketParent);
@@ -475,7 +564,88 @@ public sealed class CompPlanarGate : ThingComp
         int linkedSpires = LinkedArcaneSpires().Count();
         float power = AlignmentPower(linkedSpires);
         string spireText = linkedSpires == 1 ? "1 arcane spire linked" : $"{linkedSpires} arcane spires linked";
-        return $"{AlignmentStatusText(power)}\nPlanar gate power: {power:0.##}x ({spireText}).";
+        return $"{AlignmentStatusText(power)}\nDestination: {CurrentDimensionLabel()}.\nPlanar gate power: {power:0.##}x ({spireText}).";
+    }
+
+    private void OpenDestinationMenu()
+    {
+        List<PlanarDimensionDef> dimensions = Props.ResolvedDimensions;
+        if (dimensions.Count <= 1)
+        {
+            return;
+        }
+
+        List<FloatMenuOption> options = new();
+        for (int i = 0; i < dimensions.Count; i++)
+        {
+            PlanarDimensionDef dimension = dimensions[i];
+            string label = dimension == SelectedDimension() ? $"{dimension.LabelCap} (current)" : dimension.LabelCap;
+            options.Add(new FloatMenuOption(label, () =>
+            {
+                selectedDimensionDefName = dimension.defName;
+                Messages.Message($"Planar gate tuned to {dimension.LabelCap}.", parent, MessageTypeDefOf.PositiveEvent, false);
+            }));
+        }
+
+        Find.WindowStack.Add(new FloatMenu(options));
+    }
+
+    private PlanarDimensionDef SelectedDimension()
+    {
+        List<PlanarDimensionDef> dimensions = Props.ResolvedDimensions;
+        if (!string.IsNullOrWhiteSpace(selectedDimensionDefName))
+        {
+            PlanarDimensionDef selected = dimensions.FirstOrDefault(def => def.defName == selectedDimensionDefName)
+                ?? DefDatabase<PlanarDimensionDef>.GetNamedSilentFail(selectedDimensionDefName);
+            if (selected != null)
+            {
+                return selected;
+            }
+        }
+
+        return dimensions.Count > 0 ? dimensions[0] : Props.ResolvedDimension;
+    }
+
+    private string CurrentDimensionLabel()
+    {
+        PlanarDimensionDef dimension = SelectedDimension();
+        return dimension?.LabelCap ?? "an unstable pocket";
+    }
+
+    private int PocketParentIdFor(string dimensionKey)
+    {
+        pocketParentIdsByDimension ??= new Dictionary<string, int>();
+        if (pocketParentIdsByDimension.TryGetValue(dimensionKey, out int parentId))
+        {
+            return parentId;
+        }
+
+        return dimensionKey == (Props.ResolvedDimension?.defName ?? "default") ? pocketParentId : -1;
+    }
+
+    private void SetPocketParentIdFor(string dimensionKey, int parentId)
+    {
+        pocketParentIdsByDimension ??= new Dictionary<string, int>();
+        pocketParentIdsByDimension[dimensionKey] = parentId;
+        if (dimensionKey == (Props.ResolvedDimension?.defName ?? "default"))
+        {
+            pocketParentId = parentId;
+        }
+    }
+
+    public void NotifyPlanarPocketReturned(PlanarDimensionDef dimension, int returnedParentId)
+    {
+        string dimensionKey = dimension?.defName ?? "default";
+        pocketParentIdsByDimension ??= new Dictionary<string, int>();
+        if (pocketParentIdsByDimension.TryGetValue(dimensionKey, out int storedParentId) && storedParentId == returnedParentId)
+        {
+            pocketParentIdsByDimension.Remove(dimensionKey);
+        }
+
+        if (pocketParentId == returnedParentId)
+        {
+            pocketParentId = -1;
+        }
     }
 
     private string AlignmentStatusText(float alignmentPower)
@@ -1451,6 +1621,15 @@ public static class PlanarMagicUtility
 
     public static Map FindReturnMap(Map pocketMap)
     {
+        if (pocketMap?.Parent is PlanarPocketParent pocketParent)
+        {
+            Map originMap = FindMapByUniqueId(pocketParent.originMapId);
+            if (originMap != null)
+            {
+                return originMap;
+            }
+        }
+
         List<Map> maps = Find.Maps;
         if (maps != null)
         {
@@ -1482,6 +1661,65 @@ public static class PlanarMagicUtility
 
         List<Thing> things = map.listerThings.ThingsOfDef(gateDef);
         return things.NullOrEmpty() ? null : things[0];
+    }
+
+    public static Thing FindOriginPlanarGate(PlanarPocketParent pocketParent)
+    {
+        Map originMap = FindMapByUniqueId(pocketParent?.originMapId ?? -1);
+        if (originMap == null)
+        {
+            return null;
+        }
+
+        ThingDef gateDef = pocketParent?.dimension?.returnGateDef ?? DefDatabase<ThingDef>.GetNamedSilentFail("MFV_PlanarGate");
+        if (gateDef == null)
+        {
+            return null;
+        }
+
+        if (pocketParent.originGatePosition.IsValid)
+        {
+            List<Thing> thingsAtOrigin = pocketParent.originGatePosition.GetThingList(originMap);
+            for (int i = 0; i < thingsAtOrigin.Count; i++)
+            {
+                Thing thing = thingsAtOrigin[i];
+                if (thing?.def == gateDef)
+                {
+                    return thing;
+                }
+            }
+        }
+
+        List<Thing> gates = originMap.listerThings.ThingsOfDef(gateDef);
+        if (gates.NullOrEmpty())
+        {
+            return null;
+        }
+
+        if (!pocketParent.originGatePosition.IsValid)
+        {
+            return gates[0];
+        }
+
+        Thing closestGate = null;
+        float closestDistance = float.MaxValue;
+        for (int i = 0; i < gates.Count; i++)
+        {
+            Thing gate = gates[i];
+            if (gate == null || gate.Destroyed)
+            {
+                continue;
+            }
+
+            float distance = gate.Position.DistanceToSquared(pocketParent.originGatePosition);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestGate = gate;
+            }
+        }
+
+        return closestGate;
     }
 
     public static Thing SpawnPlanarGateNearCenter(Map map)
@@ -1585,7 +1823,7 @@ public static class PlanarMagicUtility
         }
 
         PlanarPocketParent pocketParent = pocketMap.Parent as PlanarPocketParent;
-        Map destinationMap = FindMapByUniqueId(pocketParent?.originMapId ?? -1) ?? Current.Game?.AnyPlayerHomeMap;
+        Map destinationMap = FindReturnMap(pocketMap);
         if (destinationMap == null)
         {
             Messages.Message("The planar pocket cannot find a stable return point.", MessageTypeDefOf.RejectInput, false);
@@ -1659,6 +1897,8 @@ public static class PlanarMagicUtility
             return;
         }
 
+        PlanarPocketParent pocketParent = pocketMap.Parent as PlanarPocketParent;
+
         if (HasAnySpawnedPawn(pocketMap))
         {
             Log.Warning($"[MagicFramework] Planar pocket map {pocketMap.uniqueID} was not removed because at least one pawn remains on it.");
@@ -1669,6 +1909,7 @@ public static class PlanarMagicUtility
         MapParent parent = pocketMap.Parent;
         try
         {
+            NotifyOriginGatePocketReturned(pocketParent);
             Current.Game.DeinitAndRemoveMap(pocketMap, false);
             if (parent != null && Find.WorldObjects.Contains(parent))
             {
@@ -1679,6 +1920,18 @@ public static class PlanarMagicUtility
         {
             Log.Error($"[MagicFramework] Failed to clean up planar pocket map {pocketMap.uniqueID}: {ex}");
         }
+    }
+
+    private static void NotifyOriginGatePocketReturned(PlanarPocketParent pocketParent)
+    {
+        if (pocketParent == null)
+        {
+            return;
+        }
+
+        Thing originGate = FindOriginPlanarGate(pocketParent);
+        CompPlanarGate gateComp = originGate?.TryGetComp<CompPlanarGate>();
+        gateComp?.NotifyPlanarPocketReturned(pocketParent.dimension, pocketParent.ID);
     }
 
     private static bool HasAnySpawnedPawn(Map map)

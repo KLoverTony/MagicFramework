@@ -93,6 +93,121 @@
     <fertility>0.6</fertility>
   </TerrainDef>
 
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarDeltaTileA</defName>
+    <label>delta glass</label>
+    <description>Planar delta ground polished into a faintly luminous glassy sheet.</description>
+    <texturePath>Things/Terrain/Planar/TileDelta1</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>364</renderPrecedence>
+    <pathCost>1</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.9</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarDeltaTileB</defName>
+    <label>delta siltstone</label>
+    <description>A compact layer of exotic silt carried in from an adjacent planar current.</description>
+    <texturePath>Things/Terrain/Planar/TileDelta2</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>362</renderPrecedence>
+    <pathCost>1</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>1</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarDeltaTileC</defName>
+    <label>delta bloomstone</label>
+    <description>A soft planar surface where strange plants root eagerly.</description>
+    <texturePath>Things/Terrain/Planar/TileDelta3</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>360</renderPrecedence>
+    <pathCost>2</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>1.1</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarDeltaTileD</defName>
+    <label>delta duskplate</label>
+    <description>A dense plate of folded planar sediment.</description>
+    <texturePath>Things/Terrain/Planar/TileDelta4</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>358</renderPrecedence>
+    <pathCost>3</pathCost>
+    <statBases>
+      <Beauty>0</Beauty>
+      <BeautyOutdoors>0</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.75</fertility>
+  </TerrainDef>
+
+  <TerrainDef ParentName="NaturalTerrainBase">
+    <defName>MFV_PlanarDeltaTileE</defName>
+    <label>delta mirrorstone</label>
+    <description>Glossy planar stone that reflects motion a heartbeat late.</description>
+    <texturePath>Things/Terrain/Planar/TileDelta5</texturePath>
+    <edgeType>FadeRough</edgeType>
+    <categoryType>Soil</categoryType>
+    <renderPrecedence>356</renderPrecedence>
+    <pathCost>2</pathCost>
+    <statBases>
+      <Beauty>1</Beauty>
+      <BeautyOutdoors>1</BeautyOutdoors>
+      <Cleanliness>0</Cleanliness>
+    </statBases>
+    <affordances>
+      <li>Light</li>
+      <li>Medium</li>
+      <li>Heavy</li>
+      <li>GrowSoil</li>
+    </affordances>
+    <fertility>0.85</fertility>
+  </TerrainDef>
+
   <TerrainDef ParentName="WaterChestDeepBase">
     <defName>MFV_ManaRiverDeep</defName>
     <label>deep mana current</label>

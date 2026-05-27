@@ -34,6 +34,39 @@
     <growthMax>1</growthMax>
   </MagicFramework.Core.PlanarPlantClusterDef>
 
+  <MagicFramework.Core.PlanarFlowFeatureDef>
+    <defName>MFV_PlanarDeltaManaStream</defName>
+    <label>delta mana stream</label>
+    <channelTerrain>MFV_ManaRiverDeep</channelTerrain>
+    <edgeTerrain>MFV_ManaRiverShallow</edgeTerrain>
+    <bankTerrain>MFV_PlanarDeltaTileC</bankTerrain>
+    <minWidth>2</minWidth>
+    <maxWidth>4</maxWidth>
+    <bankWidth>2</bankWidth>
+    <meanderStrength>0.55</meanderStrength>
+    <bankThingDensity>0.012</bankThingDensity>
+    <bankThings>
+      <li>Plant_MFV_PlanarK</li>
+      <li>Plant_MFV_PlanarL</li>
+      <li>Plant_MFV_PlanarN</li>
+      <li>Plant_MFV_PlanarO</li>
+    </bankThings>
+  </MagicFramework.Core.PlanarFlowFeatureDef>
+
+  <MagicFramework.Core.PlanarPlantClusterDef>
+    <defName>MFV_PlanarDeltaBloomCluster</defName>
+    <plantDef>Plant_MFV_PlanarO</plantDef>
+    <anchorDefs>
+      <li>MFV_ChunkPhaseStone</li>
+      <li>MFV_PhaseStone</li>
+    </anchorDefs>
+    <radius>6</radius>
+    <minPlantsPerAnchor>2</minPlantsPerAnchor>
+    <maxPlantsPerAnchor>5</maxPlantsPerAnchor>
+    <growthMin>0.7</growthMin>
+    <growthMax>1</growthMax>
+  </MagicFramework.Core.PlanarPlantClusterDef>
+
   <MagicFramework.Core.PlanarDimensionDef>
     <defName>MFV_PlanarPocketDimension</defName>
     <label>planar pocket</label>
@@ -78,6 +111,46 @@
     <mineableDensity>0.012</mineableDensity>
   </MagicFramework.Core.PlanarDimensionDef>
 
+  <MagicFramework.Core.PlanarDimensionDef>
+    <defName>MFV_PlanarDeltaDimension</defName>
+    <label>planar delta</label>
+    <worldObjectDef>MFV_PlanarPocketParent</worldObjectDef>
+    <mapGeneratorDef>MFV_PlanarDeltaMap</mapGeneratorDef>
+    <returnGateDef>MFV_PlanarGate</returnGateDef>
+    <mapSize>120</mapSize>
+    <terrainOptions>
+      <li>MFV_PlanarDeltaTileA</li>
+      <li>MFV_PlanarDeltaTileB</li>
+      <li>MFV_PlanarDeltaTileC</li>
+      <li>MFV_PlanarDeltaTileD</li>
+      <li>MFV_PlanarDeltaTileE</li>
+    </terrainOptions>
+    <plantOptions>
+      <li>Plant_MFV_PlanarK</li>
+      <li>Plant_MFV_PlanarL</li>
+      <li>Plant_MFV_PlanarM</li>
+      <li>Plant_MFV_PlanarN</li>
+      <li>Plant_MFV_PlanarO</li>
+    </plantOptions>
+    <chunkOptions>
+      <li>MFV_ChunkPhaseStone</li>
+      <li>MFV_ChunkVoidglass</li>
+    </chunkOptions>
+    <mineableOptions>
+      <li>MFV_PhaseStone</li>
+      <li>MFV_Voidglass</li>
+    </mineableOptions>
+    <flowFeatures>
+      <li>MFV_PlanarDeltaManaStream</li>
+    </flowFeatures>
+    <plantClusters>
+      <li>MFV_PlanarDeltaBloomCluster</li>
+    </plantClusters>
+    <plantDensity>0.025</plantDensity>
+    <chunkDensity>0.016</chunkDensity>
+    <mineableDensity>0.011</mineableDensity>
+  </MagicFramework.Core.PlanarDimensionDef>
+
   <SitePartDef>
     <defName>MFV_PlanarPocket</defName>
     <label>planar pocket</label>
@@ -104,6 +177,13 @@
     <defName>MFV_PlanarPocketMap</defName>
     <genSteps>
       <li>MFV_PlanarPocket</li>
+    </genSteps>
+  </MapGeneratorDef>
+
+  <MapGeneratorDef>
+    <defName>MFV_PlanarDeltaMap</defName>
+    <genSteps>
+      <li>MFV_PlanarDelta</li>
     </genSteps>
   </MapGeneratorDef>
 
@@ -135,6 +215,33 @@
       <plantDensity>0.075</plantDensity>
       <chunkDensity>0.018</chunkDensity>
       <mineableDensity>0.012</mineableDensity>
+    </genStep>
+  </GenStepDef>
+
+  <GenStepDef>
+    <defName>MFV_PlanarDelta</defName>
+    <linkWithSite>MFV_PlanarPocket</linkWithSite>
+    <order>420</order>
+    <genStep Class="MagicFramework.Core.GenStep_PlanarPocket">
+      <dimension>MFV_PlanarDeltaDimension</dimension>
+      <terrainOptions>
+        <li>MFV_PlanarDeltaTileA</li>
+        <li>MFV_PlanarDeltaTileB</li>
+        <li>MFV_PlanarDeltaTileC</li>
+        <li>MFV_PlanarDeltaTileD</li>
+        <li>MFV_PlanarDeltaTileE</li>
+      </terrainOptions>
+      <plantOptions>
+        <li>Plant_MFV_PlanarK</li>
+        <li>Plant_MFV_PlanarL</li>
+        <li>Plant_MFV_PlanarM</li>
+        <li>Plant_MFV_PlanarN</li>
+        <li>Plant_MFV_PlanarO</li>
+      </plantOptions>
+      <gateDef>MFV_PlanarGate</gateDef>
+      <plantDensity>0.085</plantDensity>
+      <chunkDensity>0.016</chunkDensity>
+      <mineableDensity>0.011</mineableDensity>
     </genStep>
   </GenStepDef>
 

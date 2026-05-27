@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <RecipeDef>
+    <defName>MFV_RefineVoidGlass</defName>
+    <label>refine void glass</label>
+    <description>Cut and stabilize a voidglass chunk into planar glass suitable for construction.</description>
+    <jobString>Refining void glass.</jobString>
+    <workAmount>420</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Sculpt</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_PlanarMagic</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ChunkVoidglass</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_ChunkVoidglass</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_VoidGlass>15</MFV_VoidGlass>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>MFV_LapidaryBench</li>
+    </recipeUsers>
+  </RecipeDef>
+
+</Defs>

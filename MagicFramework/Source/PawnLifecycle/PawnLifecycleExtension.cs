@@ -194,4 +194,5 @@ public class PawnLifecycleExtension : DefModExtension
     public List<HediffDef> markerHediffs;
     public List<TraitDef> lifecycleTraits;
     public List<string> lifecycleTags;
+    public List<ThoughtDef> suppressedThoughts;
 }

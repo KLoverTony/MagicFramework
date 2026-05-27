@@ -302,8 +302,17 @@ namespace AeternusFaith
             if (pawn?.needs == null)
                 return;
 
+            if (pawn.def?.defName == "AF_SpectreRace" &&
+                pawn.needs.mood == null)
+            {
+                pawn.needs.AddOrRemoveNeedsAsAppropriate();
+            }
+
             foreach (string defName in RemovedNeedDefNames)
             {
+                if (pawn.def?.defName == "AF_SpectreRace" && defName == "Mood")
+                    continue;
+
                 NeedDef needDef = DefDatabase<NeedDef>.GetNamedSilentFail(defName);
                 if (needDef != null && pawn.needs.TryGetNeed(needDef) != null)
                     RemoveNeedMethod?.Invoke(pawn.needs, new object[] { needDef });

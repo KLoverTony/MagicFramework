@@ -42,4 +42,7 @@
   <MFV_MakeParchment.label>make parchment</MFV_MakeParchment.label>
   <MFV_MakeParchment.description>Scrape, stretch, and dry leather into durable parchment sheets for formal scrollwork.</MFV_MakeParchment.description>
   <MFV_MakeParchment.jobString>Making parchment.</MFV_MakeParchment.jobString>
+  <MFV_RefineVoidGlass.label>refine void glass</MFV_RefineVoidGlass.label>
+  <MFV_RefineVoidGlass.description>Cut and stabilize a voidglass chunk into planar glass suitable for construction.</MFV_RefineVoidGlass.description>
+  <MFV_RefineVoidGlass.jobString>Refining void glass.</MFV_RefineVoidGlass.jobString>
 </LanguageData>

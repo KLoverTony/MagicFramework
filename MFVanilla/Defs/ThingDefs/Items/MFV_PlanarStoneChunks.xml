@@ -21,7 +21,7 @@
   <ThingDef ParentName="ChunkRockBase">
     <defName>MFV_ChunkVoidglass</defName>
     <label>voidglass chunk</label>
-    <description>A chunk of dark planar glass. It can be ground into gemstone dust.</description>
+    <description>A chunk of dark planar glass. It can be ground into gemstone dust or refined into void glass for construction.</description>
     <graphicData>
       <color>(42,38,58)</color>
     </graphicData>
@@ -33,6 +33,30 @@
     <butcherProducts>
       <MFV_GemstoneDust>4</MFV_GemstoneDust>
     </butcherProducts>
+  </ThingDef>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>MFV_VoidGlass</defName>
+    <label>void glass</label>
+    <description>Refined panes and shards of planar voidglass, darkly translucent and stable enough to build with.</description>
+    <graphicData>
+      <texPath>Things/Item/Gems/RoughGemstone</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.75</drawSize>
+      <color>(0.18,0.16,0.28)</color>
+    </graphicData>
+    <thingCategories>
+      <li>ResourcesRaw</li>
+    </thingCategories>
+    <stackLimit>150</stackLimit>
+    <statBases>
+      <MaxHitPoints>90</MaxHitPoints>
+      <MarketValue>3</MarketValue>
+      <Mass>0.03</Mass>
+      <Flammability>0</Flammability>
+      <DeteriorationRate>0</DeteriorationRate>
+    </statBases>
+    <tradeability>All</tradeability>
   </ThingDef>
 
 </Defs>

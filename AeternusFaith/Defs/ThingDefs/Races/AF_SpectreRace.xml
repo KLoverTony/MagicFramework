@@ -28,7 +28,7 @@
       <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
         <bodyForm>Spectral</bodyForm>
         <intelligence>PartialIdentity</intelligence>
-        <needsPolicy>None</needsPolicy>
+        <needsPolicy>NoFoodNoRest</needsPolicy>
         <socialPolicy>SuppressedBothWays</socialPolicy>
         <gearPolicy>StripAll</gearPolicy>
         <controlPolicy>AutonomousGuest</controlPolicy>
@@ -55,6 +55,32 @@
         <lifecycleTraits>
           <li>MF_Lifecycle_NoWork</li>
         </lifecycleTraits>
+        <suppressedThoughts>
+          <li>EnvironmentDark</li>
+          <li>Naked</li>
+          <li>HappyNude</li>
+          <li>NudistNoLongerNude</li>
+          <li>ApparelDamaged</li>
+          <li>WrongApparelGender</li>
+          <li>DeadMansApparel</li>
+          <li>IdeoRoleApparelRequirementNotMet</li>
+          <li>GroinUncovered_Disapproved_Male</li>
+          <li>GroinUncovered_Disapproved_Female</li>
+          <li>GroinUncovered_Disapproved_Social_Male</li>
+          <li>GroinUncovered_Disapproved_Social_Female</li>
+          <li>GroinOrChestUncovered_Disapproved_Male</li>
+          <li>GroinOrChestUncovered_Disapproved_Female</li>
+          <li>GroinOrChestUncovered_Disapproved_Social_Male</li>
+          <li>GroinOrChestUncovered_Disapproved_Social_Female</li>
+          <li>GroinChestOrHairUncovered_Disapproved_Male</li>
+          <li>GroinChestOrHairUncovered_Disapproved_Female</li>
+          <li>GroinChestOrHairUncovered_Disapproved_Social_Male</li>
+          <li>GroinChestOrHairUncovered_Disapproved_Social_Female</li>
+          <li>GroinChestHairOrFaceUncovered_Disapproved_Male</li>
+          <li>GroinChestHairOrFaceUncovered_Disapproved_Female</li>
+          <li>GroinChestHairOrFaceUncovered_Disapproved_Social_Male</li>
+          <li>GroinChestHairOrFaceUncovered_Disapproved_Social_Female</li>
+        </suppressedThoughts>
       </li>
     </modExtensions>
 

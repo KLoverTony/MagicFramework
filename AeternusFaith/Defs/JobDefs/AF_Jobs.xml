@@ -72,4 +72,28 @@
     <ifFlyingKeepFlying>true</ifFlyingKeepFlying>
   </JobDef>
 
+  <JobDef>
+    <defName>AF_SpectralVisitLovedOne</defName>
+    <driverClass>AeternusFaith.Undead.Spectral.JobDriver_SpectralVisit</driverClass>
+    <reportString>visiting a remembered love.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <isIdle>true</isIdle>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_SpectralVisitFamily</defName>
+    <driverClass>AeternusFaith.Undead.Spectral.JobDriver_SpectralVisit</driverClass>
+    <reportString>visiting remembered family.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <isIdle>true</isIdle>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_SpectralVisitAnchor</defName>
+    <driverClass>AeternusFaith.Undead.Spectral.JobDriver_SpectralVisit</driverClass>
+    <reportString>returning to a haunting anchor.</reportString>
+    <casualInterruptible>true</casualInterruptible>
+    <isIdle>true</isIdle>
+  </JobDef>
+
 </Defs>

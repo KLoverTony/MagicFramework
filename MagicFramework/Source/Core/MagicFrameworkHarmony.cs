@@ -390,6 +390,24 @@ public static class MagicFrameworkPawnInteractionsTryInteractRandomlyPatch
     }
 }
 
+[HarmonyPatch(typeof(ThoughtWorker), nameof(ThoughtWorker.CurrentState))]
+public static class MagicFrameworkThoughtWorkerCurrentStatePatch
+{
+    public static void Postfix(ThoughtWorker __instance, Pawn p, ref ThoughtState __result)
+    {
+        if (!__result.Active || p == null || __instance?.def == null)
+        {
+            return;
+        }
+
+        PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(p);
+        if (extension?.suppressedThoughts?.Contains(__instance.def) == true)
+        {
+            __result = ThoughtState.Inactive;
+        }
+    }
+}
+
 [HarmonyPatch(typeof(Apparel), nameof(Apparel.PawnCanWear))]
 public static class MagicFrameworkApparelPawnCanWearPatch
 {

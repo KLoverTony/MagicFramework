@@ -208,6 +208,7 @@ namespace AeternusFaith.Undead.Spectral
                 sourceIdeo = sourceIdeo
             };
 
+            spirit.CaptureEmotionalAnchorsFromSource(sourcePawn);
             comp.AddSpirit(spirit);
             spirit.ManifestPersistent();
             return spirit;

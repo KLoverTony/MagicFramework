@@ -140,7 +140,11 @@
   <MFV_ChunkPhaseStone.label>phase stone chunk</MFV_ChunkPhaseStone.label>
   <MFV_ChunkPhaseStone.description>A chunk of phase stone from a planar pocket. It can be ground into gemstone dust.</MFV_ChunkPhaseStone.description>
   <MFV_ChunkVoidglass.label>voidglass chunk</MFV_ChunkVoidglass.label>
-  <MFV_ChunkVoidglass.description>A chunk of dark planar glass. It can be ground into gemstone dust.</MFV_ChunkVoidglass.description>
+  <MFV_ChunkVoidglass.description>A chunk of dark planar glass. It can be ground into gemstone dust or refined into void glass for construction.</MFV_ChunkVoidglass.description>
+  <MFV_VoidGlass.label>void glass</MFV_VoidGlass.label>
+  <MFV_VoidGlass.description>Refined panes and shards of planar voidglass, darkly translucent and stable enough to build with.</MFV_VoidGlass.description>
+  <MFV_VoidGlassWall.label>void glass wall</MFV_VoidGlassWall.label>
+  <MFV_VoidGlassWall.description>An impassable wall made from refined planar void glass. It drinks in light along its dark facets while remaining strong enough to hold up a roof.</MFV_VoidGlassWall.description>
   <MFV_Gun_CrystalLance.label>crystal graser</MFV_Gun_CrystalLance.label>
   <MFV_Gun_CrystalLance.description>A faceted crystal emitter grown into the frame of an arcane sentinel. It releases a sweeping, high-energy beam that burns through armor and shield fields.</MFV_Gun_CrystalLance.description>
   <MFV_Gun_RuneBallista.label>stone hurling core</MFV_Gun_RuneBallista.label>

@@ -51,6 +51,10 @@
     <comps>
       <li Class="MagicFramework.Core.CompProperties_PlanarGate">
         <dimension>MFV_PlanarPocketDimension</dimension>
+        <dimensionOptions>
+          <li>MFV_PlanarPocketDimension</li>
+          <li>MFV_PlanarDeltaDimension</li>
+        </dimensionOptions>
         <sitePartDefName>MFV_PlanarPocket</sitePartDefName>
         <minSiteDistance>1</minSiteDistance>
         <maxSiteDistance>4</maxSiteDistance>

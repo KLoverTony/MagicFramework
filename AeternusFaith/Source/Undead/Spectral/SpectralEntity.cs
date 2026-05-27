@@ -1,5 +1,6 @@
 using RimWorld;
 using RimWorld.Planet;
+using System.Collections.Generic;
 using Verse;
 
 namespace AeternusFaith.Undead.Spectral
@@ -33,6 +34,10 @@ namespace AeternusFaith.Undead.Spectral
         public string sourcePawnThingId;
         public string sourceMemoryId;
         public Ideo sourceIdeo;
+        public List<SpectralEmotionalAnchor> emotionalAnchors;
+        public SpectralDisturbanceState disturbanceState = SpectralDisturbanceState.None;
+        public int disturbanceEndTick = -1;
+        public int nextMoodEvaluationTick = -1;
         
         public string lastActionSummary = "Created";
 
@@ -76,7 +81,14 @@ namespace AeternusFaith.Undead.Spectral
             Scribe_Values.Look(ref sourcePawnThingId, "sourcePawnThingId");
             Scribe_Values.Look(ref sourceMemoryId, "sourceMemoryId");
             Scribe_References.Look(ref sourceIdeo, "sourceIdeo");
+            Scribe_Collections.Look(ref emotionalAnchors, "emotionalAnchors", LookMode.Deep);
+            Scribe_Values.Look(ref disturbanceState, "disturbanceState", SpectralDisturbanceState.None);
+            Scribe_Values.Look(ref disturbanceEndTick, "disturbanceEndTick", -1);
+            Scribe_Values.Look(ref nextMoodEvaluationTick, "nextMoodEvaluationTick", -1);
             Scribe_Values.Look(ref lastActionSummary, "lastActionSummary", "Loaded");
+
+            if (Scribe.mode == LoadSaveMode.PostLoadInit && emotionalAnchors == null)
+                emotionalAnchors = new List<SpectralEmotionalAnchor>();
         }
 
         public bool IsBoundTo(Pawn pawn)
@@ -105,9 +117,104 @@ namespace AeternusFaith.Undead.Spectral
                    cachedPawn?.ThingID == pawn.ThingID;
         }
 
+        public void CaptureEmotionalAnchorsFromSource(Pawn source)
+        {
+            emotionalAnchors = new List<SpectralEmotionalAnchor>();
+            if (source?.relations?.DirectRelations == null)
+                return;
+
+            foreach (DirectPawnRelation relation in source.relations.DirectRelations)
+            {
+                if (!TryClassifyRelation(relation, out SpectralEmotionalAnchorKind kind, out float weight))
+                    continue;
+
+                Pawn otherPawn = relation.otherPawn;
+                if (otherPawn == null)
+                    continue;
+
+                emotionalAnchors.Add(new SpectralEmotionalAnchor
+                {
+                    pawn = otherPawn,
+                    pawnThingId = otherPawn.ThingID,
+                    pawnLabel = otherPawn.LabelShort,
+                    relationDef = relation.def,
+                    kind = kind,
+                    weight = weight,
+                    lastKnownPosition = otherPawn.Spawned ? otherPawn.Position : IntVec3.Invalid
+                });
+            }
+        }
+
+        public bool TryGetEmotionalAnchor(Map map, SpectralEmotionalAnchorKind kind, out SpectralEmotionalAnchor anchor, out Pawn pawn)
+        {
+            anchor = null;
+            pawn = null;
+            if (emotionalAnchors == null || emotionalAnchors.Count == 0)
+                return false;
+
+            List<SpectralEmotionalAnchor> candidates = new List<SpectralEmotionalAnchor>();
+            foreach (SpectralEmotionalAnchor emotionalAnchor in emotionalAnchors)
+            {
+                if (emotionalAnchor?.kind != kind)
+                    continue;
+
+                if (emotionalAnchor.TryResolvePawn(map, out Pawn resolvedPawn) &&
+                    resolvedPawn.Spawned &&
+                    resolvedPawn.Map == map)
+                {
+                    candidates.Add(emotionalAnchor);
+                }
+            }
+
+            if (candidates.Count == 0)
+                return false;
+
+            anchor = candidates.RandomElementByWeight(candidate => candidate.weight);
+            anchor.TryResolvePawn(map, out pawn);
+            return pawn != null;
+        }
+
+        public bool SourceConnectionIsFading()
+        {
+            return sourcePawn == null && !sourcePawnThingId.NullOrEmpty();
+        }
+
         public void RegisterMap(Map map)
         {
             this.cachedMap = map;
+        }
+
+        private static bool TryClassifyRelation(DirectPawnRelation relation, out SpectralEmotionalAnchorKind kind, out float weight)
+        {
+            kind = SpectralEmotionalAnchorKind.Family;
+            weight = 1f;
+
+            string defName = relation?.def?.defName;
+            if (defName.NullOrEmpty())
+                return false;
+
+            if (defName == "Spouse" || defName == "Fiance" || defName == "Lover")
+            {
+                kind = SpectralEmotionalAnchorKind.LovedOne;
+                weight = 3f;
+                return true;
+            }
+
+            if (defName == "Parent" || defName == "Child" || defName == "Sibling" || defName == "HalfSibling")
+            {
+                kind = SpectralEmotionalAnchorKind.Family;
+                weight = 2f;
+                return true;
+            }
+
+            if (defName == "Rival" || defName == "Enemy")
+            {
+                kind = SpectralEmotionalAnchorKind.Rival;
+                weight = 2.5f;
+                return true;
+            }
+
+            return false;
         }
 
         public void Tick()
@@ -124,6 +231,7 @@ namespace AeternusFaith.Undead.Spectral
                 {
                     EnsureGuestStatus();
                     lastKnownPosition = cachedPawn.Position;
+                    EvaluateMoodDisturbance();
                 }
             }
             else if (state == SpectralState.WanderingUnseen)
@@ -133,11 +241,63 @@ namespace AeternusFaith.Undead.Spectral
                     Haunt();
                 }
 
-                if (intermittentManifestation && nextManifestTick > 0 && Find.TickManager.TicksGame >= nextManifestTick)
+                if (nextManifestTick > 0 && Find.TickManager.TicksGame >= nextManifestTick)
                 {
-                    ManifestTemporary();
+                    if (persistentPawn || persistentManifestation)
+                        ManifestPersistent();
+                    else
+                        ManifestTemporary();
                 }
             }
+        }
+
+        public bool IsRestless => disturbanceState == SpectralDisturbanceState.Restless &&
+                                  (disturbanceEndTick < 0 || Find.TickManager.TicksGame < disturbanceEndTick);
+
+        private void EvaluateMoodDisturbance()
+        {
+            if (Find.TickManager.TicksGame < nextMoodEvaluationTick)
+                return;
+
+            nextMoodEvaluationTick = Find.TickManager.TicksGame + Rand.RangeInclusive(450, 750);
+
+            if (disturbanceState != SpectralDisturbanceState.None &&
+                disturbanceEndTick > 0 &&
+                Find.TickManager.TicksGame >= disturbanceEndTick)
+            {
+                disturbanceState = SpectralDisturbanceState.None;
+                disturbanceEndTick = -1;
+                lastActionSummary = "Settled.";
+            }
+
+            Need_Mood mood = cachedPawn?.needs?.mood;
+            if (mood == null)
+                return;
+
+            float moodLevel = mood.CurLevelPercentage;
+            if (moodLevel <= 0.10f)
+            {
+                BeginFadingDisturbance();
+            }
+            else if (moodLevel <= 0.25f && disturbanceState == SpectralDisturbanceState.None)
+            {
+                BeginRestlessDisturbance();
+            }
+        }
+
+        private void BeginRestlessDisturbance()
+        {
+            disturbanceState = SpectralDisturbanceState.Restless;
+            disturbanceEndTick = Find.TickManager.TicksGame + Rand.RangeInclusive(2500, 5000);
+            lastActionSummary = "Restless.";
+        }
+
+        private void BeginFadingDisturbance()
+        {
+            disturbanceState = SpectralDisturbanceState.Fading;
+            disturbanceEndTick = -1;
+            lastActionSummary = "Fading from the mortal world.";
+            FadeFromManifestation(Rand.RangeInclusive(4500, 12000));
         }
 
         public void Haunt()
@@ -302,6 +462,29 @@ namespace AeternusFaith.Undead.Spectral
             
             FleckMaker.ThrowDustPuff(lastKnownPosition, CurrentMap, 2f);
             Messages.Message($"Debug: {label} has faded away.", MessageTypeDefOf.NeutralEvent);
+        }
+
+        private void FadeFromManifestation(int remanifestDelayTicks)
+        {
+            if (state != SpectralState.Manifesting)
+                return;
+
+            if (cachedPawn != null && cachedPawn.Spawned)
+            {
+                lastKnownPosition = cachedPawn.Position;
+                cachedPawn.DeSpawn();
+                if (!persistentPawn)
+                {
+                    Find.WorldPawns.PassToWorld(cachedPawn, PawnDiscardDecideMode.Discard);
+                    cachedPawn = null;
+                }
+            }
+
+            state = SpectralState.WanderingUnseen;
+            manifestationEndTick = -1;
+            nextManifestTick = Find.TickManager.TicksGame + remanifestDelayTicks;
+            disturbanceState = SpectralDisturbanceState.None;
+            FleckMaker.ThrowDustPuff(lastKnownPosition, CurrentMap, 2f);
         }
 
         public void ScheduleNextHaunt()

@@ -115,4 +115,58 @@
     <pathCost>35</pathCost>
   </ThingDef>
 
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarK</defName>
+    <label>delta frond</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantK</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarL</defName>
+    <label>delta reed</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantL</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarM</defName>
+    <label>delta thorn</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantM</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarN</defName>
+    <label>delta bloom</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantN</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <plant>
+      <visualSizeRange>0.85~1.35</visualSizeRange>
+      <growDays>14</growDays>
+    </plant>
+  </ThingDef>
+
+  <ThingDef ParentName="MFV_PlanarPlantBase">
+    <defName>Plant_MFV_PlanarO</defName>
+    <label>delta copse</label>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantO</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+    </graphicData>
+    <plant>
+      <visualSizeRange>1.35~2.1</visualSizeRange>
+      <growDays>24</growDays>
+    </plant>
+    <pathCost>35</pathCost>
+  </ThingDef>
+
 </Defs>

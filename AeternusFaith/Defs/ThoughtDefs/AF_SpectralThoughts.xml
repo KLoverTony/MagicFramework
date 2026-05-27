@@ -15,4 +15,43 @@
     </stages>
   </ThoughtDef>
 
+  <ThoughtDef>
+    <defName>AF_SpectreVisitedLovedOne</defName>
+    <durationDays>1.5</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>visited remembered love</label>
+        <description>The echo of a beloved presence steadies this spirit.</description>
+        <baseMoodEffect>12</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>AF_SpectreVisitedFamily</defName>
+    <durationDays>1.2</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>visited remembered family</label>
+        <description>A familiar mortal bond helps this spirit remain coherent.</description>
+        <baseMoodEffect>7</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>AF_SpectreVisitedAnchor</defName>
+    <durationDays>0.8</durationDays>
+    <stackLimit>1</stackLimit>
+    <stages>
+      <li>
+        <label>returned to anchor</label>
+        <description>The haunting anchor gives this spirit a brief sense of shape.</description>
+        <baseMoodEffect>4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
 </Defs>

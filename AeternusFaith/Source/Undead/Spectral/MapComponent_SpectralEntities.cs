@@ -103,7 +103,7 @@ namespace AeternusFaith.Undead.Spectral
                     if (!CanReceiveSpectralAura(pawn, spectre))
                         continue;
 
-                    ApplyOrRefreshAuraHediff(pawn);
+                    ApplyOrRefreshAuraHediff(pawn, spirit.IsRestless);
                 }
             }
         }
@@ -119,14 +119,14 @@ namespace AeternusFaith.Undead.Spectral
                    pawn.Position.InHorDistOf(spectre.Position, SpectralAuraRadius);
         }
 
-        private void ApplyOrRefreshAuraHediff(Pawn pawn)
+        private void ApplyOrRefreshAuraHediff(Pawn pawn, bool restless)
         {
             Hediff existing = pawn.health?.hediffSet?.GetFirstHediffOfDef(eerieColdHediffDef);
             if (existing != null)
                 pawn.health.RemoveHediff(existing);
 
             Hediff hediff = HediffMaker.MakeHediff(eerieColdHediffDef, pawn);
-            hediff.Severity = 1f;
+            hediff.Severity = restless ? 2f : 1f;
             pawn.health.AddHediff(hediff);
         }
 
@@ -201,6 +201,7 @@ namespace AeternusFaith.Undead.Spectral
                 sourceIdeo = record.ideo
             };
 
+            spirit.CaptureEmotionalAnchorsFromSource(sourcePawn);
             spirit.ScheduleNextHaunt();
             spirit.ScheduleNextManifestation();
             spirit.lastActionSummary = "Haunting started.";
