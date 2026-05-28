@@ -54,6 +54,7 @@ if ($Full) {
 $Projects = @(
     'MagicFramework'
     'MFVanilla'
+    'MFStoryteller'
     'AeternusFaith'
 )
 

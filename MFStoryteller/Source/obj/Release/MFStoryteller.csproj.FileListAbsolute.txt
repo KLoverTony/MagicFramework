@@ -1,0 +1,8 @@
+D:\RimWorld\Mods\MFStoryteller\Source\bin\Release\MFStoryteller.dll
+D:\RimWorld\Mods\MFStoryteller\Source\bin\Release\MFStoryteller.pdb
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.csproj.AssemblyReference.cache
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.GeneratedMSBuildEditorConfig.editorconfig
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.csproj.CoreCompileInputs.cache
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.sourcelink.json
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.dll
+D:\RimWorld\Mods\MFStoryteller\Source\obj\Release\MFStoryteller.pdb

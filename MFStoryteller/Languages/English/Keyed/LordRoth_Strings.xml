@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+	<LordRoth_DivineAudience>Divine Audience</LordRoth_DivineAudience>
+	<LordRoth_DivineAudience_Desc>A pawn experiences a direct vision from Lord Roth himself, granting cryptic insights into fate.</LordRoth_DivineAudience_Desc>
+
+	<LordRoth_TestOfCharacter>Test of Character</LordRoth_TestOfCharacter>
+	<LordRoth_TestOfCharacter_Desc>Lord Roth sets a trial for one of your colonists to test their moral resolve.</LordRoth_TestOfCharacter_Desc>
+
+	<LordRoth_FateTwist>Twist of Fate</LordRoth_FateTwist>
+	<LordRoth_FateTwist_Desc>The threads of destiny shift unexpectedly, bringing either fortune or misery.</LordRoth_FateTwist_Desc>
+
+	<LordRoth_BlessingOfFavor>Blessing of Favor</LordRoth_BlessingOfFavor>
+	<LordRoth_BlessingOfFavor_Desc>One of your colonists has earned Lord Roth's favor and receives a blessing.</LordRoth_BlessingOfFavor_Desc>
+
+	<LordRoth_CurseOfDisfavor>Curse of Disfavor</LordRoth_CurseOfDisfavor>
+	<LordRoth_CurseOfDisfavor_Desc>A colonist has incurred Lord Roth's displeasure and suffers under his curse.</LordRoth_CurseOfDisfavor_Desc>
+
+</LanguageData>

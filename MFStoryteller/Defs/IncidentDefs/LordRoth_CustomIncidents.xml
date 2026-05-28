@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+	<IncidentDef>
+		<defName>LordRoth_DivineAudience</defName>
+		<label>divine audience</label>
+		<category>Misc</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_DivineAudience</workerClass>
+		<baseChance>0.25</baseChance>
+		<earliestDay>2</earliestDay>
+		<minRefireDays>12</minRefireDays>
+		<letterDef>NeutralEvent</letterDef>
+	</IncidentDef>
+
+	<IncidentDef>
+		<defName>LordRoth_TestOfCharacter</defName>
+		<label>test of character</label>
+		<category>Misc</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_TestOfCharacter</workerClass>
+		<baseChance>0.18</baseChance>
+		<earliestDay>5</earliestDay>
+		<minRefireDays>15</minRefireDays>
+		<letterDef>NeutralEvent</letterDef>
+	</IncidentDef>
+
+	<IncidentDef>
+		<defName>LordRoth_FateTwist</defName>
+		<label>twist of fate</label>
+		<category>Misc</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_FateTwist</workerClass>
+		<baseChance>0.22</baseChance>
+		<earliestDay>8</earliestDay>
+		<minRefireDays>18</minRefireDays>
+		<letterDef>NeutralEvent</letterDef>
+	</IncidentDef>
+
+	<IncidentDef>
+		<defName>LordRoth_BlessingOfFavor</defName>
+		<label>blessing of favor</label>
+		<category>Misc</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_BlessingOfFavor</workerClass>
+		<baseChance>0.15</baseChance>
+		<earliestDay>10</earliestDay>
+		<minRefireDays>20</minRefireDays>
+		<letterDef>PositiveEvent</letterDef>
+	</IncidentDef>
+
+	<IncidentDef>
+		<defName>LordRoth_CurseOfDisfavor</defName>
+		<label>curse of disfavor</label>
+		<category>Misc</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_CurseOfDisfavor</workerClass>
+		<baseChance>0.14</baseChance>
+		<earliestDay>12</earliestDay>
+		<minRefireDays>22</minRefireDays>
+		<letterDef>ThreatSmall</letterDef>
+	</IncidentDef>
+
+</Defs>
