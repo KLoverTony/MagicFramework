@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 
-	<StorytellerDef>
+	<StorytellerDef ParentName="BaseStoryteller">
 		<defName>LordRoth</defName>
 		<label>Lord Roth</label>
-		<description>Lord Roth is a god-like being who views mortals as pieces in an incomprehensible game. He manipulates the winds of fate, weaving trials and blessings with equal inscrutability. Those he favors receive glimpses of the future through divination; those he tests must endure his cruel designs. His true purposes are beyond mortal comprehension—he rewards the worthy and punishes the arrogant, but his standards remain forever mysterious.\n\nThis storyteller is designed to support divination-themed magic. Spells can divine his upcoming trials and blessings before they occur.</description>
-		<storytellerComps>
-			<li>
-				<compClass>RimWorld.StorytellerCompProperties_OnOffCycle</compClass>
-				<minDaysPassBeforeAcceptingincidents>2</minDaysPassBeforeAcceptingincidents>
-				<maxDaysPassBeforeAcceptingIncidents>4</maxDaysPassBeforeAcceptingIncidents>
-				<incidentTargetTagsToExclude>
-					<li>World</li>
-				</incidentTargetTagsToExclude>
+
+		<portraitLarge>UI/StoryTeller/LordRoth</portraitLarge>
+		<portraitTiny>UI/StoryTeller/LordRothTiny</portraitTiny>
+
+		<description>Lord Roth is a god-like being who views mortals as pieces in an incomprehensible game...</description>
+
+		<comps>
+			<li Class="StorytellerCompProperties_OnOffCycle">
+				<category>ThreatBig</category>
+				<onDays>2</onDays>
+				<offDays>4</offDays>
+				<numIncidentsRange>1~1</numIncidentsRange>
+				<disallowedTargetTags>
+				<li>World</li>
+				</disallowedTargetTags>
 			</li>
-		</storytellerComps>
-		<difficultyFactors>
-			<li>0.5</li>
-			<li>0.75</li>
-			<li>1.0</li>
-			<li>1.35</li>
-			<li>1.7</li>
-		</difficultyFactors>
-		<pointsPerDay>40</pointsPerDay>
+		</comps>
+
 	</StorytellerDef>
 
 </Defs>

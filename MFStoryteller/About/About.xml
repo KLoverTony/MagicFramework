@@ -7,7 +7,9 @@
   <supportedVersions>
     <li>1.6</li>
   </supportedVersions>
-  <description>Storyteller content extensions for Magic Framework.</description>
+  <description>Lord Roth is a god-like storyteller who weaves fate and exposes upcoming incidents to divination magic. This mod enables divination-themed spells to reveal what Lord Roth has planned or what has transpired.
+
+Supports both prediction and retrospective divination through a queryable incident API.</description>
   <modDependencies>
     <li>
       <packageId>brrainz.harmony</packageId>
