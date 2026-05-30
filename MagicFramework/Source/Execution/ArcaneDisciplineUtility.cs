@@ -44,7 +44,7 @@ public static class ArcaneDisciplineUtility
         List<ResearchProjectDef> spellResearch = spell.learning.researchPrerequisites;
         for (int i = 0; i < spellResearch.Count; i++)
         {
-            if (IsResearchAtOrBelow(spellResearch[i], unlockResearch))
+            if (IsResearchAtOrBelow(unlockResearch, spellResearch[i]))
             {
                 return true;
             }

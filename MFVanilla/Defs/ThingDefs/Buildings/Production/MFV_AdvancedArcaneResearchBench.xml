@@ -65,6 +65,11 @@
       <li Class="CompProperties_ReportWorkSpeed">
         <workSpeedStat>ResearchSpeedFactor</workSpeedStat>
       </li>
+      <li Class="MFVanilla.Core.CompProperties_ArcaneDisciplineRitualMarker">
+        <commandLabel>Embrace discipline</commandLabel>
+        <commandDescription>Begin a short rite for an Arcane Gift pawn to embrace an available Arcane Discipline.</commandDescription>
+        <commandIconPath>UI/Commands/DesirePower</commandIconPath>
+      </li>
     </comps>
   </ThingDef>
 

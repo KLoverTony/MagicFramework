@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>MFV_BlockPhaseStone</defName>
+    <label>phase stone block</label>
+    <description>A refined block of phase stone, suitable for construction.</description>
+    <graphicData>
+      <texPath>Things/Item/Resource/MFV_BlockPhaseStone</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.75</drawSize>
+      <color>(92,110,145)</color>
+    </graphicData>
+    <thingCategories>
+      <li>StoneBlocks</li>
+    </thingCategories>
+    <stackLimit>150</stackLimit>
+    <statBases>
+      <Mass>1.0</Mass>
+      <MarketValue>2</MarketValue>
+      <SharpDamageMultiplier>1.0</SharpDamageMultiplier>
+      <BluntDamageMultiplier>1.0</BluntDamageMultiplier>
+    </statBases>
+    <soundInteract>Stone_Drop</soundInteract>
+    <soundDrop>Stone_Drop</soundDrop>
+    <stuffProps>
+      <categories>
+        <li>Stony</li>
+      </categories>
+      <commonality>1</commonality>
+      <statFactors>
+        <MaxHitPoints>1.8</MaxHitPoints>
+        <Beauty>1.5</Beauty>
+        <WorkToBuild>6.0</WorkToBuild>
+        <DoorOpenSpeed>0.45</DoorOpenSpeed>
+      </statFactors>
+      <color>(92,110,145)</color>
+      <soundMeleeHitSharp>MeleeHit_Stone</soundMeleeHitSharp>
+      <soundMeleeHitBlunt>MeleeHit_Stone</soundMeleeHitBlunt>
+      <stuffAdjective>phase stone</stuffAdjective>
+    </stuffProps>
+  </ThingDef>
+
+</Defs>

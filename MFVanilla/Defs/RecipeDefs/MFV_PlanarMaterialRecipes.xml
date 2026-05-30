@@ -36,4 +36,74 @@
     </recipeUsers>
   </RecipeDef>
 
+  <RecipeDef>
+    <defName>MFV_CutPhaseStoneChunk</defName>
+    <label>cut phase stone</label>
+    <description>Cut a phase stone chunk into blocks.</description>
+    <jobString>Cutting phase stone.</jobString>
+    <workAmount>500</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Sculpt</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_PlanarMagic</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ChunkPhaseStone</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_ChunkPhaseStone</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_BlockPhaseStone>2</MFV_BlockPhaseStone>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>TableStonecutter</li>
+    </recipeUsers>
+  </RecipeDef>
+
+  <RecipeDef>
+    <defName>MFV_CutVoidglassChunk</defName>
+    <label>cut voidglass</label>
+    <description>Cut a voidglass chunk into void glass panes.</description>
+    <jobString>Cutting voidglass.</jobString>
+    <workAmount>550</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Sculpt</effectWorking>
+    <soundWorking>Recipe_Machining</soundWorking>
+    <researchPrerequisite>MFV_PlanarMagic</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ChunkVoidglass</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_ChunkVoidglass</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_VoidGlass>10</MFV_VoidGlass>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <recipeUsers>
+      <li>TableStonecutter</li>
+    </recipeUsers>
+  </RecipeDef>
+
 </Defs>

@@ -5,12 +5,19 @@
     <defName>MFV_VoidGlassWall</defName>
     <label>void glass wall</label>
     <description>An impassable wall made from refined planar void glass. It drinks in light along its dark facets while remaining strong enough to hold up a roof.</description>
+
     <thingClass>Building</thingClass>
     <category>Building</category>
+
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>1100</uiOrder>
+
     <noRightClickDraftAttack>true</noRightClickDraftAttack>
+
     <replaceTags>
       <li>Wall</li>
     </replaceTags>
+
     <graphicData>
       <texPath>Things/Walls/VoidGlass/MFV_VoidGlassWall</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -31,10 +38,13 @@
         <edgeRight>Damage/Edge</edgeRight>
       </damageData>
     </graphicData>
+
     <uiIconPath>Things/Walls/VoidGlass/MFV_VoidGlassWall_vertical</uiIconPath>
+
     <costList>
       <MFV_VoidGlass>5</MFV_VoidGlass>
     </costList>
+
     <statBases>
       <MaxHitPoints>520</MaxHitPoints>
       <WorkToBuild>165</WorkToBuild>
@@ -42,26 +52,25 @@
       <Beauty>2</Beauty>
       <MeditationFocusStrength>0.25</MeditationFocusStrength>
     </statBases>
+
     <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
     <altitudeLayer>Building</altitudeLayer>
     <passability>Impassable</passability>
     <blockWind>true</blockWind>
+    <blockLight>true</blockLight>
     <castEdgeShadows>true</castEdgeShadows>
     <fillPercent>1</fillPercent>
     <coversFloor>true</coversFloor>
     <drawStyleCategory>Walls</drawStyleCategory>
     <tickerType>Never</tickerType>
-    <rotatable>false</rotatable>
     <selectable>true</selectable>
     <neverMultiSelect>true</neverMultiSelect>
     <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
     <holdsRoof>true</holdsRoof>
-    <designationCategory>Structure</designationCategory>
-    <uiOrder>2001</uiOrder>
     <staticSunShadowHeight>1.0</staticSunShadowHeight>
-    <blockLight>true</blockLight>
     <canOverlapZones>false</canOverlapZones>
     <fertility>0</fertility>
+
     <building>
       <isInert>true</isInert>
       <isWall>true</isWall>
@@ -69,9 +78,11 @@
       <ai_chillDestination>false</ai_chillDestination>
       <supportsWallAttachments>true</supportsWallAttachments>
       <paintable>false</paintable>
+
       <blueprintGraphicData>
         <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
       </blueprintGraphicData>
+
       <relatedBuildCommands>
         <li>Door</li>
         <li>Autodoor</li>
@@ -82,6 +93,7 @@
         <li>Vent</li>
       </relatedBuildCommands>
     </building>
+
     <comps>
       <li Class="CompProperties_Glower">
         <glowRadius>2.5</glowRadius>
@@ -94,6 +106,7 @@
         </focusTypes>
       </li>
     </comps>
+
     <damageMultipliers>
       <li>
         <damageDef>Bomb</damageDef>
@@ -104,6 +117,7 @@
         <multiplier>2</multiplier>
       </li>
     </damageMultipliers>
+
     <researchPrerequisites>
       <li>MFV_PlanarMagic</li>
     </researchPrerequisites>

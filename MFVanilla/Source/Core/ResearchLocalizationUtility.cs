@@ -7,7 +7,8 @@ public static class ResearchLocalizationUtility
 {
     static ResearchLocalizationUtility()
     {
-        ApplyTranslations();
+        // Disabled: Language injection handles translation automatically
+        // ApplyTranslations();
     }
 
     public static void ApplyTranslations()
