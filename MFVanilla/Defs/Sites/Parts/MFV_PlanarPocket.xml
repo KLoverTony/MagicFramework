@@ -69,7 +69,7 @@
 
   <MagicFramework.Core.PlanarDimensionDef>
     <defName>MFV_PlanarPocketDimension</defName>
-    <label>planar pocket</label>
+    <label>Aether Wild</label>
     <worldObjectDef>MFV_PlanarPocketParent</worldObjectDef>
     <mapGeneratorDef>MFV_PlanarPocketMap</mapGeneratorDef>
     <returnGateDef>MFV_PlanarGate</returnGateDef>
@@ -113,7 +113,7 @@
 
   <MagicFramework.Core.PlanarDimensionDef>
     <defName>MFV_PlanarDeltaDimension</defName>
-    <label>planar delta</label>
+    <label>Cinderdeep</label>
     <worldObjectDef>MFV_PlanarPocketParent</worldObjectDef>
     <mapGeneratorDef>MFV_PlanarDeltaMap</mapGeneratorDef>
     <returnGateDef>MFV_PlanarGate</returnGateDef>
@@ -153,12 +153,12 @@
 
   <SitePartDef>
     <defName>MFV_PlanarPocket</defName>
-    <label>planar pocket</label>
-    <description>A folded pocket of space stabilized by planar magic.</description>
+    <label>planar crossing</label>
+    <description>A temporary crossing into a named plane stabilized by planar magic.</description>
     <workerClass>MagicFramework.Core.SitePartWorker_PlanarPocket</workerClass>
     <siteTexture>World/WorldObjects/Sites/GenericSite</siteTexture>
     <expandingIconTexture>World/WorldObjects/Expanding/Sites/ItemStash</expandingIconTexture>
-    <arrivedLetter>The planar pocket resolves into strange ground and impossible plant life.</arrivedLetter>
+    <arrivedLetter>The planar crossing resolves into strange ground and impossible plant life.</arrivedLetter>
     <arrivedLetterDef>NeutralEvent</arrivedLetterDef>
     <handlesWorldObjectTimeoutInspectString>true</handlesWorldObjectTimeoutInspectString>
     <gravShipsCanLandOn>true</gravShipsCanLandOn>
@@ -169,7 +169,7 @@
 
   <WorldObjectDef>
     <defName>MFV_PlanarPocketParent</defName>
-    <label>planar pocket</label>
+    <label>planar crossing</label>
     <worldObjectClass>MagicFramework.Core.PlanarPocketParent</worldObjectClass>
   </WorldObjectDef>
 

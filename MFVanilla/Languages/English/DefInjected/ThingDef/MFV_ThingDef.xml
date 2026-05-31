@@ -34,7 +34,7 @@
   <MFV_MagicTorchWallLamp.label>magic wall torch lamp</MFV_MagicTorchWallLamp.label>
   <MFV_MagicTorchWallLamp.description>An enchanted wall-mounted torch built around a fire arcane focus. It lights an area without needing refueling, and produces a small amount of heat.</MFV_MagicTorchWallLamp.description>
   <MFV_PlanarGate.label>planar gate</MFV_PlanarGate.label>
-  <MFV_PlanarGate.description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into a planar pocket.</MFV_PlanarGate.description>
+  <MFV_PlanarGate.description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into the Aether Wild or Cinderdeep.</MFV_PlanarGate.description>
   <MFV_GemstoneVein.label>gemstone vein</MFV_GemstoneVein.label>
   <MFV_GemstoneVein.description>A small mixed seam of crystalline material. Mining it may produce rough gemstone chunks.</MFV_GemstoneVein.description>
   <MFV_PhaseStone.label>phase stone</MFV_PhaseStone.label>
@@ -138,11 +138,15 @@
   <MFV_Parchment.label>parchment</MFV_Parchment.label>
   <MFV_Parchment.description>Pressed and dried sheets prepared for magical notation, ritual drafts, and scrollwork.</MFV_Parchment.description>
   <MFV_ChunkPhaseStone.label>phase stone chunk</MFV_ChunkPhaseStone.label>
-  <MFV_ChunkPhaseStone.description>A chunk of phase stone from a planar pocket. It can be ground into gemstone dust.</MFV_ChunkPhaseStone.description>
+  <MFV_ChunkPhaseStone.description>A chunk of phase stone from the Aether Wild or Cinderdeep. It can be ground into gemstone dust.</MFV_ChunkPhaseStone.description>
   <MFV_ChunkVoidglass.label>voidglass chunk</MFV_ChunkVoidglass.label>
   <MFV_ChunkVoidglass.description>A chunk of dark planar glass. It can be ground into gemstone dust or refined into void glass for construction.</MFV_ChunkVoidglass.description>
   <MFV_VoidGlass.label>void glass</MFV_VoidGlass.label>
   <MFV_VoidGlass.description>Refined panes and shards of planar voidglass, darkly translucent and stable enough to build with.</MFV_VoidGlass.description>
+  <MFV_CinderRose.label>cinder rose</MFV_CinderRose.label>
+  <MFV_CinderRose.description>A warm planar bloom cut from a Cinderdeep rosebush. Its ember-red petals make a striking gift, if one can avoid the thorns.</MFV_CinderRose.description>
+  <MFV_PhaseStoneWall.label>phase stone wall</MFV_PhaseStoneWall.label>
+  <MFV_PhaseStoneWall.description>A wall built from refined phase stone. To ordinary bodies it is solid stone, but pawns with the Arcane Gift can slip through its misaligned surface.</MFV_PhaseStoneWall.description>
   <MFV_VoidGlassWall.label>void glass wall</MFV_VoidGlassWall.label>
   <MFV_VoidGlassWall.description>An impassable wall made from refined planar void glass. It drinks in light along its dark facets while remaining strong enough to hold up a roof.</MFV_VoidGlassWall.description>
   <MFV_Gun_CrystalLance.label>crystal graser</MFV_Gun_CrystalLance.label>
@@ -176,4 +180,6 @@
   <Plant_MFV_PlanarH.label>planar fern</Plant_MFV_PlanarH.label>
   <Plant_MFV_PlanarI.label>planar stem</Plant_MFV_PlanarI.label>
   <Plant_MFV_PlanarJ.label>planar cluster</Plant_MFV_PlanarJ.label>
+  <Plant_MFV_PlanarK.label>cinder rosebush</Plant_MFV_PlanarK.label>
+  <Plant_MFV_PlanarK.description>A thorny rosebush from Cinderdeep that grows ember-warm blooms. Harvesting it can draw blood.</Plant_MFV_PlanarK.description>
 </LanguageData>

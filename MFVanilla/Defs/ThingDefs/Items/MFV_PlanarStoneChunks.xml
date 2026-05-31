@@ -4,7 +4,7 @@
   <ThingDef ParentName="ChunkRockBase">
     <defName>MFV_ChunkPhaseStone</defName>
     <label>phase stone chunk</label>
-    <description>A chunk of phase stone from a planar pocket. It can be ground into gemstone dust.</description>
+    <description>A chunk of phase stone from the Aether Wild or Cinderdeep. It can be ground into gemstone dust.</description>
     <graphicData>
       <color>(92,110,145)</color>
     </graphicData>

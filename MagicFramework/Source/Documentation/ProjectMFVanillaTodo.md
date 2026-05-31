@@ -139,7 +139,7 @@ Follow-up opportunities:
 
 Goal: round out sparse earth and water schools after the current spell survey.
 
-Status: first Geomancy implementations added and smoke tested. Desiccate is now authored as the next Aquamancy hostile attack spell and needs focused in-game validation.
+Status: first Geomancy implementations added and smoke tested. Desiccate is authored and passed first hostile-human smoke testing; animal targets, undead behavior, and final tuning remain watch items.
 
 Design direction:
 - Geomancy needs the most help. Favor spells that make earth feel defensive, positional, and materially grounded rather than another generic damage school.
@@ -170,7 +170,7 @@ Desiccate first-pass direction:
 1. Implemented with final standard spelling `Desiccate`, icon path `UI/Gizmos/Spells/MF_Desiccate`, Aquamancy research gating, generated scroll/recipe eligibility, and hostile pawn targeting.
 2. Uses a living-target conditional: undead lifecycle pawns are exempt from the damage/debuff branch.
 3. Applies initial Burn damage as withering injury plus `MF_Desiccated`, a timed bad hediff with pain and a Manipulation capacity penalty.
-4. Smoke test against humanlike enemies, hostile animals, and skeletons/other undead; tune damage, mana, cooldown, duration, and whether undead should be rejected at targeting time rather than merely having no effect.
+4. Smoke test against humanlike enemies, hostile animals, and skeletons/other undead; hostile-human testing passed, while animals and undead remain watch items. Tune damage, mana, cooldown, duration, and whether undead should be rejected at targeting time rather than merely having no effect.
 5. Optional later synergies: stronger against Drenched targets, weaker in rain/water, plant damage, or interaction with Cure Disease/Forbidden Plague only if it remains intuitive.
 
 Success criteria:

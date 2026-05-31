@@ -117,11 +117,18 @@
 
   <ThingDef ParentName="MFV_PlanarPlantBase">
     <defName>Plant_MFV_PlanarK</defName>
-    <label>delta frond</label>
+    <label>cinder rosebush</label>
+    <thingClass>MFVanilla.Core.Plant_CinderRosebush</thingClass>
     <graphicData>
       <texPath>Things/Plant/Planar/PlantK</texPath>
       <graphicClass>Graphic_Single</graphicClass>
     </graphicData>
+    <plant>
+      <growDays>14</growDays>
+      <harvestedThingDef>MFV_CinderRose</harvestedThingDef>
+      <harvestYield>3</harvestYield>
+      <harvestTag>Standard</harvestTag>
+    </plant>
   </ThingDef>
 
   <ThingDef ParentName="MFV_PlanarPlantBase">

@@ -8,6 +8,6 @@
   <MFV_RuinedSanctum.description>A collapsed arcane sanctum with broken halls, sealed rooms, and stone guardians.</MFV_RuinedSanctum.description>
   <MFV_ArcaneCache_Showcase.label>arcane cache showcase</MFV_ArcaneCache_Showcase.label>
   <MFV_ArcaneCache_Showcase.description>A debug-only oversized arcane cache that exposes all current modular site pieces.</MFV_ArcaneCache_Showcase.description>
-  <MFV_PlanarPocket.label>planar pocket</MFV_PlanarPocket.label>
-  <MFV_PlanarPocket.description>A folded pocket of space stabilized by planar magic.</MFV_PlanarPocket.description>
+  <MFV_PlanarPocket.label>planar crossing</MFV_PlanarPocket.label>
+  <MFV_PlanarPocket.description>A temporary crossing into a named plane stabilized by planar magic.</MFV_PlanarPocket.description>
 </LanguageData>

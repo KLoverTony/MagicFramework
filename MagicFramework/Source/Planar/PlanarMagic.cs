@@ -1824,9 +1824,10 @@ public static class PlanarMagicUtility
 
         PlanarPocketParent pocketParent = pocketMap.Parent as PlanarPocketParent;
         Map destinationMap = FindReturnMap(pocketMap);
+        string planeLabel = PlaneLabel(pocketParent);
         if (destinationMap == null)
         {
-            Messages.Message("The planar pocket cannot find a stable return point.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message($"{planeLabel} cannot find a stable return point.", MessageTypeDefOf.RejectInput, false);
             return false;
         }
 
@@ -1885,7 +1886,7 @@ public static class PlanarMagicUtility
             CameraJumper.TryJump(center, destinationMap);
         }
 
-        Messages.Message($"{returned} traveler(s) and supplies return from the planar pocket.", MessageTypeDefOf.PositiveEvent, false);
+        Messages.Message($"{returned} traveler(s) and supplies return from {planeLabel}.", MessageTypeDefOf.PositiveEvent, false);
         TryCleanupPlanarPocketMap(pocketMap);
         return true;
     }
@@ -1901,8 +1902,9 @@ public static class PlanarMagicUtility
 
         if (HasAnySpawnedPawn(pocketMap))
         {
-            Log.Warning($"[MagicFramework] Planar pocket map {pocketMap.uniqueID} was not removed because at least one pawn remains on it.");
-            Messages.Message("The planar pocket remains unstable: someone is still inside.", MessageTypeDefOf.CautionInput, false);
+            string planeLabel = PlaneLabel(pocketParent);
+            Log.Warning($"[MagicFramework] {planeLabel} map {pocketMap.uniqueID} was not removed because at least one pawn remains on it.");
+            Messages.Message($"{planeLabel} remains unstable: someone is still inside.", MessageTypeDefOf.CautionInput, false);
             return;
         }
 
@@ -1932,6 +1934,11 @@ public static class PlanarMagicUtility
         Thing originGate = FindOriginPlanarGate(pocketParent);
         CompPlanarGate gateComp = originGate?.TryGetComp<CompPlanarGate>();
         gateComp?.NotifyPlanarPocketReturned(pocketParent.dimension, pocketParent.ID);
+    }
+
+    public static string PlaneLabel(PlanarPocketParent pocketParent)
+    {
+        return pocketParent?.dimension?.LabelCap ?? "The planar realm";
     }
 
     private static bool HasAnySpawnedPawn(Map map)
@@ -2042,10 +2049,11 @@ public sealed class Dialog_PlanarPocketReturn : Window
     public override void DoWindowContents(Rect inRect)
     {
         Text.Font = GameFont.Medium;
-        Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), "Planar return");
+        string planeLabel = PlanarMagicUtility.PlaneLabel(pocketMap?.Parent as PlanarPocketParent);
+        Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), $"{planeLabel} return");
         Text.Font = GameFont.Small;
         Rect descriptionRect = new(inRect.x, inRect.y + 38f, inRect.width, 52f);
-        Widgets.Label(descriptionRect, "The planar pocket begins to collapse. Select travelers and supplies to return to the gate map.");
+        Widgets.Label(descriptionRect, $"{planeLabel} begins to collapse. Select travelers and supplies to return to the gate map.");
 
         float carriedMass = PlanarMagicUtility.ReturnCarriedMass(selected);
         float carryingCapacity = PlanarMagicUtility.ReturnCarryingCapacity(selected);
@@ -2174,7 +2182,8 @@ public sealed class Dialog_PlanarPocketReturn : Window
 
         if (!hasPawn)
         {
-            Messages.Message("At least one traveler must return from the planar pocket.", MessageTypeDefOf.RejectInput, false);
+            string planeLabel = PlanarMagicUtility.PlaneLabel(pocketMap?.Parent as PlanarPocketParent);
+            Messages.Message($"At least one traveler must return from {planeLabel}.", MessageTypeDefOf.RejectInput, false);
             return;
         }
 

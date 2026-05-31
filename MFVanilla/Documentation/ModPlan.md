@@ -167,7 +167,7 @@ Implementation notes:
 | Consumables | Mana Potion, Scrolls, Runes | One-time use items |
 | Production | Alchemy Table | Early magical crafting station unlocked by Alchemy. |
 | Enchantment | Arcane Forge, Arcane Spire, elemental foci | Advanced magical item production and facility support. |
-| Planar | Planar Gate, planar stone, voidglass, planar plants | Advanced pocket-map exploration, extraction, and future planar systems. |
+| Planar | Planar Gate, phase stone walls, void glass walls, planar plants | Advanced pocket-map exploration, extraction, special construction, and future planar systems. |
 | Apparel | Mage Robes, Enchanted Cloaks | Stat bonuses |
 | Artifacts | Ancient Relics, Legendary Items | Unique effects |
 
@@ -183,6 +183,7 @@ Implementation notes:
 - Arcane treasure chests are now the shared mission reward container for cache-style sites.
 - Arcane Forge recipes transform good-or-better mundane weapons into the first four enchanted weapons while preserving final quality.
 - Planar gates are supported by nearby arcane spires and currently open into functional temporary planar pocket maps; the first release should polish this loop before broadening planar rewards or hazards.
+- Phase stone blocks now build phase stone walls that behave as sealed walls for ordinary pawns while Arcane Gift pawns can pass through them.
 
 ### 3. Spell Extensions
 

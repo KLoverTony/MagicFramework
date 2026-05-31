@@ -25,8 +25,8 @@ Previous major band uploaded May 19, 2026 at 11 PM: MFVanilla 0.8 / MagicFramewo
 
 Current local development after the uploaded band:
 - Start the next iteration from a stable MFVanilla 0.9.0 baseline rather than opening another major pillar immediately.
-- Aquamancy is the most obvious school-content gap now that Forbidden Lore, Geomancy, Vitalism, planar magic, and enchanted weapons all have validated first-pass content. `Desiccate` is now authored as the next offensive water spell and needs focused smoke testing.
-- Planar Magic should move from foundation to purpose: alignment timing, pocket duration, return capacity, material economy, player-facing text, optional small hazards/reward beats, and at least one reason for planar dimensions to matter beyond novelty.
+- Aquamancy is less exposed after `Desiccate` smoke tested well against hostile humans as an effective hostile-target spell; keep animals, undead immunity, and final balance as watch items.
+- Planar Magic should move from foundation to purpose: alignment timing, pocket duration, return capacity, material economy, player-facing text, optional small hazards/reward beats, and at least one reason for planar dimensions to matter beyond novelty. Void glass walls and phase stone walls now give the first planar materials concrete construction roles.
 - Endgame design should start forming around magical Transcendence, arcane relics with map-wide effects, and eventual Soulcraft lichdom, but those should guide prerequisites and reward hooks before becoming implementation targets.
 - The research/content audit remains important: identify underused or misleading research nodes now that the live tree has moved past the original roadmap.
 - Shared lifecycle undead work now has two verified skeleton baselines: AF skeletons are selectable autonomous servants with natural RimWorld work restrictions and no drafting, while MFV raised skeletons remain temporary master-bound combat minions.
@@ -41,6 +41,7 @@ Playtest status:
 - Deep Iron Golem has been dev tested and produced a strong boss fight.
 - Automata are working fairly well in current testing.
 - Planar Magic first-pass smoke testing looks functional and has clear expansion opportunities; save/reload inside the planar dimension appears to work as expected.
+- Desiccate smoke testing against hostile humans works well and appears effective; animal targets, undead behavior, and final mana/cooldown tuning remain watch items.
 - Dominate Will and Forbidden Plague build and deploy with generated scroll/recipe coverage; Forbidden Lore scrolls are excluded from research-completion mystery aid drops so initial acquisition must come from finding or trade. Dominate Will now smoke tests correctly after fixing the temporary compelled faction name-generation path, and Forbidden Plague spreads through clustered hostile pawns at a readable pace.
 - Cure Disease smoke tests correctly against disease cleanup expectations.
 - Dig and Earth Wall smoke test correctly.
@@ -68,7 +69,7 @@ Primary target: MF-038 MFVanilla feature completion and post-0.9 cleanup.
 - World missions: continue normal-play validation for Arcane Cache, Ruined Sanctum, and Sealed Vault; tune only mission frequency, threat, reward tier, timeout, cleanup, and letter text unless a concrete blocker appears.
 - Production/progression: watch the now mostly accepted production loop, scroll acquisition, caster XP, and apprenticeship pacing during normal play; reopen only for clear balance or clarity issues.
 - Enchanted weapons: first-weapon-set smoke testing passed for 0.9.0; keep only balance/art polish watch items unless a concrete issue appears.
-- Spell balance: Aquamancy should be the next school-content pass now that Dominate Will/Forbidden Plague give Forbidden Lore its first identity pass, Dig/Earth Wall start Geomancy follow-up, and Cure Disease adds a Vitalism support beat. Desiccate is implemented and needs smoke testing against hostile humans, animals, and undead.
+- Spell balance: Desiccate has passed first hostile-human smoke testing. Keep Aquamancy tuning focused on animals, undead immunity, mana, cooldown, and debuff duration before deciding whether the school needs another spell.
 - Endgame scaffolding: begin capturing design notes for magical Transcendence, map-scale arcane relics, lichdom/phylactery prerequisites, and whether additional planes belong in MFVanilla or separate expansion mods.
 - Research/content audit: identify underused or misleading research nodes now that leylines, elemental content, disciplines, missions, and planar magic exist; attach real content, rename expectations, or defer/hide stale promises.
 - Release hygiene: update MFVanilla docs, splash notes, package metadata, XML load/build/deploy checks, and a tight release smoke checklist.
@@ -88,7 +89,7 @@ AeternusFaith remains important, but it is no longer the main active release ban
 | --- | --- | --- | --- | --- | --- |
 | MF-038 | P1 | M | MFVanilla | Release target | Drive the MFVanilla completion pass: prune stale roadmap promises, audit research/content gaps, update docs, and define the remaining shippable surface. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
 | MF-055 | P1 | M | MFVanilla/Planar | Polish | Post-0.9 polish for the now-functional planar gate, pocket-map, return, cleanup, material, and documentation loop. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
-| MF-046B | P1 | M | MFVanilla/Spells | Smoke test | Desiccate is authored as a hostile Aquamancy attack spell; verify living-pawn damage/debuff, undead immunity, scroll coverage, and balance. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
+| MF-046B | P1 | M | MFVanilla/Spells | Watch | Desiccate passed first hostile-human smoke testing; verify animals, undead immunity, scroll coverage, and final balance. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
 | MF-043 | P1 | M | MFVanilla/Sites | Watch | Continue observing Ruined Sanctum, Sealed Vault, cleanup, save/load, and repeat generation during normal play. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-043-mfvanilla-next-release-content-pillars). |
 | MF-047 | P2 | S | MFVanilla/Items | Watch | First enchanted weapon set passed 0.9 smoke testing; keep art/balance/inspect polish visible. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-047-enchanted-weapon-special-features). |
 | MF-051 | P2 | M | MFVanilla/Forbidden | Follow-up | Dominate Will and Forbidden Plague passed 0.9 smoke testing; tune and expand only after more live balance observation. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-051-forbidden-lore-first-spells). |
@@ -134,8 +135,8 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Smoke test Desiccate as a bounded Aquamancy attack spell against hostile humans, animals, and undead, then tune damage, cooldown, mana, and debuff duration.
-2. Add practical purpose to Planar Magic: hook exotic materials into at least one real recipe/reward path and outline whether future planes are MFVanilla content or separate expansion mods.
+1. Finish Desiccate validation against animals and undead, then tune damage, cooldown, mana, and debuff duration only if normal play asks for it.
+2. Continue practical-purpose Planar Magic work after void glass and phase stone walls: add small pocket-map reward beats or one more planar-material recipe, and outline whether future planes are MFVanilla content or separate expansion mods.
 3. Start endgame notes for magical Transcendence and map-scale arcane relics; keep them as design scaffolding until the planar/material/relic prerequisites are clearer.
 4. Do a research/content audit pass: underused nodes, stale promises in `Mods/MFVanilla/Documentation/ModPlan.md`, and misleading unlock expectations.
 5. Work a small AeternusFaith side slice only if it stays bounded: AF spectre lifecycle manifestation smoke test, Bonewright anointment validation, package metadata, or ritual presentation.

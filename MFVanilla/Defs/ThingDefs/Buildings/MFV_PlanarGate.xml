@@ -4,7 +4,7 @@
   <ThingDef ParentName="BuildingBase">
     <defName>MFV_PlanarGate</defName>
     <label>planar gate</label>
-    <description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into a planar pocket.</description>
+    <description>A stabilized arcane threshold tuned to folds in nearby space. Pawns can enter it to traverse into the Aether Wild or Cinderdeep.</description>
     <thingClass>MagicFramework.Core.Building_PlanarGate</thingClass>
     <category>Building</category>
     <designationCategory>Misc</designationCategory>

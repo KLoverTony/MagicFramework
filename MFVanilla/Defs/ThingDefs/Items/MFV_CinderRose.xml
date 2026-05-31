@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="ResourceBase">
+    <defName>MFV_CinderRose</defName>
+    <label>cinder rose</label>
+    <description>A warm planar bloom cut from a Cinderdeep rosebush. Its ember-red petals make a striking gift, if one can avoid the thorns.</description>
+    <thingClass>ThingWithComps</thingClass>
+    <graphicData>
+      <texPath>Things/Plant/Planar/PlantK</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>0.6</drawSize>
+    </graphicData>
+    <thingCategories>
+      <li>PlantMatter</li>
+    </thingCategories>
+    <tradeTags>
+      <li>MFV_ArcaneReagent</li>
+    </tradeTags>
+    <stackLimit>25</stackLimit>
+    <statBases>
+      <MaxHitPoints>45</MaxHitPoints>
+      <MarketValue>6</MarketValue>
+      <Mass>0.02</Mass>
+      <Flammability>1.4</Flammability>
+      <DeteriorationRate>8</DeteriorationRate>
+    </statBases>
+    <tickerType>Rare</tickerType>
+    <tradeability>All</tradeability>
+    <healthAffectsPrice>false</healthAffectsPrice>
+    <comps>
+      <li Class="CompProperties_Rottable">
+        <daysToRotStart>20</daysToRotStart>
+        <rotDestroys>true</rotDestroys>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_CinderRoseGift">
+        <moodThought>MFV_ReceivedCinderRose</moodThought>
+        <socialThought>MFV_ReceivedCinderRoseSocial</socialThought>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

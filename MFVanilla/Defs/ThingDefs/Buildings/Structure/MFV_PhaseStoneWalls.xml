@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>MFV_PhaseStoneWall</defName>
+    <label>phase stone wall</label>
+    <description>A wall built from refined phase stone. To ordinary bodies it is solid stone, but pawns with the Arcane Gift can slip through its misaligned surface.</description>
+
+    <thingClass>MFVanilla.Core.Building_PhaseStoneWall</thingClass>
+    <category>Building</category>
+
+    <designationCategory>Structure</designationCategory>
+    <uiOrder>1105</uiOrder>
+
+    <noRightClickDraftAttack>true</noRightClickDraftAttack>
+
+    <replaceTags>
+      <li>Wall</li>
+    </replaceTags>
+
+    <graphicData>
+      <texPath>Things/Walls/PhaseStone/MFV_PhaseStoneWall</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <shaderType>CutoutComplex</shaderType>
+      <linkType>CornerFiller</linkType>
+      <linkFlags>
+        <li>Wall</li>
+        <li>Rock</li>
+      </linkFlags>
+      <damageData>
+        <cornerTL>Damage/Corner</cornerTL>
+        <cornerTR>Damage/Corner</cornerTR>
+        <cornerBL>Damage/Corner</cornerBL>
+        <cornerBR>Damage/Corner</cornerBR>
+        <edgeTop>Damage/Edge</edgeTop>
+        <edgeBot>Damage/Edge</edgeBot>
+        <edgeLeft>Damage/Edge</edgeLeft>
+        <edgeRight>Damage/Edge</edgeRight>
+      </damageData>
+    </graphicData>
+
+    <uiIconPath>Things/Walls/PhaseStone/MFV_PhaseStoneWall_single</uiIconPath>
+
+    <costList>
+      <MFV_BlockPhaseStone>5</MFV_BlockPhaseStone>
+    </costList>
+
+    <statBases>
+      <MaxHitPoints>460</MaxHitPoints>
+      <WorkToBuild>150</WorkToBuild>
+      <Flammability>0</Flammability>
+      <Beauty>2</Beauty>
+      <DoorOpenSpeed>100</DoorOpenSpeed>
+    </statBases>
+
+    <leaveResourcesWhenKilled>false</leaveResourcesWhenKilled>
+    <altitudeLayer>Building</altitudeLayer>
+    <fillPercent>1</fillPercent>
+    <passability>PassThroughOnly</passability>
+    <blockWind>true</blockWind>
+    <blockLight>true</blockLight>
+    <castEdgeShadows>true</castEdgeShadows>
+    <coversFloor>true</coversFloor>
+    <drawStyleCategory>Walls</drawStyleCategory>
+    <tickerType>Normal</tickerType>
+    <selectable>true</selectable>
+    <neverMultiSelect>true</neverMultiSelect>
+    <terrainAffordanceNeeded>Heavy</terrainAffordanceNeeded>
+    <holdsRoof>true</holdsRoof>
+    <staticSunShadowHeight>1.0</staticSunShadowHeight>
+    <canOverlapZones>false</canOverlapZones>
+    <fertility>0</fertility>
+    <rotatable>false</rotatable>
+    <drawerType>MapMeshOnly</drawerType>
+
+    <building>
+      <isInert>true</isInert>
+      <isWall>true</isWall>
+      <isPlaceOverableWall>true</isPlaceOverableWall>
+      <canPlaceOverWall>true</canPlaceOverWall>
+      <blueprintClass>Blueprint_Door</blueprintClass>
+      <ai_chillDestination>false</ai_chillDestination>
+      <supportsWallAttachments>true</supportsWallAttachments>
+      <paintable>false</paintable>
+
+      <blueprintGraphicData>
+        <texPath>Things/Building/Linked/Wall_Blueprint_Atlas</texPath>
+      </blueprintGraphicData>
+
+      <relatedBuildCommands>
+        <li>Door</li>
+        <li>Autodoor</li>
+        <li>OrnateDoor</li>
+        <li MayRequire="Ludeon.RimWorld.Anomaly">SecurityDoor</li>
+        <li MayRequire="Ludeon.RimWorld.Odyssey">VacBarrier</li>
+        <li>Cooler</li>
+        <li>Vent</li>
+      </relatedBuildCommands>
+    </building>
+
+    <researchPrerequisites>
+      <li>MFV_PlanarMagic</li>
+    </researchPrerequisites>
+  </ThingDef>
+
+</Defs>
