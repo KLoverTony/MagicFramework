@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <MFV_MakeArcaneInk.label>make arcane ink</MFV_MakeArcaneInk.label>
-  <MFV_MakeArcaneInk.description>Steep exotic herbs with gemstone dust into a concentrated ink suitable for magical writing.</MFV_MakeArcaneInk.description>
+  <MFV_MakeArcaneInk.description>Steep exotic herbs or healroot with gemstone dust into a concentrated ink suitable for magical writing.</MFV_MakeArcaneInk.description>
   <MFV_MakeArcaneInk.jobString>Making arcane ink.</MFV_MakeArcaneInk.jobString>
   <MFV_EnchantFlamingLongsword.label>enchant flaming longsword</MFV_EnchantFlamingLongsword.label>
   <MFV_EnchantFlamingLongsword.description>Bind a fire arcane focus into a longsword, creating a flaming longsword.</MFV_EnchantFlamingLongsword.description>
