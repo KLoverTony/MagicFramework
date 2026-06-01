@@ -8,6 +8,8 @@
   <MF_BlessingOfVigor.description>Releases a bright blessing that invigorates nearby allies, excluding the caster.</MF_BlessingOfVigor.description>
   <MF_BlinkStep.label>blink step</MF_BlinkStep.label>
   <MF_BlinkStep.description>Instantly teleports the caster to a visible nearby cell.</MF_BlinkStep.description>
+  <MF_BorrowedSeason.label>borrowed season</MF_BorrowedSeason.label>
+  <MF_BorrowedSeason.description>Creates a pulsing chronomantic field around a target cell, rapidly advancing nearby crop growth for a short time.</MF_BorrowedSeason.description>
   <MF_ChainLightning.label>chain lightning</MF_ChainLightning.label>
   <MF_ChainLightning.description>Strikes a foe with arcing lightning that jumps forward through nearby enemies, sometimes stunning those it hits.</MF_ChainLightning.description>
   <MF_CreateFood.label>create food</MF_CreateFood.label>
@@ -58,6 +60,8 @@
   <MF_ManaShield.description>Maintains a shield around an allied pawn that spends the caster's mana to fully absorb incoming damage.</MF_ManaShield.description>
   <MF_Might.label>might</MF_Might.label>
   <MF_Might.description>Maintains a strengthening enchantment on an allied pawn, improving melee damage and carrying capacity while the caster keeps focus.</MF_Might.description>
+  <MF_PhantomReinforcements.label>phantom reinforcements</MF_PhantomReinforcements.label>
+  <MF_PhantomReinforcements.description>Conjures brief illusory allies near the target cell. They can draw hostile attention, but any real injury collapses them.</MF_PhantomReinforcements.description>
   <MF_RaiseSkeleton.label>raise skeleton</MF_RaiseSkeleton.label>
   <MF_RaiseSkeleton.description>Consumes a corpse and raises a temporary skeletal guardian that fights for and protects the caster for several hours.</MF_RaiseSkeleton.description>
   <MF_Regeneration.label>regeneration</MF_Regeneration.label>
@@ -76,6 +80,8 @@
   <MF_SummonDog.description>Summons a loyal dog for a short time to aid the caster.</MF_SummonDog.description>
   <MF_ThreatSpike.label>threat spike</MF_ThreatSpike.label>
   <MF_ThreatSpike.description>Launches a sharp arcane pulse at the most dangerous nearby foe.</MF_ThreatSpike.description>
+  <MF_TemporalResurrection.label>temporal resurrection</MF_TemporalResurrection.label>
+  <MF_TemporalResurrection.description>Snaps a dead humanlike pawn back through time, restoring life immediately before slowly reversing wounds. The recovered pawn remains comatose during the reconstruction and loses skill memory in proportion to their former abilities. Higher caster level reduces, but never removes, the loss.</MF_TemporalResurrection.description>
   <MF_Tornado.label>Tornado</MF_Tornado.label>
   <MF_Tornado.description>A magical new spell.</MF_Tornado.description>
   <MF_Transposition.label>transposition</MF_Transposition.label>

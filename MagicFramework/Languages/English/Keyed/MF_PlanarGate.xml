@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MF_PlanarGateAlignmentReady>The celestial planes are aligned. The gate can open for {0}.</MF_PlanarGateAlignmentReady>
+  <MF_PlanarGateAlignmentWaiting>Waiting for celestial alignment: {0} remaining.</MF_PlanarGateAlignmentWaiting>
+  <MF_PlanarGateCannotReadAlignment>The gate cannot read the celestial alignment.</MF_PlanarGateCannotReadAlignment>
+  <MF_PlanarGateNotAligned>The celestial planes are not aligned.</MF_PlanarGateNotAligned>
+
+  <MF_PlanarGateReturnCommandLabel>Return through gate</MF_PlanarGateReturnCommandLabel>
+  <MF_PlanarGateReturnCommandDesc>Return selected travelers and supplies from this planar realm to the gate that opened it.</MF_PlanarGateReturnCommandDesc>
+  <MF_PlanarGateSendCommandLabel>Send selected through gate</MF_PlanarGateSendCommandLabel>
+  <MF_PlanarGateSendCommandDesc>Send selected player-controlled pawns within {0} cells through this planar gate.&#10;&#10;Destination: {1}.&#10;{2}</MF_PlanarGateSendCommandDesc>
+  <MF_PlanarGateTuneCommandLabel>Tune planar gate</MF_PlanarGateTuneCommandLabel>
+  <MF_PlanarGateTuneCommandDesc>Choose which reachable realm this planar gate opens into.&#10;&#10;Current destination: {0}.</MF_PlanarGateTuneCommandDesc>
+
+  <MF_PlanarGateReturnFloatMenu>Return through planar gate</MF_PlanarGateReturnFloatMenu>
+  <MF_PlanarGateReturnFloatMenuDisabled>Return through planar gate ({0})</MF_PlanarGateReturnFloatMenuDisabled>
+  <MF_PlanarGateUseFloatMenu>Use planar gate to {0}</MF_PlanarGateUseFloatMenu>
+  <MF_PlanarGateUseFloatMenuDisabled>Use planar gate ({0})</MF_PlanarGateUseFloatMenuDisabled>
+
+  <MF_PlanarGateNoSelectedPawns>Select one or more player-controlled pawns within {0} cells of the gate.</MF_PlanarGateNoSelectedPawns>
+  <MF_PlanarGateNoReturnSelection>Select one or more travelers or supplies in this planar realm.</MF_PlanarGateNoReturnSelection>
+  <MF_PlanarGateCannotUse>Cannot use planar gate: {0}.</MF_PlanarGateCannotUse>
+  <MF_PlanarGatePocketMapFailed>The planar gate could not stabilize a pocket map.</MF_PlanarGatePocketMapFailed>
+  <MF_PlanarGatePawnStepsThrough>{0} steps through the planar gate.</MF_PlanarGatePawnStepsThrough>
+  <MF_PlanarGateTraversalJobMissing>The planar gate traversal job is missing.</MF_PlanarGateTraversalJobMissing>
+  <MF_PlanarGateSentPawns>Sent {0} pawn(s) to enter the planar gate.</MF_PlanarGateSentPawns>
+  <MF_PlanarGateTransportBlocked>Planar interference prevents conventional off-map transport from this pocket.</MF_PlanarGateTransportBlocked>
+
+  <MF_PlanarGateFailInvalidPawnOrGate>invalid pawn or gate</MF_PlanarGateFailInvalidPawnOrGate>
+  <MF_PlanarGateFailNotPlayerControlled>not player-controlled</MF_PlanarGateFailNotPlayerControlled>
+  <MF_PlanarGateFailNotOnThisMap>not on this map</MF_PlanarGateFailNotOnThisMap>
+  <MF_PlanarGateFailPawnDowned>pawn is downed</MF_PlanarGateFailPawnDowned>
+  <MF_PlanarGateFailNoReachablePath>no reachable path</MF_PlanarGateFailNoReachablePath>
+
+  <MF_PlanarGateDestinationInspect>Destination: {0}.</MF_PlanarGateDestinationInspect>
+  <MF_PlanarGatePowerInspect>Planar gate power: {0:0.##}x ({1}).</MF_PlanarGatePowerInspect>
+  <MF_PlanarGateOneSpireLinked>1 arcane spire linked</MF_PlanarGateOneSpireLinked>
+  <MF_PlanarGateManySpiresLinked>{0} arcane spires linked</MF_PlanarGateManySpiresLinked>
+  <MF_PlanarGateDimensionCurrent>{0} (current)</MF_PlanarGateDimensionCurrent>
+  <MF_PlanarGateTuned>Planar gate tuned to {0}.</MF_PlanarGateTuned>
+  <MF_PlanarGateUnstablePocket>an unstable pocket</MF_PlanarGateUnstablePocket>
+
+  <MF_PlanarGateNoStableReturnPoint>{0} cannot find a stable return point.</MF_PlanarGateNoStableReturnPoint>
+  <MF_PlanarGateReturnTooHeavy>The selected supplies are too heavy to return: {0:0.#} / {1:0.#} kg.</MF_PlanarGateReturnTooHeavy>
+  <MF_PlanarGateReturnedThings>{0} traveler(s) and supplies return from {1}.</MF_PlanarGateReturnedThings>
+  <MF_PlanarGatePocketStillOccupied>{0} remains unstable: someone is still inside.</MF_PlanarGatePocketStillOccupied>
+
+  <MF_PlanarGateReturnDialogTitle>{0} return</MF_PlanarGateReturnDialogTitle>
+  <MF_PlanarGateReturnDialogDesc>{0} begins to collapse. Select travelers and supplies to return to the gate map.</MF_PlanarGateReturnDialogDesc>
+  <MF_PlanarGateSelectedSuppliesMass>Selected supplies: {0:0.#} / {1:0.#} kg</MF_PlanarGateSelectedSuppliesMass>
+  <MF_PlanarGateReturnPawnLabel>{0} (capacity {1:0.#} kg)</MF_PlanarGateReturnPawnLabel>
+  <MF_PlanarGateReturnThingLabel>{0} ({1:0.#} kg)</MF_PlanarGateReturnThingLabel>
+  <MF_PlanarGateReturnStackLabel>{0} x{1}</MF_PlanarGateReturnStackLabel>
+  <MF_PlanarGateSelectAll>Select all</MF_PlanarGateSelectAll>
+  <MF_PlanarGateClearItems>Clear items</MF_PlanarGateClearItems>
+  <MF_PlanarGateReturnSelected>Return selected</MF_PlanarGateReturnSelected>
+  <MF_PlanarGateAtLeastOneTraveler>At least one traveler must return from {0}.</MF_PlanarGateAtLeastOneTraveler>
+</LanguageData>

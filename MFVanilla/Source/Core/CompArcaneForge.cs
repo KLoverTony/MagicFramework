@@ -55,14 +55,15 @@ public sealed class CompArcaneForge : ThingComp
     {
         int linkedCount = LinkedArcaneSpires().Count();
         string leylineText = LeylineQualityText();
+        string linkedText = "MFV_ArcaneForgeSpiresLinked".Translate(linkedCount, Props.requiredSpireCount).ToString();
         if (linkedCount >= Props.requiredSpireCount)
         {
-            return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nReady for enchantment.{leylineText}";
+            return $"{linkedText}\n{"MFV_ArcaneForgeReady".Translate()}{leylineText}";
         }
 
         int missingCount = Props.requiredSpireCount - linkedCount;
-        string spireLabel = missingCount == 1 ? "arcane spire" : "arcane spires";
-        return $"Arcane spires linked: {linkedCount}/{Props.requiredSpireCount}\nNeeds {missingCount} more linked {spireLabel} within {Props.spireRadius:0.#} cells and line of sight before enchantment bills can be worked.{leylineText}";
+        string spireLabel = missingCount == 1 ? "MFV_ArcaneForgeSpireSingular".Translate().ToString() : "MFV_ArcaneForgeSpirePlural".Translate().ToString();
+        return $"{linkedText}\n{"MFV_ArcaneForgeNeedsSpires".Translate(missingCount, spireLabel, Props.spireRadius)}{leylineText}";
     }
 
     public IEnumerable<Thing> LinkedArcaneSpires()
@@ -144,9 +145,9 @@ public sealed class CompArcaneForge : ThingComp
         float chance = EnchantmentUtility.LeylineQualityBonusChance(parent);
         if (chance <= 0f)
         {
-            return "\nLeyline resonance: none.";
+            return "\n" + "MFV_ArcaneForgeLeylineResonanceNone".Translate();
         }
 
-        return $"\nLeyline resonance: {chance.ToStringPercent()} chance to improve enchanted weapon quality.";
+        return "\n" + "MFV_ArcaneForgeLeylineResonanceChance".Translate(chance.ToStringPercent());
     }
 }

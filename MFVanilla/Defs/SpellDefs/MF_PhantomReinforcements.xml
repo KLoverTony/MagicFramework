@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_PhantomReinforcements</defName>
+    <label>phantom reinforcements</label>
+    <description>Conjures brief illusory allies near the target cell. They can draw hostile attention, but any real injury collapses them.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_SummonDog</gizmoIconPath>
+    <range>14</range>
+    <castTimeTicks>60</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Shadow</li>
+        <li>MF_Element_Arcane</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Illusion</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Summon</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Illusion</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>4</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <requireWalkableCell>true</requireWalkableCell>
+      <requireStandableCell>true</requireStandableCell>
+      <range>14</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Phantom Reinforcements</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Phantom Reinforcements cooldown ready</debugLabel>
+        <cooldownTicks>900</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Phantom Reinforcements</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Phantom Reinforcements cooldown</debugLabel>
+        <cooldownTicks>900</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Phantom Reinforcements sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Phantom Reinforcements cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>CurrentCell</locationSource>
+          </li>
+          <li Class="MagicFramework.Definitions.RepeatActionDef">
+            <debugLabel>Phantom Reinforcements spawn pulses</debugLabel>
+            <intervalTicks>1</intervalTicks>
+            <repeatCount>3</repeatCount>
+            <includeImmediate>true</includeImmediate>
+            <replaceExistingForCaster>false</replaceExistingForCaster>
+            <actions>
+              <li Class="MagicFramework.Definitions.SummonPawnActionDef">
+                <debugLabel>Summon illusory reinforcement</debugLabel>
+                <pawnKindDef>MFV_IllusoryReinforcement</pawnKindDef>
+                <durationTicks>900</durationTicks>
+                <replaceExistingForCaster>false</replaceExistingForCaster>
+                <setFactionToPlayer>true</setFactionToPlayer>
+                <joinLord>true</joinLord>
+                <followMasterWhileDrafted>false</followMasterWhileDrafted>
+                <followMasterWhileFieldwork>false</followMasterWhileFieldwork>
+              </li>
+              <li Class="MagicFramework.Definitions.EffectActionDef">
+                <debugLabel>Illusory reinforcement arrival effect</debugLabel>
+                <effectDef>PsycastPsychicEffect</effectDef>
+                <locationSource>CurrentTarget</locationSource>
+                <attachToTarget>true</attachToTarget>
+              </li>
+            </actions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

@@ -33,7 +33,7 @@
     <terrainAffordanceNeeded>Medium</terrainAffordanceNeeded>
     <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
     <researchPrerequisites>
-      <li>MFV_ArcaneTheory</li>
+      <li>MFV_PlanarMagic</li>
     </researchPrerequisites>
     <costList>
       <Steel>120</Steel>

@@ -7,7 +7,7 @@
     <description>A warm planar bloom cut from a Cinderdeep rosebush. Its ember-red petals make a striking gift, if one can avoid the thorns.</description>
     <thingClass>ThingWithComps</thingClass>
     <graphicData>
-      <texPath>Things/Plant/Planar/PlantK</texPath>
+      <texPath>Things/Item/CinderRose</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>0.6</drawSize>
     </graphicData>
@@ -19,7 +19,7 @@
     </tradeTags>
     <stackLimit>25</stackLimit>
     <statBases>
-      <MaxHitPoints>45</MaxHitPoints>
+      <MaxHitPoints>5</MaxHitPoints>
       <MarketValue>6</MarketValue>
       <Mass>0.02</Mass>
       <Flammability>1.4</Flammability>
@@ -30,7 +30,7 @@
     <healthAffectsPrice>false</healthAffectsPrice>
     <comps>
       <li Class="CompProperties_Rottable">
-        <daysToRotStart>20</daysToRotStart>
+        <daysToRotStart>10</daysToRotStart>
         <rotDestroys>true</rotDestroys>
       </li>
       <li Class="MFVanilla.Core.CompProperties_CinderRoseGift">

@@ -20,6 +20,8 @@
   <MF_CleansedBlood.description>This pawn is under a maintained vital charm that periodically treats disease and infection.</MF_CleansedBlood.description>
   <MF_SharedEssence.label>shared essence</MF_SharedEssence.label>
   <MF_SharedEssence.description>This pawn's life force has been temporarily entwined with another through resurrection magic, leaving consciousness dimmed while the bond settles.</MF_SharedEssence.description>
+  <MF_TemporalReconstruction.label>temporal reconstruction</MF_TemporalReconstruction.label>
+  <MF_TemporalReconstruction.description>This pawn has been pulled backward through the moment of death. Wounds are unwinding while memory and practiced skill shear away into lost time.</MF_TemporalReconstruction.description>
   <MF_Frozen.label>frozen</MF_Frozen.label>
   <MF_Frozen.description>This pawn's movement speed is reduced by 45%.</MF_Frozen.description>
   <MF_Waterbound.label>waterbound</MF_Waterbound.label>

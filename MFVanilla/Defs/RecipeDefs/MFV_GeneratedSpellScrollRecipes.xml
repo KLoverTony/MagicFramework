@@ -205,6 +205,57 @@
     <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_BorrowedSeason</defName>
+    <label>scribe scroll (borrowed season)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast borrowed season. The scribe must have the Arcane Gift and already know borrowed season.</description>
+    <jobString>Scribing scroll (borrowed season).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Chronomancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_BorrowedSeason>1</MFV_SpellScroll_MF_BorrowedSeason>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_BorrowedSeason</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ChainLightning</defName>
     <label>scribe scroll (chain lightning)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast chain lightning. The scribe must have the Arcane Gift and already know chain lightning.</description>
@@ -1474,6 +1525,57 @@
     <displayPriority>900</displayPriority>
   </RecipeDef>
   <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_PhantomReinforcements</defName>
+    <label>scribe scroll (phantom reinforcements)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast phantom reinforcements. The scribe must have the Arcane Gift and already know phantom reinforcements.</description>
+    <jobString>Scribing scroll (phantom reinforcements).</jobString>
+    <workAmount>1100</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Illusion</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Papyrus</li>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Papyrus</li>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_PhantomReinforcements>1</MFV_SpellScroll_MF_PhantomReinforcements>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_PhantomReinforcements</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>800</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
     <defName>MFV_ScribeScroll_MF_RaiseSkeleton</defName>
     <label>scribe scroll (raise skeleton)</label>
     <description>Prepare a spell scroll that teaches a pawn how to cast raise skeleton. The scribe must have the Arcane Gift and already know raise skeleton.</description>
@@ -1878,6 +1980,55 @@
       <li>MFV_ScribingTable</li>
     </recipeUsers>
     <displayPriority>900</displayPriority>
+  </RecipeDef>
+  <RecipeDef>
+    <defName>MFV_ScribeScroll_MF_TemporalResurrection</defName>
+    <label>scribe scroll (temporal resurrection)</label>
+    <description>Prepare a spell scroll that teaches a pawn how to cast temporal resurrection. The scribe must have the Arcane Gift and already know temporal resurrection.</description>
+    <jobString>Scribing scroll (temporal resurrection).</jobString>
+    <workAmount>1500</workAmount>
+    <workSpeedStat>GeneralLaborSpeed</workSpeedStat>
+    <effectWorking>Tailor</effectWorking>
+    <soundWorking>Recipe_Tailor</soundWorking>
+    <researchPrerequisite>MFV_Chronomancy</researchPrerequisite>
+    <ingredients>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_Parchment</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+      <li>
+        <filter>
+          <thingDefs>
+            <li>MFV_ArcaneInk</li>
+          </thingDefs>
+        </filter>
+        <count>1</count>
+      </li>
+    </ingredients>
+    <fixedIngredientFilter>
+      <thingDefs>
+        <li>MFV_Parchment</li>
+        <li>MFV_ArcaneInk</li>
+      </thingDefs>
+    </fixedIngredientFilter>
+    <products>
+      <MFV_SpellScroll_MF_TemporalResurrection>1</MFV_SpellScroll_MF_TemporalResurrection>
+    </products>
+    <workSkill>Crafting</workSkill>
+    <requiredGiverWorkType>Crafting</requiredGiverWorkType>
+    <modExtensions>
+      <li Class="MFVanilla.Core.ScribeSpellScrollRecipeExtension">
+        <spell>MF_TemporalResurrection</spell>
+      </li>
+    </modExtensions>
+    <recipeUsers>
+      <li>MFV_ScribingTable</li>
+    </recipeUsers>
+    <displayPriority>600</displayPriority>
   </RecipeDef>
   <RecipeDef>
     <defName>MFV_ScribeScroll_MF_ThreatSpike</defName>

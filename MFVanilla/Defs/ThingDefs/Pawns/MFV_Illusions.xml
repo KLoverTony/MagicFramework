@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BasePawn">
+    <defName>MFV_IllusoryReinforcement</defName>
+    <label>illusory reinforcement</label>
+    <description>A brief arcane phantasm that looks threatening enough to draw hostile attention, but collapses as soon as a real blow lands.</description>
+    <modExtensions>
+      <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
+        <bodyForm>Spectral</bodyForm>
+        <intelligence>Mindless</intelligence>
+        <needsPolicy>None</needsPolicy>
+        <socialPolicy>None</socialPolicy>
+        <gearPolicy>StripAll</gearPolicy>
+        <controlPolicy>AlliedNonControllable</controlPolicy>
+        <workPolicy>None</workPolicy>
+        <recoveryPolicy>None</recoveryPolicy>
+        <deathPolicy>Vanish</deathPolicy>
+        <soulPolicy>CopiedEcho</soulPolicy>
+        <durationPolicy>TemporaryTimer</durationPolicy>
+        <enforceNeeds>true</enforceNeeds>
+        <enforceSocialPolicy>true</enforceSocialPolicy>
+        <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceControlPolicy>true</enforceControlPolicy>
+        <enforceWorkPolicy>true</enforceWorkPolicy>
+        <enforceIdentityPolicy>true</enforceIdentityPolicy>
+        <clearGeneratedHealthState>true</clearGeneratedHealthState>
+        <enforceLifeStage>true</enforceLifeStage>
+        <enforceMarkers>true</enforceMarkers>
+        <markerHediffs>
+          <li>MF_IllusoryReinforcement</li>
+        </markerHediffs>
+      </li>
+    </modExtensions>
+    <inspectorTabs Inherit="False">
+      <li>ITab_Pawn_Health</li>
+    </inspectorTabs>
+    <soundImpactDefault>EnergyShield_AbsorbDamage</soundImpactDefault>
+    <statBases>
+      <MarketValue>0</MarketValue>
+      <Mass>1</Mass>
+      <MoveSpeed>4.2</MoveSpeed>
+      <ArmorRating_Blunt>0</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0</ArmorRating_Sharp>
+      <ArmorRating_Heat>0</ArmorRating_Heat>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>100</ComfyTemperatureMax>
+      <PsychicSensitivity>0</PsychicSensitivity>
+      <ToxicResistance>1</ToxicResistance>
+      <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+      <Flammability>0</Flammability>
+      <GlobalLearningFactor>0</GlobalLearningFactor>
+      <MeatAmount>0</MeatAmount>
+      <LeatherAmount>0</LeatherAmount>
+    </statBases>
+    <tools>
+      <li>
+        <label>phantom strike</label>
+        <labelNoLocation>phantom strike</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>1</power>
+        <cooldownTime>2.5</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+        <alwaysTreatAsWeapon>true</alwaysTreatAsWeapon>
+      </li>
+    </tools>
+    <race>
+      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
+      <intelligence>Humanlike</intelligence>
+      <renderTree>Humanlike</renderTree>
+      <body>Human</body>
+      <baseBodySize>0.9</baseBodySize>
+      <baseHealthScale>0.05</baseHealthScale>
+      <foodType>None</foodType>
+      <baseHungerRate>0</baseHungerRate>
+      <gestationPeriodDays>18</gestationPeriodDays>
+      <needsRest>false</needsRest>
+      <hasMeat>false</hasMeat>
+      <hasGenders>true</hasGenders>
+      <nameCategory>NoName</nameCategory>
+      <alwaysAwake>true</alwaysAwake>
+      <isImmuneToInfections>true</isImmuneToInfections>
+      <bleedRateFactor>0</bleedRateFactor>
+      <lifeExpectancy>1</lifeExpectancy>
+      <fleshType>Normal</fleshType>
+      <makesFootprints>false</makesFootprints>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
+      <specialShadowData>
+        <volume>(0.18, 0.45, 0.18)</volume>
+        <offset>(0,0,-0.3)</offset>
+      </specialShadowData>
+      <lifeStageAges Inherit="False">
+        <li>
+          <def>MFV_UndeadFullyFormed</def>
+          <minAge>0</minAge>
+        </li>
+      </lifeStageAges>
+    </race>
+    <butcherProducts Inherit="False" />
+    <comps>
+      <li Class="MagicFramework.PawnLifecycle.CompProperties_PawnLifecycleEnforcer" />
+    </comps>
+  </ThingDef>
+
+  <PawnKindDef ParentName="BasePlayerPawnKind">
+    <defName>MFV_IllusoryReinforcement</defName>
+    <label>illusory reinforcement</label>
+    <labelPlural>illusory reinforcements</labelPlural>
+    <race>MFV_IllusoryReinforcement</race>
+    <defaultFactionDef>PlayerColony</defaultFactionDef>
+    <combatPower>8</combatPower>
+    <isFighter>true</isFighter>
+    <lifeStages>
+      <li>
+        <label>phantasm</label>
+        <labelPlural>phantasms</labelPlural>
+        <bodyGraphicData>
+          <texPath>Things/Pawn/Undead/Skeleton/Skeleton</texPath>
+          <graphicClass>Graphic_Multi</graphicClass>
+          <drawSize>1.1</drawSize>
+          <shadowData>
+            <volume>(0.18, 0.35, 0.18)</volume>
+          </shadowData>
+        </bodyGraphicData>
+      </li>
+    </lifeStages>
+    <apparelMoney>0~0</apparelMoney>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <destroyGearOnDrop>true</destroyGearOnDrop>
+    <canStrip>false</canStrip>
+    <initialResistanceRange>0~0</initialResistanceRange>
+    <initialWillRange>0~0</initialWillRange>
+    <weaponMoney>0~0</weaponMoney>
+    <defendPointRadius>0</defendPointRadius>
+    <weaponTags />
+    <techHediffsChance>0</techHediffsChance>
+  </PawnKindDef>
+
+</Defs>

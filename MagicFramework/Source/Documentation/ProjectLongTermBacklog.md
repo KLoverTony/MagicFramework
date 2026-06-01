@@ -26,6 +26,10 @@ First implementation pass:
 
 Goal: add illusionary pawns under Illusion research so the school has a distinct battlefield and deception identity.
 
+Current active concept:
+- First spell candidate: mirror images of the caster. These should appear as viable hostile targets, look like the caster, avoid duplicating weapons or inventory, have only token durability, and dissipate quickly if not destroyed.
+- MVP pivot: `Phantom Reinforcements` uses generic illusory allies instead of caster-perfect copies, reducing appearance-copying risk while validating the same temporary pawn lifecycle path.
+
 Design direction:
 - start with temporary decoy pawns or mirage pawns that distract enemies without becoming full colonists
 - illusion pawns should have strict lifetime, cleanup, and save/load behavior
@@ -33,9 +37,9 @@ Design direction:
 - make the player-facing difference between summoned creatures, undead, constructs, and illusions obvious
 
 First implementation pass:
-1. Define the minimal illusion pawn kind and lifetime behavior.
-2. Add one spell or item source under `MFV_Illusion`.
-3. Smoke test spawning, targeting, combat distraction, expiry, map transition, save/load, and cleanup.
+1. Completed first pass: `MFV_IllusoryReinforcement` pawn kind with lifecycle policies, marker hediff, no gear/work/needs, and vanish-on-injury behavior.
+2. Completed first pass: `MF_PhantomReinforcements`, gated by `MFV_Illusion`, summons three brief illusory allies.
+3. Smoke test spawning, hostile targeting/combat distraction, vanish-on-hit, natural expiry, save/load, map transition, and cleanup.
 
 
 ### MF-053 Necromancy Undead Pawns
@@ -113,6 +117,8 @@ First implementation pass:
 
 Goal: add Chronomancy resurrection that restores a pawn through time magic rather than ordinary healing or necromancy.
 
+Status: first MFVanilla implementation is complete and smoke tested. `Temporal Resurrection` resurrects a viable corpse, keeps the pawn in temporal reconstruction while wounds reverse over time, and charges proportional skill-memory loss that caster level can reduce but not eliminate. `Borrowed Season` adds a practical Chronomancy utility spell by pulsing crop growth in a targeted area.
+
 Design direction:
 - distinguish this from Soulcraft resurrection, Necromancy undead, and AeternusFaith rites
 - possible identity: rewind a recent death, restore from a temporal echo, reverse corpse decay, or resurrect with age/time side effects
@@ -120,9 +126,9 @@ Design direction:
 - save/load and corpse/reference cleanup are release blockers
 
 First implementation pass:
-1. Decide whether the effect targets a fresh corpse, grave, pawn record, or pre-made temporal anchor.
-2. Implement one narrow Chronomancy-gated spell or ritual.
-3. Smoke test corpse state, missing body cases, world pawn references, save/load, failure feedback, and side effects.
+1. Completed: fresh-corpse `Temporal Resurrection` with temporal reconstruction and skill-memory loss.
+2. Completed: `Borrowed Season` crop-growth utility field.
+3. Watch balance, scroll pricing, icon polish, and whether deeper pawn-memory health snapshots are worth adding later.
 
 
 ### MF-058 Soulcraft Lichdom

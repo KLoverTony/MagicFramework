@@ -86,7 +86,7 @@ Tier 2 - Spell Schools:
 | `MFV_Enchantment` | Enchantment | 1000 | Elementalism | Arcane Forge, elemental foci, arcane spires, enchanted weapons, and item magic. |
 | `MFV_Summoning` | Summoning | 1200 | Spellcraft | Calling and commanding otherworldly or temporary entities. |
 | `MFV_Transformation` | Transformation | 1200 | Spellcraft | Magical alteration, transmutation, and body/object conversion concepts. |
-| `MFV_Illusion` | Illusion | 1200 | Spellcraft | Deceptive images, sensory manipulation, concealment, and misdirection. |
+| `MFV_Illusion` | Illusion | 1200 | Spellcraft | Deceptive images, sensory manipulation, concealment, and misdirection. Future candidate: mirror-image or similar illusory defense. |
 | `MFV_Vitalism` | Vitalism | 1100 | Spellcraft | Healing, regeneration, disease resistance, and growth magic. |
 | `MFV_Parchmentry` | Parchmentry | 900 | Papyrus | Durable animal-skin writing material production. |
 | `MFV_Pyromancy` | Pyromancy | 1000 | Elementalism | Firebolt, fireball variants, wall of fire, heat hazards. |
@@ -102,7 +102,7 @@ Tier 3 - Arcane Secrets:
 | `MFV_ArcaneSecrets` | Arcane Secrets | 1800 | Pyromancy, Aquamancy, Aeromancy, Geomancy, Vitalism, Transformation, Illusion, Summoning | Gate node for deeper colony-scale magic and the advanced arcane research bench. |
 | `MFV_Soulcraft` | Soulcraft | 2400 | Arcane Secrets, Necromancy, Vitalism | Soul gems, resurrection-adjacent effects, sustained buffs with backlash. Requires advanced arcane research bench. |
 | `MFV_PlanarMagic` | Planar Magic | 2600 | Arcane Secrets, Leyline Sensitivity | Planar gates, temporary pocket maps, planar materials, and future planar hazards/sites. Requires advanced arcane research bench. |
-| `MFV_GrandSorcery` | Grand Sorcery | 3200 | Arcane Secrets, Planar Magic | Endgame spells, large rituals, colony-scale effects, and future planar/artifact rewards. Requires advanced arcane research bench. |
+| `MFV_GrandSorcery` | Grand Sorcery | 3200 | Arcane Secrets, Planar Magic | Currently valuable mainly for the Archmage discipline, which can learn nearly every spell outside the most focused disciplines. Future target: endgame rituals, colony-scale effects, and planar/artifact rewards. Requires advanced arcane research bench. |
 
 Review note: `MFV_ArcaneSecrets` has replaced the old `MFV_AdvancedSchools` gate. Live XML should not reference `MFV_AdvancedSchools`.
 
@@ -113,9 +113,9 @@ Forbidden research should be optional and expensive. It should not block the mai
 | Def | Label | Cost | Prerequisites | Unlock intent |
 |-----|-------|------|---------------|---------------|
 | `MFV_ForbiddenLore` | Forbidden Lore | 2000 | Arcane Theory; hidden prerequisite: Necromancy | Records magical principles most traditions refuse to teach openly. Requires advanced arcane research bench. |
-| `MFV_Fleshcraft` | Fleshcraft | 2600 | Forbidden Lore, Vitalism, Necromancy | Body mutation, grafts, flesh constructs, risky healing. Requires advanced arcane research bench. |
-| `MFV_InfernalPact` | Infernal Pact | 2800 | Forbidden Lore, Soulcraft | Pact boons, sacrifice mechanics, infernal summons. Requires advanced arcane research bench. |
-| `MFV_Chronomancy` | Chronomancy | 3600 | Forbidden Lore, Grand Sorcery | Time dilation, cooldown manipulation, stasis, aging effects. Requires advanced arcane research bench. |
+| `MFV_Fleshcraft` | Fleshcraft | 2600 | Forbidden Lore, Vitalism, Necromancy | Future golem and flesh-construct work, building from shared undead/construct lifecycle support. Requires advanced arcane research bench. |
+| `MFV_InfernalPact` | Infernal Pact | 2800 | Forbidden Lore, Soulcraft | Undeveloped future path; core concept still open. Requires advanced arcane research bench. |
+| `MFV_Chronomancy` | Chronomancy | 3600 | Forbidden Lore, Grand Sorcery | Temporal manipulation, including Temporal Resurrection with proportional skill-memory loss and Borrowed Season crop-growth acceleration. Requires advanced arcane research bench. |
 
 Current layout coordinates:
 
@@ -294,7 +294,7 @@ Design rules:
 3. Phase 3: Advanced and forbidden content - partially implemented
    - Add advanced research gates.
    - Planar Magic has a functional gate and pocket-map foundation.
-   - Soulcraft has resurrection-adjacent spell content; Fleshcraft, Infernal Pact, Chronomancy, and deeper forbidden consequences remain later work.
+   - Soulcraft has resurrection-adjacent spell content; Chronomancy has Temporal Resurrection and Borrowed Season as its first verified spell pair; Fleshcraft, Infernal Pact, and deeper forbidden consequences remain later work.
    - Balance costs, unlock pacing, and storyteller impact.
 
 4. Phase 4: World-layer mission release - implemented, still in normal-play validation
@@ -313,7 +313,7 @@ Design rules:
    - Add textures and icons.
    - Add localization.
    - Add authoring notes for future MFVanilla content packs.
-   - Expand planar pockets, Grand Sorcery rewards, forbidden lore consequences, Illusion, Fleshcraft, Chronomancy, and richer site families only after the completion pass is clean.
+   - Expand planar pockets, Grand Sorcery rewards, forbidden lore consequences, Illusion, Fleshcraft, deeper Chronomancy, and richer site families only after the completion pass is clean.
 
 ## Integration with MagicFramework
 

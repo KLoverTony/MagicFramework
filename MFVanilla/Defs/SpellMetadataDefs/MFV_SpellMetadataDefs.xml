@@ -73,6 +73,12 @@
     <labelShort>light</labelShort>
   </MagicFramework.Definitions.SpellElementDef>
 
+  <MagicFramework.Definitions.SpellElementDef>
+    <defName>MF_Element_Time</defName>
+    <label>time</label>
+    <labelShort>time</labelShort>
+  </MagicFramework.Definitions.SpellElementDef>
+
   <!-- Domains -->
   <MagicFramework.Definitions.SpellDomainDef>
     <defName>MF_Domain_Pyromancy</defName>
@@ -170,6 +176,13 @@
     <label>forbidden lore</label>
     <primaryElement>MF_Element_Shadow</primaryElement>
     <displayOrder>140</displayOrder>
+  </MagicFramework.Definitions.SpellDomainDef>
+
+  <MagicFramework.Definitions.SpellDomainDef>
+    <defName>MF_Domain_Chronomancy</defName>
+    <label>chronomancy</label>
+    <primaryElement>MF_Element_Time</primaryElement>
+    <displayOrder>150</displayOrder>
   </MagicFramework.Definitions.SpellDomainDef>
 
   <!-- Disciplines -->

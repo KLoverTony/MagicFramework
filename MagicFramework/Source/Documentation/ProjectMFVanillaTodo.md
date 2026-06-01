@@ -67,6 +67,8 @@ Status:
 - Current cleanup pass removed completed MF-045, MF-046, and MF-061 work from the active index; their remaining concerns are now release hygiene or future follow-up tasks.
 - Planar Magic has moved out of the distant backlog into MF-055 as an implemented foundation that passed initial functional smoke testing and now needs polish, tuning, documentation, and release hygiene.
 - This item remains open as the active MFVanilla completion bucket, especially for research nodes, player-facing docs, and stale roadmap promises that no longer match live content.
+- MF-038 audit decision: the planar gate belongs under `MFV_PlanarMagic`, not early `MFV_ArcaneTheory`.
+- Late research nodes can remain as intentional discipline/future-content scaffolding, but their release text should make the current payoff honest: `MFV_GrandSorcery` primarily unlocks the broad Archmage discipline for now, `MFV_Chronomancy` now has a verified first pass through `Temporal Resurrection` and `Borrowed Season`, `MFV_Fleshcraft` should build from the undead/construct lifecycle support toward golems, `MFV_Illusion` is the next active candidate for mirror-image or similar illusory defense, and `MFV_InfernalPact` still needs a core concept.
 
 Next-release content direction:
 - Favor content definition before final economy tuning. Balance should happen after the intended release content set is clearer.
@@ -85,7 +87,7 @@ Good candidates:
 - stronger integration between spell metadata, scroll recipes, research, and generated descriptions
 - clearer player feedback for spell scaling, active enhancement rules, and unlock paths
 - balance pass for mana, cooldowns, costs, work amounts, and resource scarcity
-- concrete follow-up tasks for underused research nodes, especially Illusion, Fleshcraft, Infernal Pact, Grand Sorcery, and Chronomancy
+- concrete follow-up tasks for underused research nodes, especially Illusion, Fleshcraft, Infernal Pact, and Grand Sorcery; Chronomancy should stay on balance/icon/text watch after its first spell pair
 - release-polish follow-up for research nodes that now have first-pass content, especially Leyline Sensitivity and Planar Magic
 
 Deferral rule:

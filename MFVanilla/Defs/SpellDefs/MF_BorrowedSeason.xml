@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef>
+    <defName>MF_BorrowedSeason</defName>
+    <label>borrowed season</label>
+    <description>Creates a pulsing chronomantic field around a target cell, rapidly advancing nearby crop growth for a short time.</description>
+    <range>18</range>
+    <castTimeTicks>90</castTimeTicks>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_BorrowedSeason</gizmoIconPath>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Time</li>
+        <li>MF_Element_Life</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Chronomancy</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Area</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_Chronomancy</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>5</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+      <scaledAttributes>
+        <li>Radius</li>
+        <li>Duration</li>
+      </scaledAttributes>
+    </power>
+
+    <targeting>
+      <shape>Radius</shape>
+      <primaryTargetType>Cell</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>false</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <requireLineOfSight>true</requireLineOfSight>
+      <range>18</range>
+      <radius>4</radius>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Borrowed Season</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Borrowed Season cooldown ready</debugLabel>
+        <cooldownTicks>3000</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Borrowed Season</debugLabel>
+        <amount>28</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Borrowed Season cooldown</debugLabel>
+        <cooldownTicks>3000</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Borrowed Season sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Borrowed Season cast effect</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>CurrentCell</locationSource>
+            <attachToTarget>false</attachToTarget>
+          </li>
+          <li Class="MagicFramework.Definitions.PersistentAreaZoneActionDef">
+            <debugLabel>Borrowed Season growth field</debugLabel>
+            <markerThingDef>MF_WatersEmbraceMarker</markerThingDef>
+            <zoneRadius>4</zoneRadius>
+            <pulseIntervalTicks>180</pulseIntervalTicks>
+            <ambientEffectDef>PsycastAreaEffect</ambientEffectDef>
+            <visualPulseIntervalTicks>180</visualPulseIntervalTicks>
+            <emitVisualFromMarkers>false</emitVisualFromMarkers>
+            <maxVisualMarkersPerPulse>1</maxVisualMarkersPerPulse>
+            <durationTicks>900</durationTicks>
+            <scalableDurationTicks>
+              <baseValue>900</baseValue>
+              <perPower>30</perPower>
+              <max>1500</max>
+            </scalableDurationTicks>
+            <failsafeDurationTicks>1800</failsafeDurationTicks>
+            <pulseAtCenter>true</pulseAtCenter>
+            <pawnAffinity>All</pawnAffinity>
+            <includeCaster>false</includeCaster>
+            <replaceExistingForCaster>true</replaceExistingForCaster>
+            <onPulseActions>
+              <li Class="MFVanilla.Core.GrowPlantsActionDef">
+                <debugLabel>Borrowed Season crop growth pulse</debugLabel>
+                <centerSource>CurrentCell</centerSource>
+                <radius>4</radius>
+                <scalableRadius>
+                  <baseValue>4</baseValue>
+                  <perPower>0.05</perPower>
+                  <max>5.5</max>
+                </scalableRadius>
+                <growthPerPulse>0.08</growthPerPulse>
+                <scalableGrowthPerPulse>
+                  <baseValue>0.08</baseValue>
+                  <perPower>0.002</perPower>
+                  <max>0.12</max>
+                </scalableGrowthPerPulse>
+                <maxPlantsPerPulse>30</maxPlantsPerPulse>
+                <scalableMaxPlantsPerPulse>
+                  <baseValue>30</baseValue>
+                  <perPower>1</perPower>
+                  <max>45</max>
+                </scalableMaxPlantsPerPulse>
+                <cropsOnly>true</cropsOnly>
+                <skipBlighted>true</skipBlighted>
+                <fleckDef>PsycastAreaEffect</fleckDef>
+                <fleckScale>0.45</fleckScale>
+                <maxFlecksPerPulse>8</maxFlecksPerPulse>
+              </li>
+            </onPulseActions>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

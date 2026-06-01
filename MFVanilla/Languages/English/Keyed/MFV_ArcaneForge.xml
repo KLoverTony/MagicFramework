@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <MFV_ArcaneForgeSpiresLinked>Arcane spires linked: {0}/{1}</MFV_ArcaneForgeSpiresLinked>
+  <MFV_ArcaneForgeReady>Ready for enchantment.</MFV_ArcaneForgeReady>
+  <MFV_ArcaneForgeNeedsSpires>Needs {0} more linked {1} within {2:0.#} cells and line of sight before enchantment bills can be worked.</MFV_ArcaneForgeNeedsSpires>
+  <MFV_ArcaneForgeSpireSingular>arcane spire</MFV_ArcaneForgeSpireSingular>
+  <MFV_ArcaneForgeSpirePlural>arcane spires</MFV_ArcaneForgeSpirePlural>
+  <MFV_ArcaneForgeLeylineResonanceNone>Leyline resonance: none.</MFV_ArcaneForgeLeylineResonanceNone>
+  <MFV_ArcaneForgeLeylineResonanceChance>Leyline resonance: {0} chance to improve enchanted weapon quality.</MFV_ArcaneForgeLeylineResonanceChance>
+</LanguageData>

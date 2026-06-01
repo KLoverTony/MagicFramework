@@ -24,4 +24,6 @@
   <MF_Element_Shadow.labelShort>shadow</MF_Element_Shadow.labelShort>
   <MF_Element_Light.label>light</MF_Element_Light.label>
   <MF_Element_Light.labelShort>light</MF_Element_Light.labelShort>
+  <MF_Element_Time.label>time</MF_Element_Time.label>
+  <MF_Element_Time.labelShort>time</MF_Element_Time.labelShort>
 </LanguageData>

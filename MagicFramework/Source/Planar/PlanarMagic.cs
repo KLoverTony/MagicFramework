@@ -172,10 +172,10 @@ public sealed class PlanarAlignmentGameComponent : GameComponent
         if (remainingTicks <= 0)
         {
             int windowRemainingTicks = AlignmentWindowTicks(props, gatePower) - TicksIntoCycle(props);
-            return $"The celestial planes are aligned. The gate can open for {Mathf.Max(0, windowRemainingTicks).ToStringTicksToPeriod()}.";
+            return "MF_PlanarGateAlignmentReady".Translate(Mathf.Max(0, windowRemainingTicks).ToStringTicksToPeriod()).ToString();
         }
 
-        return $"Waiting for celestial alignment: {remainingTicks.ToStringTicksToPeriod()} remaining.";
+        return "MF_PlanarGateAlignmentWaiting".Translate(remainingTicks.ToStringTicksToPeriod()).ToString();
     }
 
     public int CurrentWindowEndTick(CompProperties_PlanarGate props, float gatePower)
@@ -270,8 +270,8 @@ public sealed class CompPlanarGate : ThingComp
         {
             yield return new Command_Action
             {
-                defaultLabel = "Return through gate",
-                defaultDesc = "Return selected travelers and supplies from this planar realm to the gate that opened it.",
+                defaultLabel = "MF_PlanarGateReturnCommandLabel".Translate(),
+                defaultDesc = "MF_PlanarGateReturnCommandDesc".Translate(),
                 icon = ContentFinder<Texture2D>.Get("UI/Gizmos/Planar/PlanarGateOpen", false),
                 action = ReturnSelectedFromPocket
             };
@@ -283,14 +283,14 @@ public sealed class CompPlanarGate : ThingComp
         bool isAligned = alignment?.IsAligned(Props, alignmentPower) == true;
         Command_Action command = new()
         {
-            defaultLabel = "Send selected through gate",
-            defaultDesc = $"Send selected player-controlled pawns within {Props.activationRadius} cells through this planar gate.\n\nDestination: {CurrentDimensionLabel()}.\n{AlignmentStatusText(alignmentPower)}",
+            defaultLabel = "MF_PlanarGateSendCommandLabel".Translate(),
+            defaultDesc = "MF_PlanarGateSendCommandDesc".Translate(Props.activationRadius, CurrentDimensionLabel(), AlignmentStatusText(alignmentPower)),
             icon = ContentFinder<Texture2D>.Get("UI/Gizmos/Planar/PlanarGateOpen", false),
             action = TraverseSelectedPawns
         };
         if (!isAligned)
         {
-            command.Disable("The celestial planes are not aligned.");
+            command.Disable("MF_PlanarGateNotAligned".Translate());
         }
 
         yield return command;
@@ -300,8 +300,8 @@ public sealed class CompPlanarGate : ThingComp
         {
             yield return new Command_Action
             {
-                defaultLabel = "Tune planar gate",
-                defaultDesc = $"Choose which reachable realm this planar gate opens into.\n\nCurrent destination: {CurrentDimensionLabel()}.",
+                defaultLabel = "MF_PlanarGateTuneCommandLabel".Translate(),
+                defaultDesc = "MF_PlanarGateTuneCommandDesc".Translate(CurrentDimensionLabel()),
                 icon = ContentFinder<Texture2D>.Get("UI/Commands/DesirePower", false),
                 action = OpenDestinationMenu
             };
@@ -319,12 +319,12 @@ public sealed class CompPlanarGate : ThingComp
         {
             if (pawn == null || pawn.Destroyed || !pawn.Spawned || pawn.Map != parent.Map)
             {
-                yield return new FloatMenuOption("Return through planar gate (invalid pawn or gate)", null);
+                yield return new FloatMenuOption("MF_PlanarGateReturnFloatMenuDisabled".Translate("MF_PlanarGateFailInvalidPawnOrGate".Translate()).ToString(), null);
                 yield break;
             }
 
             yield return FloatMenuUtility.DecoratePrioritizedTask(
-                new FloatMenuOption("Return through planar gate", () =>
+                new FloatMenuOption("MF_PlanarGateReturnFloatMenu".Translate().ToString(), () =>
                 {
                     PlanarMagicUtility.TryReturnSelectedFromPlanarPocket(parent.Map, new List<Thing> { pawn });
                 }),
@@ -335,12 +335,12 @@ public sealed class CompPlanarGate : ThingComp
 
         if (!CanPawnUseGate(pawn, out string failReason))
         {
-            yield return new FloatMenuOption($"Use planar gate ({failReason})", null);
+            yield return new FloatMenuOption("MF_PlanarGateUseFloatMenuDisabled".Translate(failReason).ToString(), null);
             yield break;
         }
 
         yield return FloatMenuUtility.DecoratePrioritizedTask(
-            new FloatMenuOption($"Use planar gate to {CurrentDimensionLabel()}", () =>
+            new FloatMenuOption("MF_PlanarGateUseFloatMenu".Translate(CurrentDimensionLabel()).ToString(), () =>
             {
                 StartTraversalJobs(new List<Pawn> { pawn });
             }),
@@ -365,7 +365,7 @@ public sealed class CompPlanarGate : ThingComp
 
         if (pawns.Count == 0)
         {
-            Messages.Message($"Select one or more player-controlled pawns within {Props.activationRadius} cells of the gate.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateNoSelectedPawns".Translate(Props.activationRadius), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
@@ -379,7 +379,7 @@ public sealed class CompPlanarGate : ThingComp
             .ToList() ?? new List<Thing>();
         if (selectedThings.Count == 0)
         {
-            Messages.Message("Select one or more travelers or supplies in this planar realm.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateNoReturnSelection".Translate(), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
@@ -390,7 +390,7 @@ public sealed class CompPlanarGate : ThingComp
     {
         if (!CanPawnUseGate(pawn, out string failReason))
         {
-            Messages.Message($"Cannot use planar gate: {failReason}.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateCannotUse".Translate(failReason), MessageTypeDefOf.RejectInput, false);
             return false;
         }
 
@@ -412,7 +412,7 @@ public sealed class CompPlanarGate : ThingComp
                 Current.Game.CurrentMap = sourceMap;
             }
 
-            Messages.Message("The planar gate could not stabilize a pocket map.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGatePocketMapFailed".Translate(), MessageTypeDefOf.RejectInput, false);
             return false;
         }
 
@@ -438,7 +438,7 @@ public sealed class CompPlanarGate : ThingComp
         Find.Selector.ClearSelection();
         Find.Selector.Select(pawn);
         CameraJumper.TryJump(pawn);
-        Messages.Message($"{pawn.LabelShortCap} steps through the planar gate.", MessageTypeDefOf.PositiveEvent, false);
+        Messages.Message("MF_PlanarGatePawnStepsThrough".Translate(pawn.LabelShortCap), MessageTypeDefOf.PositiveEvent, false);
         return true;
     }
 
@@ -475,7 +475,7 @@ public sealed class CompPlanarGate : ThingComp
         JobDef jobDef = DefDatabase<JobDef>.GetNamedSilentFail("MFV_UsePlanarGate");
         if (jobDef == null)
         {
-            Messages.Message("The planar gate traversal job is missing.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateTraversalJobMissing".Translate(), MessageTypeDefOf.RejectInput, false);
             return 0;
         }
 
@@ -496,7 +496,7 @@ public sealed class CompPlanarGate : ThingComp
 
         if (started > 0)
         {
-            Messages.Message($"Sent {started} pawn(s) to enter the planar gate.", MessageTypeDefOf.PositiveEvent, false);
+            Messages.Message("MF_PlanarGateSentPawns".Translate(started), MessageTypeDefOf.PositiveEvent, false);
         }
 
         return started;
@@ -528,31 +528,31 @@ public sealed class CompPlanarGate : ThingComp
         failReason = null;
         if (pawn == null || parent?.Map == null)
         {
-            failReason = "invalid pawn or gate";
+            failReason = "MF_PlanarGateFailInvalidPawnOrGate".Translate().ToString();
             return false;
         }
 
         if (pawn.Faction != Faction.OfPlayer && !pawn.IsPrisonerOfColony)
         {
-            failReason = "not player-controlled";
+            failReason = "MF_PlanarGateFailNotPlayerControlled".Translate().ToString();
             return false;
         }
 
         if (!pawn.Spawned || pawn.Map != parent.Map)
         {
-            failReason = "not on this map";
+            failReason = "MF_PlanarGateFailNotOnThisMap".Translate().ToString();
             return false;
         }
 
         if (pawn.Downed)
         {
-            failReason = "pawn is downed";
+            failReason = "MF_PlanarGateFailPawnDowned".Translate().ToString();
             return false;
         }
 
         if (!pawn.CanReach(parent, PathEndMode.Touch, Danger.Deadly))
         {
-            failReason = "no reachable path";
+            failReason = "MF_PlanarGateFailNoReachablePath".Translate().ToString();
             return false;
         }
 
@@ -563,8 +563,8 @@ public sealed class CompPlanarGate : ThingComp
     {
         int linkedSpires = LinkedArcaneSpires().Count();
         float power = AlignmentPower(linkedSpires);
-        string spireText = linkedSpires == 1 ? "1 arcane spire linked" : $"{linkedSpires} arcane spires linked";
-        return $"{AlignmentStatusText(power)}\nDestination: {CurrentDimensionLabel()}.\nPlanar gate power: {power:0.##}x ({spireText}).";
+        string spireText = linkedSpires == 1 ? "MF_PlanarGateOneSpireLinked".Translate().ToString() : "MF_PlanarGateManySpiresLinked".Translate(linkedSpires).ToString();
+        return $"{AlignmentStatusText(power)}\n{"MF_PlanarGateDestinationInspect".Translate(CurrentDimensionLabel())}\n{"MF_PlanarGatePowerInspect".Translate(power, spireText)}";
     }
 
     private void OpenDestinationMenu()
@@ -579,11 +579,11 @@ public sealed class CompPlanarGate : ThingComp
         for (int i = 0; i < dimensions.Count; i++)
         {
             PlanarDimensionDef dimension = dimensions[i];
-            string label = dimension == SelectedDimension() ? $"{dimension.LabelCap} (current)" : dimension.LabelCap;
+            string label = dimension == SelectedDimension() ? "MF_PlanarGateDimensionCurrent".Translate(dimension.LabelCap).ToString() : dimension.LabelCap;
             options.Add(new FloatMenuOption(label, () =>
             {
                 selectedDimensionDefName = dimension.defName;
-                Messages.Message($"Planar gate tuned to {dimension.LabelCap}.", parent, MessageTypeDefOf.PositiveEvent, false);
+                Messages.Message("MF_PlanarGateTuned".Translate(dimension.LabelCap), parent, MessageTypeDefOf.PositiveEvent, false);
             }));
         }
 
@@ -609,7 +609,7 @@ public sealed class CompPlanarGate : ThingComp
     private string CurrentDimensionLabel()
     {
         PlanarDimensionDef dimension = SelectedDimension();
-        return dimension?.LabelCap ?? "an unstable pocket";
+        return dimension?.LabelCap ?? "MF_PlanarGateUnstablePocket".Translate().ToString();
     }
 
     private int PocketParentIdFor(string dimensionKey)
@@ -650,7 +650,7 @@ public sealed class CompPlanarGate : ThingComp
 
     private string AlignmentStatusText(float alignmentPower)
     {
-        return PlanarAlignmentGameComponent.Instance?.StatusText(Props, alignmentPower) ?? "The gate cannot read the celestial alignment.";
+        return PlanarAlignmentGameComponent.Instance?.StatusText(Props, alignmentPower) ?? "MF_PlanarGateCannotReadAlignment".Translate().ToString();
     }
 
     private float AlignmentPower()
@@ -750,7 +750,7 @@ public static class PlanarMagicUtility
 
     public static void MessageOffMapTransportBlocked()
     {
-        Messages.Message(PlanarTransportBlockedMessage, MessageTypeDefOf.RejectInput, false);
+        Messages.Message("MF_PlanarGateTransportBlocked".Translate(), MessageTypeDefOf.RejectInput, false);
     }
 
     public static bool TryCreatePlanarPocketParent(Map originMap, IntVec3 originGatePosition, PlanarDimensionDef dimension, int cycleIndex, out PlanarPocketParent pocketParent)
@@ -1827,7 +1827,7 @@ public static class PlanarMagicUtility
         string planeLabel = PlaneLabel(pocketParent);
         if (destinationMap == null)
         {
-            Messages.Message($"{planeLabel} cannot find a stable return point.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateNoStableReturnPoint".Translate(planeLabel), MessageTypeDefOf.RejectInput, false);
             return false;
         }
 
@@ -1835,7 +1835,7 @@ public static class PlanarMagicUtility
         float carryingCapacity = ReturnCarryingCapacity(selectedThings);
         if (carriedMass > carryingCapacity)
         {
-            Messages.Message($"The selected supplies are too heavy to return: {carriedMass:0.#} / {carryingCapacity:0.#} kg.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateReturnTooHeavy".Translate(carriedMass, carryingCapacity), MessageTypeDefOf.RejectInput, false);
             return false;
         }
 
@@ -1886,7 +1886,7 @@ public static class PlanarMagicUtility
             CameraJumper.TryJump(center, destinationMap);
         }
 
-        Messages.Message($"{returned} traveler(s) and supplies return from {planeLabel}.", MessageTypeDefOf.PositiveEvent, false);
+        Messages.Message("MF_PlanarGateReturnedThings".Translate(returned, planeLabel), MessageTypeDefOf.PositiveEvent, false);
         TryCleanupPlanarPocketMap(pocketMap);
         return true;
     }
@@ -1904,7 +1904,7 @@ public static class PlanarMagicUtility
         {
             string planeLabel = PlaneLabel(pocketParent);
             Log.Warning($"[MagicFramework] {planeLabel} map {pocketMap.uniqueID} was not removed because at least one pawn remains on it.");
-            Messages.Message($"{planeLabel} remains unstable: someone is still inside.", MessageTypeDefOf.CautionInput, false);
+            Messages.Message("MF_PlanarGatePocketStillOccupied".Translate(planeLabel), MessageTypeDefOf.CautionInput, false);
             return;
         }
 
@@ -2050,17 +2050,17 @@ public sealed class Dialog_PlanarPocketReturn : Window
     {
         Text.Font = GameFont.Medium;
         string planeLabel = PlanarMagicUtility.PlaneLabel(pocketMap?.Parent as PlanarPocketParent);
-        Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), $"{planeLabel} return");
+        Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 32f), "MF_PlanarGateReturnDialogTitle".Translate(planeLabel));
         Text.Font = GameFont.Small;
         Rect descriptionRect = new(inRect.x, inRect.y + 38f, inRect.width, 52f);
-        Widgets.Label(descriptionRect, $"{planeLabel} begins to collapse. Select travelers and supplies to return to the gate map.");
+        Widgets.Label(descriptionRect, "MF_PlanarGateReturnDialogDesc".Translate(planeLabel));
 
         float carriedMass = PlanarMagicUtility.ReturnCarriedMass(selected);
         float carryingCapacity = PlanarMagicUtility.ReturnCarryingCapacity(selected);
         bool overCapacity = carriedMass > carryingCapacity;
         Rect massRect = new(inRect.x, inRect.y + 88f, inRect.width, 24f);
         GUI.color = overCapacity ? Color.red : Color.white;
-        Widgets.Label(massRect, $"Selected supplies: {carriedMass:0.#} / {carryingCapacity:0.#} kg");
+        Widgets.Label(massRect, "MF_PlanarGateSelectedSuppliesMass".Translate(carriedMass, carryingCapacity));
         GUI.color = Color.white;
 
         Rect outRect = new(inRect.x, inRect.y + 118f, inRect.width, inRect.height - 172f);
@@ -2077,10 +2077,12 @@ public sealed class Dialog_PlanarPocketReturn : Window
 
             bool isForcedPawn = thing is Pawn;
             bool isSelected = isForcedPawn || selected.Contains(thing);
-            string label = thing is Pawn pawn ? $"{pawn.LabelShortCap} (capacity {pawn.GetStatValue(StatDefOf.CarryingCapacity, true):0.#} kg)" : $"{thing.LabelCap} ({thing.GetStatValue(StatDefOf.Mass, true) * thing.stackCount:0.#} kg)";
+            string label = thing is Pawn pawn
+                ? "MF_PlanarGateReturnPawnLabel".Translate(pawn.LabelShortCap, pawn.GetStatValue(StatDefOf.CarryingCapacity, true)).ToString()
+                : "MF_PlanarGateReturnThingLabel".Translate(thing.LabelCap, thing.GetStatValue(StatDefOf.Mass, true) * thing.stackCount).ToString();
             if (thing.stackCount > 1)
             {
-                label = $"{label} x{thing.stackCount}";
+                label = "MF_PlanarGateReturnStackLabel".Translate(label, thing.stackCount).ToString();
             }
 
             Widgets.CheckboxLabeled(new Rect(4f, y, viewRect.width - 8f, 28f), label, ref isSelected);
@@ -2099,7 +2101,7 @@ public sealed class Dialog_PlanarPocketReturn : Window
         Widgets.EndScrollView();
 
         float buttonY = inRect.yMax - 40f;
-        if (Widgets.ButtonText(new Rect(inRect.x, buttonY, 160f, 36f), "Select all"))
+        if (Widgets.ButtonText(new Rect(inRect.x, buttonY, 160f, 36f), "MF_PlanarGateSelectAll".Translate()))
         {
             selected.Clear();
             for (int i = 0; i < candidates.Count; i++)
@@ -2108,7 +2110,7 @@ public sealed class Dialog_PlanarPocketReturn : Window
             }
         }
 
-        if (Widgets.ButtonText(new Rect(inRect.x + 170f, buttonY, 160f, 36f), "Clear items"))
+        if (Widgets.ButtonText(new Rect(inRect.x + 170f, buttonY, 160f, 36f), "MF_PlanarGateClearItems".Translate()))
         {
             selected.RemoveWhere(thing => thing is not Pawn);
         }
@@ -2118,7 +2120,7 @@ public sealed class Dialog_PlanarPocketReturn : Window
             Widgets.DrawHighlight(new Rect(inRect.xMax - 170f, buttonY, 170f, 36f));
         }
 
-        if (Widgets.ButtonText(new Rect(inRect.xMax - 170f, buttonY, 170f, 36f), "Return selected"))
+        if (Widgets.ButtonText(new Rect(inRect.xMax - 170f, buttonY, 170f, 36f), "MF_PlanarGateReturnSelected".Translate()))
         {
             TryReturnSelected();
         }
@@ -2183,7 +2185,7 @@ public sealed class Dialog_PlanarPocketReturn : Window
         if (!hasPawn)
         {
             string planeLabel = PlanarMagicUtility.PlaneLabel(pocketMap?.Parent as PlanarPocketParent);
-            Messages.Message($"At least one traveler must return from {planeLabel}.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateAtLeastOneTraveler".Translate(planeLabel), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
@@ -2191,7 +2193,7 @@ public sealed class Dialog_PlanarPocketReturn : Window
         float carryingCapacity = PlanarMagicUtility.ReturnCarryingCapacity(selected);
         if (carriedMass > carryingCapacity)
         {
-            Messages.Message($"The selected supplies are too heavy to return: {carriedMass:0.#} / {carryingCapacity:0.#} kg.", MessageTypeDefOf.RejectInput, false);
+            Messages.Message("MF_PlanarGateReturnTooHeavy".Translate(carriedMass, carryingCapacity), MessageTypeDefOf.RejectInput, false);
             return;
         }
 

@@ -125,6 +125,15 @@ public static class MFVanillaPatcher
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Postfix))
         );
 
+        MethodInfo thingKillMethod = AccessTools.Method(typeof(Thing), nameof(Thing.Kill));
+        if (thingKillMethod != null)
+        {
+            harmony.Patch(
+                thingKillMethod,
+                prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Thing_Kill_Prefix))
+            );
+        }
+
         PatchPlanarTransportBlocks(harmony);
 
         _isPatched = true;
@@ -507,12 +516,12 @@ public static class MFVanillaPatcher
 
     private static bool PawnGenerator_GeneratePawn_Prefix(ref PawnGenerationRequest request, ref Pawn __result)
     {
-        if (request.KindDef?.defName != "MFV_Skeleton")
+        if (request.KindDef?.defName != "MFV_Skeleton" && request.KindDef?.defName != "MFV_IllusoryReinforcement")
         {
             return true;
         }
 
-        PawnKindDef skeletonKindDef = request.KindDef;
+        PawnKindDef lifecycleKindDef = request.KindDef;
         PawnGenerationRequest baseRequest = new PawnGenerationRequest(
             kind: PawnKindDefOf.Colonist,
             faction: request.Faction ?? Faction.OfPlayer,
@@ -543,7 +552,15 @@ public static class MFVanillaPatcher
             return false;
         }
 
-        ConvertGeneratedPawnToMFVSkeleton(skeleton, skeletonKindDef);
+        if (lifecycleKindDef.defName == "MFV_Skeleton")
+        {
+            ConvertGeneratedPawnToMFVSkeleton(skeleton, lifecycleKindDef);
+        }
+        else
+        {
+            ConvertGeneratedPawnToMFVIllusoryReinforcement(skeleton, lifecycleKindDef);
+        }
+
         __result = skeleton;
         return false;
     }
@@ -565,6 +582,47 @@ public static class MFVanillaPatcher
         }
 
         AssignElementalistAISpells(__result);
+    }
+
+    private static bool Thing_Kill_Prefix(Thing __instance)
+    {
+        if (__instance is not Pawn pawn || pawn.def?.defName != "MFV_IllusoryReinforcement")
+        {
+            return true;
+        }
+
+        if (pawn.Spawned)
+        {
+            FleckMaker.Static(pawn.DrawPos, pawn.Map, FleckDefOf.PsycastAreaEffect, 0.8f);
+            pawn.DeSpawn(DestroyMode.Vanish);
+        }
+
+        if (!pawn.Destroyed)
+        {
+            pawn.Destroy(DestroyMode.Vanish);
+        }
+
+        return false;
+    }
+
+    private static void ConvertGeneratedPawnToMFVIllusoryReinforcement(Pawn pawn, PawnKindDef illusionKindDef)
+    {
+        if (pawn == null || illusionKindDef?.race == null)
+        {
+            return;
+        }
+
+        pawn.def = illusionKindDef.race;
+        pawn.kindDef = illusionKindDef;
+        pawn.gender = Gender.Male;
+        pawn.Name = new NameSingle("phantasm");
+        ResetPawnRenderer(pawn);
+        AttachPawnLifecycleComp(pawn);
+        PawnLifecycleEnforcementUtility.NormalizeLifeStage(pawn);
+        ApplyMFVSkeletonAppearance(pawn);
+        PawnLifecycleEnforcementUtility.EnforceAll(pawn);
+        ResetPawnRenderer(pawn);
+        pawn.Drawer?.renderer?.EnsureGraphicsInitialized();
     }
 
     private static void ConvertGeneratedPawnToMFVSkeleton(Pawn pawn, PawnKindDef skeletonKindDef)
