@@ -86,7 +86,7 @@ Tier 2 - Spell Schools:
 | `MFV_Enchantment` | Enchantment | 1000 | Elementalism | Arcane Forge, elemental foci, arcane spires, enchanted weapons, and item magic. |
 | `MFV_Summoning` | Summoning | 1200 | Spellcraft | Calling and commanding otherworldly or temporary entities. |
 | `MFV_Transformation` | Transformation | 1200 | Spellcraft | Magical alteration, transmutation, and body/object conversion concepts. |
-| `MFV_Illusion` | Illusion | 1200 | Spellcraft | Deceptive images, sensory manipulation, concealment, and misdirection. Future candidate: mirror-image or similar illusory defense. |
+| `MFV_Illusion` | Illusion | 1200 | Spellcraft | Deceptive images, sensory manipulation, concealment, and misdirection. Current payoff: Phantom Reinforcements, a decoy spell that creates short-lived illusory allies. |
 | `MFV_Vitalism` | Vitalism | 1100 | Spellcraft | Healing, regeneration, disease resistance, and growth magic. |
 | `MFV_Parchmentry` | Parchmentry | 900 | Papyrus | Durable animal-skin writing material production. |
 | `MFV_Pyromancy` | Pyromancy | 1000 | Elementalism | Firebolt, fireball variants, wall of fire, heat hazards. |
@@ -313,7 +313,7 @@ Design rules:
    - Add textures and icons.
    - Add localization.
    - Add authoring notes for future MFVanilla content packs.
-   - Expand planar pockets, Grand Sorcery rewards, forbidden lore consequences, Illusion, Fleshcraft, deeper Chronomancy, and richer site families only after the completion pass is clean.
+   - Expand planar pockets, Grand Sorcery rewards, forbidden lore consequences, deeper Illusion, Fleshcraft, deeper Chronomancy, and richer site families only after the completion pass is clean.
 
 ## Integration with MagicFramework
 

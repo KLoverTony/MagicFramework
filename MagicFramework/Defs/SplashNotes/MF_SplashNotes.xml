@@ -5,10 +5,13 @@
     <label>Magic Framework</label>
     <modName>Magic Framework</modName>
     <packageId>oracle.magicframework</packageId>
-    <versionKey>MagicFramework-1.4.0</versionKey>
+    <versionKey>MagicFramework-1.5.0</versionKey>
     <order>0</order>
     <notes>
-      <li>Magic Framework 1.4.0 expands the first-party authoring surface with planar travel support, temporary allegiance effects, magical disease/treatment support, temporary wall spawning, and mining actions.</li>
+      <li>Magic Framework 1.5.0 supports the new MF Vanilla 0.10.0 content pass with cleaner lifecycle pawn behavior for illusions, skeletons, and future constructed creatures.</li>
+      <li>Temporary lifecycle pawns can now vanish cleanly from combat without ordinary corpse, death-notification, or mourning side effects when content opts into that behavior.</li>
+      <li>Lifecycle render suppression is now routed through optional Visuals debug logging so normal play logs stay cleaner while nonstandard pawn graphics are still protected.</li>
+      <li>Magic Framework 1.4.0 expanded the first-party authoring surface with planar travel support, temporary allegiance effects, magical disease/treatment support, temporary wall spawning, and mining actions.</li>
       <li>Maintained spell warmups, generated spell details, and temporary faction handling have been hardened for the new MF Vanilla content.</li>
       <li>The main player-facing changes are in MF Vanilla 0.9.0: Planar Magic, Forbidden Lore spells, Geomancy utility spells, Cure Disease, and validated enchanted weapon behavior.</li>
       <li>You can reopen the latest notes from the Magic Framework or MF Vanilla settings pages.</li>

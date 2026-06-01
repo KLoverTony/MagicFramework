@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
+using MagicFramework.Core;
 using Verse;
 
 namespace MagicFramework.PawnLifecycle;
@@ -44,7 +45,7 @@ public static class PawnLifecycleRenderPatch
         string pawnId = pawn?.ThingID ?? "<null>";
         if (LoggedPawnIds.Add(pawnId))
         {
-            Log.Warning("[MagicFramework] Suppressed lifecycle pawn render exception for " +
+            MagicLog.Message(MagicLogSubsystem.Visuals, "[MagicFramework] Suppressed lifecycle pawn render exception for " +
                 (pawn?.LabelShort ?? "<null>") +
                 " def=" + (pawn?.def?.defName ?? "<null>") +
                 " kind=" + (pawn?.kindDef?.defName ?? "<null>") +

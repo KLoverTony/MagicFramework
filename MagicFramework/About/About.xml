@@ -2,7 +2,7 @@
 <ModMetaData>
   <name>Magic Framework</name>
   <author>Oracle</author>
-  <modVersion>1.4.0</modVersion>
+  <modVersion>1.5.0</modVersion>
   <packageId>oracle.magicframework</packageId>
   <supportedVersions>
     <li>1.6</li>

@@ -29,6 +29,7 @@ Goal: add illusionary pawns under Illusion research so the school has a distinct
 Current active concept:
 - First spell candidate: mirror images of the caster. These should appear as viable hostile targets, look like the caster, avoid duplicating weapons or inventory, have only token durability, and dissipate quickly if not destroyed.
 - MVP pivot: `Phantom Reinforcements` uses generic illusory allies instead of caster-perfect copies, reducing appearance-copying risk while validating the same temporary pawn lifecycle path.
+- Status: first MFVanilla implementation is smoke tested and behaves well after cleanup. The spell now gives the desired decoy effect, phantasms vanish on damage before ordinary death handling, and lifecycle render suppression is hidden behind optional Visuals logging.
 
 Design direction:
 - start with temporary decoy pawns or mirage pawns that distract enemies without becoming full colonists
@@ -39,7 +40,8 @@ Design direction:
 First implementation pass:
 1. Completed first pass: `MFV_IllusoryReinforcement` pawn kind with lifecycle policies, marker hediff, no gear/work/needs, and vanish-on-injury behavior.
 2. Completed first pass: `MF_PhantomReinforcements`, gated by `MFV_Illusion`, summons three brief illusory allies.
-3. Smoke test spawning, hostile targeting/combat distraction, vanish-on-hit, natural expiry, save/load, map transition, and cleanup.
+3. Smoke tested: spawning, hostile targeting/combat distraction, vanish-on-hit, death/corpse/mourning suppression, and normal-play log cleanup.
+4. Watch remaining polish: save/load while phantasms are active, map transition behavior, proper illusion art/icon, and whether later true mirror images are worth the extra appearance-copying work.
 
 
 ### MF-053 Necromancy Undead Pawns

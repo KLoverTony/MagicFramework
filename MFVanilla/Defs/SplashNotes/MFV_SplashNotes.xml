@@ -5,11 +5,18 @@
     <label>MF Vanilla</label>
     <modName>MF Vanilla</modName>
     <packageId>oracle.mfvanilla</packageId>
-    <versionKey>MFVanilla-0.9.0</versionKey>
+    <versionKey>MFVanilla-0.10.0</versionKey>
     <order>100</order>
     <notes>
-      <li>Important: MF Vanilla can hide vanilla technology research so your colony grows through spellcraft, reagents, enchanted workshops, arcane sites, and magical discoveries instead of the standard industrial path.</li>
-      <li>Settings: use the MF Vanilla settings page to restore vanilla technology research or turn off the reminder if you want the standard tech tree.</li>
+      <li>MF Vanilla 0.10.0 is a feature release focused on Chronomancy, Illusion, planar material purpose, and practical quality-of-life improvements.</li>
+      <li>Chronomancy now has a first playable identity. Temporal Resurrection can pull a dead pawn back through time, then slowly unwind wounds while skill memory is lost as the price of survival.</li>
+      <li>Borrowed Season adds a practical Chronomancy utility spell: target a field and pulse rapid crop growth through nearby plants.</li>
+      <li>Illusion now has Phantom Reinforcements, a decoy spell that conjures short-lived illusory allies. They draw hostile attention, vanish when struck, and avoid ordinary corpse, death, and mourning events.</li>
+      <li>Planar Magic gains clearer material purpose. Phase stone can now build walls that Arcane Gift pawns can pass through, while void glass walls provide durable illuminated planar construction.</li>
+      <li>The two current planar destinations now have names: the Aether Wild and Cinderdeep.</li>
+      <li>Cinderdeep now yields Cinder Rosebushes and Cinder Roses. Harvesting the thorny bush can draw blood, while the rose itself can be given as a meaningful gift.</li>
+      <li>Arcane ink crafting now accepts healroot as an alternative organic ingredient when exotic herbs are scarce.</li>
+      <li>The planar gate now properly belongs under Planar Magic research, and related icons, generated scrolls, lifecycle cleanup, and normal-play logging received polish.</li>
       <li>MF Vanilla 0.9.0 is a feature release focused on advanced school identity, planar exploration, and release-candidate polish for the first-party content set.</li>
       <li>Planar Magic now has a playable foundation: colonies can open planar gates, enter temporary pocket dimensions, gather strange materials, and return safely through the gate loop. Save and reload testing inside planar spaces passed during release smoke testing.</li>
       <li>Forbidden Lore now has dangerous first spells. Dominate Will can temporarily compel a hostile humanlike pawn to fight as an ally, while Forbidden Plague spreads through clustered enemies until treated and overcome.</li>

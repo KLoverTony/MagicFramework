@@ -27,6 +27,7 @@ Current local development after the uploaded band:
 - Start the next iteration from a stable MFVanilla 0.9.0 baseline rather than opening another major pillar immediately.
 - Aquamancy is less exposed after `Desiccate` smoke tested well against hostile humans as an effective hostile-target spell; keep animals, undead immunity, and final balance as watch items.
 - Chronomancy now has a verified first content pass: `Temporal Resurrection` provides the memory-loss resurrection keystone, and `Borrowed Season` provides a practical crop-growth utility field. Keep both in balance/icon/text watch status rather than treating Chronomancy as empty.
+- Illusion now has a verified first content pass: `Phantom Reinforcements` summons short-lived illusory allies that draw hostile attention, vanish on damage, avoid corpse/death/mourning side effects, and reuse lifecycle pawn machinery. Keep icon/art, save/load, and broader combat targeting as watch items.
 - Planar Magic should move from foundation to purpose: alignment timing, pocket duration, return capacity, material economy, player-facing text, optional small hazards/reward beats, and at least one reason for planar dimensions to matter beyond novelty. Void glass walls and phase stone walls now give the first planar materials concrete construction roles.
 - Endgame design should start forming around magical Transcendence, arcane relics with map-wide effects, and eventual Soulcraft lichdom, but those should guide prerequisites and reward hooks before becoming implementation targets.
 - The research/content audit remains important: identify underused or misleading research nodes now that the live tree has moved past the original roadmap.
@@ -49,6 +50,7 @@ Playtest status:
 - Spell text and spell scroll inspect text are verified fixed after copying the MagicFramework generated-description language file into the installed mod folder.
 - Magic weapons smoke test correctly, including the remaining first-set enchanted weapon behaviors after the earlier Zephyr Spear pass.
 - AF_Skeleton and MFV_Skeleton smoke tests confirm the composable lifecycle split: AF servants are selectable but not draftable, MFV skeletons are manageable combat minions, lifecycle traits drive disabled work through vanilla RimWorld behavior, and lifecycle inspect strings now surface control/work/expiry state.
+- Phantom Reinforcements smoke testing confirms the Illusion MVP works as intended after cleanup: phantasms appear as disposable reinforcements, draw attacks, vanish on damage, avoid corpse/death/mourning events, and no longer emit normal-play render warnings.
 - Ruined Sanctum and Sealed Vault remain observation items, but the shared mission loop is provisionally trusted unless variant-specific issues appear.
 
 ## Release Gate
@@ -72,7 +74,7 @@ Primary target: MF-038 MFVanilla feature completion and post-0.9 cleanup.
 - Enchanted weapons: first-weapon-set smoke testing passed for 0.9.0; keep only balance/art polish watch items unless a concrete issue appears.
 - Spell balance: Desiccate has passed first hostile-human smoke testing. Keep Aquamancy tuning focused on animals, undead immunity, mana, cooldown, and debuff duration before deciding whether the school needs another spell.
 - Endgame scaffolding: begin capturing design notes for magical Transcendence, map-scale arcane relics, lichdom/phylactery prerequisites, and whether additional planes belong in MFVanilla or separate expansion mods.
-- Research/content audit: identify underused or misleading research nodes now that leylines, elemental content, disciplines, missions, planar magic, and Chronomancy's first spell pair exist; attach real content, rename expectations, or defer/hide stale promises. Illusion is the next active candidate via mirror-image/decoy magic.
+- Research/content audit: identify underused or misleading research nodes now that leylines, elemental content, disciplines, missions, planar magic, Chronomancy's first spell pair, and Illusion's first decoy spell exist; attach real content, rename expectations, or defer/hide stale promises. Fleshcraft and Infernal Pact remain the thinnest late nodes.
 - Release hygiene: update MFVanilla docs, splash notes, package metadata, XML load/build/deploy checks, and a tight release smoke checklist.
 
 ## AeternusFaith Side Track
@@ -90,6 +92,7 @@ AeternusFaith remains important, but it is no longer the main active release ban
 | --- | --- | --- | --- | --- | --- |
 | MF-038 | P1 | M | MFVanilla | Release target | Drive the MFVanilla completion pass: prune stale roadmap promises, audit research/content gaps, update docs, and define the remaining shippable surface. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
 | MF-055 | P1 | M | MFVanilla/Planar | Polish | Post-0.9 polish for the now-functional planar gate, pocket-map, return, cleanup, material, and documentation loop. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
+| MF-052 | P1 | M | MFVanilla/Illusion | Watch | Phantom Reinforcements gives Illusion a first playable decoy spell; watch save/load, enemy targeting, art/icon polish, and whether true mirror images are worth a later pass. See [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md#mf-052-illusionary-pawns). |
 | MF-046B | P1 | M | MFVanilla/Spells | Watch | Desiccate passed first hostile-human smoke testing; verify animals, undead immunity, scroll coverage, and final balance. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
 | MF-043 | P1 | M | MFVanilla/Sites | Watch | Continue observing Ruined Sanctum, Sealed Vault, cleanup, save/load, and repeat generation during normal play. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-043-mfvanilla-next-release-content-pillars). |
 | MF-047 | P2 | S | MFVanilla/Items | Watch | First enchanted weapon set passed 0.9 smoke testing; keep art/balance/inspect polish visible. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-047-enchanted-weapon-special-features). |
@@ -117,13 +120,12 @@ AeternusFaith remains important, but it is no longer the main active release ban
 
 School identity and advanced magic after the MFVanilla completion pass:
 - MF-051 Forbidden Lore expansion beyond Dominate Will and Forbidden Plague.
-- MF-052 Illusionary pawns.
 - MF-063 Shared undead and construct pawn foundations before deeper Necromancy, Fleshcraft, and Soulcraft creature work.
 - MF-053 Necromancy undead pawns.
 - MF-054 Fleshcraft golems.
 - MF-055 Planar exploration expansion beyond the current gate/pocket foundation.
 - MF-056 Grand Sorcery legendary weapons and buff ritual.
-- MF-052 Illusionary pawns / mirror images.
+- MF-052 Illusionary pawns first pass is implemented in MFVanilla; keep future work to art/icon polish, save/load validation, richer mirror images, and lifecycle reuse.
 - MF-057 Chronometric resurrection first pass is implemented in MFVanilla; keep future work to balance, icon polish, and deeper temporal-memory infrastructure.
 - MF-058 Soulcraft lichdom.
 - MF-064 Magical Transcendence endgame and map-scale arcane relics.
@@ -137,8 +139,8 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Start Illusion's first playable payoff: a mirror-image/decoy spell that distracts hostile targeting without creating real colonist-equivalent pawns.
+1. Continue practical-purpose Planar Magic work after void glass, phase stone walls, and the two named planes: add small pocket-map reward beats or one more planar-material recipe, and outline whether future planes are MFVanilla content or separate expansion mods.
 2. Finish Desiccate validation against animals and undead, then tune damage, cooldown, mana, and debuff duration only if normal play asks for it.
-3. Continue practical-purpose Planar Magic work after void glass and phase stone walls: add small pocket-map reward beats or one more planar-material recipe, and outline whether future planes are MFVanilla content or separate expansion mods.
+3. Pick the next thin research node to define: Fleshcraft golems, Infernal Pact core concept, or Grand Sorcery capstone payoff.
 4. Start endgame notes for magical Transcendence and map-scale arcane relics; keep them as design scaffolding until the planar/material/relic prerequisites are clearer.
 5. Do a research/content audit pass: underused nodes, stale promises in `Mods/MFVanilla/Documentation/ModPlan.md`, and misleading unlock expectations.

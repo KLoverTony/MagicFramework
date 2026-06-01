@@ -125,6 +125,24 @@ public static class MFVanillaPatcher
             postfix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(PawnGenerator_GeneratePawn_Postfix))
         );
 
+        MethodInfo preApplyDamageMethod = AccessTools.Method(typeof(Thing), nameof(Thing.PreApplyDamage));
+        if (preApplyDamageMethod != null)
+        {
+            harmony.Patch(
+                preApplyDamageMethod,
+                prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Thing_PreApplyDamage_Prefix))
+            );
+        }
+
+        MethodInfo pawnKillMethod = AccessTools.Method(typeof(Pawn), "Kill");
+        if (pawnKillMethod != null)
+        {
+            harmony.Patch(
+                pawnKillMethod,
+                prefix: new HarmonyMethod(typeof(MFVanillaPatcher), nameof(Pawn_Kill_Prefix))
+            );
+        }
+
         MethodInfo thingKillMethod = AccessTools.Method(typeof(Thing), nameof(Thing.Kill));
         if (thingKillMethod != null)
         {
@@ -584,25 +602,65 @@ public static class MFVanillaPatcher
         AssignElementalistAISpells(__result);
     }
 
-    private static bool Thing_Kill_Prefix(Thing __instance)
+    private static bool Thing_PreApplyDamage_Prefix(Thing __instance, ref bool absorbed)
     {
-        if (__instance is not Pawn pawn || pawn.def?.defName != "MFV_IllusoryReinforcement")
+        if (__instance is not Pawn pawn || !IsIllusoryReinforcement(pawn))
         {
             return true;
         }
 
+        absorbed = true;
+        VanishIllusoryReinforcement(pawn);
+        return false;
+    }
+
+    private static bool Pawn_Kill_Prefix(Pawn __instance)
+    {
+        if (!IsIllusoryReinforcement(__instance))
+        {
+            return true;
+        }
+
+        VanishIllusoryReinforcement(__instance);
+        return false;
+    }
+
+    private static bool Thing_Kill_Prefix(Thing __instance)
+    {
+        if (__instance is not Pawn pawn || !IsIllusoryReinforcement(pawn))
+        {
+            return true;
+        }
+
+        VanishIllusoryReinforcement(pawn);
+        return false;
+    }
+
+    private static bool IsIllusoryReinforcement(Pawn pawn)
+    {
+        return pawn?.def?.defName == "MFV_IllusoryReinforcement"
+            || pawn?.kindDef?.defName == "MFV_IllusoryReinforcement";
+    }
+
+    private static void VanishIllusoryReinforcement(Pawn pawn)
+    {
+        if (pawn == null || pawn.Destroyed)
+        {
+            return;
+        }
+
         if (pawn.Spawned)
         {
-            FleckMaker.Static(pawn.DrawPos, pawn.Map, FleckDefOf.PsycastAreaEffect, 0.8f);
+            if (pawn.Map != null)
+            {
+                FleckMaker.Static(pawn.DrawPos, pawn.Map, FleckDefOf.PsycastAreaEffect, 0.8f);
+            }
+
+            pawn.jobs?.StopAll();
             pawn.DeSpawn(DestroyMode.Vanish);
         }
 
-        if (!pawn.Destroyed)
-        {
-            pawn.Destroy(DestroyMode.Vanish);
-        }
-
-        return false;
+        pawn.Destroy(DestroyMode.Vanish);
     }
 
     private static void ConvertGeneratedPawnToMFVIllusoryReinforcement(Pawn pawn, PawnKindDef illusionKindDef)
