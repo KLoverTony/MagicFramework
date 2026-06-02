@@ -518,7 +518,7 @@ This file tracks implemented framework and content milestones moved out of the a
 
 - MF-037 Aeternus ritual-circle research gates.
   Current state:
-  - the Aeternus Faith research tab includes `AF_FaithRituals`, `AF_OssanithTraditions`, and the cathedra follow-up projects
+  - the Aeternus Faith research tab now enters directly through `AF_OssanithTraditions`, with cathedra follow-up projects branching from it; the generic `AF_FaithRituals` gate was removed because it did not carry current gameplay value
   - Ossanith circle, ossuary bone box, and lectern require `AF_OssanithTraditions`
   - Animara ritual center and lectern require `AF_AnimaraSoulbinding`
   - Shroudhymn ritual center and lectern require `AF_ShroudhymnOaths`

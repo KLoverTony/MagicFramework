@@ -28,21 +28,28 @@
   <JobDef>
     <defName>AF_PerformSkeletonRite</defName>
     <driverClass>AeternusFaith.JobDriver_PerformSkeletonRite</driverClass>
-    <reportString>performing a skeleton rite.</reportString>
+    <reportString>animating undead.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_PerformChoralumWardenRite</defName>
+    <driverClass>AeternusFaith.JobDriver_PerformChoralumWardenRite</driverClass>
+    <reportString>animating a reliquary warden.</reportString>
     <casualInterruptible>false</casualInterruptible>
   </JobDef>
 
   <JobDef>
     <defName>AF_AttendSkeletonRite</defName>
     <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
-    <reportString>attending a skeleton rite.</reportString>
+    <reportString>attending an animation rite.</reportString>
     <casualInterruptible>true</casualInterruptible>
   </JobDef>
 
   <JobDef>
     <defName>AF_PerformSpectreRite</defName>
     <driverClass>AeternusFaith.Undead.Spectral.JobDriver_PerformSpectreRite</driverClass>
-    <reportString>performing a spectre rite.</reportString>
+    <reportString>animating a veilbound shade.</reportString>
     <casualInterruptible>false</casualInterruptible>
   </JobDef>
 
@@ -56,7 +63,7 @@
   <JobDef>
     <defName>AF_AttendSpectreRite</defName>
     <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
-    <reportString>attending a spectre rite.</reportString>
+    <reportString>attending an animation rite.</reportString>
     <casualInterruptible>true</casualInterruptible>
   </JobDef>
 

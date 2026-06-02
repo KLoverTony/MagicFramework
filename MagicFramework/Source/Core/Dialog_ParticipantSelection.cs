@@ -71,7 +71,9 @@ namespace MagicFramework
             DrawPawnBuckets(pawnRect, pawns);
 
             AcceptanceReport canStart = CanAccept();
-            Rect reasonRect = new Rect(inRect.x, inRect.yMax - 38f, inRect.width - 176f, 38f);
+            float buttonWidth = Mathf.Clamp(Text.CalcSize(acceptLabel).x + 36f, 160f, Mathf.Min(300f, inRect.width * 0.45f));
+            Rect buttonRect = new Rect(inRect.xMax - buttonWidth, inRect.yMax - 38f, buttonWidth, 38f);
+            Rect reasonRect = new Rect(inRect.x, inRect.yMax - 38f, inRect.width - buttonWidth - 16f, 38f);
             if (!canStart.Accepted)
             {
                 GUI.color = ColoredText.SubtleGrayColor;
@@ -79,7 +81,6 @@ namespace MagicFramework
                 GUI.color = Color.white;
             }
 
-            Rect buttonRect = new Rect(inRect.xMax - 160f, inRect.yMax - 38f, 160f, 38f);
             if (!canStart.Accepted)
                 GUI.color = Color.gray;
 

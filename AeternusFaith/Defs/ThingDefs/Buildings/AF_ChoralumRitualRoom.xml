@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+
+  <ThingDef ParentName="BuildingBase">
+    <defName>AF_ChoralumCircle</defName>
+    <label>choralum circle</label>
+    <description>A Choralum ritual circle laid across the floor, prepared for rites of spiritual harmony and soul stabilization.</description>
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <graphicData>
+      <texPath>Things/RitualRooms/ChoralumRitualRoom/Choralum_Ritual_center</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(3,3)</drawSize>
+    </graphicData>
+    <minifiedDef>MinifiedThing</minifiedDef>
+    <size>(3,3)</size>
+    <altitudeLayer>FloorCoverings</altitudeLayer>
+    <passability>Standable</passability>
+    <pathCost>0</pathCost>
+    <fillPercent>0</fillPercent>
+    <selectable>true</selectable>
+    <useHitPoints>true</useHitPoints>
+    <rotatable>false</rotatable>
+    <terrainAffordanceNeeded>Light</terrainAffordanceNeeded>
+    <designationCategory>Misc</designationCategory>
+    <uiOrder>2080</uiOrder>
+    <researchPrerequisites>
+      <li>AF_ChoralumConcordance</li>
+    </researchPrerequisites>
+    <thingCategories>
+      <li>BuildingsMisc</li>
+    </thingCategories>
+    <blocksAltitudes>
+      <li>FloorCoverings</li>
+    </blocksAltitudes>
+    <statBases>
+      <MaxHitPoints>80</MaxHitPoints>
+      <WorkToBuild>800</WorkToBuild>
+      <Flammability>0.32</Flammability>
+      <Beauty>4</Beauty>
+      <Mass>20</Mass>
+    </statBases>
+    <costList>
+      <Cloth>60</Cloth>
+      <Steel>20</Steel>
+    </costList>
+    <building>
+      <isEdifice>false</isEdifice>
+      <isInert>true</isInert>
+      <ai_chillDestination>false</ai_chillDestination>
+    </building>
+    <comps>
+      <li Class="AeternusFaith.CompProperties_PlaceLinkedBuildable">
+        <targetDef>AF_OssuaryBoneBox</targetDef>
+        <offset>(0,0,0)</offset>
+        <commandLabel>Build ossuary bone box</commandLabel>
+        <commandDescription>Place a normal construction blueprint for an ossuary bone box in the center of this circle.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+      <li Class="AeternusFaith.CompProperties_BonewrightAnointment">
+        <commandIconPath>Things/RitualRooms/ChoralumRitualRoom/Choralum_Ritual_center</commandIconPath>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

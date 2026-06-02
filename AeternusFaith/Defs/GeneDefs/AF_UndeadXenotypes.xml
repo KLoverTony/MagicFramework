@@ -12,7 +12,7 @@
 
   <XenotypeDef MayRequire="Ludeon.RimWorld.Biotech">
     <defName>AF_SpectreXenotype</defName>
-    <label>spectre</label>
+    <label>veilbound shade</label>
     <description>An incorporeal or partially manifested undead state.</description>
     <descriptionShort>An incorporeal or partially manifested undead state.</descriptionShort>
     <iconPath>UI/Icons/Xenotypes/Baseliner</iconPath>

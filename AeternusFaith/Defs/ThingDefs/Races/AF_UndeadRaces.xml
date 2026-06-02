@@ -184,4 +184,153 @@
     </comps>
   </ThingDef>
 
+  <ThingDef ParentName="BasePawn">
+    <defName>AF_ReliquaryWardenRace</defName>
+    <label>reliquary warden</label>
+    <description>An armored skeletal undead animated through Choralum rites. It is slower and more durable than an Ossanith Skeleton, shaped to stand as a protective reliquary rather than a simple bone servant.</description>
+    <modExtensions>
+      <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">
+        <bodyForm>Skeletal</bodyForm>
+        <intelligence>Mindless</intelligence>
+        <needsPolicy>None</needsPolicy>
+        <socialPolicy>None</socialPolicy>
+        <gearPolicy>StripAll</gearPolicy>
+        <controlPolicy>AutonomousServant</controlPolicy>
+        <workPolicy>MundaneLabor</workPolicy>
+        <recoveryPolicy>None</recoveryPolicy>
+        <deathPolicy>LeaveRemains</deathPolicy>
+        <soulPolicy>ReleasedSourceSoul</soulPolicy>
+        <durationPolicy>Permanent</durationPolicy>
+        <isUndead>true</isUndead>
+        <enforceNeeds>true</enforceNeeds>
+        <enforceSocialPolicy>true</enforceSocialPolicy>
+        <enforceGearPolicy>true</enforceGearPolicy>
+        <enforceControlPolicy>true</enforceControlPolicy>
+        <enforceWorkPolicy>true</enforceWorkPolicy>
+        <enforceIdentityPolicy>true</enforceIdentityPolicy>
+        <clearGeneratedHealthState>true</clearGeneratedHealthState>
+        <enforceLifeStage>true</enforceLifeStage>
+        <lifecycleTraits>
+          <li>MF_Lifecycle_MundaneServantWork</li>
+        </lifecycleTraits>
+      </li>
+    </modExtensions>
+    <inspectorTabs Inherit="False">
+      <li>ITab_Pawn_Health</li>
+      <li>ITab_Pawn_FormingCaravan</li>
+      <li>ITab_Pawn_Gear</li>
+      <li>ITab_Pawn_Log</li>
+    </inspectorTabs>
+    <soundImpactDefault>BulletImpact_Metal</soundImpactDefault>
+    <statBases>
+      <MarketValue>0</MarketValue>
+      <Mass>60</Mass>
+      <MoveSpeed>3.25</MoveSpeed>
+      <Flammability>0.32</Flammability>
+      <ArmorRating_Blunt>0.18</ArmorRating_Blunt>
+      <ArmorRating_Sharp>0.42</ArmorRating_Sharp>
+      <ArmorRating_Heat>0.18</ArmorRating_Heat>
+      <ComfyTemperatureMin>-100</ComfyTemperatureMin>
+      <ComfyTemperatureMax>100</ComfyTemperatureMax>
+      <PsychicSensitivity>0</PsychicSensitivity>
+      <GlobalLearningFactor>0</GlobalLearningFactor>
+      <ToxicResistance>1</ToxicResistance>
+      <ToxicEnvironmentResistance>1</ToxicEnvironmentResistance>
+      <MeatAmount>0</MeatAmount>
+      <LeatherAmount>0</LeatherAmount>
+    </statBases>
+    <tools>
+      <li>
+        <label>armored fist</label>
+        <labelNoLocation>armored fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>11</power>
+        <cooldownTime>2.3</cooldownTime>
+        <linkedBodyPartsGroup>LeftHand</linkedBodyPartsGroup>
+      </li>
+      <li>
+        <label>armored fist</label>
+        <labelNoLocation>armored fist</labelNoLocation>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>11</power>
+        <cooldownTime>2.3</cooldownTime>
+        <linkedBodyPartsGroup>RightHand</linkedBodyPartsGroup>
+      </li>
+      <li>
+        <label>reliquary frame</label>
+        <capacities>
+          <li>Blunt</li>
+        </capacities>
+        <power>8</power>
+        <cooldownTime>2.6</cooldownTime>
+        <linkedBodyPartsGroup>HeadAttackTool</linkedBodyPartsGroup>
+        <ensureLinkedBodyPartsGroupAlwaysUsable>true</ensureLinkedBodyPartsGroupAlwaysUsable>
+        <chanceFactor>0.1</chanceFactor>
+      </li>
+    </tools>
+    <race>
+      <thinkTreeMain>Humanlike</thinkTreeMain>
+      <thinkTreeConstant>HumanlikeConstant</thinkTreeConstant>
+      <intelligence>Humanlike</intelligence>
+      <renderTree>Humanlike</renderTree>
+      <body>Human</body>
+      <baseBodySize>1.05</baseBodySize>
+      <baseHealthScale>1.45</baseHealthScale>
+      <foodType>None</foodType>
+      <baseHungerRate>0</baseHungerRate>
+      <needsRest>false</needsRest>
+      <hasMeat>false</hasMeat>
+      <hasGenders>true</hasGenders>
+      <nameCategory>NoName</nameCategory>
+      <alwaysAwake>true</alwaysAwake>
+      <isImmuneToInfections>true</isImmuneToInfections>
+      <bleedRateFactor>0</bleedRateFactor>
+      <lifeExpectancy>2000</lifeExpectancy>
+      <fleshType>AF_Bone</fleshType>
+      <makesFootprints>true</makesFootprints>
+      <manhunterOnDamageChance>0</manhunterOnDamageChance>
+      <manhunterOnTameFailChance>0</manhunterOnTameFailChance>
+      <soundMeleeDodge>Pawn_MeleeDodge</soundMeleeDodge>
+      <specialShadowData>
+        <volume>(0.3, 0.72, 0.36)</volume>
+        <offset>(0,0,-0.3)</offset>
+      </specialShadowData>
+      <ageGenerationCurve>
+        <points>
+          <li>(0, 0)</li>
+          <li>(1, 100)</li>
+          <li>(2000, 0)</li>
+        </points>
+      </ageGenerationCurve>
+      <lifeStageAges>
+        <li>
+          <def>AF_UndeadFullyFormed</def>
+          <minAge>0</minAge>
+        </li>
+      </lifeStageAges>
+      <lifeStageWorkSettings>
+        <Firefighter>3</Firefighter>
+        <Patient>0</Patient>
+        <PatientBedRest>0</PatientBedRest>
+        <BasicWorker>3</BasicWorker>
+        <Construction>7</Construction>
+        <Mining>7</Mining>
+        <Hauling>3</Hauling>
+        <Cleaning>3</Cleaning>
+      </lifeStageWorkSettings>
+    </race>
+    <recipes>
+      <li>RemoveBodyPart</li>
+      <li>Anesthetize</li>
+    </recipes>
+    <comps>
+      <li Class="MagicFramework.PawnLifecycle.CompProperties_PawnLifecycleEnforcer" />
+      <li Class="AeternusFaith.CompProperties_SkeletonUndeadCleanup" />
+    </comps>
+  </ThingDef>
+
 </Defs>

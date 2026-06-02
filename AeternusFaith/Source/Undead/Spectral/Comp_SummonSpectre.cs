@@ -11,8 +11,8 @@ namespace AeternusFaith.Undead.Spectral
     public class CompProperties_SummonSpectre : CompProperties
     {
         public ThingDef circleDef;
-        public string commandLabel = "Begin spectre rite";
-        public string commandDescription = "Begin a Shroudhymn rite to manifest a spectre.";
+        public string commandLabel = "Animate Veilbound Shade";
+        public string commandDescription = "Begin a Shroudhymn rite to animate a corpse as a Veilbound Shade.";
         public string commandIconPath;
 
         public CompProperties_SummonSpectre()
@@ -51,7 +51,7 @@ namespace AeternusFaith.Undead.Spectral
 
             if (Props.circleDef == null)
             {
-                failReason = "The spectre rite is missing its ritual center definition.";
+                failReason = "The animation rite is missing its ritual center definition.";
                 return false;
             }
 
@@ -70,7 +70,7 @@ namespace AeternusFaith.Undead.Spectral
                 return;
             }
 
-            Find.WindowStack.Add(new Dialog_SpectreRitual(parent, circle, TryStartRitualJobs, ValidateCorpseTarget, ValidateConductor, ValidateAudience));
+            Find.WindowStack.Add(new Dialog_SpectreRitual(parent, circle, TryStartRitualJobs, ValidateCorpseTarget, ValidateConductor, ValidateAudience, Props.commandLabel, Props.commandLabel));
         }
 
         internal AcceptanceReport ValidateCorpseTarget(Corpse corpse)
@@ -113,7 +113,7 @@ namespace AeternusFaith.Undead.Spectral
 
             if (!conductor.jobs.TryTakeOrderedJob(job, JobTag.Misc))
             {
-                Messages.Message(conductor.LabelShortCap + " could not start the spectre rite.", conductor, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message(conductor.LabelShortCap + " could not start " + Props.commandLabel + ".", conductor, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -127,7 +127,7 @@ namespace AeternusFaith.Undead.Spectral
                 attendee.jobs.TryTakeOrderedJob(attendJob, JobTag.Misc);
             }
 
-            Messages.Message(conductor.LabelShortCap + " begins the spectre rite.", parent, MessageTypeDefOf.PositiveEvent, historical: false);
+            Messages.Message(conductor.LabelShortCap + " begins " + Props.commandLabel + ".", parent, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
         private IntVec3 FindAudienceCell(Pawn attendee, Thing circle, HashSet<IntVec3> reservedAudienceCells)
@@ -190,7 +190,7 @@ namespace AeternusFaith.Undead.Spectral
 
             SpectralEntity spirit = new SpectralEntity(map)
             {
-                label = "Spectre of " + (sourceName.NullOrEmpty() ? "the dead" : sourceName),
+                label = "Veilbound shade of " + (sourceName.NullOrEmpty() ? "the dead" : sourceName),
                 state = SpectralState.WanderingUnseen,
                 anchorPosition = circle.Position,
                 lastKnownPosition = ResolveManifestCell(map, circle, source),

@@ -21,8 +21,8 @@
 
   <ThingDef ParentName="BasePawn">
     <defName>AF_SpectreRace</defName>
-    <label>spectre</label>
-    <description>A disembodied spirit bound to the mortal world, made briefly visible through the Animara rite. It has no flesh, no hunger, and no will of its own — only an echo of the life it once carried.</description>
+    <label>veilbound shade</label>
+    <description>A disembodied spirit bound to the mortal world through Shroudhymn oaths. It has no flesh, no hunger, and little power over the physical world, only the lingering will to watch, guard, and answer its Bonewright's charge.</description>
     <generateAllowChance>0</generateAllowChance>
     <modExtensions>
       <li Class="MagicFramework.PawnLifecycle.PawnLifecycleExtension">

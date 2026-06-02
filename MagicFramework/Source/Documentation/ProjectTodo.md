@@ -2,7 +2,7 @@
 
 This file is the short-term command center for MagicFramework, MFVanilla, and AeternusFaith. Detailed task notes live in the linked backlog files so this page stays small enough for quick release reviews.
 
-Current emphasis: push MFVanilla toward a complete first-party content mod, keep MagicFramework support work close to the content needs that expose it, and move AeternusFaith into a side-track cadence until the MFVanilla completion pass is in better shape.
+Current emphasis: start the AeternusFaith RC1 validation slice now that MFVanilla 0.10.0 / MagicFramework 1.5.0 is released. Keep MagicFramework support work close to AeternusFaith lifecycle and ritual needs, and treat MFVanilla as a watch/polish surface unless live play exposes a concrete blocker.
 
 Complexity key: `XS` docs/XML tweak, `S` contained implementation, `M` multi-file feature, `L` cross-system feature, `XL` major pillar.
 Priority key: `P0` immediate stability, `P1` near-term release, `P2` polish/content depth, `P3` later or exploratory.
@@ -17,21 +17,20 @@ Priority key: `P0` immediate stability, `P1` near-term release, `P2` polish/cont
 
 ## Last Uploaded Band
 
-Uploaded May 25, 2026: MFVanilla 0.9.0 / MagicFramework 1.4.0 feature release. Planar Magic now has a playable gate/pocket-dimension foundation with save/load-tested return flow; Forbidden Lore gains Dominate Will and Forbidden Plague; Vitalism gains Cure Disease; Geomancy gains Dig and Earth Wall; spell and scroll text are fixed; and the first Arcane Forge weapon set has validated activated powers, passives, protections, and melee triggers.
+Uploaded June 1, 2026: MFVanilla 0.10.0 / MagicFramework 1.5.0 feature release. Chronomancy now has Temporal Resurrection and Borrowed Season; Illusion gains Phantom Reinforcements; Planar Magic gains clearer material purpose through phase stone walls, void glass walls, named destinations, and Cinderdeep harvestables; arcane ink can use healroot as an alternative organic input; and the planar gate/research/documentation loop received release polish.
+
+Previous uploaded band May 25, 2026: MFVanilla 0.9.0 / MagicFramework 1.4.0 feature release. Planar Magic now has a playable gate/pocket-dimension foundation with save/load-tested return flow; Forbidden Lore gains Dominate Will and Forbidden Plague; Vitalism gains Cure Disease; Geomancy gains Dig and Earth Wall; spell and scroll text are fixed; and the first Arcane Forge weapon set has validated activated powers, passives, protections, and melee triggers.
 
 Previous uploaded band May 22, 2026: MFVanilla 0.8.2 / MagicFramework 1.3.1 quality-of-life progression patch. Spell-unlocking research now grants a matching mystery scroll, scrolls are more available through Elementalist traders and arcane rewards, scroll prices scale with research depth, known-spell casting and scroll learning grant caster XP, and Arcane Gift pawns can apprentice under higher-level mentors during arcane work.
 
 Previous major band uploaded May 19, 2026 at 11 PM: MFVanilla 0.8 / MagicFramework 1.3 world-layer mission release with Arcane Cache, Ruined Sanctum, and Sealed Vault opportunities; Leyline Sensitivity gameplay; Arcane Discipline rituals; elemental spell expansion; deterministic site generation; construct defenders; and updated splash notes.
 
 Current local development after the uploaded band:
-- Start the next iteration from a stable MFVanilla 0.9.0 baseline rather than opening another major pillar immediately.
-- Aquamancy is less exposed after `Desiccate` smoke tested well against hostile humans as an effective hostile-target spell; keep animals, undead immunity, and final balance as watch items.
-- Chronomancy now has a verified first content pass: `Temporal Resurrection` provides the memory-loss resurrection keystone, and `Borrowed Season` provides a practical crop-growth utility field. Keep both in balance/icon/text watch status rather than treating Chronomancy as empty.
-- Illusion now has a verified first content pass: `Phantom Reinforcements` summons short-lived illusory allies that draw hostile attention, vanish on damage, avoid corpse/death/mourning side effects, and reuse lifecycle pawn machinery. Keep icon/art, save/load, and broader combat targeting as watch items.
-- Planar Magic should move from foundation to purpose: alignment timing, pocket duration, return capacity, material economy, player-facing text, optional small hazards/reward beats, and at least one reason for planar dimensions to matter beyond novelty. Void glass walls and phase stone walls now give the first planar materials concrete construction roles.
-- Endgame design should start forming around magical Transcendence, arcane relics with map-wide effects, and eventual Soulcraft lichdom, but those should guide prerequisites and reward hooks before becoming implementation targets.
-- The research/content audit remains important: identify underused or misleading research nodes now that the live tree has moved past the original roadmap.
-- Shared lifecycle undead work now has two verified skeleton baselines: AF skeletons are selectable autonomous servants with natural RimWorld work restrictions and no drafting, while MFV raised skeletons remain temporary master-bound combat minions.
+- Start the next iteration from a stable MFVanilla 0.10.0 / MagicFramework 1.5.0 baseline.
+- Make AeternusFaith RC1 the active slice: Bonewright anointment validation, ritual-dialog smoke tests, Shroudhymn Veilbound Shade lifecycle validation, cathedra presentation, ideology/package review, and one conservative ritual/content decision at a time.
+- Keep MagicFramework lifecycle work tightly scoped to AF release needs: shade manifestation, non-player guest control, cleanup, save/load, and inspect/debug clarity.
+- Keep MFVanilla in watch mode. Desiccate animal/undead behavior, Ruined Sanctum/Sealed Vault observation, planar pocket balance, Chronomancy/Illusion icon and balance polish, and late-node research honesty remain visible but are not the primary slice.
+- Deeper MFVanilla endgame design around Transcendence, relics, lichdom, Grand Sorcery, Fleshcraft, and Infernal Pact should stay as notes until the AF RC1 surface is steadier.
 
 Playtest status:
 - The research mystery-scroll drop was tested in game and works well.
@@ -64,49 +63,49 @@ Playtest status:
 
 ## Current Focus Band
 
-MFVanilla completion pass: move the first-party content mod from "broadly functional" toward "near-complete, shippable, and easy to explain." The current priority is to stabilize the implemented systems, close misleading research/content gaps, and update presentation rather than open another large pillar.
+AeternusFaith RC1 validation slice: make the first public faith/ritual surface reliable, understandable, and packageable without broadening the doctrine into a large new expansion pass.
 
-Primary target: MF-038 MFVanilla feature completion and post-0.9 cleanup.
+Primary target: MF-039 AeternusFaith first-edition release candidate.
 
-- Planar Magic: polish the new planar gate and pocket-map loop after a successful first release, including alignment timing, pocket duration, return capacity, material economy, optional hazards/rewards, player-facing text, and practical purpose for exotic materials.
-- World missions: continue normal-play validation for Arcane Cache, Ruined Sanctum, and Sealed Vault; tune only mission frequency, threat, reward tier, timeout, cleanup, and letter text unless a concrete blocker appears.
-- Production/progression: watch the now mostly accepted production loop, scroll acquisition, caster XP, and apprenticeship pacing during normal play; reopen only for clear balance or clarity issues.
-- Enchanted weapons: first-weapon-set smoke testing passed for 0.9.0; keep only balance/art polish watch items unless a concrete issue appears.
-- Spell balance: Desiccate has passed first hostile-human smoke testing. Keep Aquamancy tuning focused on animals, undead immunity, mana, cooldown, and debuff duration before deciding whether the school needs another spell.
-- Endgame scaffolding: begin capturing design notes for magical Transcendence, map-scale arcane relics, lichdom/phylactery prerequisites, and whether additional planes belong in MFVanilla or separate expansion mods.
-- Research/content audit: identify underused or misleading research nodes now that leylines, elemental content, disciplines, missions, planar magic, Chronomancy's first spell pair, and Illusion's first decoy spell exist; attach real content, rename expectations, or defer/hide stale promises. Fleshcraft and Infernal Pact remain the thinnest late nodes.
-- Release hygiene: update MFVanilla docs, splash notes, package metadata, XML load/build/deploy checks, and a tight release smoke checklist.
+- Bonewright anointment: smoke test circle command, popup selection, Soulwarden bootstrap, membership cap behavior, save/load, and rite gating.
+- Ritual dialogs: validate skeleton, ossuary, shade-calling, and Bonewright anointment setup flows, including wrong corpse, missing target, non-Bonewright conductor, reachability, reservation, and already-bound shade messages.
+- Veilbound Shade lifecycle: smoke test Shroudhymn rite-bound shades and debug manifestation with the shared lifecycle profile: guest/non-draftable control, manifest/unmanifest, save/load while manifested, death/downing, map removal, and cleanup.
+- Cathedra surface: keep RC1 focused on simple ritual circles and one signature undead target per cathedra: Ossanith Skeleton, Echobound Revenant, Reliquary Warden, Veilbound Shade, and Hungering Husk. Decide RC1 player-facing exposure per summon instead of expanding ritual rooms.
+- Ideology and package review: check memes, precepts, roles, apparel, research gates, starting ideology/preset, build availability, metadata, preview/icon assets, dependencies, assembly output, XML load, local deployment, and release notes.
+- Scope guard: defer pseudo-relationship memory, custom ritual-room tiles, decorative building sets, custom wall auto-joining, full Choralum aura/guardian suites, and full Voressai hostile ecosystems unless they become necessary for RC1 coherence.
 
-## AeternusFaith Side Track
+## MFVanilla Watch Track
 
-AeternusFaith remains important, but it is no longer the main active release band. Work it in small slices while MFVanilla is the major focus.
+MFVanilla remains the mature first-party content mod after the 0.10.0 release. Keep watching it during normal play, but avoid opening another major pillar until AeternusFaith RC1 pressure eases or a concrete MFVanilla issue appears.
 
-- Keep the first-edition scope intact: neutral soul ecology first, cathedra-shaped necromancy second.
-- Preserve the tested manifested-spirit and ritual-dialog work as the current baseline.
-- Prefer small validation or presentation passes: Bonewright anointment smoke tests, ritual invalid-state readability, package metadata, ideology presentation, and one conservative ritual loop at a time.
-- Do not expand pseudo-relationship memory, custom wall auto-joining, or broad faith content until MFVanilla completion pressure eases or a blocker proves they are necessary.
+- Desiccate: animal targets, undead immunity/targeting feedback, mana, cooldown, and debuff duration remain balance watch items.
+- Sites: Ruined Sanctum and Sealed Vault remain observation items; tune only mission frequency, threat, reward tier, timeout, cleanup, and letter text unless a concrete blocker appears.
+- Planar Magic: watch alignment timing, pocket duration, return capacity, material value, Cinderdeep harvestables, and whether pocket-map reward beats are needed before the next MFVanilla content push.
+- Chronomancy and Illusion: keep Temporal Resurrection, Borrowed Season, and Phantom Reinforcements in icon/art/text/save-load/balance watch status.
+- Late nodes: Grand Sorcery, Fleshcraft, Infernal Pact, Soulcraft lichdom, Transcendence, and map-scale arcane relics stay in design scaffolding until a future MFVanilla-focused slice.
 
 ## Active Task Index
 
 | ID | Priority | Complexity | Area | Status | Detail |
 | --- | --- | --- | --- | --- | --- |
-| MF-038 | P1 | M | MFVanilla | Release target | Drive the MFVanilla completion pass: prune stale roadmap promises, audit research/content gaps, update docs, and define the remaining shippable surface. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
-| MF-055 | P1 | M | MFVanilla/Planar | Polish | Post-0.9 polish for the now-functional planar gate, pocket-map, return, cleanup, material, and documentation loop. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
-| MF-052 | P1 | M | MFVanilla/Illusion | Watch | Phantom Reinforcements gives Illusion a first playable decoy spell; watch save/load, enemy targeting, art/icon polish, and whether true mirror images are worth a later pass. See [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md#mf-052-illusionary-pawns). |
-| MF-046B | P1 | M | MFVanilla/Spells | Watch | Desiccate passed first hostile-human smoke testing; verify animals, undead immunity, scroll coverage, and final balance. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
-| MF-043 | P1 | M | MFVanilla/Sites | Watch | Continue observing Ruined Sanctum, Sealed Vault, cleanup, save/load, and repeat generation during normal play. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-043-mfvanilla-next-release-content-pillars). |
+| MF-039 | P1 | M | AeternusFaith | Release target | Prepare the AeternusFaith first-edition release candidate: Bonewright anointment, ritual-dialog validation, spectre lifecycle smoke tests, cathedra surface decisions, ideology/package review, and RC1 release hygiene. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-039-aeternusfaith-first-edition). |
+| MF-019 | P1 | S | AeternusFaith/UI | Active slice | Polish and smoke test skeleton, ossuary, spectre, and Bonewright anointment participant dialogs, especially small-resolution layout and invalid-state reasons. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
+| MF-063 | P1 | M | Framework/Lifecycle | Support | Support the AF RC1 lifecycle surface: spectre manifestation, guest/non-draftable control, cleanup, save/load, debug inspection, and reusable lifecycle readouts. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations). |
+| MF-038 | P2 | M | MFVanilla | Watch | MFVanilla 0.10.0 shipped the completion/polish band; keep research/content honesty and late-node design notes visible for the next MFVanilla-focused slice. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
+| MF-055 | P2 | M | MFVanilla/Planar | Watch | Post-0.10 planar pocket, material, Cinderdeep, and reward-beat tuning remain watch items rather than the active release target. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
+| MF-052 | P2 | M | MFVanilla/Illusion | Watch | Phantom Reinforcements gives Illusion a first playable decoy spell; watch save/load, enemy targeting, art/icon polish, and whether true mirror images are worth a later pass. See [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md#mf-052-illusionary-pawns). |
+| MF-046B | P2 | M | MFVanilla/Spells | Watch | Desiccate passed first hostile-human smoke testing; verify animals, undead immunity, scroll coverage, and final balance. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-046b-geomancy-and-aquamancy-follow-up). |
+| MF-043 | P2 | M | MFVanilla/Sites | Watch | Continue observing Ruined Sanctum, Sealed Vault, cleanup, save/load, and repeat generation during normal play. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-043-mfvanilla-next-release-content-pillars). |
 | MF-047 | P2 | S | MFVanilla/Items | Watch | First enchanted weapon set passed 0.9 smoke testing; keep art/balance/inspect polish visible. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-047-enchanted-weapon-special-features). |
 | MF-051 | P2 | M | MFVanilla/Forbidden | Follow-up | Dominate Will and Forbidden Plague passed 0.9 smoke testing; tune and expand only after more live balance observation. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-051-forbidden-lore-first-spells). |
 | MF-062 | P2 | M | MFVanilla/Vitalism | Watch | Cure Disease passed smoke testing; watch balance against ordinary medicine and disease pressure. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-062-cure-disease-spell-concept). |
-| MF-037 | P1 | S | MFVanilla/Economy | Watch | Production loop is provisionally accepted; only reopen for concrete issues in pacing, player clarity, scroll access, apprenticeship, or gemstone/reward economy. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-037-mfvanilla-production-and-progression). |
+| MF-037 | P2 | S | MFVanilla/Economy | Watch | Production loop is provisionally accepted; only reopen for concrete issues in pacing, player clarity, scroll access, apprenticeship, or gemstone/reward economy. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-037-mfvanilla-production-and-progression). |
 | MF-031 | P2 | M | Framework/Docs | Support | Continue the Spell Design Guide where it helps stabilize the MFVanilla authoring surface and future content packs. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-031-spell-design-guide). |
 | MF-032 | P2 | M | Framework/Compatibility | Support | Keep deterministic/save-load/multiplayer risks visible, especially around planar transfer, missions, item abilities, AI casting, and random production outcomes. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-032-compatibility). |
-| MF-063 | P2 | M | Framework/Lifecycle | Active slice | Shared undead lifecycle foundations now have verified AF servant and MFV master-bound skeleton profiles; AF spectres have a first lifecycle profile and need Shroudhymn/debug manifestation smoke testing. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations). |
-| MF-039 | P2 | M | AeternusFaith | Side track | Prepare the AeternusFaith first-edition release candidate in small slices while MFVanilla remains the main focus. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-039-aeternusfaith-first-edition). |
-| MF-019 | P2 | S | AeternusFaith/UI | Side track | Polish ritual dialogs and smoke test small-resolution participant selection when working an Aeternus slice. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
 
 ## Completed Previous Slice
 
+- MFVanilla 0.10.0 / MagicFramework 1.5.0: Chronomancy first identity through Temporal Resurrection and Borrowed Season, Illusion first identity through Phantom Reinforcements, planar materials and named destinations, Cinderdeep harvestables, healroot-compatible arcane ink, and post-0.9 release polish.
 - MFVanilla 0.8.2 / MagicFramework 1.3.1: progression QoL patch covering research mystery-scroll drops, improved scroll trader/reward availability, research-depth scroll pricing, XP from scroll learning and known-spell casting, and Arcane Gift apprenticeship under higher-level mentors.
 - MF-044: Leyline Sensitivity reveals a stable hidden leyline map, supports optional numeric inspection, boosts Arcane Gift pawn mana recovery near strong currents, and gives Arcane Forges a leyline resonance chance to improve enchanted weapon quality.
 - MF-061: Arcane Discipline specialization gives research projects reward labels, lets Arcane Gift pawns embrace/advance disciplines through a marker ritual, shows discipline in the mana gizmo, optionally enforces discipline spell learning, and requires scroll scribes to know the spell being copied.
@@ -139,8 +138,8 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Continue practical-purpose Planar Magic work after void glass, phase stone walls, and the two named planes: add small pocket-map reward beats or one more planar-material recipe, and outline whether future planes are MFVanilla content or separate expansion mods.
-2. Finish Desiccate validation against animals and undead, then tune damage, cooldown, mana, and debuff duration only if normal play asks for it.
-3. Pick the next thin research node to define: Fleshcraft golems, Infernal Pact core concept, or Grand Sorcery capstone payoff.
-4. Start endgame notes for magical Transcendence and map-scale arcane relics; keep them as design scaffolding until the planar/material/relic prerequisites are clearer.
-5. Do a research/content audit pass: underused nodes, stale promises in `Mods/MFVanilla/Documentation/ModPlan.md`, and misleading unlock expectations.
+1. Run the Bonewright anointment smoke pass: circle command, popup selection, Soulwarden bootstrap, cap behavior, save/load, and rite gating.
+2. Smoke test skeleton, ossuary, spectre, and Bonewright anointment dialogs for invalid-state readability and small-resolution layout.
+3. Smoke test Shroudhymn rite-bound Veilbound Shades through manifestation, save/load while manifested, death/downing, map removal, cleanup, and lifecycle inspect/debug readouts.
+4. Define the first implementation slice for the cathedra undead roster: keep the Ossanith Skeleton stable, replace Animara's borrowed skeleton identity with the Echobound Revenant, align Shroudhymn spectres toward Veilbound Shades, and decide whether Reliquary Wardens and Hungering Husks are player-facing, dev-facing, or documented-only for RC1.
+5. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.

@@ -1,0 +1,325 @@
+﻿Bonewright Adept 
+Class Overview
+Bonewright Adepts are masters of death's architecture. They do not merely raise the dead—they sculpt them, bind them, question them, and walk among them. Rooted in the practical entropy-sealing practices of the Ossanith Praxis, Bonewrights may later align with one of the five High Cathedrae, each interpreting undeath through a distinct philosophical and spiritual lens.
+
+
+In the world of *Aeternus*, where the divine is undeniable and the dead linger, Bonewright Adepts shape the space between breath and silence.
+
+
+Class Features
+
+
+Hit Points
+- Hit Dice:1d6 per Bonewright Adept level  
+- Hit Points at 1st Level:6 + your Constitution modifier  
+- Hit Points at Higher Levels:1d6 + your Constitution modifier per Bonewright Adept level after 1st
+
+
+Proficiencies
+- Armor:Light armor
+- Weapons:Simple weapons
+- Tools:Bonecarver's tools or embalmer's kit
+- Saving Throws:Intelligence, Constitution
+- Skills:Choose two from Arcana, Religion, Insight, Medicine, History, or Investigation
+
+
+Equipment
+You start with the following equipment, in addition to the equipment granted by your background:
+- Bonecarver's tools or embalmer's kit
+- A ritual dagger
+- A bone-etched journal (your Codex)
+- Leather armor and a simple weapon of your choice
+
+
+Level 1: Ossanith Praxis
+At 1st level, you begin your training in the practical rites of the Ossanith. You gain access to foundational corpsecraft and early necromantic rituals.
+
+
+Spellcasting
+You have begun your training in necromantic spellcraft. You cast spells using Intelligenceas your spellcasting ability.
+
+
+Cantrips
+At 1st level, you know two cantrips of your choice from the Bonewright spell list. You learn additional Bonewright cantrips at higher levels.
+
+
+Spell Slots
+The Bonewright Adept table shows how many spell slots you have to cast your spells. You regain all expended spell slots when you finish a long rest.
+
+
+Ritual Casting
+You can cast a Bonewright spell as a ritual if that spell has the ritual tag and you have it in your Codex.
+
+
+Codex of the Bonewright
+You keep your prepared spells in your Codex, which functions like a spellbook. You begin with six 1st-level Bonewright spells in your Codex. When you gain a level, you can add spells to your Codex following the same rules as a wizard.
+
+
+Spellcasting Ability
+- Your spellcasting ability is Intelligence. You use your Intelligence modifier when setting the saving throw DC for your Bonewright spells and when making an attack roll with one
+- Spell Save DC:8 + your proficiency bonus + your Intelligence modifier
+- Spell Attack Modifier:your proficiency bonus + your Intelligence modifier
+
+
+Level 2: Corpsecraft Techniques
+Beginning at 2nd level, you learn how to manipulate the physical structure of undead. Choose one of the following techniques:
+- Entropy Ward:Your summoned undead gain +1 AC.
+- Bone Reinforcement:Your undead gain temporary HP equal to your Intelligence modifier at the start of combat.
+- Ritual Surgeon:When creating undead, you can graft one mundane weapon or armor piece onto their body.
+
+
+You gain additional corpsecraft upgrades at higher levels.
+
+
+Level 3: Cathedra Alignment
+At 3rd level, you choose your Cathedra Path, which determines your philosophical alignment and spellcasting evolution. The options are:
+- Ossanith– Mastery of entropy and skeletal command.
+- Animara– Soulbinding and memory-guided undeath.
+- Choralum– Harmony of soul and healing through undeath.
+- Shroudhymn– Sacred oaths and task-bound spirits.
+- Voressai– Void entropy and incorporeal dissolution.
+
+
+Your Cathedra determines:
+- Expanded spell list
+- Modifications to spellcasting (Wis/Int blend or divine spells)
+- A passive and active feature unique to the philosophy
+
+
+________________
+
+
+Ossanith Vinculatum Mortuum
+At Levels 6, 10, 14, and 18, the Bonewright Adept chooses one enhancement from a curated list.
+Each milestone allows for one new upgrade, encouraging specialization or well-rounded builds.
+________________
+
+
+Enhancement Options by Category
+Strength & Damage
+* Empowered Strikes: Increase the Vinculatum’s Strength by 2 (max 20).
+* Brutal Blows: The Vinculatum's melee attacks deal an additional +1 damage per attack.
+* Cleave (requires level 10+): If it reduces a creature to 0 HP, it may make one additional attack this turn.
+
+Durability & Defense
+   * Bone Plating: Increase AC by 1.
+   * Hardened Form: Increase HP by +10.
+   * Relic Anchor (requires level 14+): Once per long rest, if reduced to 0 HP, it remains active for 1 round with resistance to all damage.
+
+Weapon Handling
+      * Weapon Bond: Can wield martial weapons. You may bind a weapon to it during a long rest.
+      * Integrated Weaponry: Meld a weapon permanently into the Vinculatum. It can never be disarmed.
+      * Two-Handed Adaptation (requires Strength 16+): It can use heavy two-handed weapons regardless of size.
+
+Reach, Mobility, & Control
+         * Extended Reach: Its melee range increases to 10 ft. for one attack type.
+         * Juggernaut Build: It gains advantage on checks to shove or resist being moved.
+         * Gravegrip (requires level 10+): Once per turn, when it hits, the target's movement is reduced by 10 ft. until the start of your next turn.
+
+Obedience & Functionality
+            * Discipline: Gains advantage on saving throws against control or charm effects.
+            * Task Memory: Can complete simple verbal commands with minor conditional logic (e.g., “Guard the door unless I call”).
+            * Efficient Servitor (requires level 14+): Doesn’t require your concentration for basic commands like “Attack that creature.”
+
+________________
+
+
+Animara Vinculatum Mortuum – “Echobound Revenant”
+Philosophy of the Animara Cathedrae
+               * Animara Adepts view undeath as a continuation of purpose through memory, duty, and identity.
+               * Their undead are soul-tethered remnants, often retaining personality fragments and echoes of past roles.
+               * They are not automatons—they are echoes, reflections, or reenactors of lives once lived.
+
+________________
+
+
+Animara Vinculatum – “Echobound Revenant”
+Core Themes:
+                  * Semi-sapient or spiritually aware
+                  * Defends or protects its Bonewright with memory-infused motivation
+                  * Slightly less durable than Ossanith but more versatile and reactive
+
+________________
+
+
+Base Traits (Level 3)
+                     * Type: Undead (Sentient Fragment), Neutral
+                     * HP: 4d8 + the Bonewright Adept’s Constitution modifier per level (approx. 25 HP)
+                     * AC: 13 (natural armor)
+                     * STR 10 / DEX 14 / CON 14 / INT 10 / WIS 12 / CHA 13
+                     * Senses: Darkvision 60 ft., passive Perception 11
+                     * Languages: Understands one language known in life; can whisper fragmented phrases
+
+________________
+
+
+Unique Features
+Memory Echo (Passive)
+Once per round, when the Bonewright makes an ability check or saving throw, the Animara Vinculatum may grant +1d4 to the result. This represents flashes of insight, instinct, or advice from its past life.
+Soul Bond (Ongoing)
+When within 30 ft. of its Bonewright, the Vinculatum gains advantage on all saving throws and may take the Help action as a bonus action once per round.
+Echo Rebuke (Reaction, 1/rest)
+When struck by a melee attack, the Vinculatum may lash out psychically. The attacker takes 1d8 psychic damage and must succeed on a Wisdom save or have disadvantage on their next attack.
+________________
+
+
+Progression Milestones (Level 6, 10, 14, 18)
+At each milestone, the player chooses one Soul Memory Enhancement:
+Memory Enhancements:
+                        * Defender’s Legacy: Gains +1 AC and +10 HP
+                        * Warrior’s Form: Proficiency with a martial weapon of the Bonewright’s choice
+                        * Scholar’s Echo: Can cast Guidance or Spare the Dying at will (no concentration)
+                        * Emotional Tether: If the Bonewright is reduced to 0 HP, the Vinculatum may act independently for 1 minute
+                        * Sacrificial Link (Level 10+): Once per day, when the Bonewright would be reduced to 0 HP, the Vinculatum takes the damage instead
+                        * Lingering Purpose (Level 14+): If slain, the Vinculatum fights on for 1 round with ghostly form (resistance to all damage)
+                        * Living Memory (Level 18): It gains +2 to all mental stats (INT, WIS, CHA) and can speak fluently in full sentences
+
+
+
+________________
+
+
+Voressai Vinculatum Mortuum – Hungering Husk
+Philosophy of the Voressai
+The Voressai believe that undeath is not a mockery of life, but a metamorphosis of need. Their creations are driven by instinctive hunger, fueled by rot, pain, and consumption. These Bonewrights may speak of rot as sacred and hunger as a path to spiritual wholeness, though their methods are feared even among other Bonewrights.
+Their Vinculatum Mortuum, the Hungering Husk, is an unholy predator—part corpse, part contagion.
+________________
+
+
+Voressai Vinculatum – “Hungering Husk”
+Base Traits (Level 3)
+                           * Type: Undead (Monstrosity), Chaotic Neutral or Unaligned
+                           * Size: Medium
+                           * AC: 13 (decayed armor plating)
+                           * HP: 4d10 + Adept’s Constitution modifier × Adept level (~28 HP)
+                           * Speed: 30 ft.
+                           * STR 14 / DEX 12 / CON 16 / INT 5 / WIS 10 / CHA 6
+                           * Saving Throws: CON +3, STR +2
+                           * Damage Resistances: Necrotic, Poison; Bludgeoning from non-magical weapons
+                           * Condition Immunities: Poisoned, Charmed, Exhaustion
+                           * Senses: Darkvision 60 ft., Scent 30 ft., Passive Perception 10
+                           * Languages: Understands its creator; cannot speak
+
+________________
+
+
+Features
+Rotting Touch (Natural Weapon)
+Melee Weapon Attack: +4 to hit, reach 5 ft., 1 target.
+Hit: 1d8 + STR modifier necrotic damage. The target must succeed on a Constitution save (DC = 8 + proficiency + CON modifier) or have their speed reduced by 10 ft. until the start of their next turn.
+Gnawing Hunger (1/rest)
+As a bonus action, the Vinculatum may enter a feeding frenzy for 1 minute:
+                              * Gains temporary HP equal to half the damage dealt by its melee attacks.
+                              * While frenzied, it cannot take the Dodge or Help actions.
+                              * Ends early if reduced to 0 HP or commanded to stop.
+
+Toxic Persistence
+The Vinculatum does not decay and regenerates minor damage passively. It regains 1 HP per minute outside of combat (no concentration required).
+________________
+
+
+Voressai Evolution Enhancements (Levels 6, 10, 14, 18)
+                                 * Acidic Claws – Rotting Touch now deals an additional 1d4 acid damage.
+                                 * Vile Resilience – Gains resistance to radiant damage. If it is healed by necrotic energy, it heals 50% more.
+                                 * Burrowing Maw (Level 10+) – May attack prone or grappled enemies with advantage. On a hit, it deals an additional 2d6 necrotic damage once per turn.
+                                 * Grave Miasma (Level 14+) – Creatures that hit the Vinculatum with melee attacks take 1d4 poison damage.
+                                 * Corpse Bloom (Level 18) – When reduced to 0 HP, the Vinculatum explodes in a 10-ft. radius cloud of spores. All creatures in the area must make a CON save or take 4d6 necrotic and 2d6 poison damage (half on success). 
+________________
+Choralum Vinculatum Mortuum – Reliquary Warden
+Philosophy of the Choralum
+To the Choralum, death is not to be feared—it is to be honored. The dead should stand in service to legacy, to harmony, to continuity. Their Vinculatum Mortuum is not simply a creature, but a living monument: crafted, adorned, often armored, and sometimes even inscribed with verse. These constructs blend craftsmanship, liturgy, and ancestral memory.
+Their Vinculatum is ritual-bound, semi-articulated, and protective, often holding a relic fragment or engraving of its own past.
+Resonant Echo (Flavor Trait):
+“The Warden instinctively hums or moans in harmony when exposed to music, chants, or singing—a solemn, involuntary echo that deepens as the melody persists. Scholars argue whether this is a vestige of soul-memory or a sacred resonance encoded by the Choralum.”
+________________
+
+
+Choralum Vinculatum – “Reliquary Warden”
+Base Traits (Level 3)
+                                    * Type: Undead (Constructed), Lawful Neutral
+                                    * Size: Medium
+                                    * AC: 16 (reinforced reliquary plating)
+                                    * HP: 4d10 + Adept’s Intelligence modifier × Adept level (~26 HP)
+                                    * Speed: 25 ft.
+                                    * STR 12 / DEX 10 / CON 14 / INT 12 / WIS 10 / CHA 8
+                                    * Saving Throws: INT +2, CON +2
+                                    * Damage Resistances: Necrotic, Radiant, Slashing from non-magical weapons
+                                    * Condition Immunities: Charmed, Frightened, Exhaustion
+                                    * Senses: Darkvision 60 ft., Passive Perception 10
+                                    * Languages: Understands all languages known by the Adept; cannot speak (but can sing via resonant tones)
+
+________________
+
+
+Features
+Liturgical Shield (1/rest)
+As a reaction, when the Bonewright is hit by an attack, the Vinculatum can raise a spectral ward, reducing the damage by 1d10 + its INT modifier.
+Sacred Anchor
+While the Vinculatum is within 10 ft. of the Bonewright, the Adept has advantage on saves against being frightened or charmed. Allies within 5 ft. of the Warden gain +1 to Wisdom saves.
+Relic Core
+The Warden holds a relic or memorial token in its core. If it is reduced to 0 HP, the Bonewright may choose to preserve the relic, allowing it to be rebuilt with 25% less time and materials.
+________________
+
+
+Choralum Evolution Enhancements (Levels 6, 10, 14, 18)
+                                       * Resonant Ward: The Warden gains the Sanctuary spell as an innate ability once per long rest.
+                                       * Sacred Inscription: Choose one damage type (Radiant, Fire, Cold, or Lightning). The Warden gains resistance to that damage type and emits soft light in a 10-ft. radius.
+                                       * Hymn of Denial (Level 10+): When the Warden is destroyed, it explodes in a chime of forceful rebuke. All enemies within 10 ft. must make a CON save or be pushed 10 ft. and take 2d10 force damage.
+                                       * Aura of Remembrance (Level 14+): Allies within 10 ft. of the Warden may reroll failed Death Saving Throws once per long rest.
+                                       * Living Chorus (Level 18): The Warden may project a sacred hymn. For 1 minute (1/day), allies within 15 ft. gain +1 AC and resistance to necrotic and psychic damage. Cannot be used while the Warden is destroyed.
+Shroudhymn Vinculatum Mortuum – Veilbound Shade
+
+
+The Shade is an incorporeal, invisible spirit that haunts the Bonewright Adept. It grows in presence and power over time, becoming more capable of manifesting in the physical world. Its abilities focus on spiritual perception, protective intervention, and subtle influence.
+
+
+Base Traits (Level 3)
+- Type:Undead (Incorporeal, Invisible by default)
+- AC:13 + the Adept’s Wisdom modifier (minimum 1)
+- HP:Equal to 5 + 5 per Bonewright Adept level
+- Speed:30 ft. (hover)
+- Damage Resistances:Necrotic, Radiant, Non-magical B/P/S
+- Condition Immunities:Grappled, Prone, Restrained
+- Senses:Darkvision 60 ft., Spirit Sense (see below)
+- Languages:Understands the Adept’s known languages, but does not speak.
+
+
+Manifestation Rules
+The Shade is invisible and incorporeal at all times unless manifested. The Adept may manifest the Shade as a bonus action, making it visible and capable of interacting with the physical world for a limited time.
+- Manifestation Time (per long rest):1 minute at level 3, increasing with class level.
+- While manifested, the Shade can use its active abilities and take physical actions (such as providing Help, blocking, etc.).
+
+
+Abilities
+
+
+Phantom Intercession (1/rest): 
+When the Adept is targeted by a melee or ranged weapon attack, the Shade can use its reaction to impose disadvantage on the roll or grant resistance to the attack’s damage. This requires the Shade to be manifested, or the Adept may trigger a 1-round manifestation as part of the reaction.
+
+
+Wail of Lament (1/rest): 
+While manifested, the Shade may release a haunting wail. Each creature of the Shade’s choice within 15 feet that can hear it must make a Wisdom saving throw (DC = 8 + Adept’s Proficiency + Wisdom mod) or be frightened until the end of their next turn. This ability immediately reveals the Shade.
+
+
+Ghostsense: 
+The Shade can sense the presence of celestials, fiends, undead, or lingering souls within 60 feet, even while not manifested. The Adept receives brief impressions or whispered thoughts from the Shade when such presences are near.
+
+
+Spell Intercession (1/long rest): 
+When the Bonewright Adept is targeted by a spell that affects only a single creature, the Veilbound Shade may use its reaction to become the new target. The spell is redirected to the Shade, and the Adept is unaffected. This choice must be made before any attack roll or saving throw is resolved. For this effect, the Shade is treated as a valid target regardless of its normal creature type or incorporeal state, unless the spell explicitly cannot affect undead.
+
+
+Flickerstep (Level 6): 
+When the Shade uses the Help action, it may teleport up to 10 feet immediately after, even through small barriers. This can occur even during brief manifestations.
+
+
+Banish the Unbidden (Level 10): 
+Once per day, while manifested, the Shade may attempt to banish a summoned creature. The target must succeed on a Charisma saving throw (DC 8 + Proficiency + Wis mod) or be instantly dismissed to its home plane.
+
+
+Echoed Wisdom (Level 14): 
+The Adept gains proficiency (or expertise if already proficient) in one Wisdom-based skill of choice. This represents the Shade’s growing ability to share knowledge and insight from beyond.
+
+
+Veil Unbroken (Level 18): 
+If the Adept is reduced to 0 HP while the Shade is active, the Shade may sacrifice itself to restore the Adept to 1 HP instead. The Shade vanishes and cannot be resummoned until after a long rest.

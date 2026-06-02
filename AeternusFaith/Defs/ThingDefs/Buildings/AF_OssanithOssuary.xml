@@ -8,7 +8,7 @@
     <thingClass>Building</thingClass>
     <category>Building</category>
     <graphicData>
-      <texPath>Things/RitualCircles/AF_OssanithCircle</texPath>
+      <texPath>Things/RitualRooms/OssanithRitualRoom/AF_OssanithCircle</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(3,3)</drawSize>
     </graphicData>
@@ -58,7 +58,7 @@
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
       </li>
       <li Class="AeternusFaith.CompProperties_BonewrightAnointment">
-        <commandIconPath>Things/RitualCircles/AF_OssanithCircle</commandIconPath>
+        <commandIconPath>Things/RitualRooms/OssanithRitualRoom/AF_OssanithCircle</commandIconPath>
       </li>
     </comps>
   </ThingDef>
@@ -121,8 +121,8 @@
 
   <ThingDef ParentName="BuildingBase">
     <defName>AF_OssanithLectern</defName>
-    <label>ossanith lectern</label>
-    <description>A ceremonial lectern used by the Ossanith Bonewrights for sacred rites, funerary observances, and solemn sermons honoring memory, death, and the stewardship of the departed.</description>
+    <label>bonewright lectern</label>
+    <description>A ceremonial lectern used by Bonewrights for cathedra rites. It recognizes adjacent ritual circles and exposes the rites appropriate to each circle.</description>
 
     <thingClass>Building</thingClass>
     <category>Building</category>
@@ -195,9 +195,59 @@
 
       <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
         <circleDef>AF_OssanithCircle</circleDef>
-        <commandLabel>Raise skeleton</commandLabel>
-        <commandDescription>Begin an Ossanith rite to raise a corpse as a skeleton. Requires an orthogonally adjacent Ossanith circle.</commandDescription>
-        <commandIconPath>Things/RitualCircles/AF_OssanithCircle</commandIconPath>
+        <commandLabel>Animate Ossanith Skeleton</commandLabel>
+        <commandDescription>Begin an Ossanith rite to animate a corpse as an Ossanith Skeleton. Requires an orthogonally adjacent Ossanith circle.</commandDescription>
+        <commandIconPath>Things/RitualRooms/OssanithRitualRoom/AF_OssanithCircle</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
+        <circleDef>AF_AnimaraRitualCenter</circleDef>
+        <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
+        <commandLabel>Begin animara ossuary rite</commandLabel>
+        <commandDescription>Begin an Animara ossuary rite. Requires an orthogonally adjacent Animara ritual center with a completed ossuary in its center.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
+        <circleDef>AF_AnimaraRitualCenter</circleDef>
+        <commandLabel>Animate Echobound Revenant</commandLabel>
+        <commandDescription>Begin an Animara rite to animate a corpse as an Echobound Revenant. Requires an orthogonally adjacent Animara ritual center.</commandDescription>
+        <commandIconPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_center</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
+        <circleDef>AF_ChoralumCircle</circleDef>
+        <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
+        <commandLabel>Begin choralum ossuary rite</commandLabel>
+        <commandDescription>Begin a Choralum ossuary rite. Requires an orthogonally adjacent Choralum circle with a completed ossuary in its center.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.CompProperties_ChoralumWardenRitual">
+        <circleDef>AF_ChoralumCircle</circleDef>
+        <armorDefs>
+          <li>Apparel_PlateArmor</li>
+          <li>Apparel_FlakVest</li>
+          <li>Apparel_FlakJacket</li>
+        </armorDefs>
+        <commandLabel>Animate Reliquary Warden</commandLabel>
+        <commandDescription>Begin a Choralum rite to animate a corpse and suit of armor as a Reliquary Warden. Requires plate armor or flak armor near the circle.</commandDescription>
+        <commandIconPath>Things/RitualRooms/ChoralumRitualRoom/Choralum_Ritual_center</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
+        <circleDef>AF_ShroudhymnRitualCenter</circleDef>
+        <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
+        <commandLabel>Begin Shroudhymn ossuary rite</commandLabel>
+        <commandDescription>Begin a Shroudhymn ossuary rite. Requires an orthogonally adjacent Shroudhymn ritual center with a completed ossuary in its center.</commandDescription>
+        <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+      </li>
+
+      <li Class="AeternusFaith.Undead.Spectral.CompProperties_SummonSpectre">
+        <circleDef>AF_ShroudhymnRitualCenter</circleDef>
+        <commandLabel>Animate Veilbound Shade</commandLabel>
+        <commandDescription>Begin a Shroudhymn rite to animate a corpse as a Veilbound Shade at the adjacent ritual center.</commandDescription>
+        <commandIconPath>Things/RitualRooms/ShroudhymnRitualRoom/Shroudhymn_Ritual_center</commandIconPath>
       </li>
     </comps>
 

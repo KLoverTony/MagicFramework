@@ -25,9 +25,33 @@
     </lifeStages>
   </PawnKindDef>
 
+  <PawnKindDef ParentName="BasePlayerPawnKind">
+    <defName>AF_ReliquaryWarden</defName>
+    <label>reliquary warden</label>
+    <race>AF_ReliquaryWardenRace</race>
+    <defaultFactionDef>PlayerColony</defaultFactionDef>
+    <combatPower>85</combatPower>
+    <isFighter>true</isFighter>
+    <nameMaker>NamerAnimalGenericMale</nameMaker>
+    <nameMakerFemale>NamerAnimalGenericFemale</nameMakerFemale>
+    <apparelMoney>0~0</apparelMoney>
+    <apparelAllowHeadgearChance>0</apparelAllowHeadgearChance>
+    <chemicalAddictionChance>0</chemicalAddictionChance>
+    <destroyGearOnDrop>true</destroyGearOnDrop>
+    <canStrip>false</canStrip>
+    <initialResistanceRange>0~0</initialResistanceRange>
+    <initialWillRange>0~0</initialWillRange>
+    <lifeStages>
+      <li>
+        <label>reliquary warden</label>
+        <labelPlural>reliquary wardens</labelPlural>
+      </li>
+    </lifeStages>
+  </PawnKindDef>
+
   <PawnKindDef>
     <defName>AF_Spectre</defName>
-    <label>spectre</label>
+    <label>veilbound shade</label>
     <race>AF_SpectreRace</race>
     <combatPower>0</combatPower>
     <isFighter>false</isFighter>
@@ -42,8 +66,8 @@
     <initialWillRange>0~0</initialWillRange>
     <lifeStages>
       <li>
-        <label>spectre</label>
-        <labelPlural>spectres</labelPlural>
+        <label>veilbound shade</label>
+        <labelPlural>veilbound shades</labelPlural>
       </li>
     </lifeStages>
   </PawnKindDef>

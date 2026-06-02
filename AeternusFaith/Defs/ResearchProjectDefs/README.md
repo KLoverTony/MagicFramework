@@ -1,6 +1,6 @@
 # Research Notes
 
-Research can gate material systems without overexplaining mysteries.
+Research can gate material systems without overexplaining mysteries. The live tree currently enters directly through Ossanith Traditions; a generic Faith Rituals gate is intentionally omitted until it has a real gameplay purpose.
 
 Possible projects:
 

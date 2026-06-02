@@ -1,6 +1,6 @@
 # Spikecore Floor Notes
 
-Spikecore plates define Bonewright ritual room identity and hidden spiritual condition.
+Spikecore plates can define Bonewright ritual room identity and hidden spiritual condition in a later presentation pass. RC1 should stay focused on simple ritual circles; expanded custom tiles and decorative buildings can wait until players need richer rooms.
 
 Planned variants:
 

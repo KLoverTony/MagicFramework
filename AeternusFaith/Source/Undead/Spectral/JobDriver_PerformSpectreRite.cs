@@ -64,7 +64,7 @@ namespace AeternusFaith.Undead.Spectral
             Corpse corpse = Corpse;
             if (corpse == null || corpse.Destroyed)
             {
-                Messages.Message("The spectre rite could not find the selected corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("The animation rite could not find the selected corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
                 EndJobWith(JobCondition.Incompletable);
                 return;
             }
@@ -101,7 +101,7 @@ namespace AeternusFaith.Undead.Spectral
         {
             if (!BonewrightUtility.IsBonewright(pawn))
             {
-                Messages.Message("Only a Bonewright can complete the spectre rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("Only a Bonewright can complete the animation rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace AeternusFaith.Undead.Spectral
             SpectralEntity spirit = Comp_SummonSpectre.ManifestSpectre(Map, Lectern, Circle, sourcePawn, sourceName, sourceIdeo, pawn);
             PawnSoulRiteUtility.NotifySpiritManifested(sourcePawn, spirit?.id, permanent: true);
             ReleaseAttendees();
-            Messages.Message(corpseLabel + " manifests as a spectre.", Circle, MessageTypeDefOf.PositiveEvent, historical: false);
+            Messages.Message(corpseLabel + " manifests as a veilbound shade.", Circle, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
         private void ReleaseAttendees()

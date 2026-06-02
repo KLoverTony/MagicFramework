@@ -128,6 +128,7 @@ Current state:
 - MFVanilla's temporary `MFV_Skeleton` has a verified master-bound combat-minion profile.
 - AeternusFaith's `AF_SkeletonRace` has a verified autonomous servant profile.
 - AeternusFaith's `AF_SpectreRace` now has a spectral lifecycle profile layered around its existing Shroudhymn manifestation system: no needs, no gear, no work, guest/non-draftable control, active-spirit soul policy, and AF spectral marker hediffs.
+- AeternusFaith now has a reusable `UndeadPawnFactory` that generates AF lifecycle-authored undead pawn kinds from a clean humanlike template and applies lifecycle enforcement, source ideology, optional source backstories/skills, race markers, xenotypes, and appearance in one path. Existing `AF_Skeleton` and `AF_Spectre` generation now route through this factory, while their old conversion helpers remain compatibility wrappers.
 - Recovery, death cleanup, soul contracts, deeper duration/upkeep policies, and advanced interaction policies are still early or definition/query-only.
 
 Behavioral qualities to model:
@@ -170,8 +171,9 @@ Iteration slices:
 4. AeternusFaith skeleton migration and smoke test. - verified as selectable autonomous servant, not draftable
 5. AeternusFaith spectre migration and smoke test. - lifecycle profile added; needs in-game Shroudhymn rite/debug manifestation smoke test
 6. MFVanilla skeleton/necromancy decision and migration if approved. - `MFV_Skeleton` converted and verified as temporary master-bound combat minion
-7. Construct/flesh-golem profile pass after undead migration is stable.
-8. Advanced identity pass for revenants, liches, pseudo-relationship memory, and phylactery-style reform.
+7. Generic AF undead pawn factory for skeleton/spectre generation and future close variants. - initial `UndeadPawnFactory` added; current skeleton and spectre paths route through it
+8. Construct/flesh-golem profile pass after undead migration is stable.
+9. Advanced identity pass for revenants, liches, pseudo-relationship memory, and phylactery-style reform.
 
 Success criteria:
 - content mods can author new undead or constructs by choosing explicit lifecycle policies instead of copying cleanup code

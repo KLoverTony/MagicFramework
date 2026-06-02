@@ -121,54 +121,22 @@ namespace AeternusFaith
 
         public static void ConvertPawnToSkeleton(Pawn pawn, PawnKindDef skeletonKindDef, string name = "skeleton", bool resetSkills = true)
         {
-            if (pawn == null || skeletonKindDef?.race == null)
-                return;
-
-            pawn.def = skeletonKindDef.race;
-            pawn.kindDef = skeletonKindDef;
-            pawn.gender = Gender.Male;
-            if (!name.NullOrEmpty())
-                pawn.Name = new NameSingle(name);
-
-            ResetPawnRenderer(pawn);
-            NormalizeSkeletonLifeStage(pawn);
-            EnsureUndeadCleanupComp(pawn);
-            ApplySkeletonAppearance(pawn);
-            RemoveLivingResurrectionHediffs(pawn);
-            EnforceUndeadState(pawn, resetSkills);
-            EnsureFrameworkLifecycleComp(pawn);
-            RemoveNonUndeadHediffs(pawn);
-            ApplyRaceBasedUndeadHediffs(pawn);
-            ApplyRaceBasedUndeadXenotype(pawn);
-            SuppressUndeadSocialInteractions(pawn);
-            ResetPawnRenderer(pawn);
-            TryInitializeRenderer(pawn);
+            UndeadPawnFactory.ConvertPawn(pawn, skeletonKindDef, new UndeadPawnCreationOptions
+            {
+                fixedGender = Gender.Male,
+                label = name,
+                resetSkills = resetSkills
+            });
         }
 
         public static void ConvertPawnToSpectre(Pawn pawn, PawnKindDef spectreKindDef, string name = "spectre", bool resetSkills = true)
         {
-            if (pawn == null || spectreKindDef?.race == null)
-                return;
-
-            pawn.def = spectreKindDef.race;
-            pawn.kindDef = spectreKindDef;
-            pawn.gender = Gender.Male;
-            if (!name.NullOrEmpty())
-                pawn.Name = new NameSingle(name);
-
-            ResetPawnRenderer(pawn);
-            NormalizeSkeletonLifeStage(pawn);
-            EnsureUndeadCleanupComp(pawn);
-            ApplySpectreAppearance(pawn);
-            RemoveLivingResurrectionHediffs(pawn);
-            EnforceUndeadState(pawn, resetSkills);
-            EnsureFrameworkLifecycleComp(pawn);
-            RemoveNonUndeadHediffs(pawn);
-            ApplyRaceBasedUndeadHediffs(pawn);
-            ApplyRaceBasedUndeadXenotype(pawn);
-            SuppressUndeadSocialInteractions(pawn);
-            ResetPawnRenderer(pawn);
-            TryInitializeRenderer(pawn);
+            UndeadPawnFactory.ConvertPawn(pawn, spectreKindDef, new UndeadPawnCreationOptions
+            {
+                fixedGender = Gender.Male,
+                label = name,
+                resetSkills = resetSkills
+            });
         }
 
         public static void RepairUndeadRenderingState(Pawn pawn)
@@ -178,9 +146,14 @@ namespace AeternusFaith
 
             pawn.gender = Gender.Male;
 
-            if (pawn.def?.defName == "AF_SkeletonRace")
+            PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+            if (extension?.bodyForm == PawnLifecycleBodyForm.Skeletal || pawn.def?.defName == "AF_SkeletonRace")
             {
                 ApplySkeletonAppearance(pawn);
+            }
+            else if (extension?.bodyForm == PawnLifecycleBodyForm.Spectral || pawn.def?.defName == "AF_SpectreRace")
+            {
+                ApplySpectreAppearance(pawn);
             }
 
             ResetPawnRenderer(pawn);
@@ -260,6 +233,11 @@ namespace AeternusFaith
                 "AF_SpectralForm",
                 "AF_SpectralLimitations"
             };
+            foreach (HediffDef markerHediff in PawnLifecycleUtility.MarkerHediffs(pawn))
+            {
+                if (markerHediff != null)
+                    preservedHediffDefNames.Add(markerHediff.defName);
+            }
 
             List<Hediff> hediffs = new List<Hediff>(pawn.health.hediffSet.hediffs);
             foreach (Hediff hediff in hediffs)
@@ -288,8 +266,7 @@ namespace AeternusFaith
 
         public static bool IsUndeadRace(Pawn pawn)
         {
-            string defName = pawn?.def?.defName;
-            return defName == "AF_SkeletonRace" || defName == "AF_SpectreRace";
+            return PawnLifecycleUtility.IsUndead(pawn);
         }
 
         public static bool ShouldSuppressSocialInteraction(Pawn initiator, Pawn recipient)
@@ -447,8 +424,7 @@ namespace AeternusFaith
 
         public static void NormalizeSkeletonLifeStage(Pawn pawn)
         {
-            if (pawn?.ageTracker == null ||
-                (pawn.def?.defName != "AF_SkeletonRace" && pawn.def?.defName != "AF_SpectreRace"))
+            if (pawn?.ageTracker == null || !PawnLifecycleUtility.HasLifecycle(pawn))
                 return;
 
             pawn.ageTracker.AgeBiologicalTicks = (long)DefaultUndeadBiologicalAgeYears * GenDate.TicksPerYear;

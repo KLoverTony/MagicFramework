@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
@@ -7,23 +6,25 @@ using Verse.AI;
 
 namespace AeternusFaith
 {
-    public class JobDriver_PerformSkeletonRite : JobDriver
+    public class JobDriver_PerformChoralumWardenRite : JobDriver
     {
         private const TargetIndex CorpseInd = TargetIndex.A;
         private const TargetIndex LecternInd = TargetIndex.B;
         private const TargetIndex CircleInd = TargetIndex.C;
-        private const int DefaultRitualTicks = 900;
+        private const int DefaultRitualTicks = 1000;
 
         private Corpse Corpse => job.GetTarget(CorpseInd).Thing as Corpse;
         private Thing Lectern => job.GetTarget(LecternInd).Thing;
         private Thing Circle => job.GetTarget(CircleInd).Thing;
+        private Thing Armor => job.targetQueueB != null && job.targetQueueB.Count > 0 ? job.targetQueueB[0].Thing : null;
         private IntVec3 CircleCell => job.GetTarget(CircleInd).Cell;
 
         public override bool TryMakePreToilReservations(bool errorOnFailed)
         {
             return pawn.Reserve(job.GetTarget(CorpseInd), job, errorOnFailed: errorOnFailed) &&
                    pawn.Reserve(job.GetTarget(LecternInd), job, errorOnFailed: errorOnFailed) &&
-                   pawn.Reserve(job.GetTarget(CircleInd), job, errorOnFailed: errorOnFailed);
+                   pawn.Reserve(job.GetTarget(CircleInd), job, errorOnFailed: errorOnFailed) &&
+                   (Armor == null || pawn.Reserve(Armor, job, errorOnFailed: errorOnFailed));
         }
 
         protected override IEnumerable<Toil> MakeNewToils()
@@ -31,12 +32,12 @@ namespace AeternusFaith
             this.FailOnDestroyedOrNull(CorpseInd);
             this.FailOnDestroyedOrNull(LecternInd);
             this.FailOnDestroyedOrNull(CircleInd);
+            this.FailOn(() => Armor == null || Armor.Destroyed);
             this.FailOn(() => !BonewrightUtility.IsBonewright(pawn));
 
             yield return Toils_Reserve.Reserve(CorpseInd);
             yield return Toils_Reserve.Reserve(LecternInd);
             yield return Toils_Reserve.Reserve(CircleInd);
-
             Toil postPickup = Toils_General.Label();
             yield return Toils_Jump.JumpIf(postPickup, () => pawn.carryTracker.CarriedThing == Corpse);
 
@@ -64,7 +65,7 @@ namespace AeternusFaith
             Corpse corpse = Corpse;
             if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
-                Messages.Message("The skeleton rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("The Choralum animation rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
                 EndJobWith(JobCondition.Incompletable);
                 return;
             }
@@ -101,14 +102,21 @@ namespace AeternusFaith
         {
             if (!BonewrightUtility.IsBonewright(pawn))
             {
-                Messages.Message("Only a Bonewright can complete the skeleton rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("Only a Bonewright can complete the animation rite.", pawn, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
             Corpse corpse = Corpse ?? FindPlacedCorpseNearCircle();
             if (!RitualCorpseEligibilityUtility.IsValidHumanlikeMortalCorpse(corpse, Map))
             {
-                Messages.Message("The skeleton rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
+                Messages.Message("The Choralum animation rite requires a humanlike mortal corpse.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
+            Thing armor = Armor;
+            if (armor == null || armor.Destroyed)
+            {
+                Messages.Message("The Choralum animation rite requires intact plate or flak armor.", Lectern ?? Circle, MessageTypeDefOf.RejectInput, historical: false);
                 return;
             }
 
@@ -120,57 +128,60 @@ namespace AeternusFaith
             IntVec3 spawnCell = ResolveSpawnCell(corpse.Position);
 
             PawnSoulRiteUtility.NotifyCorpseConsumedWithoutBindingSoul(sourcePawn, corpse, pawn);
-            Pawn skeleton = CreateSkeletonPawn(corpse, sourcePawn, sourceName, sourceGender, sourceIdeo);
-            if (skeleton == null)
+            Pawn warden = CreateWardenPawn(corpse, sourcePawn, sourceName, sourceGender, sourceIdeo);
+            if (!armor.Destroyed)
+                armor.Destroy(DestroyMode.Vanish);
+
+            if (warden == null)
             {
-                Messages.Message("The skeleton rite consumed " + corpseLabel + ", but no skeleton could be raised.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
+                Messages.Message("The Choralum rite consumed " + corpseLabel + ", but no Reliquary Warden could be animated.", Lectern ?? Circle, MessageTypeDefOf.NegativeEvent, historical: false);
                 ReleaseAttendees();
                 return;
             }
 
-            if (!skeleton.Spawned)
-                GenSpawn.Spawn(skeleton, spawnCell, Map);
-            if (skeleton.Faction != Faction.OfPlayer)
-                skeleton.SetFaction(Faction.OfPlayer);
+            if (!warden.Spawned)
+                GenSpawn.Spawn(warden, spawnCell, Map);
+            if (warden.Faction != Faction.OfPlayer)
+                warden.SetFaction(Faction.OfPlayer);
 
             ReleaseAttendees();
-            Messages.Message(corpseLabel + " rises as a skeleton.", skeleton, MessageTypeDefOf.PositiveEvent, historical: false);
+            Messages.Message(corpseLabel + " rises as a Reliquary Warden.", warden, MessageTypeDefOf.PositiveEvent, historical: false);
         }
 
-        private Pawn CreateSkeletonPawn(Corpse corpse, Pawn sourcePawn, string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
+        private Pawn CreateWardenPawn(Corpse corpse, Pawn sourcePawn, string sourceName, Gender sourceGender, Ideo sourceIdeo = null)
         {
-            PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_Skeleton");
+            PawnKindDef pawnKindDef = DefDatabase<PawnKindDef>.GetNamedSilentFail("AF_ReliquaryWarden");
             if (pawnKindDef == null)
             {
-                Log.Error("AeternusFaith skeleton rite could not find PawnKindDef AF_Skeleton.");
+                Log.Error("AeternusFaith Choralum rite could not find PawnKindDef AF_ReliquaryWarden.");
                 return null;
             }
 
             if (corpse != null && !corpse.Destroyed)
                 corpse.Destroy(DestroyMode.Vanish);
 
-            Pawn skeleton = UndeadPawnFactory.GeneratePawn(pawnKindDef, new UndeadPawnCreationOptions
+            Pawn warden = UndeadPawnFactory.GeneratePawn(pawnKindDef, new UndeadPawnCreationOptions
             {
                 faction = Faction.OfPlayer,
                 context = PawnGenerationContext.NonPlayer,
                 tile = Map.Tile,
                 fixedGender = sourceGender,
-                label = "Skeleton of " + sourceName,
+                label = "Reliquary Warden of " + sourceName,
                 sourcePawn = sourcePawn,
                 sourceIdeo = sourceIdeo,
                 resetSkills = true,
                 forceNoBackstory = false
             });
-            if (skeleton == null)
+            if (warden == null)
                 return null;
 
-            skeleton.Name = new NameTriple("", "Skeleton of " + sourceName, "");
-            Log.Message("[AeternusFaith] Raised skeleton conversion result: def=" + skeleton.def?.defName +
-                        ", kindDef=" + skeleton.kindDef?.defName +
-                        ", xenotype=" + (ModsConfig.BiotechActive ? skeleton.genes?.Xenotype?.defName : "BiotechInactive") +
-                        ", undead=" + SkeletonUndeadUtility.IsUndead(skeleton) +
-                        ", skeletal=" + SkeletonUndeadUtility.IsSkeletonUndead(skeleton));
-            return skeleton;
+            warden.Name = new NameTriple("", "Reliquary Warden of " + sourceName, "");
+            Log.Message("[AeternusFaith] Reliquary Warden conversion result: def=" + warden.def?.defName +
+                        ", kindDef=" + warden.kindDef?.defName +
+                        ", xenotype=" + (ModsConfig.BiotechActive ? warden.genes?.Xenotype?.defName : "BiotechInactive") +
+                        ", undead=" + SkeletonUndeadUtility.IsUndead(warden) +
+                        ", skeletal=" + SkeletonUndeadUtility.IsSkeletonUndead(warden));
+            return warden;
         }
 
         private string ResolveSourceName(Corpse corpse)

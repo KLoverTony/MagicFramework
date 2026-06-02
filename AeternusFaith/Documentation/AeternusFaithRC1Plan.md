@@ -118,6 +118,25 @@ Malevolent hauntings:
 
 ## Cathedrae And Undead Families
 
+## Ritual Circle Undead Roster
+
+The ritual-circle undead roster should stay small and readable. Each cathedra gets one signature summoned undead for the first complete pass, even if the implementation initially reuses shared lifecycle code or placeholder art.
+
+| Cathedra | Ritual undead | Form | Mind and agency | Primary role | Work expectation |
+| --- | --- | --- | --- | --- | --- |
+| Ossanith | Ossanith Skeleton | Dumb skeletal summon | No returned identity; a corpse-husk animated under discipline | Protects its master and serves as a reliable body-undead | Mundane chores only |
+| Animara | Echobound Revenant | Skeletal undead with retained echoes | Limited intellect and fragments of memory or purpose | Protects its master while feeling like a remembered duty rather than a simple tool | Simple tasks; more capable than an Ossanith Skeleton, but not a normal colonist |
+| Choralum | Reliquary Warden | Armored skeletal undead | Stable, solemn, monument-like obedience rather than personal identity | Protects its master and acts as a durable ceremonial guardian | Mundane tasks only |
+| Shroudhymn | Veilbound Shade | Spirit undead | Some intellect, oath-bound, and mostly unable to affect the physical world | Watches, haunts, guards, or harms living hostiles through limited spectral means | Essentially no physical work |
+| Voressai | Hungering Husk | Fleshy undead | Controlled by its master, instinctive, hungry, and poor at complex judgment | Dangerous body-undead that can be directed rather than trusted | Mundane tasks only when actively controlled |
+
+Implementation implications:
+- The existing `AF_Skeleton` remains the Ossanith baseline unless renamed later for presentation.
+- Animara should stop borrowing the Ossanith skeleton rite as its final identity; its target summon is the Echobound Revenant.
+- Choralum needs a distinct Reliquary Warden pawn kind/race or at least a lifecycle-authored skeleton variant with armored presentation.
+- Shroudhymn's current spectre implementation is the closest foundation for the Veilbound Shade, but the label, description, and interaction limits should be aligned with this roster.
+- Voressai should use the same generator foundation eventually, but its control/work rules likely need an explicit "only useful when directed" policy rather than ordinary autonomous labor.
+
 ### Ossanith
 
 Doctrine:

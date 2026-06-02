@@ -37,47 +37,19 @@ namespace AeternusFaith
     {
         public static bool Prefix(ref PawnGenerationRequest request, ref Pawn __result)
         {
-            string requestedKindDefName = request.KindDef?.defName;
-            if (requestedKindDefName != "AF_Skeleton" && requestedKindDefName != "AF_Spectre")
+            if (!UndeadPawnFactory.CanHandleKind(request.KindDef))
                 return true;
 
-            PawnKindDef undeadKindDef = request.KindDef;
-            PawnGenerationRequest baseRequest = new PawnGenerationRequest(
-                kind: PawnKindDefOf.Colonist,
-                faction: request.Faction ?? Faction.OfPlayer,
-                context: request.Context,
-                tile: request.Tile,
-                forceGenerateNewPawn: true,
-                allowDead: false,
-                allowDowned: false,
-                canGeneratePawnRelations: false,
-                mustBeCapableOfViolence: false,
-                colonistRelationChanceFactor: 0f,
-                allowPregnant: false,
-                allowFood: false,
-                allowAddictions: false,
-                fixedGender: Gender.Male,
-                forceNoIdeo: true,
-                forceNoBackstory: true,
-                developmentalStages: DevelopmentalStage.Adult,
-                dontGiveWeapon: true,
-                maximumAgeTraits: 0,
-                minimumAgeTraits: 0,
-                forceNoGear: true);
-
-            Pawn pawn = PawnGenerator.GeneratePawn(baseRequest);
-            if (pawn == null)
+            __result = UndeadPawnFactory.GeneratePawn(request.KindDef, new UndeadPawnCreationOptions
             {
-                __result = null;
-                return false;
-            }
-
-            if (requestedKindDefName == "AF_Spectre")
-                SkeletonUndeadUtility.ConvertPawnToSpectre(pawn, undeadKindDef);
-            else
-                SkeletonUndeadUtility.ConvertPawnToSkeleton(pawn, undeadKindDef);
-
-            __result = pawn;
+                faction = request.Faction ?? Faction.OfPlayer,
+                context = request.Context,
+                tile = request.Tile,
+                fixedGender = Gender.Male,
+                label = request.KindDef.label,
+                resetSkills = true,
+                forceNoBackstory = true
+            });
             return false;
         }
     }

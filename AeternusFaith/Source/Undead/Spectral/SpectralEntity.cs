@@ -348,51 +348,26 @@ namespace AeternusFaith.Undead.Spectral
                     return;
                 }
 
-                PawnGenerationRequest request = new PawnGenerationRequest(
-                    kind: PawnKindDefOf.Colonist,
-                    faction: null,
-                    context: PawnGenerationContext.NonPlayer,
-                    tile: CurrentMap.Tile,
-                    forceGenerateNewPawn: true,
-                    allowDead: false,
-                    allowDowned: false,
-                    canGeneratePawnRelations: false,
-                    mustBeCapableOfViolence: false,
-                    colonistRelationChanceFactor: 0f,
-                    forceNoBackstory: true,
-                    allowPregnant: false,
-                    allowFood: false,
-                    allowAddictions: false,
-                    fixedGender: Gender.Male,
-                    forceNoIdeo: true,
-                    developmentalStages: DevelopmentalStage.Adult,
-                    dontGiveWeapon: true,
-                    maximumAgeTraits: 0,
-                    minimumAgeTraits: 0,
-                    forceNoGear: true);
-                cachedPawn = PawnGenerator.GeneratePawn(request);
-                cachedPawn.def = spectreKind.race;
-                cachedPawn.kindDef = spectreKind;
-                SkeletonUndeadUtility.NormalizeSkeletonLifeStage(cachedPawn);
-                SkeletonUndeadUtility.EnsureUndeadCleanupComp(cachedPawn);
-                cachedPawn.Name = new NameTriple("", label, "");
-
-                if (ModsConfig.IdeologyActive && cachedPawn.ideo != null)
+                cachedPawn = UndeadPawnFactory.GeneratePawn(spectreKind, new UndeadPawnCreationOptions
                 {
-                    Ideo ideoToApply = sourceIdeo ?? Faction.OfPlayer?.ideos?.PrimaryIdeo;
-                    if (ideoToApply != null)
-                        cachedPawn.ideo.SetIdeo(ideoToApply);
+                    faction = null,
+                    context = PawnGenerationContext.NonPlayer,
+                    tile = CurrentMap.Tile,
+                    fixedGender = Gender.Male,
+                    label = label,
+                    sourcePawn = sourcePawn,
+                    sourceIdeo = sourceIdeo,
+                    resetSkills = true,
+                    copyBackstories = true,
+                    copySkills = true,
+                    forceNoBackstory = true
+                });
+                if (cachedPawn == null)
+                {
+                    Log.Error("[AeternusFaith] Could not manifest a spectre because pawn generation failed.");
+                    return;
                 }
 
-                SkeletonUndeadUtility.EnforceUndeadState(cachedPawn, resetSkills: true);
-                SkeletonUndeadUtility.EnsureFrameworkLifecycleComp(cachedPawn);
-                SkeletonUndeadUtility.CopyBackstoriesFromSource(sourcePawn, cachedPawn);
-                SkeletonUndeadUtility.CopySkillsFromSource(sourcePawn, cachedPawn);
-                SkeletonUndeadUtility.RemoveNonUndeadHediffs(cachedPawn);
-                SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(cachedPawn);
-                SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(cachedPawn);
-                SkeletonUndeadUtility.SuppressUndeadSocialInteractions(cachedPawn);
-                SkeletonUndeadUtility.ApplySpectreAppearance(cachedPawn);
                 cachedPawn.Name = new NameTriple("", label, "");
                 Log.Message("[AeternusFaith] Manifested spectre conversion result: def=" + cachedPawn.def?.defName +
                             ", kindDef=" + cachedPawn.kindDef?.defName +
