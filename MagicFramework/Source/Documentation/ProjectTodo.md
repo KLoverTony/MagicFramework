@@ -37,7 +37,9 @@ Playtest status:
 - Arcane apprenticeship now works in game after replacing the brittle global-tick XP check with accumulated apprenticeship time; multiple apprentices can learn from the same mentor.
 - Scroll availability and scaled scroll prices are rolled out as a QoL correction to spell acquisition pacing.
 - AeternusFaith manifested spirits now smoke test correctly as non-player guest pawns: they remain unmanageable, non-hostile, save/load safely, and clean up through the tested lifecycle paths.
-- AeternusFaith skeleton, ossuary, and spectre ritual dialogs now surface specific invalid-state messages for corpse validity, Bonewright requirements, reachability, reservations, missing ritual targets, and already-bound spectres.
+- AeternusFaith ritual dialogs now surface specific invalid-state messages for corpse validity, Bonewright requirements, reachability, reservations, missing ritual targets, missing armor, and already-bound shades.
+- The universal Bonewright lectern now reads adjacent ritual circles, filters out irrelevant ritual gizmos, and shows one disabled fallback gizmo when no supported circle is adjacent.
+- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested: it consumes a corpse plus nearby plate/flak armor and creates a tougher armored skeletal guardian through the shared undead factory.
 - Arcane Cache has been confirmed in normal gameplay around day 45, including event arrival and expected completion.
 - Deep Iron Golem has been dev tested and produced a strong boss fight.
 - Automata are working fairly well in current testing.
@@ -68,9 +70,9 @@ AeternusFaith RC1 validation slice: make the first public faith/ritual surface r
 Primary target: MF-039 AeternusFaith first-edition release candidate.
 
 - Bonewright anointment: smoke test circle command, popup selection, Soulwarden bootstrap, membership cap behavior, save/load, and rite gating.
-- Ritual dialogs: validate skeleton, ossuary, shade-calling, and Bonewright anointment setup flows, including wrong corpse, missing target, non-Bonewright conductor, reachability, reservation, and already-bound shade messages.
+- Ritual dialogs: continue collecting follow-up details from live smoke tests, especially universal lectern filtering, wrong corpse, missing target, missing armor, non-Bonewright conductor, reachability, reservation, and already-bound shade messages.
 - Veilbound Shade lifecycle: smoke test Shroudhymn rite-bound shades and debug manifestation with the shared lifecycle profile: guest/non-draftable control, manifest/unmanifest, save/load while manifested, death/downing, map removal, and cleanup.
-- Cathedra surface: keep RC1 focused on simple ritual circles and one signature undead target per cathedra: Ossanith Skeleton, Echobound Revenant, Reliquary Warden, Veilbound Shade, and Hungering Husk. Decide RC1 player-facing exposure per summon instead of expanding ritual rooms.
+- Cathedra surface: Ossanith Skeleton, Reliquary Warden, and Veilbound Shade have working player-facing rites through the universal Bonewright lectern. Next content slice is making Animara's Echobound Revenant a real undead variant instead of a borrowed skeleton-path label.
 - Ideology and package review: check memes, precepts, roles, apparel, research gates, starting ideology/preset, build availability, metadata, preview/icon assets, dependencies, assembly output, XML load, local deployment, and release notes.
 - Scope guard: defer pseudo-relationship memory, custom ritual-room tiles, decorative building sets, custom wall auto-joining, full Choralum aura/guardian suites, and full Voressai hostile ecosystems unless they become necessary for RC1 coherence.
 
@@ -138,8 +140,8 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Run the Bonewright anointment smoke pass: circle command, popup selection, Soulwarden bootstrap, cap behavior, save/load, and rite gating.
-2. Smoke test skeleton, ossuary, spectre, and Bonewright anointment dialogs for invalid-state readability and small-resolution layout.
-3. Smoke test Shroudhymn rite-bound Veilbound Shades through manifestation, save/load while manifested, death/downing, map removal, cleanup, and lifecycle inspect/debug readouts.
-4. Define the first implementation slice for the cathedra undead roster: keep the Ossanith Skeleton stable, replace Animara's borrowed skeleton identity with the Echobound Revenant, align Shroudhymn spectres toward Veilbound Shades, and decide whether Reliquary Wardens and Hungering Husks are player-facing, dev-facing, or documented-only for RC1.
+1. Implement the Animara Echobound Revenant as a real undead pawn kind/race/lifecycle variant instead of reusing the Ossanith skeleton result.
+2. Smoke test the universal Bonewright lectern in continued play: no-circle fallback, one-circle filtering, multi-circle filtering, missing ossuary, missing Choralum armor, and invalid conductor/corpse states.
+3. Continue Reliquary Warden validation: armor consumption, corpse/soul cleanup, save/load, downing/death, work restrictions, and combat durability against Ossanith Skeleton expectations.
+4. Smoke test Shroudhymn rite-bound Veilbound Shades through manifestation, save/load while manifested, death/downing, map removal, cleanup, and lifecycle inspect/debug readouts.
 5. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.

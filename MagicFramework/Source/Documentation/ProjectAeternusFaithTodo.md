@@ -18,6 +18,8 @@ Current implemented baseline:
 - Veilbound Shades use the existing spectre think tree/jobgiver foundation, keeping them inactive most of the time with occasional movement near their anchor or summoner.
 - Manifested Veilbound Shades now behave as non-player guest pawns rather than player-managed allied pawns; smoke testing confirmed ownership/control expectations, save/load, death/downing, map removal, and cleanup behavior.
 - AF skeleton and shade pawn creation now route through a reusable undead pawn factory, so future close variants can share template generation, lifecycle enforcement, source ideology/identity transfer, race markers, xenotypes, and appearance setup instead of copying the old skeleton/spectre conversion path.
+- The universal Bonewright lectern now exposes rites based on adjacent supported ritual circles, hides irrelevant ritual gizmos, and shows one disabled fallback gizmo when no supported circle is adjacent.
+- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested. It requires a humanlike corpse plus nearby plate/flak armor, consumes both, and creates `AF_ReliquaryWarden`, a tougher armored skeletal undead than the Ossanith Skeleton.
 - Bonewright membership now exists as `AF_BonewrightOssanithInitiate`. Existing ritual circles/centers expose a Bonewright anointment popup, and Soulwardens or existing Bonewrights can anoint new initiates.
 - Ossuary, skeleton, and shade-calling rite conductors must be anointed Bonewrights.
 - Skeleton, ossuary, and shade-calling ritual setup now reports specific invalid-state reasons for wrong corpse, non-Bonewright conductors, reachability, reservations, missing targets, and already-bound shades.
@@ -26,8 +28,8 @@ Current implemented baseline:
 First-edition emphasis:
 - Ossanith skeleton and ossuary loops should be reliable and understandable.
 - Shroudhymn Veilbound Shade content should be stable enough that it does not leave stale pawns, spectral state, or player confusion. Rite-bound shades are currently persistent; natural hauntings are the first model for intermittent manifestation.
-- Animara should move toward the Echobound Revenant: a skeletal undead with limited intellect, retained echoes, master protection, and simple-task ability. Deep pseudo-relationship memory can remain follow-up unless it becomes necessary for this first summon.
-- Choralum should move toward the Reliquary Warden: an armored skeletal guardian that protects its master and performs mundane tasks before deeper guardian/aura mechanics.
+- Animara is the next undead implementation slice: turn `Animate Echobound Revenant` from a borrowed skeleton-path label into a real pawn kind/race/lifecycle variant with limited intellect, retained echoes, master protection, and simple-task ability.
+- Choralum now has its first player-facing summon through the Reliquary Warden. Deeper Choralum guardian/aura mechanics remain follow-up.
 - Shroudhymn should align its spectre foundation with the Veilbound Shade: an oath-bound spirit with some intellect, very little physical agency, and limited ability to harm living hostiles.
 - Voressai should move toward the Hungering Husk: a fleshy, controlled undead that is dangerous and poor at complex work, with mundane tasks available only when directed.
 - Bonewright role requirements should make ritual access feel intentional rather than arbitrary. The Soulwarden is now the order office/initiator, while Bonewright membership is the actual ritual-access marker.
@@ -36,9 +38,9 @@ Current RC1 priorities, in order:
 1. Smoke-test the Bonewright anointment loop: circle command, popup selection, Soulwarden bootstrap, cap behavior, save/load, and rite gating.
 2. Stabilize the existing undead and spirit lifecycle under normal play: spectre guest ownership/control, manifest/unmanifest, load while manifested, clear map, pawn death/downing, and debug cleanup have passed smoke testing; keep resurrection/source-soul edge cases under observation.
 3. Smoke-test ritual invalid-state messaging in the setup dialogs and start-job rejection paths, especially "not a Bonewright", "cannot reserve", "cannot reach", "wrong corpse", "missing circle", and "already bound".
-4. Finish the cathedra circle surface around simple ritual circles: confirm Ossanith, Animara, Shroudhymn are functional; add or stub Choralum and Voressai ritual centers if they are not yet player-facing.
-5. Define the first summon implementation for each cathedra in small, generator-backed slices: Ossanith Skeleton, Echobound Revenant, Reliquary Warden, Veilbound Shade, and Hungering Husk.
-6. Decide which of the non-Ossanith summons are RC1 player-facing and which remain documented or dev-facing until their lifecycle/control rules feel good.
+4. Continue smoke testing the universal Bonewright lectern and simple ritual circles, especially filtered gizmos, fallback reasons, missing-ingredient states, and save/load behavior.
+5. Implement the Echobound Revenant as the next generator-backed undead slice.
+6. Decide whether Voressai's Hungering Husk is player-facing, dev-facing, or documented-only for RC1 after Animara is stable.
 7. Review ideology completeness: memes, precepts, roles, apparel, research gates, starting ideology/preset, and build availability.
 8. Packaging and release hygiene: `About.xml`, dependencies, preview/icon assets, assembly output, XML load, local deployment, and Workshop/GitHub packaging expectations.
 

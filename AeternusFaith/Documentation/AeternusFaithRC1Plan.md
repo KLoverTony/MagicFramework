@@ -133,7 +133,7 @@ The ritual-circle undead roster should stay small and readable. Each cathedra ge
 Implementation implications:
 - The existing `AF_Skeleton` remains the Ossanith baseline unless renamed later for presentation.
 - Animara should stop borrowing the Ossanith skeleton rite as its final identity; its target summon is the Echobound Revenant.
-- Choralum needs a distinct Reliquary Warden pawn kind/race or at least a lifecycle-authored skeleton variant with armored presentation.
+- Choralum now has a distinct Reliquary Warden pawn kind/race and a player-facing animation rite requiring a corpse plus plate/flak armor.
 - Shroudhymn's current spectre implementation is the closest foundation for the Veilbound Shade, but the label, description, and interaction limits should be aligned with this roster.
 - Voressai should use the same generator foundation eventually, but its control/work rules likely need an explicit "only useful when directed" policy rather than ordinary autonomous labor.
 
@@ -211,7 +211,7 @@ Likely undead family:
 
 RC1 target:
 - define the circle and one ritual
-- likely first ritual should stabilize or soothe a soul/spirit rather than create a complex new pawn type
+- first implemented ritual is `Animate Reliquary Warden`, an armored skeletal guardian rite using a corpse plus plate/flak armor
 - deeper guardian/aura mechanics can follow after the soul system is stable
 
 ### Shroudhymn
