@@ -43,6 +43,7 @@ Playtest status:
 - AeternusFaith bound undead now use a one-minion-per-Bonewright rule across the current animation rites. Bound minions follow drafted masters through the lifecycle escort loop, attack hostiles near their drafted master, and can be dismissed through an Ossanith burial rite that fills an ossuary bone box.
 - Animara's `Animate Echobound Revenant` rite now has a real first-pass pawn kind/race/job path instead of borrowing the Ossanith skeleton result. It creates a skeletal limited-labor revenant through the shared undead factory, blocks complex work such as crafting/art/medicine/research, and copies a reduced practical skill echo from the source pawn.
 - Master death/destruction now has a validated lost-undead behavior for current bound undead: `AF_BoundUndeadMinion` stores the master binding, shows the bound/failing state as a hediff marker, starts a short grace timer when the master dies or is destroyed, then renames the minion to its cathedra lost form, clears the binding, and begins attacking nearby living pawns.
+- AeternusFaith undead now project a standardized `Unnerving aura` onto nearby living non-Bonewright pawns. The debuff lingers for several hours, excludes undead and Bonewrights, and has a stronger tier for Veilbound Shades and the future Voressai Hungering Husk.
 - Arcane Cache has been confirmed in normal gameplay around day 45, including event arrival and expected completion.
 - Deep Iron Golem has been dev tested and produced a strong boss fight.
 - Automata are working fairly well in current testing.
@@ -144,9 +145,10 @@ Consideration backlog:
 ## Recommended Next Work
 
 1. Tune and smoke test the Animara Echobound Revenant: reduced source-skill echoes, allowed limited labor, combat response, save/load, death/downing, dismissal, and whether its limited intellect feels distinct from the Ossanith Skeleton.
-2. Smoke test Shroudhymn rite-bound Veilbound Shades through reduced source-skill echoes, manifestation, save/load while manifested, death/downing, map removal, cleanup, combat/hostility edge cases, and lifecycle inspect/debug readouts.
+2. Smoke test Shroudhymn rite-bound Veilbound Shades through reduced source-skill echoes, stronger unnerving aura, manifestation, save/load while manifested, death/downing, map removal, cleanup, combat/hostility edge cases, and lifecycle inspect/debug readouts.
 3. Continue Reliquary Warden validation: reduced source-skill echoes, armor consumption, corpse/soul cleanup, save/load, downing/death, limited-labor restrictions, and combat durability against Ossanith Skeleton expectations.
 4. Smoke test the universal Bonewright lectern in continued play: no-circle fallback, one-circle filtering, multi-circle filtering, missing ossuary, missing Choralum armor, and invalid conductor/corpse states.
 5. Run regression checks on completed bound-undead rules: one minion per Bonewright, rejection messaging on additional animation rites, drafted-master follow/defense, dismissal filling an ossuary bone box, and lost-undead conversion after master death/destruction.
-6. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
-7. Decide the next content boundary: either keep RC1 in validation/package mode, or add one small post-foundation undead/presentation improvement only if it clearly improves first-edition coherence.
+6. Smoke test undead aura behavior: ordinary undead mood effect, stronger shade effect, several-hour duration, refresh behavior, and exemptions for undead and Bonewright pawns.
+7. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
+8. Decide the next content boundary: either keep RC1 in validation/package mode, or add one small post-foundation undead/presentation improvement only if it clearly improves first-edition coherence.

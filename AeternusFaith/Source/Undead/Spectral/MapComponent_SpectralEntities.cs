@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AeternusFaith;
+using MagicFramework.PawnLifecycle;
 using MagicFramework.PawnMemory;
 using RimWorld;
 using Verse;
@@ -10,14 +11,15 @@ namespace AeternusFaith.Undead.Spectral
     public class MapComponent_SpectralEntities : MapComponent
     {
         private const int HauntingBridgeIntervalTicks = 2500;
-        private const int SpectralAuraIntervalTicks = 250;
-        private const float SpectralAuraRadius = 6f;
+        private const int UndeadAuraIntervalTicks = 250;
+        private const float UndeadAuraRadius = 6f;
 
         public List<SpectralEntity> spirits = new List<SpectralEntity>();
         private List<SpectralLightFlicker> lightFlickers = new List<SpectralLightFlicker>();
         private int nextHauntingBridgeTick;
-        private int nextSpectralAuraTick;
-        private HediffDef eerieColdHediffDef;
+        private int nextUndeadAuraTick;
+        private ThoughtDef unnervingAuraThoughtDef;
+        private ThoughtDef strongUnnervingAuraThoughtDef;
 
         public MapComponent_SpectralEntities(Map map) : base(map)
         {
@@ -33,10 +35,10 @@ namespace AeternusFaith.Undead.Spectral
                 nextHauntingBridgeTick = Find.TickManager.TicksGame + HauntingBridgeIntervalTicks;
             }
 
-            if (Find.TickManager.TicksGame >= nextSpectralAuraTick)
+            if (Find.TickManager.TicksGame >= nextUndeadAuraTick)
             {
-                ApplyManifestedSpectreAuras();
-                nextSpectralAuraTick = Find.TickManager.TicksGame + SpectralAuraIntervalTicks;
+                ApplyUndeadAuras();
+                nextUndeadAuraTick = Find.TickManager.TicksGame + UndeadAuraIntervalTicks;
             }
             
             for (int i = spirits.Count - 1; i >= 0; i--)
@@ -83,51 +85,75 @@ namespace AeternusFaith.Undead.Spectral
             }
         }
 
-        private void ApplyManifestedSpectreAuras()
+        private void ApplyUndeadAuras()
         {
-            if (spirits.Count == 0 || map?.mapPawns == null)
+            if (map?.mapPawns?.AllPawnsSpawned == null)
                 return;
 
-            eerieColdHediffDef ??= DefDatabase<HediffDef>.GetNamedSilentFail("AF_EerieCold");
-            if (eerieColdHediffDef == null)
+            unnervingAuraThoughtDef ??= DefDatabase<ThoughtDef>.GetNamedSilentFail("AF_UnnervingAuraThought");
+            strongUnnervingAuraThoughtDef ??= DefDatabase<ThoughtDef>.GetNamedSilentFail("AF_StrongUnnervingAuraThought");
+            if (unnervingAuraThoughtDef == null || strongUnnervingAuraThoughtDef == null)
                 return;
 
-            foreach (SpectralEntity spirit in spirits)
+            foreach (Pawn undead in map.mapPawns.AllPawnsSpawned)
             {
-                Pawn spectre = spirit?.cachedPawn;
-                if (spirit?.state != SpectralState.Manifesting || spectre?.Spawned != true)
+                if (!IsUndeadAuraSource(undead))
                     continue;
 
+                float severity = AuraSeverityFor(undead);
                 foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
                 {
-                    if (!CanReceiveSpectralAura(pawn, spectre))
+                    if (!CanReceiveUndeadAura(pawn, undead))
                         continue;
 
-                    ApplyOrRefreshAuraHediff(pawn, spirit.IsRestless);
+                    ApplyOrRefreshAuraThought(pawn, severity);
                 }
             }
         }
 
-        private bool CanReceiveSpectralAura(Pawn pawn, Pawn spectre)
+        private bool IsUndeadAuraSource(Pawn pawn)
         {
             return pawn != null &&
-                   pawn != spectre &&
+                   pawn.Spawned &&
+                   !pawn.Dead &&
+                   (SkeletonUndeadUtility.IsUndead(pawn) || PawnLifecycleUtility.IsUndead(pawn));
+        }
+
+        private bool CanReceiveUndeadAura(Pawn pawn, Pawn undead)
+        {
+            return pawn != null &&
+                   pawn != undead &&
                    pawn.Spawned &&
                    !pawn.Dead &&
                    pawn.RaceProps?.Humanlike == true &&
                    !SkeletonUndeadUtility.IsUndead(pawn) &&
-                   pawn.Position.InHorDistOf(spectre.Position, SpectralAuraRadius);
+                   !PawnLifecycleUtility.IsUndead(pawn) &&
+                   !BonewrightUtility.IsBonewright(pawn) &&
+                   pawn.Position.InHorDistOf(undead.Position, UndeadAuraRadius);
         }
 
-        private void ApplyOrRefreshAuraHediff(Pawn pawn, bool restless)
+        private float AuraSeverityFor(Pawn undead)
         {
-            Hediff existing = pawn.health?.hediffSet?.GetFirstHediffOfDef(eerieColdHediffDef);
-            if (existing != null)
-                pawn.health.RemoveHediff(existing);
+            string defName = undead?.def?.defName;
+            if (defName == "AF_SpectreRace" || defName == "AF_HungeringHuskRace")
+                return 2f;
 
-            Hediff hediff = HediffMaker.MakeHediff(eerieColdHediffDef, pawn);
-            hediff.Severity = restless ? 2f : 1f;
-            pawn.health.AddHediff(hediff);
+            return 1f;
+        }
+
+        private void ApplyOrRefreshAuraThought(Pawn pawn, float severity)
+        {
+            MemoryThoughtHandler memories = pawn.needs?.mood?.thoughts?.memories;
+            if (memories == null)
+                return;
+
+            ThoughtDef appliedThoughtDef = severity >= 2f ? strongUnnervingAuraThoughtDef : unnervingAuraThoughtDef;
+            if (appliedThoughtDef == unnervingAuraThoughtDef && memories.GetFirstMemoryOfDef(strongUnnervingAuraThoughtDef) != null)
+                return;
+
+            memories.RemoveMemoriesOfDef(unnervingAuraThoughtDef);
+            memories.RemoveMemoriesOfDef(strongUnnervingAuraThoughtDef);
+            memories.TryGainMemory(appliedThoughtDef);
         }
 
         public void AddSpirit(SpectralEntity spirit)

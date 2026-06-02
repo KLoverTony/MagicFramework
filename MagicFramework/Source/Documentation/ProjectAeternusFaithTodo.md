@@ -38,6 +38,7 @@ First-edition emphasis:
 - Voressai should move toward the Hungering Husk: a fleshy, controlled undead that is dangerous and poor at complex work, with mundane tasks available only when directed.
 - Master death/destruction should not leave bound undead as ordinary servants. Absence is acceptable, but if the master is truly gone the minion should enter a delayed instability window and eventually become a lost undead if not resolved: Hollowborn, Fractured Echobound, Wailwright, Errant Soul, or Void Drifter depending on cathedra.
 - First-pass lost-undead behavior is implemented for current bound undead. When the master dies or is destroyed, the minion starts a grace timer; if unresolved, it is renamed to its lost form, unbound, and begins rampaging against nearby living pawns.
+- Spawned undead now project `AF_UnnervingAura` onto nearby living non-Bonewright pawns. Ordinary undead apply the lower severity, while Veilbound Shades and the planned Hungering Husk use the stronger severity. The effect lingers for several hours and excludes undead and anointed Bonewrights.
 - Bonewright role requirements should make ritual access feel intentional rather than arbitrary. The Soulwarden is now the order office/initiator, while Bonewright membership is the actual ritual-access marker.
 
 Current RC1 priorities, in order:
@@ -48,9 +49,10 @@ Current RC1 priorities, in order:
 5. Continue smoke testing the universal Bonewright lectern and simple ritual circles, especially filtered gizmos, fallback reasons, missing-ingredient states, and save/load behavior.
 6. Smoke test and tune the Echobound Revenant as the newest generator-backed undead slice, especially reduced skill echoes and limited-labor work restrictions.
 7. Regression-test master-loss/lost-undead behavior so death/destruction of a Bonewright continues to produce a readable consequence instead of leaving normal obedient minions behind.
-8. Decide whether Voressai's Hungering Husk is player-facing, dev-facing, or documented-only for RC1 after Animara is stable.
-9. Review ideology completeness: memes, precepts, roles, apparel, research gates, starting ideology/preset, and build availability.
-10. Packaging and release hygiene: `About.xml`, dependencies, preview/icon assets, assembly output, XML load, local deployment, and Workshop/GitHub packaging expectations.
+8. Smoke test unnerving aura behavior: ordinary undead severity, stronger Veilbound Shade severity, several-hour duration, refresh near undead, and exemptions for undead and Bonewrights.
+9. Decide whether Voressai's Hungering Husk is player-facing, dev-facing, or documented-only for RC1 after Animara is stable.
+10. Review ideology completeness: memes, precepts, roles, apparel, research gates, starting ideology/preset, and build availability.
+11. Packaging and release hygiene: `About.xml`, dependencies, preview/icon assets, assembly output, XML load, local deployment, and Workshop/GitHub packaging expectations.
 
 Intentionally paused:
 - Haunting resolution, exorcism, or release of active hauntings should not be a simple cleanup action. Leave this design open until the haunting-response plan is more satisfying.

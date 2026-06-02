@@ -111,7 +111,7 @@ Manifesting:
 - natural haunting spirits should manifest on pseudo-random, deterministic save-stable schedules and then return to not-manifesting
 - Shroudhymn rite-created spectres are persistent manifestations by default; they should not fade merely because a manifestation timer elapsed
 - Shroudhymn rite-created spectres are bound to their summoner, and a summoner may maintain only one such rite-bound spectre at a time.
-- manifested spirits project an unsettling aura onto nearby living pawns; the baseline implementation is a short-lived `AF_EerieCold` hediff that drives a mild mood thought and falls off after the pawn leaves the spirit's presence
+- spawned undead project an unsettling aura onto nearby living pawns through `AF_UnnervingAura`; undead and Bonewrights are exempt, and Veilbound Shades plus future Hungering Husks use a stronger severity tier
 
 Malevolent hauntings:
 - should usually be event-driven or corruption-driven
@@ -165,6 +165,7 @@ Implementation implications:
 - The bound-minion hediff is the source of truth for visible binding and lost-undead conversion; the lifecycle comp remains the control/follow behavior surface.
 - Intelligence tiers currently map to work tiers: mindless/minimal undead use mundane servant labor; task-bound undead use limited labor; spectral undead use no-work manifestation.
 - Reduced practical skill echoes currently copy only combat, construction, and mining at half strength, and intentionally exclude complex skills such as artistic, crafting, medicine, and research.
+- Undead aura is standardized through `AF_UnnervingAura`: ordinary undead apply the lower severity, while Veilbound Shades and the planned Hungering Husk apply the stronger severity. The debuff lingers for several hours and does not affect undead or anointed Bonewrights.
 
 ### Ossanith
 
@@ -407,6 +408,7 @@ RC1 should favor simple, conservative answers over ambitious mechanics.
 - Bound minions follow drafted masters, attack hostiles near drafted masters, and save/load their master binding.
 - Bound minions show `AF_BoundUndeadMinion`, preserve their master binding, and enter a delayed visible instability countdown when the master dies or is destroyed.
 - Lost undead conversion clears the binding, renames the pawn to the cathedra lost form, turns hostile, and attacks nearby living pawns.
+- Undead aura applies to nearby living non-Bonewright pawns, refreshes while they remain near undead, and uses the stronger tier for Veilbound Shades.
 - Ossanith dismissal destroys the bound minion, fills an ossuary bone box, and does not leave stale minion jobs or lifecycle ownership.
 - Shroudhymn temporary spirit can manifest, unmanifest, save/load, and clean up.
 - Non-manifesting spirits can exist without visible pawn clutter.

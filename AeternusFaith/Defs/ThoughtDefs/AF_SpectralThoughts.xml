@@ -16,6 +16,34 @@
   </ThoughtDef>
 
   <ThoughtDef>
+    <defName>AF_UnnervingAuraThought</defName>
+    <durationDays>0.125</durationDays>
+    <stackLimit>1</stackLimit>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>unnerved by undead</label>
+        <description>The presence of undeath still lingers nearby.</description>
+        <baseMoodEffect>-4</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
+    <defName>AF_StrongUnnervingAuraThought</defName>
+    <durationDays>0.125</durationDays>
+    <stackLimit>1</stackLimit>
+    <developmentalStageFilter>Baby, Child, Adult</developmentalStageFilter>
+    <stages>
+      <li>
+        <label>deeply unnerved by undead</label>
+        <description>A powerful undead presence has left this pawn shaken.</description>
+        <baseMoodEffect>-8</baseMoodEffect>
+      </li>
+    </stages>
+  </ThoughtDef>
+
+  <ThoughtDef>
     <defName>AF_SpectreVisitedLovedOne</defName>
     <durationDays>1.5</durationDays>
     <stackLimit>1</stackLimit>

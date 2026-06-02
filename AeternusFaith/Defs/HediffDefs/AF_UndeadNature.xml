@@ -110,6 +110,31 @@
   </HediffDef>
 
   <HediffDef>
+    <defName>AF_UnnervingAura</defName>
+    <label>unnerving aura</label>
+    <description>The presence of undeath clings to this pawn, leaving a lingering dread much like the memory of a corpse.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>true</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <defaultLabelColor>(0.55, 0.55, 0.65)</defaultLabelColor>
+    <stages>
+      <li>
+        <label>unnerved</label>
+        <minSeverity>0</minSeverity>
+      </li>
+      <li>
+        <label>deeply unnerved</label>
+        <minSeverity>2</minSeverity>
+      </li>
+    </stages>
+    <comps>
+      <li Class="HediffCompProperties_Disappears">
+        <disappearsAfterTicks>7500</disappearsAfterTicks>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
     <defName>AF_BoundUndeadMinion</defName>
     <label>bound undead minion</label>
     <description>This animated undead is bound to a Bonewright master. If that master dies or is destroyed, the binding will fail after a short delay.</description>
