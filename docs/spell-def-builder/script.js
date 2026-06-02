@@ -1004,11 +1004,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return result;
     }
 
-    function updatePreview() {
+    function updatePreview(renderInspectorPanel = true) {
         const state = getState();
         updateFieldVisibility(state);
         patternHint.textContent = state.pattern.hint;
-        renderAdvancedWorkflow(state);
+        renderAdvancedWorkflow(state, renderInspectorPanel);
         humanSummary.innerHTML = buildSummary(state);
         xmlPreview.innerHTML = highlightXml(buildXml(state));
     }
@@ -1167,7 +1167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootActionType.innerHTML = options;
     }
 
-    function renderAdvancedWorkflow(state) {
+    function renderAdvancedWorkflow(state, renderInspectorPanel = true) {
         if (currentMode === 'advanced' && !advancedActions.length) {
             advancedActions = buildGeneratedActionTree(state);
             selectedActionId = selectedActionId || firstActionId(advancedActions);
@@ -1182,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', () => {
         actionTree.innerHTML = advancedActions.length
             ? advancedActions.map(node => renderActionNode(node)).join('')
             : '<div class="slot-empty">No root actions yet.</div>';
-        renderActionInspector();
+        if (renderInspectorPanel) renderActionInspector();
         renderValidation(state);
     }
 
@@ -1348,7 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const field = actionTypes[found.node.type].fields.find(item => item.key === input.dataset.actionField);
         if (!field) return;
         found.node.fields[field.key] = parseFieldValue(input, field);
-        markAdvancedDirty();
+        markAdvancedDirty(false);
     }
 
     function handleInspectorClick(event) {
@@ -1408,7 +1408,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!found) return;
         if (!found.node.query) found.node.query = defaultQuery();
         found.node.query[input.dataset.queryField] = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? parseNumber(input.value) : input.value);
-        markAdvancedDirty();
+        markAdvancedDirty(false);
     }
 
     function removeAction(id) {
@@ -1435,9 +1435,9 @@ document.addEventListener('DOMContentLoaded', () => {
         markAdvancedDirty();
     }
 
-    function markAdvancedDirty() {
+    function markAdvancedDirty(renderInspectorPanel = true) {
         advancedDirty = true;
-        updatePreview();
+        updatePreview(renderInspectorPanel);
     }
 
     function renderValidation(state) {
