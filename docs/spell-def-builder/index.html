@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MagicFramework SpellForge</title>
+    <title>MagicFramework SpellForge v2</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -11,8 +11,11 @@
     <header class="app-header">
         <div class="header-content">
             <div class="title-area">
-                <h1>SpellForge</h1>
-                <p>Pattern-first MagicFramework spell authoring</p>
+                <div class="title-line">
+                    <h1>SpellForge</h1>
+                    <span class="version-badge">v2</span>
+                </div>
+                <p>Pattern-first MagicFramework spell authoring with advanced action-tree control</p>
             </div>
             <div class="header-actions">
                 <a class="btn btn-secondary" href="../spell-design-guide/index.html">Guide</a>
@@ -23,8 +26,14 @@
 
     <main class="app-container">
         <section class="composer-panel glass-panel">
+            <nav class="workspace-tabs" aria-label="SpellForge authoring sections">
+                <button type="button" class="workspace-tab active" data-builder-tab="spell">Spell</button>
+                <button type="button" class="workspace-tab" data-builder-tab="targeting">Targeting</button>
+                <button type="button" class="workspace-tab" data-builder-tab="actions">Actions</button>
+                <button type="button" class="workspace-tab" data-builder-tab="progression">Costs & Learning</button>
+            </nav>
             <form id="spell-form">
-                <section class="builder-section">
+                <section class="builder-section" data-tab-panel="spell">
                     <div class="section-title">
                         <span class="section-number">1</span>
                         <div>
@@ -33,31 +42,9 @@
                         </div>
                     </div>
                     <div id="patternGrid" class="pattern-grid" aria-label="Spell patterns"></div>
-                    <div class="resource-strip" aria-label="Author resources">
-                        <a href="../spell-design-guide/index.html#first-direct-spell-minor-heal" target="_blank" rel="noopener noreferrer">
-                            <span>First Spell</span>
-                            <strong>Minor Heal</strong>
-                            <small>Direct target, mana, cooldown, and immediate healing.</small>
-                        </a>
-                        <a href="../spell-design-guide/index.html#first-projectile-spell-ember-bolt" target="_blank" rel="noopener noreferrer">
-                            <span>Projectile</span>
-                            <strong>Ember Bolt</strong>
-                            <small>Launch now, apply payloads on impact.</small>
-                        </a>
-                        <a href="../spell-design-guide/index.html#spelldef-anatomy">
-                            <span>Reference</span>
-                            <strong>SpellDef Anatomy</strong>
-                            <small>Top-level fields and what they control.</small>
-                        </a>
-                        <a href="../spell-design-guide/index.html#quick-reference">
-                            <span>Quickref</span>
-                            <strong>Parameters</strong>
-                            <small>Valid values for targeting, actions, scaling, and lifecycle.</small>
-                        </a>
-                    </div>
                 </section>
 
-                <section class="builder-section">
+                <section class="builder-section" data-tab-panel="spell">
                     <div class="section-title">
                         <span class="section-number">2</span>
                         <div>
@@ -95,7 +82,7 @@
                     </div>
                 </section>
 
-                <section class="builder-section">
+                <section class="builder-section" data-tab-panel="targeting">
                     <div class="section-title">
                         <span class="section-number">3</span>
                         <div>
@@ -173,23 +160,74 @@
                             <input type="text" id="projectileDef" value="MF_FireboltProjectile">
                         </div>
                     </div>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="includePawns" checked> Pawns</label>
-                        <label><input type="checkbox" id="includeBuildings"> Buildings</label>
-                        <label><input type="checkbox" id="includeItems"> Items</label>
-                        <label><input type="checkbox" id="allowSelfTarget"> Self target</label>
-                        <label><input type="checkbox" id="useCasterAsTarget"> Use caster as target</label>
-                        <label><input type="checkbox" id="requireLineOfSight" checked> Line of sight</label>
-                        <label><input type="checkbox" id="requireStandableCell"> Standable cell</label>
-                        <label><input type="checkbox" id="requireWalkableCell"> Walkable cell</label>
-                        <label><input type="checkbox" id="requireWaterCell"> Water cell</label>
-                        <label><input type="checkbox" id="requireResurrectableCorpse"> Resurrectable corpse</label>
+                    <div class="targeting-options">
+                        <fieldset class="targeting-option-group">
+                            <legend>
+                                Target Categories
+                                <span class="info-tip" tabindex="0" aria-label="Target categories decide which thing types can be selected or affected. They do not validate terrain by themselves.">i</span>
+                            </legend>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="includePawns" checked> Pawns</label>
+                                <label><input type="checkbox" id="includeBuildings"> Buildings</label>
+                                <label><input type="checkbox" id="includeItems"> Items</label>
+                            </div>
+                            <small class="targeting-note">Choose which thing categories may be selected or affected.</small>
+                        </fieldset>
+                        <fieldset class="targeting-option-group">
+                            <legend>
+                                Selection Rules
+                                <span class="info-tip" tabindex="0" aria-label="Selection rules change how the initial target is chosen. Self target permits selecting the caster pawn; use caster as target skips normal target picking.">i</span>
+                            </legend>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="allowSelfTarget"> Self target</label>
+                                <label><input type="checkbox" id="useCasterAsTarget"> Use caster as target</label>
+                                <label><input type="checkbox" id="requireLineOfSight" checked> Line of sight</label>
+                            </div>
+                            <small class="targeting-note">Use caster as target skips ordinary target picking for self-centered spells.</small>
+                        </fieldset>
+                        <fieldset class="targeting-option-group">
+                            <legend>
+                                Cell Requirements
+                                <span class="info-tip" tabindex="0" aria-label="Cell requirements validate the target location. If more than one is enabled, all selected terrain gates must pass.">i</span>
+                            </legend>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="requireStandableCell"> Standable cell</label>
+                                <label><input type="checkbox" id="requireWalkableCell"> Walkable cell</label>
+                                <label><input type="checkbox" id="requireWaterCell"> Water cell</label>
+                            </div>
+                            <small class="targeting-note">Water, walkable, and standable are terrain gates; combine only when the terrain logic should require all selected gates.</small>
+                        </fieldset>
+                        <fieldset class="targeting-option-group special">
+                            <legend>
+                                Special Requirements
+                                <span class="info-tip" tabindex="0" aria-label="Special requirements narrow targeting to specific framework cases. Resurrectable corpse usually needs Primary Target set to Thing or PawnOrThing, with Items enabled.">i</span>
+                            </legend>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" id="requireResurrectableCorpse"> Resurrectable corpse</label>
+                            </div>
+                            <small class="targeting-note">Corpse requirements usually pair with Thing targeting and item inclusion.</small>
+                        </fieldset>
+                    </div>
+                    <div id="targetingCompatibility" class="targeting-compatibility"></div>
+                </section>
+
+                <section class="builder-section action-mode-section" data-tab-panel="actions">
+                    <div class="section-title">
+                        <span class="section-number">4</span>
+                        <div>
+                            <h2>Actions</h2>
+                            <p>Use simple payloads for common spells or switch to the full execution tree.</p>
+                        </div>
+                    </div>
+                    <div class="mode-switch" aria-label="Authoring mode">
+                        <button type="button" class="mode-button active" data-mode="simple">Simple Payloads</button>
+                        <button type="button" class="mode-button" data-mode="advanced">Advanced Tree</button>
                     </div>
                 </section>
 
-                <section class="builder-section">
+                <section class="builder-section simple-workflow" data-tab-panel="actions">
                     <div class="section-title">
-                        <span class="section-number">4</span>
+                        <span class="section-number">4A</span>
                         <div>
                             <h2>Effect Payload Stack</h2>
                             <p>Add one or more common effects. The selected pattern decides where the stack runs.</p>
@@ -234,7 +272,31 @@
                     </div>
                 </section>
 
-                <section class="builder-section compact">
+                <section class="builder-section advanced-workflow" data-tab-panel="actions" hidden>
+                    <div class="section-title">
+                        <span class="section-number">4B</span>
+                        <div>
+                            <h2>Advanced Action Tree</h2>
+                            <p>Inspect the generated execution graph, add framework actions, and edit child action slots directly.</p>
+                        </div>
+                    </div>
+                    <div class="advanced-layout">
+                        <div class="action-tree-panel">
+                            <div class="advanced-toolbar">
+                                <select id="rootActionType" aria-label="Root action type"></select>
+                                <button type="button" id="addRootActionBtn" class="btn btn-secondary">Add Root</button>
+                                <button type="button" id="regenerateTreeBtn" class="btn btn-secondary">Regenerate</button>
+                            </div>
+                            <div id="actionTree" class="action-tree" aria-label="Spell action tree"></div>
+                        </div>
+                        <div class="action-inspector-panel">
+                            <div id="actionInspector" class="action-inspector"></div>
+                        </div>
+                    </div>
+                    <div class="validation-panel" id="validationPanel"></div>
+                </section>
+
+                <section class="builder-section compact" data-tab-panel="progression">
                     <div class="section-title">
                         <span class="section-number">5</span>
                         <div>
@@ -254,7 +316,7 @@
                     </div>
                 </section>
 
-                <section class="builder-section compact">
+                <section class="builder-section compact" data-tab-panel="progression">
                     <div class="section-title">
                         <span class="section-number">6</span>
                         <div>

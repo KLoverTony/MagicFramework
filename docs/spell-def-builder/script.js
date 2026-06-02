@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const appContainer = document.querySelector('.app-container');
     const form = document.getElementById('spell-form');
     const patternGrid = document.getElementById('patternGrid');
     const humanSummary = document.getElementById('humanSummary');
@@ -10,6 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const patternHint = document.getElementById('patternHint');
     const payloadToolbar = document.getElementById('payloadToolbar');
     const payloadStack = document.getElementById('payloadStack');
+    const modeButtons = document.querySelectorAll('.mode-button');
+    const simpleWorkflow = document.querySelector('.simple-workflow');
+    const advancedWorkflow = document.querySelector('.advanced-workflow');
+    const rootActionType = document.getElementById('rootActionType');
+    const addRootActionBtn = document.getElementById('addRootActionBtn');
+    const regenerateTreeBtn = document.getElementById('regenerateTreeBtn');
+    const actionTree = document.getElementById('actionTree');
+    const actionInspector = document.getElementById('actionInspector');
+    const validationPanel = document.getElementById('validationPanel');
+    const workspaceTabs = document.querySelectorAll('.workspace-tab');
+    const tabPanels = document.querySelectorAll('[data-tab-panel]');
+    const targetingCompatibility = document.getElementById('targetingCompatibility');
 
     const customDefOption = '__new__';
     const knownDefs = {
@@ -342,21 +355,337 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const actionTypes = {
+        SequenceActionDef: {
+            title: 'Sequence',
+            className: 'MagicFramework.Definitions.SequenceActionDef',
+            summary: node => `${countSlot(node, 'actions')} ordered child action(s)`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Spell sequence')
+            ],
+            slots: {
+                actions: 'Actions'
+            }
+        },
+        EffectActionDef: {
+            title: 'Effect',
+            className: 'MagicFramework.Definitions.EffectActionDef',
+            summary: node => `${node.fields.effectDef || 'No effect'} at ${node.fields.locationSource || 'CurrentTarget'}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Play effect'),
+                textField('effectDef', 'Effect Def', 'PsycastPsychicEffect'),
+                textField('soundDef', 'Sound Def', ''),
+                selectField('locationSource', 'Location Source', ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster'], 'CurrentTarget'),
+                boolField('attachToTarget', 'Attach To Target', true)
+            ]
+        },
+        ProceduralFXActionDef: {
+            title: 'Procedural FX',
+            className: 'MagicFramework.Definitions.ProceduralFXActionDef',
+            summary: node => `${node.fields.fxEvent || 'Auto'} at ${node.fields.locationSource || 'CurrentTarget'}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Procedural FX'),
+                selectField('fxEvent', 'FX Event', ['Auto', 'CastStart', 'ProjectileLaunch', 'ProjectileImpact', 'Impact', 'AreaPulse', 'Explosion', 'SustainStart', 'SustainTick', 'SustainEnd'], 'Auto'),
+                selectField('locationSource', 'Location Source', ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster'], 'CurrentTarget')
+            ]
+        },
+        LaunchProjectileActionDef: {
+            title: 'Launch Projectile',
+            className: 'MagicFramework.Definitions.LaunchProjectileActionDef',
+            summary: node => `${node.fields.projectileDef || 'Projectile'} with ${countSlot(node, 'onImpactActions')} impact action(s)`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Launch projectile'),
+                textField('projectileDef', 'Projectile Def', 'MF_Projectile'),
+                selectField('launchOrigin', 'Launch Origin', ['Caster', 'CurrentTarget', 'CurrentCell'], 'Caster'),
+                selectField('targetSource', 'Target Source', ['CurrentTarget', 'CurrentCell', 'Caster'], 'CurrentTarget'),
+                boolField('preventFriendlyFire', 'Prevent Friendly Fire', false),
+                numberField('impactTimeoutPaddingTicks', 'Impact Timeout Padding', 60, 1)
+            ],
+            slots: {
+                onImpactActions: 'On Impact'
+            }
+        },
+        ExplosionActionDef: {
+            title: 'Explosion',
+            className: 'MagicFramework.Definitions.ExplosionActionDef',
+            summary: node => `${node.fields.damageAmount || 0} ${node.fields.damageDef || 'Flame'} in radius ${node.fields.radius || 0}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Explosion'),
+                numberField('radius', 'Radius', 3.9, 0.1),
+                numberField('damageAmount', 'Damage Amount', 12, 0.1),
+                textField('damageDef', 'Damage Def', 'Flame'),
+                numberField('fireChance', 'Fire Chance', 0.35, 0.01),
+                boolField('damageFalloff', 'Damage Falloff', false),
+                textField('explosionSoundDef', 'Explosion Sound', ''),
+                textField('explosionEffectDef', 'Explosion Effect', '')
+            ]
+        },
+        ApplyToTargetsActionDef: {
+            title: 'Apply To Targets',
+            className: 'MagicFramework.Definitions.ApplyToTargetsActionDef',
+            summary: node => `Query radius ${node.query?.radius || 0}, then ${countSlot(node, 'actions')} action(s)`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Apply to targets')
+            ],
+            query: true,
+            slots: {
+                actions: 'Actions'
+            }
+        },
+        PersistentAreaZoneActionDef: {
+            title: 'Persistent Area Zone',
+            className: 'MagicFramework.Definitions.PersistentAreaZoneActionDef',
+            summary: node => `${node.fields.markerThingDef || 'Marker'} for ${node.fields.durationTicks || 0} ticks`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Persistent area zone'),
+                textField('markerThingDef', 'Marker Thing Def', 'MF_FlameFieldMarker'),
+                numberField('zoneRadius', 'Zone Radius', 3, 0.1),
+                numberField('pulseIntervalTicks', 'Pulse Interval', 60, 1),
+                numberField('durationTicks', 'Duration Ticks', 600, 1),
+                boolField('pulseAtCenter', 'Pulse At Center', false),
+                selectField('pawnAffinity', 'Pawn Affinity', ['All', 'Ally', 'Foe'], 'All'),
+                boolField('includeCaster', 'Include Caster', false),
+                boolField('replaceExistingForCaster', 'Replace Existing For Caster', true),
+                boolField('requiresConcentration', 'Requires Concentration', false),
+                numberField('sustainedManaCost', 'Sustained Mana Cost', 0, 0.1),
+                numberField('sustainedManaCostIntervalTicks', 'Sustained Mana Interval', 60, 1)
+            ],
+            slots: {
+                onCreateActions: 'On Create',
+                onPulseActions: 'On Pulse',
+                actions: 'Pulse Payload',
+                onBreakActions: 'On Break',
+                onEndActions: 'On End'
+            }
+        },
+        SustainedStatModifierActionDef: {
+            title: 'Sustained Modifier',
+            className: 'MagicFramework.Definitions.SustainedStatModifierActionDef',
+            summary: node => `${node.fields.statusEffectDef || 'Status'} up to ${node.fields.maxDurationTicks || -1} ticks`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Sustained modifier'),
+                textField('statusEffectDef', 'Status Effect Def', 'MFV_Status_Might'),
+                selectField('targetSource', 'Target Source', ['Caster', 'CurrentTarget'], 'CurrentTarget'),
+                numberField('maxDurationTicks', 'Max Duration', 1800, 1),
+                numberField('maxRange', 'Max Range', 12, 0.1),
+                boolField('breakWhenCasterDowned', 'Break When Caster Downed', true),
+                boolField('breakWhenTargetDowned', 'Break When Target Downed', false),
+                boolField('breakWhenTargetOutOfRange', 'Break When Target Out Of Range', true),
+                boolField('breakWhenLineOfSightLost', 'Break When LOS Lost', true),
+                numberField('pulseIntervalTicks', 'Pulse Interval', -1, 1)
+            ],
+            slots: {
+                onPulseActions: 'On Pulse',
+                onBreakActions: 'On Break'
+            }
+        },
+        ApplyForceFieldActionDef: {
+            title: 'Force Field',
+            className: 'MagicFramework.Definitions.ApplyForceFieldActionDef',
+            summary: node => `Damage factor ${node.fields.damageFactor || 0.5}, duration ${node.fields.maxDurationTicks || -1}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Force field'),
+                selectField('targetSource', 'Target Source', ['Caster', 'CurrentTarget'], 'CurrentTarget'),
+                numberField('maxDurationTicks', 'Max Duration', 1800, 1),
+                numberField('maxRange', 'Max Range', 12, 0.1),
+                numberField('damageFactor', 'Damage Factor', 0.5, 0.05),
+                boolField('absorbFullyWithMana', 'Absorb Fully With Mana', false),
+                numberField('manaCostPerDamageAbsorbed', 'Mana Per Damage', 1, 0.1),
+                boolField('breakWhenCasterDowned', 'Break When Caster Downed', true),
+                boolField('breakWhenTargetOutOfRange', 'Break When Target Out Of Range', true),
+                boolField('breakWhenLineOfSightLost', 'Break When LOS Lost', true)
+            ],
+            slots: {
+                onCreateActions: 'On Create',
+                onPulseActions: 'On Pulse',
+                onExpireActions: 'On Expire',
+                onBreakActions: 'On Break'
+            }
+        },
+        DelayActionDef: {
+            title: 'Delay',
+            className: 'MagicFramework.Definitions.DelayActionDef',
+            summary: node => `${node.fields.delayTicks || 0} ticks, then ${countSlot(node, 'actions')} action(s)`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Delay'),
+                numberField('delayTicks', 'Delay Ticks', 60, 1),
+                boolField('replaceExistingForCaster', 'Replace Existing For Caster', true)
+            ],
+            slots: {
+                actions: 'Delayed Actions'
+            }
+        },
+        RepeatActionDef: {
+            title: 'Repeat',
+            className: 'MagicFramework.Definitions.RepeatActionDef',
+            summary: node => `${node.fields.repeatCount || 1} repeats every ${node.fields.intervalTicks || 60} ticks`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Repeat'),
+                numberField('intervalTicks', 'Interval Ticks', 60, 1),
+                numberField('repeatCount', 'Repeat Count', 1, 1),
+                boolField('includeImmediate', 'Include Immediate', true),
+                boolField('replaceExistingForCaster', 'Replace Existing For Caster', true)
+            ],
+            slots: {
+                actions: 'Repeated Actions'
+            }
+        },
+        DamageActionDef: {
+            title: 'Damage',
+            className: 'MagicFramework.Definitions.DamageActionDef',
+            summary: node => `${node.fields.amount || 0} ${node.fields.damageDef || 'damage'}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Apply damage'),
+                numberField('amount', 'Amount', 10, 0.1),
+                textField('damageDef', 'Damage Def', 'Blunt'),
+                numberField('armorPenetration', 'Armor Penetration', 0, 0.01),
+                selectField('guiltPolicy', 'Guilt Policy', ['None', 'Damage'], 'None'),
+                boolField('useCombatLog', 'Use Combat Log', false)
+            ]
+        },
+        HealActionDef: {
+            title: 'Heal',
+            className: 'MagicFramework.Definitions.HealActionDef',
+            summary: node => `Heal ${node.fields.amount || 0}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Apply healing'),
+                numberField('amount', 'Amount', 15, 0.1),
+                numberField('permanentHealingAmount', 'Permanent Healing', 0, 0.1),
+                boolField('healPermanentInjuries', 'Heal Permanent Injuries', false),
+                boolField('regenerateMissingParts', 'Regenerate Missing Parts', false)
+            ]
+        },
+        ApplyStatusEffectActionDef: {
+            title: 'Apply Status',
+            className: 'MagicFramework.Definitions.ApplyStatusEffectActionDef',
+            summary: node => node.fields.statusEffectDef || 'Status effect',
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Apply status'),
+                textField('statusEffectDef', 'Status Effect Def', 'MFV_Status_Haste'),
+                selectField('targetSource', 'Target Source', ['Caster', 'CurrentTarget'], 'CurrentTarget'),
+                numberField('durationTicks', 'Override Duration', -1, 1),
+                boolField('replaceExistingFromCasterSpell', 'Replace Existing', true)
+            ]
+        },
+        ApplyHediffActionDef: {
+            title: 'Apply Hediff',
+            className: 'MagicFramework.Definitions.ApplyHediffActionDef',
+            summary: node => `${node.fields.hediffDef || 'Hediff'} severity ${node.fields.severity || 0}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Apply hediff'),
+                textField('hediffDef', 'Hediff Def', 'Burn'),
+                selectField('targetSource', 'Target Source', ['Caster', 'CurrentTarget'], 'CurrentTarget'),
+                numberField('severity', 'Severity', 0.2, 0.01),
+                selectField('addMode', 'Add Mode', ['Default', 'Replace', 'TryAdd', 'SoftReplace'], 'Default'),
+                boolField('removeAfterDuration', 'Remove After Duration', false),
+                numberField('durationTicks', 'Duration', 0, 1)
+            ]
+        },
+        KnockbackActionDef: {
+            title: 'Knockback',
+            className: 'MagicFramework.Definitions.KnockbackActionDef',
+            summary: node => `${node.fields.distance || 0} cells from ${node.fields.originSource || 'Caster'}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Knockback'),
+                selectField('originSource', 'Origin Source', ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster'], 'Caster'),
+                numberField('distance', 'Distance', 3, 1),
+                boolField('requireStandableDestination', 'Require Standable', true),
+                boolField('requireWalkableDestination', 'Require Walkable', true),
+                numberField('impactDamageAmount', 'Impact Damage', 0, 0.1),
+                textField('impactDamageDef', 'Impact Damage Def', 'Blunt')
+            ]
+        },
+        SummonPawnActionDef: {
+            title: 'Summon Pawn',
+            className: 'MagicFramework.Definitions.SummonPawnActionDef',
+            summary: node => `${node.fields.pawnKindDef || 'Pawn'} for ${node.fields.durationTicks || 0} ticks`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Summon pawn'),
+                textField('pawnKindDef', 'PawnKind Def', 'Husky'),
+                numberField('durationTicks', 'Duration', 2500, 1),
+                boolField('replaceExistingForCaster', 'Replace Existing For Caster', true),
+                boolField('setFactionToPlayer', 'Set Faction To Player', true),
+                boolField('joinLord', 'Join Lord', true)
+            ],
+            slots: {
+                onCreateActions: 'On Create',
+                onExpireActions: 'On Expire',
+                onBreakActions: 'On Break'
+            }
+        },
+        TeleportActionDef: {
+            title: 'Teleport',
+            className: 'MagicFramework.Definitions.TeleportActionDef',
+            summary: node => `${node.fields.subjectSource || 'Caster'} to ${node.fields.destinationSource || 'CurrentCell'}`,
+            fields: [
+                textField('debugLabel', 'Debug Label', 'Teleport'),
+                selectField('subjectSource', 'Subject Source', ['Caster', 'CurrentTarget', 'InitialTarget'], 'Caster'),
+                selectField('destinationSource', 'Destination Source', ['CurrentCell', 'InitialTargetCell', 'CurrentTargetCell', 'CasterCell', 'CasterAdjacentCell', 'RandomCellNearSubject', 'RandomCellNearCaster', 'RandomCellNearCurrentCell', 'RandomCellNearInitialTarget'], 'CurrentCell'),
+                boolField('swapWithCaster', 'Swap With Caster', false),
+                boolField('requireStandableDestination', 'Require Standable', true),
+                boolField('requireWalkableDestination', 'Require Walkable', true),
+                boolField('preserveDrafted', 'Preserve Drafted', true),
+                numberField('postTeleportStunTicks', 'Post Teleport Stun', 0, 1)
+            ]
+        }
+    };
+
+    const rootActionOptions = [
+        'SequenceActionDef',
+        'EffectActionDef',
+        'ProceduralFXActionDef',
+        'LaunchProjectileActionDef',
+        'ExplosionActionDef',
+        'ApplyToTargetsActionDef',
+        'PersistentAreaZoneActionDef',
+        'SustainedStatModifierActionDef',
+        'ApplyForceFieldActionDef',
+        'DelayActionDef',
+        'RepeatActionDef',
+        'DamageActionDef',
+        'HealActionDef',
+        'ApplyStatusEffectActionDef',
+        'ApplyHediffActionDef',
+        'KnockbackActionDef',
+        'SummonPawnActionDef',
+        'TeleportActionDef'
+    ];
+
     let selectedPattern = 'projectileDamage';
+    let activeBuilderTab = 'spell';
+    let currentMode = 'simple';
     let xmlVisible = false;
     let currentPayloads = [];
     let payloadIdSeed = 1;
+    let actionIdSeed = 1;
+    let advancedActions = [];
+    let selectedActionId = '';
+    let advancedDirty = false;
 
     function init() {
+        renderActionTypeOptions();
         renderPatterns();
         applyPattern(selectedPattern);
-        form.addEventListener('input', updatePreview);
-        form.addEventListener('change', updatePreview);
+        applyBuilderTab(activeBuilderTab, false);
+        form.addEventListener('input', event => {
+            if (!event.target.closest('.advanced-workflow')) updatePreview();
+        });
+        form.addEventListener('change', event => {
+            if (!event.target.closest('.advanced-workflow')) updatePreview();
+        });
         document.getElementById('label').addEventListener('input', syncGeneratedDefs);
         payloadToolbar.addEventListener('click', addPayloadFromButton);
         payloadStack.addEventListener('input', handlePayloadInput);
         payloadStack.addEventListener('change', handlePayloadInput);
         payloadStack.addEventListener('click', handlePayloadClick);
+        workspaceTabs.forEach(button => button.addEventListener('click', () => applyBuilderTab(button.dataset.builderTab)));
+        modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
+        actionTree.addEventListener('click', handleActionTreeClick);
+        actionInspector.addEventListener('input', handleInspectorInput);
+        actionInspector.addEventListener('change', handleInspectorInput);
+        actionInspector.addEventListener('click', handleInspectorClick);
+        addRootActionBtn.addEventListener('click', addRootAction);
+        regenerateTreeBtn.addEventListener('click', regenerateAdvancedTree);
         viewXmlBtn.addEventListener('click', toggleXml);
         copyXmlBtn.addEventListener('click', copyXml);
         resetBtn.addEventListener('click', () => applyPattern(selectedPattern));
@@ -389,6 +718,9 @@ document.addEventListener('DOMContentLoaded', () => {
         currentPayloads = clonePayloads(pattern.values.payloads || [{ type: 'damage', amount: 10, damageDef: 'Blunt' }]);
         renderPayloadStack();
         syncGeneratedDefs();
+        advancedDirty = false;
+        advancedActions = buildGeneratedActionTree(getState());
+        selectedActionId = firstActionId(advancedActions);
         patternGrid.querySelectorAll('.pattern-card').forEach(button => {
             button.classList.toggle('active', button.dataset.pattern === patternKey);
         });
@@ -668,6 +1000,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const state = getState();
         updateFieldVisibility(state);
         patternHint.textContent = state.pattern.hint;
+        renderAdvancedWorkflow(state);
         humanSummary.innerHTML = buildSummary(state);
         xmlPreview.innerHTML = highlightXml(buildXml(state));
     }
@@ -693,7 +1026,61 @@ document.addEventListener('DOMContentLoaded', () => {
         setGroupAvailable('zoneMarkerDef', showZone, 'Zone Marker Def is only used by Persistent Zone delivery.');
         setGroupAvailable('pulseIntervalTicks', showZone, 'Pulse Interval is only used by Persistent Zone delivery.');
         setGroupAvailable('impactEffectDef', showImpactFx, 'Impact effects are used by projectile, area burst, and persistent zone patterns.');
+        updateTargetingCompatibility(state);
         updatePayloadButtons(state);
+    }
+
+    function updateTargetingCompatibility(state) {
+        const messages = targetingCompatibilityMessages(state);
+        targetingCompatibility.innerHTML = messages.length
+            ? messages.map(message => `<div class="compatibility-message">${escapeHtml(message)}</div>`).join('')
+            : '<div class="compatibility-message ok">Targeting choices are internally consistent.</div>';
+    }
+
+    function targetingCompatibilityMessages(state) {
+        const messages = [];
+        const primaryIsPawnOnly = state.primaryTargetType === 'Pawn';
+        const primaryCanTargetThing = ['Thing', 'PawnOrThing'].includes(state.primaryTargetType);
+        const primaryCanTargetCell = ['Cell', 'PawnOrCell'].includes(state.primaryTargetType);
+
+        if (primaryIsPawnOnly && !state.includePawns) {
+            messages.push('Primary Target is Pawn, but Pawns are disabled in Target Categories.');
+        }
+
+        if (state.primaryTargetType === 'Thing' && !state.includeBuildings && !state.includeItems) {
+            messages.push('Primary Target is Thing, but both Buildings and Items are disabled.');
+        }
+
+        if (state.primaryTargetType === 'PawnOrThing' && !state.includePawns && !state.includeBuildings && !state.includeItems) {
+            messages.push('Primary Target is PawnOrThing, but every target category is disabled.');
+        }
+
+        if (state.requireResurrectableCorpse) {
+            if (!primaryCanTargetThing) {
+                messages.push('Resurrectable corpse requires a thing-style primary target. Use Primary Target: Thing or PawnOrThing.');
+            }
+            if (state.includePawns || state.includeBuildings || !state.includeItems) {
+                messages.push('Resurrectable corpse targeting should normally use Items only: disable Pawns and Buildings, enable Items.');
+            }
+            if (state.useCasterAsTarget) {
+                messages.push('Use caster as target conflicts with Resurrectable corpse; the caster cannot be the corpse target.');
+            }
+        }
+
+        if (state.useCasterAsTarget) {
+            if (primaryCanTargetCell || state.targetShape !== 'Single') {
+                messages.push('Use caster as target skips normal target selection, so cell shape/radius/line targeting settings will not choose an initial target.');
+            }
+            if (!state.allowSelfTarget && !state.requireResurrectableCorpse) {
+                messages.push('Use caster as target usually pairs with Self target enabled for clarity.');
+            }
+        }
+
+        if (state.requireWaterCell && (state.requireWalkableCell || state.requireStandableCell)) {
+            messages.push('Water cell combined with Walkable or Standable requires all selected terrain gates at once; that is rare and may reject most targets.');
+        }
+
+        return messages;
     }
 
     function updatePayloadButtons(state) {
@@ -745,6 +1132,566 @@ document.addEventListener('DOMContentLoaded', () => {
         help.textContent = available ? '' : reason;
     }
 
+    function setMode(mode) {
+        currentMode = mode === 'advanced' ? 'advanced' : 'simple';
+        modeButtons.forEach(button => button.classList.toggle('active', button.dataset.mode === currentMode));
+        simpleWorkflow.hidden = currentMode !== 'simple';
+        advancedWorkflow.hidden = currentMode !== 'advanced';
+
+        if (currentMode === 'advanced' && !advancedActions.length) {
+            regenerateAdvancedTree();
+            return;
+        }
+
+        updatePreview();
+    }
+
+    function applyBuilderTab(tab, refresh = true) {
+        activeBuilderTab = tab || 'spell';
+        workspaceTabs.forEach(button => button.classList.toggle('active', button.dataset.builderTab === activeBuilderTab));
+        tabPanels.forEach(panel => panel.classList.toggle('is-tab-hidden', panel.dataset.tabPanel !== activeBuilderTab));
+        appContainer.classList.toggle('actions-focus', activeBuilderTab === 'actions');
+        if (refresh) updatePreview();
+    }
+
+    function renderActionTypeOptions() {
+        const options = rootActionOptions.map(type => `<option value="${type}">${escapeHtml(actionTypes[type].title)}</option>`).join('');
+        rootActionType.innerHTML = options;
+    }
+
+    function renderAdvancedWorkflow(state) {
+        if (currentMode === 'advanced' && !advancedActions.length) {
+            advancedActions = buildGeneratedActionTree(state);
+            selectedActionId = selectedActionId || firstActionId(advancedActions);
+        }
+
+        if (currentMode !== 'advanced') return;
+
+        if (!selectedActionId || !findAction(advancedActions, selectedActionId)) {
+            selectedActionId = firstActionId(advancedActions);
+        }
+
+        actionTree.innerHTML = advancedActions.length
+            ? advancedActions.map(node => renderActionNode(node)).join('')
+            : '<div class="slot-empty">No root actions yet.</div>';
+        renderActionInspector();
+        renderValidation(state);
+    }
+
+    function renderActionNode(node) {
+        const def = actionTypes[node.type];
+        const slots = def.slots || {};
+        const slotMarkup = Object.entries(slots).map(([slotKey, slotLabel]) => renderActionSlot(node, slotKey, slotLabel)).join('');
+        return `
+            <div class="action-node" data-action-id="${node.id}">
+                <button type="button" class="action-node-main ${node.id === selectedActionId ? 'active' : ''}" data-select-action="${node.id}">
+                    <span class="action-node-title">
+                        <span>${escapeHtml(def.title)}</span>
+                        <small>${escapeHtml(node.fields.debugLabel || node.type)}</small>
+                    </span>
+                    <span class="action-node-summary">${escapeHtml(def.summary?.(node) || '')}</span>
+                </button>
+                ${slotMarkup}
+            </div>
+        `;
+    }
+
+    function renderActionSlot(parentNode, slotKey, slotLabel) {
+        const nodes = parentNode.slots?.[slotKey] || [];
+        const addOptions = rootActionOptions.map(type => `<option value="${type}">${escapeHtml(actionTypes[type].title)}</option>`).join('');
+        return `
+            <div class="action-slot" data-slot-owner="${parentNode.id}" data-slot-key="${slotKey}">
+                <div class="action-slot-header">
+                    <span>${escapeHtml(slotLabel)}</span>
+                    <select data-add-type-for="${parentNode.id}" data-add-slot="${slotKey}">${addOptions}</select>
+                    <button type="button" class="btn btn-secondary" data-add-child="${parentNode.id}" data-add-slot="${slotKey}">Add</button>
+                </div>
+                ${nodes.length ? nodes.map(node => renderActionNode(node)).join('') : '<div class="slot-empty">Empty slot.</div>'}
+            </div>
+        `;
+    }
+
+    function renderActionInspector() {
+        const found = findAction(advancedActions, selectedActionId);
+        if (!found) {
+            actionInspector.innerHTML = '<div class="slot-empty">Select an action to edit it.</div>';
+            return;
+        }
+
+        const node = found.node;
+        const def = actionTypes[node.type];
+        const typeOptions = rootActionOptions.map(type => `
+            <option value="${type}" ${node.type === type ? 'selected' : ''}>${escapeHtml(actionTypes[type].title)}</option>
+        `).join('');
+        const coreFields = def.fields.slice(0, 4).map(field => renderInspectorField(node, field)).join('');
+        const advancedFields = def.fields.slice(4).map(field => renderInspectorField(node, field)).join('');
+        const queryFields = def.query ? renderQueryFields(node) : '';
+        const canRemove = Boolean(found.parent) || advancedActions.length > 1;
+
+        actionInspector.innerHTML = `
+            <div class="inspector-heading">
+                <span>Selected Action</span>
+                <strong>${escapeHtml(def.title)}</strong>
+            </div>
+            <label>
+                <span>Action Type</span>
+                <select data-action-type="${node.id}">${typeOptions}</select>
+            </label>
+            <div class="inspector-fields">${coreFields}</div>
+            ${advancedFields ? `
+                <details class="field-details">
+                    <summary>Advanced Fields</summary>
+                    <div class="inspector-fields">${advancedFields}</div>
+                </details>
+            ` : ''}
+            ${queryFields}
+            <div class="inspector-actions">
+                <button type="button" class="btn btn-secondary" data-move-action="${node.id}" data-direction="up">Move Up</button>
+                <button type="button" class="btn btn-secondary" data-move-action="${node.id}" data-direction="down">Move Down</button>
+                <button type="button" class="btn danger-button" data-remove-action="${node.id}" ${canRemove ? '' : 'disabled'}>Remove</button>
+            </div>
+        `;
+    }
+
+    function renderInspectorField(node, field) {
+        const value = node.fields[field.key] ?? field.default ?? '';
+        if (field.type === 'checkbox') {
+            return `
+                <label class="payload-check-field">
+                    <input type="checkbox" data-action-id="${node.id}" data-action-field="${field.key}" ${value ? 'checked' : ''}>
+                    <span>${escapeHtml(field.label)}</span>
+                </label>
+            `;
+        }
+
+        if (field.type === 'select') {
+            return `
+                <label>
+                    <span>${escapeHtml(field.label)}</span>
+                    <select data-action-id="${node.id}" data-action-field="${field.key}">
+                        ${field.options.map(option => `<option value="${escapeHtml(option)}" ${String(value) === option ? 'selected' : ''}>${escapeHtml(option)}</option>`).join('')}
+                    </select>
+                </label>
+            `;
+        }
+
+        return `
+            <label>
+                <span>${escapeHtml(field.label)}</span>
+                <input type="${field.type}" value="${escapeHtml(value)}" step="${field.step || ''}" data-action-id="${node.id}" data-action-field="${field.key}">
+            </label>
+        `;
+    }
+
+    function renderQueryFields(node) {
+        const query = node.query || defaultQuery();
+        const affinityOptions = ['All', 'Ally', 'Foe'].map(value => `<option value="${value}" ${query.pawnAffinity === value ? 'selected' : ''}>${value}</option>`).join('');
+        const centerOptions = ['CurrentCell', 'CurrentTarget', 'InitialTarget', 'Caster'].map(value => `<option value="${value}" ${query.centerSource === value ? 'selected' : ''}>${value}</option>`).join('');
+        return `
+            <details class="field-details" open>
+                <summary>Target Query</summary>
+                <div class="query-fields">
+                    <label><span>Query Radius</span><input type="number" step="0.1" value="${escapeHtml(query.radius)}" data-query-field="radius" data-action-id="${node.id}"></label>
+                    <label><span>Center Source</span><select data-query-field="centerSource" data-action-id="${node.id}">${centerOptions}</select></label>
+                    <label><span>Pawn Affinity</span><select data-query-field="pawnAffinity" data-action-id="${node.id}">${affinityOptions}</select></label>
+                    <label class="payload-check-field"><input type="checkbox" data-query-field="includePawns" data-action-id="${node.id}" ${query.includePawns ? 'checked' : ''}><span>Include Pawns</span></label>
+                    <label class="payload-check-field"><input type="checkbox" data-query-field="includeBuildings" data-action-id="${node.id}" ${query.includeBuildings ? 'checked' : ''}><span>Include Buildings</span></label>
+                    <label class="payload-check-field"><input type="checkbox" data-query-field="includeItems" data-action-id="${node.id}" ${query.includeItems ? 'checked' : ''}><span>Include Items</span></label>
+                    <label class="payload-check-field"><input type="checkbox" data-query-field="includeCaster" data-action-id="${node.id}" ${query.includeCaster ? 'checked' : ''}><span>Include Caster</span></label>
+                </div>
+            </details>
+        `;
+    }
+
+    function handleActionTreeClick(event) {
+        const selectButton = event.target.closest('[data-select-action]');
+        if (selectButton) {
+            selectedActionId = selectButton.dataset.selectAction;
+            renderAdvancedWorkflow(getState());
+            return;
+        }
+
+        const addButton = event.target.closest('[data-add-child]');
+        if (!addButton) return;
+
+        const select = actionTree.querySelector(`[data-add-type-for="${addButton.dataset.addChild}"][data-add-slot="${addButton.dataset.addSlot}"]`);
+        addChildAction(addButton.dataset.addChild, addButton.dataset.addSlot, select?.value || 'EffectActionDef');
+    }
+
+    function handleInspectorInput(event) {
+        const typeSelect = event.target.closest('[data-action-type]');
+        if (typeSelect) {
+            changeActionType(typeSelect.dataset.actionType, typeSelect.value);
+            return;
+        }
+
+        const queryInput = event.target.closest('[data-query-field][data-action-id]');
+        if (queryInput) {
+            updateQueryField(queryInput);
+            return;
+        }
+
+        const input = event.target.closest('[data-action-id][data-action-field]');
+        if (!input) return;
+
+        const found = findAction(advancedActions, input.dataset.actionId);
+        if (!found) return;
+
+        const field = actionTypes[found.node.type].fields.find(item => item.key === input.dataset.actionField);
+        if (!field) return;
+        found.node.fields[field.key] = parseFieldValue(input, field);
+        markAdvancedDirty();
+    }
+
+    function handleInspectorClick(event) {
+        const removeButton = event.target.closest('[data-remove-action]');
+        if (removeButton && !removeButton.disabled) {
+            removeAction(removeButton.dataset.removeAction);
+            return;
+        }
+
+        const moveButton = event.target.closest('[data-move-action]');
+        if (moveButton) {
+            moveAction(moveButton.dataset.moveAction, moveButton.dataset.direction);
+        }
+    }
+
+    function addRootAction() {
+        const node = createActionNode(rootActionType.value || 'SequenceActionDef');
+        advancedActions.push(node);
+        selectedActionId = node.id;
+        markAdvancedDirty();
+    }
+
+    function addChildAction(parentId, slotKey, type) {
+        const found = findAction(advancedActions, parentId);
+        if (!found) return;
+        found.node.slots ??= {};
+        found.node.slots[slotKey] ??= [];
+        const node = createActionNode(type);
+        found.node.slots[slotKey].push(node);
+        selectedActionId = node.id;
+        markAdvancedDirty();
+    }
+
+    function regenerateAdvancedTree() {
+        advancedDirty = false;
+        advancedActions = buildGeneratedActionTree(getState());
+        selectedActionId = firstActionId(advancedActions);
+        updatePreview();
+    }
+
+    function changeActionType(id, type) {
+        const found = findAction(advancedActions, id);
+        if (!found || !actionTypes[type]) return;
+        const oldLabel = found.node.fields.debugLabel;
+        const replacement = createActionNode(type);
+        replacement.id = found.node.id;
+        if (oldLabel) replacement.fields.debugLabel = oldLabel;
+        found.node.type = replacement.type;
+        found.node.fields = replacement.fields;
+        found.node.slots = replacement.slots;
+        found.node.query = replacement.query;
+        markAdvancedDirty();
+    }
+
+    function updateQueryField(input) {
+        const found = findAction(advancedActions, input.dataset.actionId);
+        if (!found) return;
+        found.node.query ??= defaultQuery();
+        found.node.query[input.dataset.queryField] = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? parseNumber(input.value) : input.value);
+        markAdvancedDirty();
+    }
+
+    function removeAction(id) {
+        const found = findAction(advancedActions, id);
+        if (!found) return;
+
+        if (found.parent) {
+            found.collection.splice(found.index, 1);
+        } else if (advancedActions.length > 1) {
+            advancedActions.splice(found.index, 1);
+        }
+
+        selectedActionId = firstActionId(advancedActions);
+        markAdvancedDirty();
+    }
+
+    function moveAction(id, direction) {
+        const found = findAction(advancedActions, id);
+        if (!found) return;
+        const targetIndex = direction === 'up' ? found.index - 1 : found.index + 1;
+        if (targetIndex < 0 || targetIndex >= found.collection.length) return;
+        const [node] = found.collection.splice(found.index, 1);
+        found.collection.splice(targetIndex, 0, node);
+        markAdvancedDirty();
+    }
+
+    function markAdvancedDirty() {
+        advancedDirty = true;
+        updatePreview();
+    }
+
+    function renderValidation(state) {
+        const warnings = validateActionTree(advancedActions, state);
+        const modeText = advancedDirty
+            ? 'Advanced tree is custom. Simple payload changes will not alter it unless Regenerate is used.'
+            : 'Advanced tree currently mirrors the simple pattern.';
+        const items = [
+            `<div class="validation-item ok">${escapeHtml(modeText)}</div>`,
+            ...warnings.map(warning => `<div class="validation-item warning">${escapeHtml(warning)}</div>`)
+        ];
+        validationPanel.innerHTML = items.join('');
+    }
+
+    function validateActionTree(nodes) {
+        const warnings = [];
+        if (!nodes.length) warnings.push('The spell has no root actions.');
+        walkActions(nodes, (node, ancestors) => {
+            if (node.type === 'LaunchProjectileActionDef' && !countSlot(node, 'onImpactActions')) {
+                warnings.push('A projectile has no on-impact actions.');
+            }
+            if (node.type === 'SummonPawnActionDef' && ancestors.some(parent => parent.type === 'PersistentAreaZoneActionDef' || parent.type === 'RepeatActionDef')) {
+                warnings.push('A summon action is nested under a repeating or persistent action; verify this is intentional.');
+            }
+            if (node.type === 'ApplyToTargetsActionDef' && !countSlot(node, 'actions')) {
+                warnings.push('An Apply To Targets node has a query but no child actions.');
+            }
+        });
+        return warnings;
+    }
+
+    function buildGeneratedActionTree(state) {
+        const payloadNodes = state.payloads.map(payload => payloadToActionNode(payload, state));
+        const primaryDamage = state.payloads.find(payload => payload.type === 'damage') || payloadTypes.damage.defaults;
+        const sustainedStatus = state.payloads.find(payload => payload.type === 'status') || payloadTypes.status.defaults;
+        const areaPayloads = state.payloads.filter(payload => payload.type !== 'damage').map(payload => payloadToActionNode(payload, state));
+
+        if (state.delivery === 'projectile') {
+            return [
+                actionNode('SequenceActionDef', { debugLabel: `${cap(state.label)} sequence` }, {
+                    actions: [
+                        effectNode(state, state.castEffectDef, 'Caster', false),
+                        actionNode('LaunchProjectileActionDef', { debugLabel: `Launch ${state.label} projectile`, projectileDef: state.projectileDef }, {
+                            onImpactActions: [
+                                effectNode(state, state.impactEffectDef, 'CurrentTarget', true),
+                                ...payloadNodes
+                            ]
+                        })
+                    ]
+                })
+            ];
+        }
+
+        if (state.delivery === 'area') {
+            const actions = [
+                effectNode(state, state.castEffectDef, 'Caster', false),
+                actionNode('ExplosionActionDef', {
+                    debugLabel: `${cap(state.label)} explosion`,
+                    radius: state.targetRadius,
+                    damageAmount: primaryDamage.amount,
+                    damageDef: primaryDamage.damageDef
+                })
+            ];
+            if (areaPayloads.length) {
+                actions.push(actionNode('ApplyToTargetsActionDef', { debugLabel: `Apply ${state.label} payload in radius` }, {
+                    actions: areaPayloads
+                }, defaultQuery({
+                    debugLabel: `Targets around ${state.label} impact`,
+                    radius: state.targetRadius,
+                    centerSource: 'CurrentCell',
+                    includePawns: state.includePawns,
+                    includeBuildings: state.includeBuildings,
+                    includeItems: state.includeItems,
+                    includeCaster: state.allowSelfTarget,
+                    pawnAffinity: state.pawnAffinity
+                })));
+            }
+            return [actionNode('SequenceActionDef', { debugLabel: `${cap(state.label)} area burst` }, { actions })];
+        }
+
+        if (state.delivery === 'persistent') {
+            return [
+                actionNode('PersistentAreaZoneActionDef', {
+                    debugLabel: `Create ${state.label} persistent zone`,
+                    markerThingDef: state.zoneMarkerDef,
+                    zoneRadius: state.targetRadius,
+                    pulseIntervalTicks: state.pulseIntervalTicks,
+                    durationTicks: state.durationTicks,
+                    pulseAtCenter: false,
+                    pawnAffinity: state.pawnAffinity,
+                    includeCaster: state.allowSelfTarget,
+                    replaceExistingForCaster: true
+                }, {
+                    onPulseActions: [effectNode(state, state.impactEffectDef, 'CurrentCell', false)],
+                    actions: payloadNodes
+                })
+            ];
+        }
+
+        if (state.delivery === 'sustained') {
+            return [
+                actionNode('SustainedStatModifierActionDef', {
+                    debugLabel: `${cap(state.label)} sustained effect`,
+                    statusEffectDef: sustainedStatus.statusEffectDef,
+                    targetSource: 'CurrentTarget',
+                    maxDurationTicks: state.durationTicks,
+                    maxRange: state.range,
+                    breakWhenCasterDowned: true,
+                    breakWhenTargetOutOfRange: true,
+                    breakWhenLineOfSightLost: state.requireLineOfSight
+                })
+            ];
+        }
+
+        if (state.delivery === 'forcefield') {
+            return [
+                actionNode('ApplyForceFieldActionDef', {
+                    debugLabel: `${cap(state.label)} force field`,
+                    targetSource: 'CurrentTarget',
+                    maxDurationTicks: state.durationTicks,
+                    maxRange: state.range,
+                    breakWhenCasterDowned: true,
+                    breakWhenTargetOutOfRange: true,
+                    breakWhenLineOfSightLost: state.requireLineOfSight,
+                    damageFactor: 0.5
+                })
+            ];
+        }
+
+        return [
+            actionNode('SequenceActionDef', { debugLabel: `${cap(state.label)} direct sequence` }, {
+                actions: [
+                    effectNode(state, state.castEffectDef, 'CurrentTarget', true),
+                    ...payloadNodes
+                ]
+            })
+        ];
+    }
+
+    function payloadToActionNode(payload, state) {
+        if (payload.type === 'damage') {
+            return actionNode('DamageActionDef', { debugLabel: `Apply ${state.label} damage`, amount: payload.amount, damageDef: payload.damageDef });
+        }
+        if (payload.type === 'heal') {
+            return actionNode('HealActionDef', { debugLabel: `Apply ${state.label} healing`, amount: payload.amount });
+        }
+        if (payload.type === 'status') {
+            return actionNode('ApplyStatusEffectActionDef', { debugLabel: `Apply ${state.label} status`, statusEffectDef: payload.statusEffectDef, targetSource: 'CurrentTarget', durationTicks: payload.durationTicks });
+        }
+        if (payload.type === 'hediff') {
+            return actionNode('ApplyHediffActionDef', { debugLabel: `Apply ${state.label} hediff`, hediffDef: payload.hediffDef, severity: payload.severity, removeAfterDuration: Number(payload.durationTicks) > 0, durationTicks: payload.durationTicks });
+        }
+        if (payload.type === 'knockback') {
+            return actionNode('KnockbackActionDef', { debugLabel: `Apply ${state.label} knockback`, distance: payload.distance });
+        }
+        return actionNode('SummonPawnActionDef', { debugLabel: `Summon ${payload.pawnKindDef}`, pawnKindDef: payload.pawnKindDef, durationTicks: payload.durationTicks });
+    }
+
+    function effectNode(state, effectDef, locationSource, attachToTarget) {
+        return actionNode('EffectActionDef', {
+            debugLabel: `Play ${state.label} effect`,
+            effectDef,
+            soundDef: state.soundDef,
+            locationSource,
+            attachToTarget
+        });
+    }
+
+    function actionNode(type, fieldOverrides = {}, slotOverrides = {}, query = null) {
+        const node = createActionNode(type);
+        node.fields = { ...node.fields, ...fieldOverrides };
+        Object.entries(slotOverrides).forEach(([slotKey, nodes]) => {
+            node.slots[slotKey] = nodes;
+        });
+        if (query) node.query = query;
+        return node;
+    }
+
+    function createActionNode(type) {
+        const def = actionTypes[type] || actionTypes.EffectActionDef;
+        const fields = Object.fromEntries(def.fields.map(field => [field.key, field.default ?? defaultFieldValue(field)]));
+        const slots = Object.fromEntries(Object.keys(def.slots || {}).map(slotKey => [slotKey, []]));
+        const node = {
+            id: `action-${actionIdSeed++}`,
+            type,
+            fields,
+            slots
+        };
+        if (def.query) node.query = defaultQuery();
+        return node;
+    }
+
+    function defaultQuery(overrides = {}) {
+        return {
+            debugLabel: 'Targets in radius',
+            radius: 3,
+            centerSource: 'CurrentCell',
+            includePawns: true,
+            includeBuildings: false,
+            includeItems: false,
+            includeCaster: false,
+            pawnAffinity: 'All',
+            ...overrides
+        };
+    }
+
+    function findAction(nodes, id, parent = null, slotKey = '') {
+        for (let index = 0; index < nodes.length; index++) {
+            const node = nodes[index];
+            if (node.id === id) return { node, parent, slotKey, collection: nodes, index };
+            for (const [childSlotKey, childNodes] of Object.entries(node.slots || {})) {
+                const found = findAction(childNodes, id, node, childSlotKey);
+                if (found) return found;
+            }
+        }
+        return null;
+    }
+
+    function firstActionId(nodes) {
+        if (!nodes.length) return '';
+        return nodes[0].id;
+    }
+
+    function walkActions(nodes, visit, ancestors = []) {
+        nodes.forEach(node => {
+            visit(node, ancestors);
+            Object.values(node.slots || {}).forEach(childNodes => walkActions(childNodes, visit, [...ancestors, node]));
+        });
+    }
+
+    function countSlot(node, slotKey) {
+        return node.slots?.[slotKey]?.length || 0;
+    }
+
+    function parseFieldValue(input, field) {
+        if (field.type === 'checkbox') return input.checked;
+        if (field.type === 'number') return parseNumber(input.value);
+        return input.value;
+    }
+
+    function defaultFieldValue(field) {
+        if (field.type === 'checkbox') return false;
+        if (field.type === 'number') return 0;
+        return '';
+    }
+
+    function textField(key, label, defaultValue = '') {
+        return { key, label, type: 'text', default: defaultValue };
+    }
+
+    function numberField(key, label, defaultValue = 0, step = 1) {
+        return { key, label, type: 'number', default: defaultValue, step };
+    }
+
+    function boolField(key, label, defaultValue = false) {
+        return { key, label, type: 'checkbox', default: defaultValue };
+    }
+
+    function selectField(key, label, options, defaultValue) {
+        return { key, label, type: 'select', options, default: defaultValue ?? options[0] };
+    }
+
     function buildSummary(state) {
         const flow = describeFlow(state);
         return `
@@ -791,6 +1738,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function describeFlow(state) {
+        if (currentMode === 'advanced') {
+            const lines = [];
+            walkActions(advancedActions, (node, ancestors) => {
+                const def = actionTypes[node.type];
+                const indent = ancestors.length ? `${'--'.repeat(ancestors.length)} ` : '';
+                lines.push(`${escapeHtml(indent)}<strong>${escapeHtml(def.title)}</strong>: ${escapeHtml(def.summary?.(node) || node.fields.debugLabel || node.type)}`);
+            });
+            return lines.length ? lines : ['No advanced actions have been authored.'];
+        }
+
         const payload = describePayloadStack(state);
         if (state.delivery === 'projectile') {
             return [
@@ -959,7 +1916,61 @@ ${state.scaledAttributes.map(attribute => `        <li>${xml(attribute)}</li>`).
         return '';
     }
 
+    function actionNodesXml(nodes, level) {
+        return nodes.map(node => actionNodeXml(node, level)).join('\n');
+    }
+
+    function actionNodeXml(node, level) {
+        const def = actionTypes[node.type];
+        const indent = '  '.repeat(level);
+        const fieldXml = def.fields
+            .filter(field => shouldWriteActionField(node, field))
+            .map(field => `${indent}  <${field.key}>${xml(node.fields[field.key])}</${field.key}>`)
+            .join('\n');
+        const queryXml = def.query ? `\n${targetQueryXml(node.query || defaultQuery(), level + 1)}` : '';
+        const slotXml = Object.keys(def.slots || {})
+            .map(slotKey => actionSlotXml(node, slotKey, level + 1))
+            .filter(Boolean)
+            .join('\n');
+        const body = [fieldXml, queryXml.trimEnd(), slotXml].filter(Boolean).join('\n');
+        return `${indent}<li Class="${xml(def.className)}">${body ? `\n${body}\n${indent}` : ''}</li>`;
+    }
+
+    function shouldWriteActionField(node, field) {
+        if (field.key === 'debugLabel') return Boolean(node.fields[field.key]);
+        if (field.key === 'soundDef' || field.key === 'explosionSoundDef' || field.key === 'explosionEffectDef') return Boolean(node.fields[field.key]);
+        if (field.key === 'durationTicks' && node.type === 'ApplyStatusEffectActionDef') return Number(node.fields[field.key]) >= 0;
+        if (field.key === 'durationTicks' && node.type === 'ApplyHediffActionDef') return Number(node.fields[field.key]) > 0;
+        if (field.key === 'removeAfterDuration' && node.type === 'ApplyHediffActionDef') return Boolean(node.fields[field.key]);
+        return node.fields[field.key] !== undefined && node.fields[field.key] !== '';
+    }
+
+    function actionSlotXml(node, slotKey, level) {
+        const nodes = node.slots?.[slotKey] || [];
+        if (!nodes.length) return '';
+        const indent = '  '.repeat(level);
+        return `${indent}<${slotKey}>\n${actionNodesXml(nodes, level + 1)}\n${indent}</${slotKey}>`;
+    }
+
+    function targetQueryXml(query, level) {
+        const indent = '  '.repeat(level);
+        return `${indent}<targetQuery Class="MagicFramework.Definitions.TargetsInRadiusQueryDef">
+${indent}  <debugLabel>${xml(query.debugLabel || 'Targets in radius')}</debugLabel>
+${indent}  <radius>${xml(query.radius)}</radius>
+${indent}  <centerSource>${xml(query.centerSource)}</centerSource>
+${indent}  <includePawns>${Boolean(query.includePawns)}</includePawns>
+${indent}  <includeBuildings>${Boolean(query.includeBuildings)}</includeBuildings>
+${indent}  <includeItems>${Boolean(query.includeItems)}</includeItems>
+${indent}  <includeCaster>${Boolean(query.includeCaster)}</includeCaster>
+${indent}  <pawnAffinity>${xml(query.pawnAffinity)}</pawnAffinity>
+${indent}</targetQuery>`;
+    }
+
     function buildActionsXml(state, level) {
+        if (currentMode === 'advanced') {
+            return `\n${actionNodesXml(advancedActions, level)}`;
+        }
+
         const primaryDamage = state.payloads.find(payload => payload.type === 'damage') || payloadTypes.damage.defaults;
         const sustainedStatus = state.payloads.find(payload => payload.type === 'status') || payloadTypes.status.defaults;
         const areaPayloads = state.payloads.filter(payload => payload.type !== 'damage');

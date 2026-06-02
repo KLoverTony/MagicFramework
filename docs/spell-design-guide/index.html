@@ -387,6 +387,7 @@
     <aside class="guide-nav" aria-label="Guide sections">
       <a href="#start">Start Here</a>
       <a href="#designing-spells">Designing Spells</a>
+      <a href="#targeting-compatibility">Targeting Compatibility</a>
       <a href="#first-direct-spell-minor-heal">Minor Heal</a>
       <a href="#first-projectile-spell-ember-bolt">Ember Bolt</a>
       <a href="#direct-versus-projectile-actions">Direct vs Projectile</a>
@@ -455,6 +456,55 @@
         </ol>
         <div class="guide-callout">
           <p><strong>Useful mental split:</strong> targeting controls the initial player selection. Actions can later retarget through queries, chains, child contexts, projectile impact context, or persistent lifecycle callbacks.</p>
+        </div>
+      </section>
+
+      <section id="targeting-compatibility">
+        <p class="eyebrow">Targeting Reference</p>
+        <h2>Targeting Compatibility</h2>
+        <p>
+          Targeting fields are cumulative. If a spell enables more than one category, terrain
+          gate, or special requirement, all relevant checks must pass. This is powerful, but it
+          can also make a spell impossible to cast if the fields describe different target kinds.
+        </p>
+        <div class="guide-card-grid">
+          <div class="guide-card">
+            <span>Categories</span>
+            <h3>Thing Types</h3>
+            <p>`includePawns`, `includeBuildings`, and `includeItems` decide which thing types can be selected or affected.</p>
+          </div>
+          <div class="guide-card">
+            <span>Cells</span>
+            <h3>Location Gates</h3>
+            <p>`requireStandableCell`, `requireWalkableCell`, and `requireWaterCell` validate the target location.</p>
+          </div>
+          <div class="guide-card">
+            <span>Selection</span>
+            <h3>Initial Target</h3>
+            <p>`allowSelfTarget`, `useCasterAsTarget`, and `requireLineOfSight` change how the first target is chosen.</p>
+          </div>
+          <div class="guide-card">
+            <span>Special</span>
+            <h3>Framework Cases</h3>
+            <p>`requireResurrectableCorpse` narrows targeting to corpse-style spells and should be paired deliberately.</p>
+          </div>
+        </div>
+        <table class="field-table">
+          <thead>
+            <tr><th>Spell Intent</th><th>Primary Target</th><th>Categories</th><th>Requirements And Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Ally heal</td><td>`Pawn`</td><td>Pawns only</td><td>`pawnAffinity` `Ally`; `allowSelfTarget` only if the caster may heal themselves.</td></tr>
+            <tr><td>Self buff</td><td>`Pawn`</td><td>Pawns only</td><td>Prefer `useCasterAsTarget=true` when no target prompt is needed.</td></tr>
+            <tr><td>Hostile bolt</td><td>`Pawn` or `PawnOrThing`</td><td>Pawns, optionally Buildings/Items</td><td>`requireLineOfSight=true`; avoid `allowSelfTarget`.</td></tr>
+            <tr><td>Area burst</td><td>`PawnOrCell`</td><td>Categories describe what later queries or payloads may affect</td><td>Cell requirements are optional unless the cast location must be special terrain.</td></tr>
+            <tr><td>Summon or placement spell</td><td>`Cell`</td><td>Categories usually irrelevant</td><td>Use `requireWalkableCell` or `requireStandableCell` for placement safety.</td></tr>
+            <tr><td>Water-only spell</td><td>`Cell` or `PawnOrCell`</td><td>Depends on payload</td><td>`requireWaterCell=true`; combine with walkable/standable only if all gates should be required.</td></tr>
+            <tr><td>Resurrection</td><td>`Thing`</td><td>Items only</td><td>`requireResurrectableCorpse=true`; disable Pawns and Buildings.</td></tr>
+          </tbody>
+        </table>
+        <div class="guide-callout">
+          <p><strong>Suspicious combinations:</strong> `Pawn` targets with Pawns disabled, `Thing` targets with Buildings and Items both disabled, corpse requirements with non-Thing targeting, corpse targeting with `useCasterAsTarget`, self-targeting while Pawns are disabled, and water-cell requirements combined with walkable or standable gates without testing.</p>
         </div>
       </section>
 

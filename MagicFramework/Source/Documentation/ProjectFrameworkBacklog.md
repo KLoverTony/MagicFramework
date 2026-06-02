@@ -258,7 +258,7 @@ MF-031 documentation backlog:
 - Reference, generated presentation: document generated description tokens, spell details UI fields, colored generated text settings, scroll inspect text, and how to keep authored descriptions readable.
 - Reference, scaling and enhancement: document `SpellPowerDef`, `ScalableFloatDef`, lightweight `scaledAttributes`, explicit scalar defs, power tiers, structural conditionals, enhancement rules, and settings multipliers.
 - Reference, validation checklist: provide copyable smoke-test checklists for XML load, cast success/failure, targeting edges, cost/cooldown, generated descriptions, save/load, cleanup, replacement, cancel, caster down/death, target invalidation, and multiplayer-sensitive deterministic behavior.
-- Web presentation: keep the Markdown guide as the canonical source, add browser tutorial pages/cards as sections mature, and keep SpellForge links anchored to the tutorial pages through `sync-docs.ps1`.
+- Web presentation: keep the Markdown guide as the canonical source, add browser tutorial pages/cards as sections mature, and maintain SpellForge directly under `Mods/docs/spell-def-builder`.
 
 
 ### MF-032 Compatibility

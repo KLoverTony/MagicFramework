@@ -2,20 +2,14 @@
 
 This folder contains the static documentation site for MagicFramework, MFVanilla, and related authoring tools.
 
-## SpellForge Copy
+## SpellForge
 
-`docs/spell-def-builder` is the publishable docs-site copy of the workspace-level `../SpellDefBuilder` tool.
+`docs/spell-def-builder` is the maintained SpellForge tool and the publishable docs-site version.
 
-Use the sync script from the `Mods` folder after editing the source builder:
+Edit the files in `docs/spell-def-builder` directly:
 
-```powershell
-./sync-docs.ps1
-```
+- `index.html`
+- `style.css`
+- `script.js`
 
-Use check mode before publishing:
-
-```powershell
-./sync-docs.ps1 -Check
-```
-
-The source builder and docs copy should stay equivalent for `index.html`, `style.css`, and `script.js`. The sync script rewrites the root builder's `../Mods/docs/spell-design-guide/index.html` links to the docs-site relative `../spell-design-guide/index.html` path during publish sync.
+The old workspace-level `../SpellDefBuilder` copy has been removed so this folder stays the single source of truth.

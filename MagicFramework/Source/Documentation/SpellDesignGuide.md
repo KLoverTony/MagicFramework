@@ -650,6 +650,38 @@ First-party conventions:
 - Terrain and aura spells should make cell restrictions explicit, especially `requireWalkableCell`, `requireStandableCell`, or `requireWaterCell`.
 - Caster-centered spells should use `useCasterAsTarget` so players cast them directly from the gizmo without a redundant target prompt.
 
+#### Targeting Compatibility
+
+Targeting fields are cumulative. If a spell enables more than one category, terrain gate, or special requirement, all relevant checks must pass. This is powerful, but it can also make a spell impossible to cast if the fields describe different kinds of targets.
+
+Use this mental split:
+
+- Target categories (`includePawns`, `includeBuildings`, `includeItems`) decide which thing types can be selected or affected.
+- Cell requirements (`requireStandableCell`, `requireWalkableCell`, `requireWaterCell`) validate the target location.
+- Selection rules (`allowSelfTarget`, `useCasterAsTarget`, `requireLineOfSight`) change how the initial target is chosen.
+- Special requirements such as `requireResurrectableCorpse` narrow targeting to a framework-specific case and should be paired deliberately.
+
+Common recipes:
+
+| Spell intent | Primary target | Categories | Requirements and notes |
+| --- | --- | --- | --- |
+| Ally heal | `Pawn` | Pawns only | `pawnAffinity` `Ally`; `allowSelfTarget` only if the caster may heal themselves. |
+| Self buff | `Pawn` | Pawns only | Prefer `useCasterAsTarget=true` when no target prompt is needed. |
+| Hostile bolt | `Pawn` or `PawnOrThing` | Pawns, optionally Buildings/Items | `requireLineOfSight=true`; avoid `allowSelfTarget`. |
+| Area burst | `PawnOrCell` | Categories describe what later queries or payloads may affect | Cell requirements are optional unless the cast location must be special terrain. |
+| Summon or placement spell | `Cell` | Categories usually irrelevant | Use `requireWalkableCell` or `requireStandableCell` for placement safety. |
+| Water-only spell | `Cell` or `PawnOrCell` | Depends on payload | `requireWaterCell=true`; combine with walkable/standable only if all gates should be required. |
+| Resurrection | `Thing` | Items only | `requireResurrectableCorpse=true`; disable Pawns and Buildings. |
+
+Suspicious combinations to avoid unless you have tested the exact behavior:
+
+- `primaryTargetType=Pawn` with `includePawns=false`.
+- `primaryTargetType=Thing` with both `includeBuildings=false` and `includeItems=false`.
+- `requireResurrectableCorpse=true` with `primaryTargetType=Pawn`, `Cell`, or building-only targeting.
+- `requireResurrectableCorpse=true` with `useCasterAsTarget=true`.
+- `allowSelfTarget=true` while pawns are disabled.
+- `requireWaterCell=true` plus `requireWalkableCell=true` or `requireStandableCell=true`, unless the spell should require all selected terrain gates.
+
 ### Actions
 
 `actions` is the spell's execution tree. Every action node has a `Class` and may have a `debugLabel`. Complex actions own child action lists:
