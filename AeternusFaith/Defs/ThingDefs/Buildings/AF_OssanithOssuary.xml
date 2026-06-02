@@ -184,6 +184,15 @@
 
     <comps>
       <li Class="CompProperties_Forbiddable"/>
+      <li Class="AeternusFaith.CompProperties_BonewrightLecternRitualFallback">
+        <supportedCircleDefs>
+          <li>AF_OssanithCircle</li>
+          <li>AF_AnimaraRitualCenter</li>
+          <li>AF_ChoralumCircle</li>
+          <li>AF_ShroudhymnRitualCenter</li>
+        </supportedCircleDefs>
+        <commandIconPath>Things/RitualLectern/Ossanith_Lectern</commandIconPath>
+      </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
         <circleDef>AF_OssanithCircle</circleDef>
@@ -191,6 +200,7 @@
         <commandLabel>Begin ossuary rite</commandLabel>
         <commandDescription>Begin an Ossanith ossuary rite. Requires an orthogonally adjacent Ossanith circle with an empty ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
@@ -198,6 +208,7 @@
         <commandLabel>Animate Ossanith Skeleton</commandLabel>
         <commandDescription>Begin an Ossanith rite to animate a corpse as an Ossanith Skeleton. Requires an orthogonally adjacent Ossanith circle.</commandDescription>
         <commandIconPath>Things/RitualRooms/OssanithRitualRoom/AF_OssanithCircle</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
@@ -206,6 +217,7 @@
         <commandLabel>Begin animara ossuary rite</commandLabel>
         <commandDescription>Begin an Animara ossuary rite. Requires an orthogonally adjacent Animara ritual center with a completed ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
@@ -213,6 +225,7 @@
         <commandLabel>Animate Echobound Revenant</commandLabel>
         <commandDescription>Begin an Animara rite to animate a corpse as an Echobound Revenant. Requires an orthogonally adjacent Animara ritual center.</commandDescription>
         <commandIconPath>Things/RitualRooms/AnimaraRitualRoom/Animara_Ritual_center</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
@@ -221,6 +234,7 @@
         <commandLabel>Begin choralum ossuary rite</commandLabel>
         <commandDescription>Begin a Choralum ossuary rite. Requires an orthogonally adjacent Choralum circle with a completed ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_ChoralumWardenRitual">
@@ -233,6 +247,7 @@
         <commandLabel>Animate Reliquary Warden</commandLabel>
         <commandDescription>Begin a Choralum rite to animate a corpse and suit of armor as a Reliquary Warden. Requires plate armor or flak armor near the circle.</commandDescription>
         <commandIconPath>Things/RitualRooms/ChoralumRitualRoom/Choralum_Ritual_center</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
@@ -241,6 +256,7 @@
         <commandLabel>Begin Shroudhymn ossuary rite</commandLabel>
         <commandDescription>Begin a Shroudhymn ossuary rite. Requires an orthogonally adjacent Shroudhymn ritual center with a completed ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
 
       <li Class="AeternusFaith.Undead.Spectral.CompProperties_SummonSpectre">
@@ -248,6 +264,7 @@
         <commandLabel>Animate Veilbound Shade</commandLabel>
         <commandDescription>Begin a Shroudhymn rite to animate a corpse as a Veilbound Shade at the adjacent ritual center.</commandDescription>
         <commandIconPath>Things/RitualRooms/ShroudhymnRitualRoom/Shroudhymn_Ritual_center</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
     </comps>
 

@@ -14,6 +14,7 @@ namespace AeternusFaith.Undead.Spectral
         public string commandLabel = "Animate Veilbound Shade";
         public string commandDescription = "Begin a Shroudhymn rite to animate a corpse as a Veilbound Shade.";
         public string commandIconPath;
+        public bool hideWhenCircleAbsent;
 
         public CompProperties_SummonSpectre()
         {
@@ -39,9 +40,20 @@ namespace AeternusFaith.Undead.Spectral
             };
 
             if (!TryFindRitualCenter(out _, out string failReason))
+            {
+                if (Props.hideWhenCircleAbsent && !HasAdjacentCircle())
+                    yield break;
+
                 command.Disable(failReason);
+            }
 
             yield return command;
+        }
+
+        private bool HasAdjacentCircle()
+        {
+            return Props.circleDef != null &&
+                   RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out _);
         }
 
         private bool TryFindRitualCenter(out Thing circle, out string failReason)

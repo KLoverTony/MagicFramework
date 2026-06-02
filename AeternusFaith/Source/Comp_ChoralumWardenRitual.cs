@@ -14,6 +14,7 @@ namespace AeternusFaith
         public string commandLabel = "Animate Reliquary Warden";
         public string commandDescription = "Begin a Choralum rite to animate a corpse and suit of armor as a Reliquary Warden.";
         public string commandIconPath;
+        public bool hideWhenCircleAbsent;
 
         public CompProperties_ChoralumWardenRitual()
         {
@@ -39,9 +40,20 @@ namespace AeternusFaith
             };
 
             if (!TryFindRitualSetup(out _, out _, out string failReason))
+            {
+                if (Props.hideWhenCircleAbsent && !HasAdjacentCircle())
+                    yield break;
+
                 command.Disable(failReason);
+            }
 
             yield return command;
+        }
+
+        private bool HasAdjacentCircle()
+        {
+            return Props.circleDef != null &&
+                   RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out _);
         }
 
         private bool TryFindRitualSetup(out Thing circle, out Thing armor, out string failReason)

@@ -13,6 +13,7 @@ namespace AeternusFaith
         public string commandLabel = "Animate Ossanith Skeleton";
         public string commandDescription = "Begin an Ossanith rite to animate a corpse as an Ossanith Skeleton.";
         public string commandIconPath;
+        public bool hideWhenCircleAbsent;
 
         public CompProperties_OssanithSkeletonRitual()
         {
@@ -38,9 +39,20 @@ namespace AeternusFaith
             };
 
             if (!TryFindRitualSetup(out _, out string failReason))
+            {
+                if (Props.hideWhenCircleAbsent && !HasAdjacentCircle())
+                    yield break;
+
                 command.Disable(failReason);
+            }
 
             yield return command;
+        }
+
+        private bool HasAdjacentCircle()
+        {
+            return Props.circleDef != null &&
+                   RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out _);
         }
 
         private bool TryFindRitualSetup(out Thing circle, out string failReason)

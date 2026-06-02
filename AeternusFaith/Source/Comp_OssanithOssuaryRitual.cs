@@ -14,6 +14,7 @@ namespace AeternusFaith
         public string commandLabel = "Begin rite";
         public string commandDescription = "Begin an Ossanith ossuary rite";
         public string commandIconPath;
+        public bool hideWhenCircleAbsent;
 
         public CompProperties_OssanithOssuaryRitual()
         {
@@ -39,9 +40,20 @@ namespace AeternusFaith
             };
 
             if (!TryFindRitualSetup(out _, out _, out string failReason))
+            {
+                if (Props.hideWhenCircleAbsent && !HasAdjacentCircle())
+                    yield break;
+
                 command.Disable(failReason);
+            }
 
             yield return command;
+        }
+
+        private bool HasAdjacentCircle()
+        {
+            return Props.circleDef != null &&
+                   RitualAdjacencyUtility.TryFindOrthogonallyAdjacentThing(parent, Props.circleDef, out _);
         }
 
         private bool TryFindRitualSetup(out Thing circle, out Thing ossuary, out string failReason)

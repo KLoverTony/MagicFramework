@@ -122,18 +122,26 @@
     <surfaceType>Item</surfaceType>
     <comps>
       <li Class="CompProperties_Forbiddable"/>
+      <li Class="AeternusFaith.CompProperties_BonewrightLecternRitualFallback">
+        <supportedCircleDefs>
+          <li>AF_ShroudhymnRitualCenter</li>
+        </supportedCircleDefs>
+        <commandIconPath>Things/RitualLectern/Ossanith_Lectern</commandIconPath>
+      </li>
       <li Class="AeternusFaith.CompProperties_OssanithOssuaryRitual">
         <circleDef>AF_ShroudhymnRitualCenter</circleDef>
         <ossuaryDef>AF_OssuaryBoneBox</ossuaryDef>
         <commandLabel>Begin Shroudhymn ossuary rite</commandLabel>
         <commandDescription>Begin a Shroudhymn ossuary rite. Requires an orthogonally adjacent Shroudhymn Ritual Center with a completed ossuary in its center.</commandDescription>
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
       <li Class="AeternusFaith.Undead.Spectral.CompProperties_SummonSpectre">
         <circleDef>AF_ShroudhymnRitualCenter</circleDef>
         <commandLabel>Animate Veilbound Shade</commandLabel>
         <commandDescription>Begin a Shroudhymn rite to animate a corpse as a Veilbound Shade at the adjacent ritual center.</commandDescription>
         <commandIconPath>Things/RitualRooms/ShroudhymnRitualRoom/Shroudhymn_Ritual_center</commandIconPath>
+        <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
     </comps>
   </ThingDef>
