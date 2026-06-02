@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ApplyToTargetsActionDef: {
             title: 'Apply To Targets',
             className: 'MagicFramework.Definitions.ApplyToTargetsActionDef',
-            summary: node => `Query radius ${node.query?.radius || 0}, then ${countSlot(node, 'actions')} action(s)`,
+            summary: node => `Query radius ${(node.query && node.query.radius) || 0}, then ${countSlot(node, 'actions')} action(s)`,
             fields: [
                 textField('debugLabel', 'Debug Label', 'Apply to targets')
             ],
@@ -663,6 +663,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let advancedDirty = false;
 
     function init() {
+        workspaceTabs.forEach(button => button.addEventListener('click', () => applyBuilderTab(button.dataset.builderTab, false)));
         renderActionTypeOptions();
         renderPatterns();
         applyPattern(selectedPattern);
@@ -678,7 +679,6 @@ document.addEventListener('DOMContentLoaded', () => {
         payloadStack.addEventListener('input', handlePayloadInput);
         payloadStack.addEventListener('change', handlePayloadInput);
         payloadStack.addEventListener('click', handlePayloadClick);
-        workspaceTabs.forEach(button => button.addEventListener('click', () => applyBuilderTab(button.dataset.builderTab)));
         modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
         actionTree.addEventListener('click', handleActionTreeClick);
         actionInspector.addEventListener('input', handleInspectorInput);
@@ -743,7 +743,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function clonePayloads(payloads) {
         return payloads.map(payload => ({
-            ...payloadTypes[payload.type]?.defaults,
+            ...(payloadTypes[payload.type] ? payloadTypes[payload.type].defaults : {}),
             ...payload,
             id: `payload-${payloadIdSeed++}`
         }));
@@ -860,7 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>${field.label}</span>
                 <input
                     type="${field.type}"
-                    value="${escapeHtml(payload[field.key] ?? '')}"
+                    value="${escapeHtml(payload[field.key] == null ? '' : payload[field.key])}"
                     step="${field.step || ''}"
                     data-payload-id="${payload.id}"
                     data-payload-key="${field.key}">
@@ -880,7 +880,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderDefField(payload, field) {
-        const value = String(payload[field.key] ?? '');
+        const value = String(payload[field.key] == null ? '' : payload[field.key]);
         const options = field.options || [];
         const isKnownValue = options.includes(value);
         const showCustom = payload[customDefFlagKey(field.key)] || (value && !isKnownValue);
@@ -913,12 +913,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getPayloadField(type, key) {
-        return payloadTypes[type]?.fields.find(field => field.key === key);
+        return payloadTypes[type] ? payloadTypes[type].fields.find(field => field.key === key) : undefined;
     }
 
     function customDefValue(payload, field) {
-        const currentValue = String(payload[field.key] ?? '');
-        return field.options?.includes(currentValue) ? '' : currentValue;
+        const currentValue = String(payload[field.key] == null ? '' : payload[field.key]);
+        return field.options && field.options.includes(currentValue) ? '' : currentValue;
     }
 
     function customDefFlagKey(key) {
@@ -990,10 +990,18 @@ document.addEventListener('DOMContentLoaded', () => {
             requireArcaneGift: getVal('requireArcaneGift'),
             appendSpellSummary: getVal('appendSpellSummary'),
             scaledAttributes: Array.from(document.querySelectorAll('.scaled-attribute:checked')).map(input => input.value),
-            payloads: currentPayloads.map(({ id, ...payload }) => Object.fromEntries(
-                Object.entries(payload).filter(([key]) => !key.startsWith('__custom_'))
-            ))
+            payloads: currentPayloads.map(payload => cleanPayloadForState(payload))
         };
+    }
+
+    function cleanPayloadForState(payload) {
+        const result = {};
+        Object.keys(payload).forEach(key => {
+            if (key !== 'id' && !key.startsWith('__custom_')) {
+                result[key] = payload[key];
+            }
+        });
+        return result;
     }
 
     function updatePreview() {
@@ -1115,7 +1123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setGroupAvailable(id, available, reason) {
         const el = document.getElementById(id);
-        const group = el?.closest('.form-group');
+        const group = el ? el.closest('.form-group') : null;
         if (!el || !group) return;
 
         el.disabled = !available;
@@ -1150,7 +1158,7 @@ document.addEventListener('DOMContentLoaded', () => {
         activeBuilderTab = tab || 'spell';
         workspaceTabs.forEach(button => button.classList.toggle('active', button.dataset.builderTab === activeBuilderTab));
         tabPanels.forEach(panel => panel.classList.toggle('is-tab-hidden', panel.dataset.tabPanel !== activeBuilderTab));
-        appContainer.classList.toggle('actions-focus', activeBuilderTab === 'actions');
+        if (appContainer) appContainer.classList.toggle('actions-focus', activeBuilderTab === 'actions');
         if (refresh) updatePreview();
     }
 
@@ -1189,7 +1197,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <span>${escapeHtml(def.title)}</span>
                         <small>${escapeHtml(node.fields.debugLabel || node.type)}</small>
                     </span>
-                    <span class="action-node-summary">${escapeHtml(def.summary?.(node) || '')}</span>
+                    <span class="action-node-summary">${escapeHtml(def.summary ? def.summary(node) : '')}</span>
                 </button>
                 ${slotMarkup}
             </div>
@@ -1197,7 +1205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderActionSlot(parentNode, slotKey, slotLabel) {
-        const nodes = parentNode.slots?.[slotKey] || [];
+        const nodes = parentNode.slots && parentNode.slots[slotKey] ? parentNode.slots[slotKey] : [];
         const addOptions = rootActionOptions.map(type => `<option value="${type}">${escapeHtml(actionTypes[type].title)}</option>`).join('');
         return `
             <div class="action-slot" data-slot-owner="${parentNode.id}" data-slot-key="${slotKey}">
@@ -1254,7 +1262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderInspectorField(node, field) {
-        const value = node.fields[field.key] ?? field.default ?? '';
+        const value = node.fields[field.key] != null ? node.fields[field.key] : (field.default != null ? field.default : '');
         if (field.type === 'checkbox') {
             return `
                 <label class="payload-check-field">
@@ -1315,7 +1323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!addButton) return;
 
         const select = actionTree.querySelector(`[data-add-type-for="${addButton.dataset.addChild}"][data-add-slot="${addButton.dataset.addSlot}"]`);
-        addChildAction(addButton.dataset.addChild, addButton.dataset.addSlot, select?.value || 'EffectActionDef');
+        addChildAction(addButton.dataset.addChild, addButton.dataset.addSlot, select ? select.value : 'EffectActionDef');
     }
 
     function handleInspectorInput(event) {
@@ -1366,8 +1374,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function addChildAction(parentId, slotKey, type) {
         const found = findAction(advancedActions, parentId);
         if (!found) return;
-        found.node.slots ??= {};
-        found.node.slots[slotKey] ??= [];
+        if (!found.node.slots) found.node.slots = {};
+        if (!found.node.slots[slotKey]) found.node.slots[slotKey] = [];
         const node = createActionNode(type);
         found.node.slots[slotKey].push(node);
         selectedActionId = node.id;
@@ -1398,7 +1406,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateQueryField(input) {
         const found = findAction(advancedActions, input.dataset.actionId);
         if (!found) return;
-        found.node.query ??= defaultQuery();
+        if (!found.node.query) found.node.query = defaultQuery();
         found.node.query[input.dataset.queryField] = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? parseNumber(input.value) : input.value);
         markAdvancedDirty();
     }
@@ -1610,8 +1618,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createActionNode(type) {
         const def = actionTypes[type] || actionTypes.EffectActionDef;
-        const fields = Object.fromEntries(def.fields.map(field => [field.key, field.default ?? defaultFieldValue(field)]));
-        const slots = Object.fromEntries(Object.keys(def.slots || {}).map(slotKey => [slotKey, []]));
+        const fields = {};
+        def.fields.forEach(field => {
+            fields[field.key] = field.default != null ? field.default : defaultFieldValue(field);
+        });
+        const slots = {};
+        Object.keys(def.slots || {}).forEach(slotKey => {
+            slots[slotKey] = [];
+        });
         const node = {
             id: `action-${actionIdSeed++}`,
             type,
@@ -1661,7 +1675,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function countSlot(node, slotKey) {
-        return node.slots?.[slotKey]?.length || 0;
+        return node.slots && node.slots[slotKey] ? node.slots[slotKey].length : 0;
     }
 
     function parseFieldValue(input, field) {
@@ -1689,7 +1703,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function selectField(key, label, options, defaultValue) {
-        return { key, label, type: 'select', options, default: defaultValue ?? options[0] };
+        return { key, label, type: 'select', options, default: defaultValue != null ? defaultValue : options[0] };
     }
 
     function buildSummary(state) {
@@ -1743,7 +1757,7 @@ document.addEventListener('DOMContentLoaded', () => {
             walkActions(advancedActions, (node, ancestors) => {
                 const def = actionTypes[node.type];
                 const indent = ancestors.length ? `${'--'.repeat(ancestors.length)} ` : '';
-                lines.push(`${escapeHtml(indent)}<strong>${escapeHtml(def.title)}</strong>: ${escapeHtml(def.summary?.(node) || node.fields.debugLabel || node.type)}`);
+                lines.push(`${escapeHtml(indent)}<strong>${escapeHtml(def.title)}</strong>: ${escapeHtml((def.summary ? def.summary(node) : '') || node.fields.debugLabel || node.type)}`);
             });
             return lines.length ? lines : ['No advanced actions have been authored.'];
         }
@@ -1795,7 +1809,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function describePayloadStack(state) {
         if (!state.payloads.length) return 'run no payload actions';
         return state.payloads
-            .map(payload => payloadTypes[payload.type]?.summary(payload) || 'run a payload action')
+            .map(payload => payloadTypes[payload.type] ? payloadTypes[payload.type].summary(payload) : 'run a payload action')
             .join(', then ');
     }
 
@@ -1946,7 +1960,7 @@ ${state.scaledAttributes.map(attribute => `        <li>${xml(attribute)}</li>`).
     }
 
     function actionSlotXml(node, slotKey, level) {
-        const nodes = node.slots?.[slotKey] || [];
+        const nodes = node.slots && node.slots[slotKey] ? node.slots[slotKey] : [];
         if (!nodes.length) return '';
         const indent = '  '.repeat(level);
         return `${indent}<${slotKey}>\n${actionNodesXml(nodes, level + 1)}\n${indent}</${slotKey}>`;
@@ -2191,7 +2205,7 @@ ${indent}</li>`;
     }
 
     function xml(value) {
-        return String(value ?? '').replace(/[<>&'"]/g, c => ({
+        return String(value == null ? '' : value).replace(/[<>&'"]/g, c => ({
             '<': '&lt;',
             '>': '&gt;',
             '&': '&amp;',
