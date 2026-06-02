@@ -19,30 +19,38 @@ Current implemented baseline:
 - Manifested Veilbound Shades now behave as non-player guest pawns rather than player-managed allied pawns; smoke testing confirmed ownership/control expectations, save/load, death/downing, map removal, and cleanup behavior.
 - AF skeleton and shade pawn creation now route through a reusable undead pawn factory, so future close variants can share template generation, lifecycle enforcement, source ideology/identity transfer, race markers, xenotypes, and appearance setup instead of copying the old skeleton/spectre conversion path.
 - The universal Bonewright lectern now exposes rites based on adjacent supported ritual circles, hides irrelevant ritual gizmos, and shows one disabled fallback gizmo when no supported circle is adjacent.
-- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested. It requires a humanlike corpse plus nearby plate/flak armor, consumes both, and creates `AF_ReliquaryWarden`, a tougher armored skeletal undead than the Ossanith Skeleton.
+- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested. It requires a humanlike corpse plus nearby plate/flak armor, consumes both, and creates `AF_ReliquaryWarden`, a tougher armored skeletal undead than the Ossanith Skeleton. It now uses the limited-labor intelligence tier and inherits a reduced practical skill echo from the source pawn.
+- Animara's `Animate Echobound Revenant` rite has a first real pawn kind/race/job path. It no longer borrows the Ossanith skeleton result; it creates `AF_EchoboundRevenant`, a skeletal limited-labor undead with task-bound echoes and reduced practical source-skill copying.
+- Current animation rites enforce one bound undead minion per Bonewright through the lifecycle master binding. Additional animation attempts are rejected before corpse/armor consumption.
+- Bound undead minions follow drafted masters through the MagicFramework lifecycle escort loop and default to attacking hostiles near their drafted master.
+- Ossanith now provides a dismissal rite for the Bonewright's bound undead minion. The minion walks to the ritual circle/ossuary center, waits for dismissal, is destroyed, and fills the ossuary bone box with a dismissal obituary.
 - Bonewright membership now exists as `AF_BonewrightOssanithInitiate`. Existing ritual circles/centers expose a Bonewright anointment popup, and Soulwardens or existing Bonewrights can anoint new initiates.
 - Ossuary, skeleton, and shade-calling rite conductors must be anointed Bonewrights.
-- Skeleton, ossuary, and shade-calling ritual setup now reports specific invalid-state reasons for wrong corpse, non-Bonewright conductors, reachability, reservations, missing targets, and already-bound shades.
+- Skeleton, ossuary, dismissal, and shade-calling ritual setup now reports specific invalid-state reasons for wrong corpse, non-Bonewright conductors, reachability, reservations, missing targets, already-bound shades, and existing bound minions.
 - Spectral debug actions have been hardened for listing, spawning, manifesting, clearing, and smoke-test inspection.
 
 First-edition emphasis:
 - Ossanith skeleton and ossuary loops should be reliable and understandable.
 - Shroudhymn Veilbound Shade content should be stable enough that it does not leave stale pawns, spectral state, or player confusion. Rite-bound shades are currently persistent; natural hauntings are the first model for intermittent manifestation.
-- Animara is the next undead implementation slice: turn `Animate Echobound Revenant` from a borrowed skeleton-path label into a real pawn kind/race/lifecycle variant with limited intellect, retained echoes, master protection, and simple-task ability.
-- Choralum now has its first player-facing summon through the Reliquary Warden. Deeper Choralum guardian/aura mechanics remain follow-up.
-- Shroudhymn should align its spectre foundation with the Veilbound Shade: an oath-bound spirit with some intellect, very little physical agency, and limited ability to harm living hostiles.
+- Animara's first Echobound Revenant implementation is in place and now needs live smoke testing and tuning: limited intellect, retained echoes, master protection, and simple-task ability should be verified against Ossanith Skeleton expectations.
+- Choralum now has its first player-facing summon through the Reliquary Warden. Its limited-labor tier and reduced practical skill echoes need live tuning; deeper Choralum guardian/aura mechanics remain follow-up.
+- Shroudhymn should align its spectre foundation with the Veilbound Shade: an oath-bound spirit with some intellect, no ordinary physical work, reduced practical skill echoes for identity/combat/future spectral interactions, and limited ability to harm living hostiles.
 - Voressai should move toward the Hungering Husk: a fleshy, controlled undead that is dangerous and poor at complex work, with mundane tasks available only when directed.
+- Master death/destruction should not leave bound undead as ordinary servants. Absence is acceptable, but if the master is truly gone the minion should enter a delayed instability window and eventually become a lost undead if not resolved: Hollowborn, Fractured Echobound, Wailwright, Errant Soul, or Void Drifter depending on cathedra.
+- First-pass lost-undead behavior is implemented for current bound undead. When the master dies or is destroyed, the minion starts a grace timer; if unresolved, it is renamed to its lost form, unbound, and begins rampaging against nearby living pawns.
 - Bonewright role requirements should make ritual access feel intentional rather than arbitrary. The Soulwarden is now the order office/initiator, while Bonewright membership is the actual ritual-access marker.
 
 Current RC1 priorities, in order:
 1. Smoke-test the Bonewright anointment loop: circle command, popup selection, Soulwarden bootstrap, cap behavior, save/load, and rite gating.
 2. Stabilize the existing undead and spirit lifecycle under normal play: spectre guest ownership/control, manifest/unmanifest, load while manifested, clear map, pawn death/downing, and debug cleanup have passed smoke testing; keep resurrection/source-soul edge cases under observation.
-3. Smoke-test ritual invalid-state messaging in the setup dialogs and start-job rejection paths, especially "not a Bonewright", "cannot reserve", "cannot reach", "wrong corpse", "missing circle", and "already bound".
-4. Continue smoke testing the universal Bonewright lectern and simple ritual circles, especially filtered gizmos, fallback reasons, missing-ingredient states, and save/load behavior.
-5. Implement the Echobound Revenant as the next generator-backed undead slice.
-6. Decide whether Voressai's Hungering Husk is player-facing, dev-facing, or documented-only for RC1 after Animara is stable.
-7. Review ideology completeness: memes, precepts, roles, apparel, research gates, starting ideology/preset, and build availability.
-8. Packaging and release hygiene: `About.xml`, dependencies, preview/icon assets, assembly output, XML load, local deployment, and Workshop/GitHub packaging expectations.
+3. Smoke-test ritual invalid-state messaging in the setup dialogs and start-job rejection paths, especially "not a Bonewright", "cannot reserve", "cannot reach", "wrong corpse", "missing circle", "existing bound minion", and "already bound".
+4. Smoke-test bound-minion behavior under normal play: drafted-master follow, automatic defense, work interruption when drafted, save/load of master binding, and the Ossanith dismissal rite filling the bone box.
+5. Continue smoke testing the universal Bonewright lectern and simple ritual circles, especially filtered gizmos, fallback reasons, missing-ingredient states, and save/load behavior.
+6. Smoke test and tune the Echobound Revenant as the newest generator-backed undead slice, especially reduced skill echoes and limited-labor work restrictions.
+7. Regression-test master-loss/lost-undead behavior so death/destruction of a Bonewright continues to produce a readable consequence instead of leaving normal obedient minions behind.
+8. Decide whether Voressai's Hungering Husk is player-facing, dev-facing, or documented-only for RC1 after Animara is stable.
+9. Review ideology completeness: memes, precepts, roles, apparel, research gates, starting ideology/preset, and build availability.
+10. Packaging and release hygiene: `About.xml`, dependencies, preview/icon assets, assembly output, XML load, local deployment, and Workshop/GitHub packaging expectations.
 
 Intentionally paused:
 - Haunting resolution, exorcism, or release of active hauntings should not be a simple cleanup action. Leave this design open until the haunting-response plan is more satisfying.
@@ -68,22 +76,26 @@ First implementation pass:
 
 Goal: make AeternusFaith ritual setup clearer and more polished.
 
+Status: implementation complete for the current RC1 ritual surface. Remaining work is validation under MF-039 rather than a separate active slice.
+
 Current state:
 - MagicFramework provides `Dialog_ParticipantSelection` as a reusable participant-selection shell.
 - The reusable dialog supports corpse selection plus pawn buckets for conductor, audience, and available pawns.
 - Bucket rows use pawn/corpse icons, disabled-row reasons, and a validation summary before accept.
-- AeternusFaith skeleton, ossuary, and spectre rite dialogs now use thin adapters over the shared participant dialog.
+- AeternusFaith skeleton, Choralum warden, ossuary, and spectre rite dialogs now use thin adapters over the shared participant dialog.
+- The shared accept button scales for longer labels such as `Animate Reliquary Warden`.
+- Bonewright anointment uses its own compact popup and follows the same validation posture.
 
-Possible first pass:
-- Replace plain checkbox/radio lists with pawn rows that include portraits.
-- Show why a corpse or conductor is unavailable.
-- Surface reachability/reservation failure reasons where practical.
-- Keep the UI compact enough for small screens.
+Completed first pass:
+- Replaced plain checkbox/radio lists with pawn/corpse rows.
+- Shows why a corpse or conductor is unavailable.
+- Surfaces reachability, reservation, role, corpse-state, ingredient, and existing-bound-minion failure reasons where practical.
+- Keeps the current UI compact enough for the RC1 ritual flow.
 
-Remaining work:
-- Smoke test the specific reachability, reservation, role, corpse-state, and Bonewright conductor reasons now exposed by skeleton, ossuary, and spectre ritual dialogs.
-- Consider dedicated slot labels and optional min/max participant counts if future rites need them.
-- Smoke test the skeleton, ossuary, spectre, and Bonewright anointment dialogs at small resolutions.
+Validation folded into MF-039:
+- Smoke test the specific reachability, reservation, role, corpse-state, missing-ingredient, existing-bound-minion, and Bonewright conductor reasons exposed by the current ritual dialogs.
+- Smoke test skeleton, ossuary, Choralum, spectre, and Bonewright anointment dialogs at small resolutions.
+- Consider dedicated slot labels and optional min/max participant counts only if future rites need them.
 
 
 ### MF-020 Psychic Sensitivity In Haunting Effects

@@ -113,6 +113,13 @@ namespace AeternusFaith
                 return;
             }
 
+            AcceptanceReport minionReport = BonewrightMinionUtility.ValidateCanBindMinion(pawn);
+            if (!minionReport.Accepted)
+            {
+                Messages.Message(minionReport.Reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             Thing armor = Armor;
             if (armor == null || armor.Destroyed)
             {
@@ -169,7 +176,11 @@ namespace AeternusFaith
                 label = "Reliquary Warden of " + sourceName,
                 sourcePawn = sourcePawn,
                 sourceIdeo = sourceIdeo,
+                master = pawn,
                 resetSkills = true,
+                copySkills = true,
+                copyOnlySimpleSkills = true,
+                copiedSkillFactor = 0.5f,
                 forceNoBackstory = false
             });
             if (warden == null)

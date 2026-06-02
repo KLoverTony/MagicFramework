@@ -49,6 +49,20 @@ namespace AeternusFaith
             obituary = "Here lie the remains of " + deceased.LabelShortCap + ageText + ", " + kindText + "." + conductorText;
         }
 
+        public void RecordDismissedUndead(Pawn undead, Pawn conductor)
+        {
+            filled = true;
+            if (undead == null)
+            {
+                obituary = "The remains of an unnamed bound undead are sealed within this ossuary.";
+                return;
+            }
+
+            string kindText = string.IsNullOrEmpty(undead.KindLabel) ? "bound undead" : undead.KindLabel;
+            string conductorText = conductor != null ? " Dismissed and sealed by " + conductor.LabelShortCap + "." : string.Empty;
+            obituary = "Here lie the ritually dismissed remains of " + undead.LabelShortCap + ", " + kindText + "." + conductorText;
+        }
+
         public void CopyFrom(Comp_OssuaryObituary other)
         {
             if (other == null)

@@ -112,6 +112,13 @@ namespace AeternusFaith
                 return;
             }
 
+            AcceptanceReport minionReport = BonewrightMinionUtility.ValidateCanBindMinion(pawn);
+            if (!minionReport.Accepted)
+            {
+                Messages.Message(minionReport.Reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             string corpseLabel = corpse.LabelShortCap;
             Pawn sourcePawn = corpse.InnerPawn;
             string sourceName = ResolveSourceName(corpse);
@@ -158,6 +165,7 @@ namespace AeternusFaith
                 label = "Skeleton of " + sourceName,
                 sourcePawn = sourcePawn,
                 sourceIdeo = sourceIdeo,
+                master = pawn,
                 resetSkills = true,
                 forceNoBackstory = false
             });

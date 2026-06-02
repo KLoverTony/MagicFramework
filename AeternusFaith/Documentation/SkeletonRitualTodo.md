@@ -8,6 +8,9 @@ Current implemented slice:
 - Skeletons receive undead cleanup/state handling through `Comp_SkeletonUndeadCleanup`, `AF_UndeadNature`, `AF_SkeletalBody`, and `AF_SkeletonXenotype` when available.
 - The race has no hunger/rest/breath, no bleeding, no learning, strong temperature/tox resistance, psychic immunity, modest armor, slower movement, and a restricted work set.
 - Rite attendees can be assigned through the dialog and are released when the ritual finishes.
+- Raised skeletons bind to the ritual conductor as their Bonewright master. The current RC1 rule allows one bound undead minion per Bonewright.
+- Bound skeletons follow drafted masters, automatically attack hostiles near drafted masters, and can be dismissed through an Ossanith burial rite that fills an ossuary bone box.
+- Bound skeletons show the `AF_BoundUndeadMinion` hediff marker. If their master dies or is destroyed, the marker starts a visible instability countdown; unresolved skeletons become Hollowborn, clear their master binding, turn hostile, and attack nearby living pawns.
 
 ## Resources
 
@@ -56,17 +59,15 @@ Current implemented slice:
 
 ## Master Binding
 
-- Bind the raised skeleton to the ritual conductor as its master.
-- Automatically attack anything hostile to its master.
-- Follow the master when the master is drafted.
+- Implemented: bind the raised skeleton to the ritual conductor as its master.
+- Implemented: automatically attack hostiles near its drafted master.
+- Implemented: follow the master when the master is drafted, interrupting ordinary work/hauling to do so.
 - Decide whether it should follow the master while undrafted, doing fieldwork, or guarding.
-- Decide what happens if the master dies, leaves the map, becomes hostile, or is downed:
-  - idle near the circle,
-  - defend the body,
-  - transfer to another Bonewright,
-  - become uncontrolled,
-  - collapse.
+- Implemented: ordinary absence is tolerated, while master death/destruction starts a delayed instability countdown through `AF_BoundUndeadMinion`.
+- Implemented: if unresolved after the countdown, the skeleton becomes Hollowborn, loses its binding, turns hostile, and attacks nearby living pawns.
+- Follow-up decisions remain for master transfer, recovery, or calming rituals during the instability window.
 - Decide whether the player can reassign the master.
+- Implemented: an Ossanith dismissal rite can destroy the bound skeleton/minion and seal remains into an ossuary bone box.
 
 ## Ritual Rules
 
@@ -85,12 +86,13 @@ Current implemented slice:
   - ritual quality affects retained traits.
 - Decide whether raising a corpse completes funeral obligations or creates ideology/social consequences.
 - Add failure, imperfect success, and stronger success outcomes later.
+- Implemented ritual limit: a Bonewright cannot animate another bound undead while they already have a living bound minion.
 
 ## UX And Feedback
 
 - Make the ritual dialog explain why a corpse or conductor is unavailable.
 - Add clear messages for successful raising, failed raising, and invalid setup.
-- Add inspect text or a hediff label that marks the pawn as undead/bound.
+- Implemented: hediff labels mark the pawn as undead/bound and show the bound master or failing countdown.
 - Add a gizmo or status entry showing the master.
 
 ## Testing
@@ -102,6 +104,7 @@ Current implemented slice:
 - Verify undead hediffs/xenotype apply and persist after save/load.
 - Verify skeleton follows master when drafted.
 - Verify skeleton attacks hostile threats to master.
+- Verify master death/destruction starts the bound-minion countdown and produces Hollowborn behavior if unresolved.
 - Verify no food, rest, breath, fear, skill learning, or skill decay behavior leaks through.
 - Verify save/load preserves master binding and undead state.
 - Verify deployed Steam/Common mod copy matches the working copy after changes.

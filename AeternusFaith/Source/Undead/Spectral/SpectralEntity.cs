@@ -357,9 +357,12 @@ namespace AeternusFaith.Undead.Spectral
                     label = label,
                     sourcePawn = sourcePawn,
                     sourceIdeo = sourceIdeo,
+                    master = boundSummoner,
                     resetSkills = true,
                     copyBackstories = true,
                     copySkills = true,
+                    copyOnlySimpleSkills = true,
+                    copiedSkillFactor = 0.5f,
                     forceNoBackstory = true
                 });
                 if (cachedPawn == null)

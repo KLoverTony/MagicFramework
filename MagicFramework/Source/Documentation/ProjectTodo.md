@@ -39,7 +39,10 @@ Playtest status:
 - AeternusFaith manifested spirits now smoke test correctly as non-player guest pawns: they remain unmanageable, non-hostile, save/load safely, and clean up through the tested lifecycle paths.
 - AeternusFaith ritual dialogs now surface specific invalid-state messages for corpse validity, Bonewright requirements, reachability, reservations, missing ritual targets, missing armor, and already-bound shades.
 - The universal Bonewright lectern now reads adjacent ritual circles, filters out irrelevant ritual gizmos, and shows one disabled fallback gizmo when no supported circle is adjacent.
-- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested: it consumes a corpse plus nearby plate/flak armor and creates a tougher armored skeletal guardian through the shared undead factory.
+- Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested: it consumes a corpse plus nearby plate/flak armor and creates a tougher armored skeletal guardian through the shared undead factory. Reliquary Wardens now use the limited-labor intelligence tier and inherit a reduced echo of simple source skills.
+- AeternusFaith bound undead now use a one-minion-per-Bonewright rule across the current animation rites. Bound minions follow drafted masters through the lifecycle escort loop, attack hostiles near their drafted master, and can be dismissed through an Ossanith burial rite that fills an ossuary bone box.
+- Animara's `Animate Echobound Revenant` rite now has a real first-pass pawn kind/race/job path instead of borrowing the Ossanith skeleton result. It creates a skeletal limited-labor revenant through the shared undead factory, blocks complex work such as crafting/art/medicine/research, and copies a reduced practical skill echo from the source pawn.
+- Master death/destruction now has a validated lost-undead behavior for current bound undead: `AF_BoundUndeadMinion` stores the master binding, shows the bound/failing state as a hediff marker, starts a short grace timer when the master dies or is destroyed, then renames the minion to its cathedra lost form, clears the binding, and begins attacking nearby living pawns.
 - Arcane Cache has been confirmed in normal gameplay around day 45, including event arrival and expected completion.
 - Deep Iron Golem has been dev tested and produced a strong boss fight.
 - Automata are working fairly well in current testing.
@@ -70,9 +73,9 @@ AeternusFaith RC1 validation slice: make the first public faith/ritual surface r
 Primary target: MF-039 AeternusFaith first-edition release candidate.
 
 - Bonewright anointment: smoke test circle command, popup selection, Soulwarden bootstrap, membership cap behavior, save/load, and rite gating.
-- Ritual dialogs: continue collecting follow-up details from live smoke tests, especially universal lectern filtering, wrong corpse, missing target, missing armor, non-Bonewright conductor, reachability, reservation, and already-bound shade messages.
+- Ritual dialogs: continue collecting follow-up details from live smoke tests, especially universal lectern filtering, wrong corpse, missing target, missing armor, non-Bonewright conductor, reachability, reservation, existing bound minion, and dismissal/bone-box messages.
 - Veilbound Shade lifecycle: smoke test Shroudhymn rite-bound shades and debug manifestation with the shared lifecycle profile: guest/non-draftable control, manifest/unmanifest, save/load while manifested, death/downing, map removal, and cleanup.
-- Cathedra surface: Ossanith Skeleton, Reliquary Warden, and Veilbound Shade have working player-facing rites through the universal Bonewright lectern. Next content slice is making Animara's Echobound Revenant a real undead variant instead of a borrowed skeleton-path label.
+- Cathedra surface: Ossanith Skeleton, Echobound Revenant, Reliquary Warden, and Veilbound Shade have working player-facing rites through the universal Bonewright lectern. Ossanith also has a dismissal path for a Bonewright's current minion. Bound-undead master binding and master-death/lost-undead behavior are implemented and smoke tested.
 - Ideology and package review: check memes, precepts, roles, apparel, research gates, starting ideology/preset, build availability, metadata, preview/icon assets, dependencies, assembly output, XML load, local deployment, and release notes.
 - Scope guard: defer pseudo-relationship memory, custom ritual-room tiles, decorative building sets, custom wall auto-joining, full Choralum aura/guardian suites, and full Voressai hostile ecosystems unless they become necessary for RC1 coherence.
 
@@ -91,7 +94,7 @@ MFVanilla remains the mature first-party content mod after the 0.10.0 release. K
 | ID | Priority | Complexity | Area | Status | Detail |
 | --- | --- | --- | --- | --- | --- |
 | MF-039 | P1 | M | AeternusFaith | Release target | Prepare the AeternusFaith first-edition release candidate: Bonewright anointment, ritual-dialog validation, spectre lifecycle smoke tests, cathedra surface decisions, ideology/package review, and RC1 release hygiene. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-039-aeternusfaith-first-edition). |
-| MF-019 | P1 | S | AeternusFaith/UI | Active slice | Polish and smoke test skeleton, ossuary, spectre, and Bonewright anointment participant dialogs, especially small-resolution layout and invalid-state reasons. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
+| MF-019 | P1 | S | AeternusFaith/UI | Complete | Ritual participant dialogs are implemented for the current RC1 rites, including invalid-state reasons and widened action buttons. Remaining checks are ordinary MF-039 RC1 smoke testing. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
 | MF-063 | P1 | M | Framework/Lifecycle | Support | Support the AF RC1 lifecycle surface: spectre manifestation, guest/non-draftable control, cleanup, save/load, debug inspection, and reusable lifecycle readouts. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations). |
 | MF-038 | P2 | M | MFVanilla | Watch | MFVanilla 0.10.0 shipped the completion/polish band; keep research/content honesty and late-node design notes visible for the next MFVanilla-focused slice. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
 | MF-055 | P2 | M | MFVanilla/Planar | Watch | Post-0.10 planar pocket, material, Cinderdeep, and reward-beat tuning remain watch items rather than the active release target. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
@@ -140,8 +143,10 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Implement the Animara Echobound Revenant as a real undead pawn kind/race/lifecycle variant instead of reusing the Ossanith skeleton result.
-2. Smoke test the universal Bonewright lectern in continued play: no-circle fallback, one-circle filtering, multi-circle filtering, missing ossuary, missing Choralum armor, and invalid conductor/corpse states.
-3. Continue Reliquary Warden validation: armor consumption, corpse/soul cleanup, save/load, downing/death, work restrictions, and combat durability against Ossanith Skeleton expectations.
-4. Smoke test Shroudhymn rite-bound Veilbound Shades through manifestation, save/load while manifested, death/downing, map removal, cleanup, and lifecycle inspect/debug readouts.
-5. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
+1. Tune and smoke test the Animara Echobound Revenant: reduced source-skill echoes, allowed limited labor, combat response, save/load, death/downing, dismissal, and whether its limited intellect feels distinct from the Ossanith Skeleton.
+2. Smoke test Shroudhymn rite-bound Veilbound Shades through reduced source-skill echoes, manifestation, save/load while manifested, death/downing, map removal, cleanup, combat/hostility edge cases, and lifecycle inspect/debug readouts.
+3. Continue Reliquary Warden validation: reduced source-skill echoes, armor consumption, corpse/soul cleanup, save/load, downing/death, limited-labor restrictions, and combat durability against Ossanith Skeleton expectations.
+4. Smoke test the universal Bonewright lectern in continued play: no-circle fallback, one-circle filtering, multi-circle filtering, missing ossuary, missing Choralum armor, and invalid conductor/corpse states.
+5. Run regression checks on completed bound-undead rules: one minion per Bonewright, rejection messaging on additional animation rites, drafted-master follow/defense, dismissal filling an ossuary bone box, and lost-undead conversion after master death/destruction.
+6. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
+7. Decide the next content boundary: either keep RC1 in validation/package mode, or add one small post-foundation undead/presentation improvement only if it clearly improves first-edition coherence.

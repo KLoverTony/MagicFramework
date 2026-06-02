@@ -136,7 +136,7 @@
         <commandIconPath>Things/Graves/OssuaryBox_south</commandIconPath>
         <hideWhenCircleAbsent>true</hideWhenCircleAbsent>
       </li>
-      <li Class="AeternusFaith.CompProperties_OssanithSkeletonRitual">
+      <li Class="AeternusFaith.CompProperties_AnimaraRevenantRitual">
         <circleDef>AF_AnimaraRitualCenter</circleDef>
         <commandLabel>Animate Echobound Revenant</commandLabel>
         <commandDescription>Begin an Animara rite to animate a corpse as an Echobound Revenant. Requires an orthogonally adjacent Animara Ritual Center.</commandDescription>

@@ -157,6 +157,10 @@ namespace AeternusFaith
             if (!report.Accepted)
                 return report;
 
+            report = BonewrightMinionUtility.ValidateCanBindMinion(pawn);
+            if (!report.Accepted)
+                return report;
+
             report = RitualPawnEligibilityUtility.ValidateReachAndReserve(pawn, corpse, PathEndMode.ClosestTouch, "corpse");
             if (!report.Accepted)
                 return report;

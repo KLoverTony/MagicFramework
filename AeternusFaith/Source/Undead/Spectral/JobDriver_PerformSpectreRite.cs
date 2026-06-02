@@ -112,6 +112,13 @@ namespace AeternusFaith.Undead.Spectral
             if (corpse == null || corpse.Destroyed)
                 return;
 
+            AcceptanceReport minionReport = BonewrightMinionUtility.ValidateCanBindMinion(pawn);
+            if (!minionReport.Accepted)
+            {
+                Messages.Message(minionReport.Reason, pawn, MessageTypeDefOf.RejectInput, historical: false);
+                return;
+            }
+
             if (MapComponent_SpectralEntities.HasActiveRiteBoundSpectre(pawn, out SpectralEntity existingSpectre))
             {
                 Messages.Message(pawn.LabelShortCap + " is already bound to " + existingSpectre.label + ".", pawn, MessageTypeDefOf.RejectInput, historical: false);

@@ -41,6 +41,28 @@
   </TraitDef>
 
   <TraitDef>
+    <defName>MF_Lifecycle_LimitedLaborWork</defName>
+    <commonality>0</commonality>
+    <disabledWorkTags>
+      <li>Caring</li>
+      <li>Social</li>
+      <li>Animals</li>
+      <li>Cooking</li>
+      <li>Hunting</li>
+      <li>PlantWork</li>
+      <li>Crafting</li>
+      <li>Artistic</li>
+      <li>Intellectual</li>
+    </disabledWorkTags>
+    <degreeDatas>
+      <li>
+        <label>limited laborer</label>
+        <description>{PAWN_nameDef} retains enough purpose for simple directed work, but cannot perform complex living vocations.</description>
+      </li>
+    </degreeDatas>
+  </TraitDef>
+
+  <TraitDef>
     <defName>MF_Lifecycle_NoWork</defName>
     <commonality>0</commonality>
     <disabledWorkTags>

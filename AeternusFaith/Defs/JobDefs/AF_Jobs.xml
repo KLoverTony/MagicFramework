@@ -9,6 +9,20 @@
   </JobDef>
 
   <JobDef>
+    <defName>AF_DismissBoundUndeadRite</defName>
+    <driverClass>AeternusFaith.JobDriver_DismissBoundUndeadRite</driverClass>
+    <reportString>dismissing bound undead.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_AwaitDismissalRite</defName>
+    <driverClass>AeternusFaith.JobDriver_AwaitDismissalRite</driverClass>
+    <reportString>awaiting dismissal.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
     <defName>AF_AttendOssuaryRite</defName>
     <driverClass>AeternusFaith.JobDriver_AttendOssuaryRite</driverClass>
     <reportString>attending an ossuary rite.</reportString>
@@ -29,6 +43,13 @@
     <defName>AF_PerformSkeletonRite</defName>
     <driverClass>AeternusFaith.JobDriver_PerformSkeletonRite</driverClass>
     <reportString>animating undead.</reportString>
+    <casualInterruptible>false</casualInterruptible>
+  </JobDef>
+
+  <JobDef>
+    <defName>AF_PerformAnimaraRevenantRite</defName>
+    <driverClass>AeternusFaith.JobDriver_PerformAnimaraRevenantRite</driverClass>
+    <reportString>animating an echobound revenant.</reportString>
     <casualInterruptible>false</casualInterruptible>
   </JobDef>
 

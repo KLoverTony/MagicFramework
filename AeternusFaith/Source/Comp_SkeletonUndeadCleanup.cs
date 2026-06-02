@@ -26,6 +26,7 @@ namespace AeternusFaith
             SkeletonUndeadUtility.RepairUndeadRenderingState(Pawn);
             SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+            BoundUndeadMinionUtility.EnsureBoundMarkerFromLifecycle(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
         }
 
@@ -37,6 +38,7 @@ namespace AeternusFaith
                 SkeletonUndeadUtility.RepairUndeadRenderingState(Pawn);
                 SkeletonUndeadUtility.EnforceUndeadState(Pawn, resetSkills: false);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+                BoundUndeadMinionUtility.EnsureBoundMarkerFromLifecycle(Pawn);
                 SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
             }
         }
@@ -48,6 +50,7 @@ namespace AeternusFaith
             SkeletonUndeadUtility.EnforceUndeadNeeds(Pawn);
             SkeletonUndeadUtility.SuppressUndeadSocialInteractions(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(Pawn);
+            BoundUndeadMinionUtility.EnsureBoundMarkerFromLifecycle(Pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(Pawn);
         }
     }
@@ -170,7 +173,8 @@ namespace AeternusFaith
 
         public static void ApplyRaceBasedUndeadHediffs(Pawn pawn)
         {
-            if (pawn?.def?.defName == "AF_SkeletonRace")
+            PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+            if (extension?.bodyForm == PawnLifecycleBodyForm.Skeletal || pawn?.def?.defName == "AF_SkeletonRace")
             {
                 ApplyUndeadHediffs(pawn, "AF_SkeletalBody");
                 AddHediffIfMissing(pawn, "AF_SkeletalLimitations");
@@ -187,7 +191,8 @@ namespace AeternusFaith
             if (!ModsConfig.BiotechActive || pawn?.genes == null)
                 return;
 
-            if (pawn.def?.defName == "AF_SkeletonRace")
+            PawnLifecycleExtension extension = PawnLifecycleUtility.GetLifecycle(pawn);
+            if (extension?.bodyForm == PawnLifecycleBodyForm.Skeletal || pawn.def?.defName == "AF_SkeletonRace")
                 ApplyXenotype(pawn, "AF_SkeletonXenotype");
             else if (pawn.def?.defName == "AF_SpectreRace")
                 ApplyXenotype(pawn, "AF_SpectreXenotype");
@@ -231,7 +236,8 @@ namespace AeternusFaith
                 "AF_SkeletalBody",
                 "AF_SkeletalLimitations",
                 "AF_SpectralForm",
-                "AF_SpectralLimitations"
+                "AF_SpectralLimitations",
+                "AF_BoundUndeadMinion"
             };
             foreach (HediffDef markerHediff in PawnLifecycleUtility.MarkerHediffs(pawn))
             {
@@ -404,22 +410,34 @@ namespace AeternusFaith
             AdulthoodField?.SetValue(targetPawn.story, AdulthoodField?.GetValue(sourcePawn.story));
         }
 
-        public static void CopySkillsFromSource(Pawn sourcePawn, Pawn targetPawn)
+        public static void CopySkillsFromSource(Pawn sourcePawn, Pawn targetPawn, float factor = 1f, bool simpleSkillsOnly = false)
         {
             if (sourcePawn?.skills?.skills == null || targetPawn?.skills == null)
                 return;
 
+            if (factor < 0f)
+                factor = 0f;
+            else if (factor > 1f)
+                factor = 1f;
             foreach (SkillRecord sourceSkill in sourcePawn.skills.skills)
             {
+                if (simpleSkillsOnly && !IsSimpleUndeadSkill(sourceSkill.def))
+                    continue;
+
                 SkillRecord targetSkill = targetPawn.skills.GetSkill(sourceSkill.def);
                 if (targetSkill == null)
                     continue;
 
-                targetSkill.Level = sourceSkill.Level;
-                targetSkill.passion = sourceSkill.passion;
+                targetSkill.Level = GenMath.RoundRandom(sourceSkill.Level * factor);
+                targetSkill.passion = factor >= 0.75f ? sourceSkill.passion : Passion.None;
                 targetSkill.xpSinceLastLevel = sourceSkill.xpSinceLastLevel;
                 targetSkill.xpSinceMidnight = sourceSkill.xpSinceMidnight;
             }
+        }
+
+        private static bool IsSimpleUndeadSkill(SkillDef skillDef)
+        {
+            return skillDef?.defName is "Shooting" or "Melee" or "Construction" or "Mining";
         }
 
         public static void NormalizeSkeletonLifeStage(Pawn pawn)

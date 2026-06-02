@@ -40,6 +40,7 @@ This layer is intentional undead creation through Bonewright doctrine.
 - In lore, each cathedra only does so according to its doctrine.
 - The undead created by each cathedra should reflect that cathedra's style, failure modes, and intended purpose.
 - Ossanith remains the common praxis and gatekeeper: every Bonewright path begins with disciplined corpse/soul handling.
+- RC1 uses a strict one-bound-minion-per-Bonewright rule for player-facing animation rites. This keeps early undead management legible and gives dismissal/rest rites a practical purpose.
 
 ### Bonewright Order Membership
 
@@ -63,6 +64,7 @@ Possible implementation:
 
 Maintenance burden:
 - Being a Bonewright should have meaningful limits and obligations.
+- RC1's first practical burden is simple: each Bonewright may maintain only one bound undead minion at a time.
 - Candidate model A: routine rites. Bonewrights must periodically perform observances, similar in spirit to royalty meditation, to maintain standing.
 - Candidate model B: addiction-like need without normal harmful drug side effects. If neglected, the pawn loses Bonewright standing or access to rites rather than suffering a conventional chemical crash.
 - Candidate model C: a custom need or hediff severity that rises/falls with rites performed, corpse care, meditation, or cathedra-specific practice.
@@ -126,16 +128,43 @@ The ritual-circle undead roster should stay small and readable. Each cathedra ge
 | --- | --- | --- | --- | --- | --- |
 | Ossanith | Ossanith Skeleton | Dumb skeletal summon | No returned identity; a corpse-husk animated under discipline | Protects its master and serves as a reliable body-undead | Mundane chores only |
 | Animara | Echobound Revenant | Skeletal undead with retained echoes | Limited intellect and fragments of memory or purpose | Protects its master while feeling like a remembered duty rather than a simple tool | Simple tasks; more capable than an Ossanith Skeleton, but not a normal colonist |
-| Choralum | Reliquary Warden | Armored skeletal undead | Stable, solemn, monument-like obedience rather than personal identity | Protects its master and acts as a durable ceremonial guardian | Mundane tasks only |
+| Choralum | Reliquary Warden | Armored skeletal undead | Stable, solemn, monument-like obedience with enough retained discipline for simple duties | Protects its master and acts as a durable ceremonial guardian | Simple tasks; no complex living vocations |
 | Shroudhymn | Veilbound Shade | Spirit undead | Some intellect, oath-bound, and mostly unable to affect the physical world | Watches, haunts, guards, or harms living hostiles through limited spectral means | Essentially no physical work |
 | Voressai | Hungering Husk | Fleshy undead | Controlled by its master, instinctive, hungry, and poor at complex judgment | Dangerous body-undead that can be directed rather than trusted | Mundane tasks only when actively controlled |
 
+## Lost Undead
+
+Bound undead should tolerate ordinary absence. A master being away, off-map, temporarily unreachable, asleep, downed, or otherwise not immediately available should not instantly break the binding.
+
+If the master dies, is destroyed, or is otherwise spiritually gone, the bound undead should enter a delayed instability window. During that window the colony has time to dismiss, recover, transfer, or otherwise deal with the minion. If no resolution happens after a short while, the minion should become a lost undead: no longer a healthy bound servant, no longer part of the Bonewright's ordinary one-minion contract, and visibly distinct from its original ritual state.
+
+Lost-undead names by cathedra:
+
+| Cathedra | Bound undead | Lost undead |
+| --- | --- | --- |
+| Ossanith | Ossanith Skeleton | Hollowborn |
+| Animara | Echobound Revenant | Fractured Echobound |
+| Choralum | Reliquary Warden | Wailwright |
+| Shroudhymn | Veilbound Shade | Errant Soul |
+| Voressai | Hungering Husk | Void Drifter |
+
+Implementation implications:
+- Bound undead use `AF_BoundUndeadMinion` as the visible marker and owner of master binding state.
+- The hediff distinguishes ordinary absence from master death/destruction, stores the delayed instability timer, and shows the bound/failing state for smoke testing.
+- The current implementation uses a simple hediff/status/name/faction/AI change rather than five fully separate lost pawn races.
+- Lost undead stop behaving like obedient master-bound minions: they clear lifecycle ownership, no longer count against the Bonewright's one-minion rule, become hostile, and attack nearby living pawns.
+- Dismissal/restoration/transfer hooks should remain possible during the instability window, but full transfer and recovery rituals can be follow-up if RC1 only needs the failure state.
+
 Implementation implications:
 - The existing `AF_Skeleton` remains the Ossanith baseline unless renamed later for presentation.
-- Animara should stop borrowing the Ossanith skeleton rite as its final identity; its target summon is the Echobound Revenant.
-- Choralum now has a distinct Reliquary Warden pawn kind/race and a player-facing animation rite requiring a corpse plus plate/flak armor.
-- Shroudhymn's current spectre implementation is the closest foundation for the Veilbound Shade, but the label, description, and interaction limits should be aligned with this roster.
+- Animara now has a first real Echobound Revenant implementation: a skeletal, task-bound, limited-labor undead that uses the shared undead factory and copies a reduced practical skill echo from the source pawn. It is the next main tuning target.
+- Choralum now has a distinct Reliquary Warden pawn kind/race and a player-facing animation rite requiring a corpse plus plate/flak armor. It uses the limited-labor tier and copies a reduced practical skill echo from the source pawn.
+- Shroudhymn's current spectre implementation is the closest foundation for the Veilbound Shade. Rite-bound shades use no-work spectral lifecycle rules, but can carry a reduced practical skill echo for identity/combat/future spectral interactions.
 - Voressai should use the same generator foundation eventually, but its control/work rules likely need an explicit "only useful when directed" policy rather than ordinary autonomous labor.
+- Bound minions use the lifecycle master binding for ownership. Current body-undead follow their drafted master, attack hostiles near that drafted master, and can interrupt ordinary work to answer the master's drafted state.
+- The bound-minion hediff is the source of truth for visible binding and lost-undead conversion; the lifecycle comp remains the control/follow behavior surface.
+- Intelligence tiers currently map to work tiers: mindless/minimal undead use mundane servant labor; task-bound undead use limited labor; spectral undead use no-work manifestation.
+- Reduced practical skill echoes currently copy only combat, construction, and mining at half strength, and intentionally exclude complex skills such as artistic, crafting, medicine, and research.
 
 ### Ossanith
 
@@ -159,10 +188,11 @@ Likely undead family:
 
 RC1 target:
 - complete the skeleton rite and ossuary loop
-- add or define an Ossanith rite to put a soul to rest
+- add or define an Ossanith rite to put a soul or bound minion to rest
 - wire rites into soul release / haunting suppression
 - make corpse/soul invalid states clear
 - make Bonewright role requirements intentional and readable
+- support a dismissal rite that destroys a Bonewright's bound undead and fills an ossuary bone box as a burial/sealing action
 
 Implementation note:
 - `PawnSoulRiteUtility` in MagicFramework is the shared integration surface for rites that alter soul records. Ossanith ossuary and skeleton rites should use release/final-rest helpers, while other cathedrae may use bound or active-spirit helpers when their doctrine calls for it.
@@ -188,6 +218,7 @@ Likely undead family:
 
 RC1 target:
 - define the circle and one ritual
+- smoke test and tune the first Echobound Revenant implementation
 - at minimum, use Animara as the conceptual basis for identity/passion-flavored haunting behavior
 - keep deep pseudo-relationship memory as follow-up unless it becomes necessary for the first ritual
 
@@ -287,7 +318,7 @@ Ossanith should be more complete than the others because it is the foundation pr
 Preferred RC1 ritual set:
 - Ossanith: Raise Skeleton
 - Ossanith: Ossuary Rite
-- Ossanith: Put Soul To Rest
+- Ossanith: Put Soul To Rest / Dismiss Bound Undead
 - Animara: Call Memory Echo or Bind Ancestor Echo
 - Choralum: Harmonize Spirit or Soothe Restless Soul
 - Shroudhymn: Call Veilbound Shade / Task-Bound Spirit
@@ -331,6 +362,7 @@ RC1 should favor simple, conservative answers over ambitious mechanics.
 3. Ossanith foundation
    - Finish skeleton and ossuary smoke testing.
    - Add soul release/rest rite.
+   - Validate the bound-minion dismissal rite: minion walks to the ossuary/circle center, waits, is destroyed, and fills the bone box with dismissal text. This is implemented and smoke tested.
    - Wire proper rites into soul state.
    - Improve invalid-state messages.
 
@@ -371,6 +403,11 @@ RC1 should favor simple, conservative answers over ambitious mechanics.
 - Resurrected pawns return their soul record to active, cancel pending hauntings, and despawn any spirit entity sourced from that pawn.
 - Skeleton rite works, cleans up source corpse intentionally, and updates soul/corpse state.
 - Ossuary rite works and updates soul/corpse state.
+- Bound-minion limit blocks additional animation rites before consuming corpses or armor.
+- Bound minions follow drafted masters, attack hostiles near drafted masters, and save/load their master binding.
+- Bound minions show `AF_BoundUndeadMinion`, preserve their master binding, and enter a delayed visible instability countdown when the master dies or is destroyed.
+- Lost undead conversion clears the binding, renames the pawn to the cathedra lost form, turns hostile, and attacks nearby living pawns.
+- Ossanith dismissal destroys the bound minion, fills an ossuary bone box, and does not leave stale minion jobs or lifecycle ownership.
 - Shroudhymn temporary spirit can manifest, unmanifest, save/load, and clean up.
 - Non-manifesting spirits can exist without visible pawn clutter.
 - Scheduled hauntings create active spectral entities without immediately spawning a visible pawn.

@@ -13,9 +13,14 @@ namespace AeternusFaith
         public string label;
         public Pawn sourcePawn;
         public Ideo sourceIdeo;
+        public Pawn master;
+        public bool followMasterWhileDrafted = true;
+        public bool followMasterWhileFieldwork = true;
         public bool resetSkills = true;
         public bool copyBackstories;
         public bool copySkills;
+        public bool copyOnlySimpleSkills;
+        public float copiedSkillFactor = 1f;
         public bool forceNoBackstory = true;
     }
 
@@ -102,15 +107,26 @@ namespace AeternusFaith
             if (options.copyBackstories)
                 SkeletonUndeadUtility.CopyBackstoriesFromSource(options.sourcePawn, pawn);
             if (options.copySkills)
-                SkeletonUndeadUtility.CopySkillsFromSource(options.sourcePawn, pawn);
+                SkeletonUndeadUtility.CopySkillsFromSource(options.sourcePawn, pawn, options.copiedSkillFactor, options.copyOnlySimpleSkills);
 
             SkeletonUndeadUtility.RemoveNonUndeadHediffs(pawn);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadHediffs(pawn);
+            AssignMaster(pawn, options);
             SkeletonUndeadUtility.ApplyRaceBasedUndeadXenotype(pawn);
             SkeletonUndeadUtility.SuppressUndeadSocialInteractions(pawn);
             ApplyLifecycleAppearance(pawn);
             SkeletonUndeadUtility.ResetPawnRenderer(pawn);
             SkeletonUndeadUtility.TryInitializeRenderer(pawn);
+        }
+
+        private static void AssignMaster(Pawn pawn, UndeadPawnCreationOptions options)
+        {
+            if (pawn == null || options?.master == null)
+                return;
+
+            CompPawnLifecycleEnforcer lifecycleComp = pawn.GetComp<CompPawnLifecycleEnforcer>();
+            lifecycleComp?.AssignMaster(options.master, options.followMasterWhileDrafted, options.followMasterWhileFieldwork);
+            BoundUndeadMinionUtility.AssignMaster(pawn, options.master);
         }
 
         private static void ApplyLifecycleAppearance(Pawn pawn)

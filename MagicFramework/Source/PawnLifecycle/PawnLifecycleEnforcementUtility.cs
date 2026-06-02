@@ -374,6 +374,7 @@ public static class PawnLifecycleEnforcementUtility
             PawnLifecycleWorkPolicy.CombatOnly => false,
             PawnLifecycleWorkPolicy.HaulingCleaningOnly => defName is "Hauling" or "Cleaning",
             PawnLifecycleWorkPolicy.MundaneLabor => defName is "Hauling" or "Cleaning" or "BasicWorker" or "Firefighter",
+            PawnLifecycleWorkPolicy.LimitedLabor => defName is "Hauling" or "Cleaning" or "BasicWorker" or "Firefighter" or "Construction" or "Mining",
             _ => true
         };
     }
@@ -505,9 +506,23 @@ public static class PawnLifecycleEnforcementUtility
             return;
         }
 
-        pawn.playerSettings.Master = master;
         pawn.playerSettings.followDrafted = lifecycleComp?.FollowMasterWhileDrafted ?? true;
         pawn.playerSettings.followFieldwork = lifecycleComp?.FollowMasterWhileFieldwork ?? true;
+        pawn.playerSettings.hostilityResponse = HostilityResponseMode.Attack;
+        if (lifecycleComp?.Master != null)
+        {
+            return;
+        }
+
+        try
+        {
+            pawn.playerSettings.Master = master;
+        }
+        catch (System.NullReferenceException)
+        {
+            // Some humanlike lifecycle pawns cannot accept a vanilla player-settings master.
+            // The lifecycle comp still stores the master and handles follow behavior directly.
+        }
     }
 
     private static void ApplyAutonomousMasterDuty(Pawn pawn, Pawn master, CompPawnLifecycleEnforcer lifecycleComp)

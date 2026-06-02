@@ -110,6 +110,22 @@
   </HediffDef>
 
   <HediffDef>
+    <defName>AF_BoundUndeadMinion</defName>
+    <label>bound undead minion</label>
+    <description>This animated undead is bound to a Bonewright master. If that master dies or is destroyed, the binding will fail after a short delay.</description>
+    <hediffClass>HediffWithComps</hediffClass>
+    <isBad>false</isBad>
+    <scenarioCanAdd>false</scenarioCanAdd>
+    <defaultLabelColor>(0.72, 0.72, 0.66)</defaultLabelColor>
+    <comps>
+      <li Class="AeternusFaith.HediffCompProperties_BoundUndeadMinion">
+        <graceTicks>7500</graceTicks>
+        <rampageRadius>40</rampageRadius>
+      </li>
+    </comps>
+  </HediffDef>
+
+  <HediffDef>
     <defName>AF_BonewrightOssanithInitiate</defName>
     <label>Ossanith Bonewright initiate</label>
     <description>This pawn has been anointed into the Bonewright order under the Ossanith foundation.</description>
