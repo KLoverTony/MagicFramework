@@ -305,6 +305,29 @@
       <li Class="CompProperties_UseEffectDestroySelf" />
     </comps>
   </ThingDef>
+  <ThingDef ParentName="MFV_SpellScrollBase" MayRequire="oracle.mfstoryteller">
+    <defName>MFV_SpellScroll_MF_Divination</defName>
+    <label>spell scroll (divination)</label>
+    <description>A prepared arcane scroll that teaches a pawn how to cast divination.</description>
+    <forceDebugSpawnable>true</forceDebugSpawnable>
+    <statBases>
+      <MarketValue>400</MarketValue>
+    </statBases>
+    <comps Inherit="False">
+      <li Class="CompProperties_Forbiddable" />
+      <li Class="CompProperties_Usable">
+        <useJob>UseItem</useJob>
+        <useLabel>Read scroll</useLabel>
+      </li>
+      <li Class="MFVanilla.Core.CompProperties_UseEffectLearnSpell">
+        <spell>MF_Divination</spell>
+        <requiredResearch>
+          <li>MFV_LeylineSensitivity</li>
+        </requiredResearch>
+      </li>
+      <li Class="CompProperties_UseEffectDestroySelf" />
+    </comps>
+  </ThingDef>
   <ThingDef ParentName="MFV_SpellScrollBase">
     <defName>MFV_SpellScroll_MF_DominateWill</defName>
     <label>spell scroll (dominate will)</label>

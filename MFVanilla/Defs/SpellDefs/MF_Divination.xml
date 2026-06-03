@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+  <MagicFramework.Definitions.SpellDef MayRequire="oracle.mfstoryteller">
+    <defName>MF_Divination</defName>
+    <label>divination</label>
+    <description>Reads the fate held by Lord Roth, revealing the next foretold incident before it unfolds.</description>
+    <gizmoIconPath>UI/Gizmos/Spells/MF_Divination</gizmoIconPath>
+    <range>0</range>
+    <castTimeTicks>2500</castTimeTicks>
+
+    <meta>
+      <tier>2</tier>
+      <elements>
+        <li>MF_Element_Arcane</li>
+        <li>MF_Element_Time</li>
+      </elements>
+      <domains>
+        <li>MF_Domain_Divination</li>
+      </domains>
+      <disciplines>
+        <li>MF_Discipline_Utility</li>
+        <li>MF_Discipline_Ritual</li>
+      </disciplines>
+      <tags>
+        <li>MF_Tag_Beneficial</li>
+        <li>MF_Tag_Self</li>
+      </tags>
+    </meta>
+
+    <learning>
+      <canBeLearned>true</canBeLearned>
+      <researchPrerequisites>
+        <li>MFV_LeylineSensitivity</li>
+      </researchPrerequisites>
+      <requirements>
+        <li Class="MagicFramework.Definitions.ArcaneGiftRequirementDef" />
+        <li Class="MagicFramework.Definitions.CasterLevelRequirementDef">
+          <minimumLevel>4</minimumLevel>
+        </li>
+      </requirements>
+    </learning>
+
+    <power>
+      <casterLevelFactor>1</casterLevelFactor>
+    </power>
+
+    <targeting>
+      <shape>Single</shape>
+      <primaryTargetType>Pawn</primaryTargetType>
+      <pawnAffinity>All</pawnAffinity>
+      <includePawns>true</includePawns>
+      <includeBuildings>false</includeBuildings>
+      <includeItems>false</includeItems>
+      <allowSelfTarget>true</allowSelfTarget>
+      <useCasterAsTarget>true</useCasterAsTarget>
+      <requireLineOfSight>false</requireLineOfSight>
+      <range>0</range>
+    </targeting>
+
+    <requirements>
+      <li Class="MagicFramework.Definitions.ManaRequirementDef">
+        <debugLabel>Enough mana for Divination</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownRequirementDef">
+        <debugLabel>Divination cooldown ready</debugLabel>
+        <cooldownTicks>6000</cooldownTicks>
+      </li>
+    </requirements>
+
+    <costs>
+      <li Class="MagicFramework.Definitions.ManaCostDef">
+        <debugLabel>Spend mana for Divination</debugLabel>
+        <amount>24</amount>
+      </li>
+      <li Class="MagicFramework.Definitions.CooldownCostDef">
+        <debugLabel>Start Divination cooldown</debugLabel>
+        <cooldownTicks>6000</cooldownTicks>
+      </li>
+    </costs>
+
+    <actions>
+      <li Class="MagicFramework.Definitions.SequenceActionDef">
+        <debugLabel>Divination sequence</debugLabel>
+        <actions>
+          <li Class="MagicFramework.Definitions.EffectActionDef">
+            <debugLabel>Divination cast shimmer</debugLabel>
+            <effectDef>PsycastAreaEffect</effectDef>
+            <locationSource>Caster</locationSource>
+            <attachToTarget>true</attachToTarget>
+          </li>
+          <li Class="MFVanilla.Core.DivinationActionDef">
+            <debugLabel>Reveal held fate</debugLabel>
+            <maxEvents>1</maxEvents>
+            <revealExactIncident>true</revealExactIncident>
+            <revealCategory>true</revealCategory>
+            <revealThreatPoints>false</revealThreatPoints>
+            <revealTargetMap>true</revealTargetMap>
+            <sendLetter>true</sendLetter>
+            <letterLabel>Divination</letterLabel>
+          </li>
+        </actions>
+      </li>
+    </actions>
+  </MagicFramework.Definitions.SpellDef>
+</Defs>

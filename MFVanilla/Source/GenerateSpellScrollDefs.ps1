@@ -125,6 +125,26 @@ function Get-MarketValue {
     return 200 * $unlockCount
 }
 
+function New-RetryingXmlWriter {
+    param(
+        [string]$Path,
+        [System.Xml.XmlWriterSettings]$Settings
+    )
+
+    for ($attempt = 1; $attempt -le 10; $attempt++) {
+        try {
+            $stream = [System.IO.File]::Open($Path, [System.IO.FileMode]::Create, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+            return [System.Xml.XmlWriter]::Create([System.IO.Stream]$stream, $Settings)
+        }
+        catch [System.UnauthorizedAccessException] {
+            if ($attempt -eq 10) {
+                throw
+            }
+            Start-Sleep -Milliseconds (100 * $attempt)
+        }
+    }
+}
+
 $spellFiles = Get-ChildItem -Path $spellDefsDir -Filter '*.xml' | Sort-Object Name
 $spellRecords = New-Object System.Collections.Generic.List[object]
 
@@ -148,6 +168,7 @@ foreach ($file in $spellFiles) {
         }
 
         $researchPrerequisites = @(Get-ResearchPrerequisites -Learning $learning)
+        $mayRequire = $spell.GetAttribute('MayRequire')
 
         $spellRecords.Add([pscustomobject]@{
             DefName = $defName
@@ -155,6 +176,7 @@ foreach ($file in $spellFiles) {
             Tier = Get-SpellTier -Spell $spell
             MarketValue = Get-MarketValue -ResearchDefNames $researchPrerequisites
             Research = $researchPrerequisites
+            MayRequire = $mayRequire
         })
     }
 }
@@ -164,7 +186,7 @@ $settings.Indent = $true
 $settings.IndentChars = '  '
 $settings.Encoding = New-Object System.Text.UTF8Encoding($false)
 
-$writer = [System.Xml.XmlWriter]::Create($outputPath, $settings)
+$writer = New-RetryingXmlWriter -Path $outputPath -Settings $settings
 try {
     $writer.WriteStartDocument()
     $writer.WriteStartElement('Defs')
@@ -174,6 +196,9 @@ try {
 
         $writer.WriteStartElement('ThingDef')
         $writer.WriteAttributeString('ParentName', 'MFV_SpellScrollBase')
+        if (![string]::IsNullOrWhiteSpace($record.MayRequire)) {
+            $writer.WriteAttributeString('MayRequire', $record.MayRequire)
+        }
 
         $writer.WriteElementString('defName', "MFV_SpellScroll_$($record.DefName)")
         $writer.WriteElementString('label', "spell scroll ($($record.Label))")
@@ -225,12 +250,14 @@ try {
     $writer.WriteEndDocument()
 }
 finally {
-    $writer.Dispose()
+    if ($null -ne $writer) {
+        $writer.Dispose()
+    }
 }
 
 Write-Host "Generated $($spellRecords.Count) spell scroll defs at $outputPath"
 
-$recipeWriter = [System.Xml.XmlWriter]::Create($recipeOutputPath, $settings)
+$recipeWriter = New-RetryingXmlWriter -Path $recipeOutputPath -Settings $settings
 try {
     $recipeWriter.WriteStartDocument()
     $recipeWriter.WriteStartElement('Defs')
@@ -239,6 +266,9 @@ try {
         $researchPrerequisites = @($record.Research)
 
         $recipeWriter.WriteStartElement('RecipeDef')
+        if (![string]::IsNullOrWhiteSpace($record.MayRequire)) {
+            $recipeWriter.WriteAttributeString('MayRequire', $record.MayRequire)
+        }
         $recipeWriter.WriteElementString('defName', "MFV_ScribeScroll_$($record.DefName)")
         $recipeWriter.WriteElementString('label', "scribe scroll ($($record.Label))")
         $recipeWriter.WriteElementString('description', "Prepare a spell scroll that teaches a pawn how to cast $($record.Label). The scribe must have the Arcane Gift and already know $($record.Label).")
@@ -306,7 +336,9 @@ try {
     $recipeWriter.WriteEndDocument()
 }
 finally {
-    $recipeWriter.Dispose()
+    if ($null -ne $recipeWriter) {
+        $recipeWriter.Dispose()
+    }
 }
 
 Write-Host "Generated $($spellRecords.Count) spell scroll recipe defs at $recipeOutputPath"

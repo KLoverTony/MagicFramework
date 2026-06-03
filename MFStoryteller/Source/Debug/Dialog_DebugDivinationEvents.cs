@@ -53,6 +53,8 @@ namespace MFStoryteller
 					string label = $"{i + 1}. {incident.incidentDef.label} ({incident.threatPoints:F0} pts)";
 					if (incident.TargetMap != null)
 						label += $" @ {incident.TargetMap.Tile}";
+					int ticksUntil = incident.fireTick - Find.TickManager.TicksGame;
+					label += $" - in {(ticksUntil / 60000f):F1} days";
 
 					Widgets.Label(new Rect(20f, y, viewRect.width - 40f, 30f), label);
 					y += 30f;

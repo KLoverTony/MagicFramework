@@ -23,5 +23,6 @@
   <loadAfter>
     <li>brrainz.harmony</li>
     <li>oracle.magicframework</li>
+    <li>oracle.mfstoryteller</li>
   </loadAfter>
 </ModMetaData>

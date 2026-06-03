@@ -28,17 +28,8 @@ namespace MFStoryteller
 
 			var incident = pending[0];
 			Messages.Message($"Forcing incident: {incident.incidentDef.label}", MessageTypeDefOf.NeutralEvent);
-
-			IncidentWorker worker = (IncidentWorker)System.Activator.CreateInstance(incident.incidentDef.workerClass);
-			IncidentParms parms = new IncidentParms()
-			{
-				target = incident.TargetMap,
-				points = incident.threatPoints
-			};
-
-			worker.TryExecute(parms);
+			divComponent.TryForceNextPendingIncident();
 		}
 	}
 }
-
 
