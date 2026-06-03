@@ -71,4 +71,18 @@
 		<letterDef>ThreatSmall</letterDef>
 	</IncidentDef>
 
+	<IncidentDef MayRequire="oracle.mfvanilla">
+		<defName>LordRoth_RampagingGolems</defName>
+		<label>rampaging golems</label>
+		<category>ThreatBig</category>
+		<targetTags>
+			<li>Map_PlayerHome</li>
+		</targetTags>
+		<workerClass>MFStoryteller.IncidentWorker_RampagingGolems</workerClass>
+		<baseChance>0.35</baseChance>
+		<earliestDay>12</earliestDay>
+		<minRefireDays>18</minRefireDays>
+		<letterDef>ThreatBig</letterDef>
+	</IncidentDef>
+
 </Defs>
