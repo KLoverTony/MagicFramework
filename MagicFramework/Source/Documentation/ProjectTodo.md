@@ -1,8 +1,8 @@
 ﻿# MagicFramework Active Todo
 
-This file is the short-term command center for MagicFramework, MFVanilla, and AeternusFaith. Detailed task notes live in the linked backlog files so this page stays small enough for quick release reviews.
+This file is the short-term command center for MagicFramework, MFVanilla, and Aeternus Core. Detailed task notes live in the linked backlog files so this page stays small enough for quick release reviews.
 
-Current emphasis: start the AeternusFaith RC1 validation slice now that MFVanilla 0.10.0 / MagicFramework 1.5.0 is released. Keep MagicFramework support work close to AeternusFaith lifecycle and ritual needs, and treat MFVanilla as a watch/polish surface unless live play exposes a concrete blocker.
+Current emphasis: finish the Aeternus Core RC1 packaging slice now that MFVanilla 0.10.0 / MagicFramework 1.5.0 is released. Keep MagicFramework support work close to Aeternus Core lifecycle and ritual needs, and treat MFVanilla as a watch/polish surface unless live play exposes a concrete blocker.
 
 Complexity key: `XS` docs/XML tweak, `S` contained implementation, `M` multi-file feature, `L` cross-system feature, `XL` major pillar.
 Priority key: `P0` immediate stability, `P1` near-term release, `P2` polish/content depth, `P3` later or exploratory.
@@ -11,7 +11,7 @@ Priority key: `P0` immediate stability, `P1` near-term release, `P2` polish/cont
 
 - [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md): MFVanilla production, world missions, constructs, leylines, elemental faction/spells, enchanted weapons.
 - [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md): framework polish, scaling, UI, docs, compatibility, AI.
-- [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md): AeternusFaith release candidate and faith-specific follow-up work.
+- [ProjectAeternusCoreTodo.md](ProjectAeternusCoreTodo.md): Aeternus Core release candidate and faith/Bonewright follow-up work.
 - [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md): long-range school identity, planar/lichdom content, and exploratory systems.
 - [ProjectCompleted.md](ProjectCompleted.md): completed implementation history.
 
@@ -27,7 +27,7 @@ Previous major band uploaded May 19, 2026 at 11 PM: MFVanilla 0.8 / MagicFramewo
 
 Current local development after the uploaded band:
 - Start the next iteration from a stable MFVanilla 0.10.0 / MagicFramework 1.5.0 baseline.
-- Make AeternusFaith RC1 the active slice: Bonewright anointment validation, ritual-dialog smoke tests, Shroudhymn Veilbound Shade lifecycle validation, cathedra presentation, ideology/package review, and one conservative ritual/content decision at a time.
+- Make Aeternus Core RC1 the active slice: Bonewright anointment validation, ritual-dialog smoke tests, Shroudhymn Veilbound Shade lifecycle validation, cathedra presentation, ideology/package review, and one conservative ritual/content decision at a time.
 - Keep MagicFramework lifecycle work tightly scoped to AF release needs: shade manifestation, non-player guest control, cleanup, save/load, and inspect/debug clarity.
 - Keep MFVanilla in watch mode. Desiccate animal/undead behavior, Ruined Sanctum/Sealed Vault observation, planar pocket balance, Chronomancy/Illusion icon and balance polish, and late-node research honesty remain visible but are not the primary slice.
 - Deeper MFVanilla endgame design around Transcendence, relics, lichdom, Grand Sorcery, Fleshcraft, and Infernal Pact should stay as notes until the AF RC1 surface is steadier.
@@ -36,14 +36,15 @@ Playtest status:
 - The research mystery-scroll drop was tested in game and works well.
 - Arcane apprenticeship now works in game after replacing the brittle global-tick XP check with accumulated apprenticeship time; multiple apprentices can learn from the same mentor.
 - Scroll availability and scaled scroll prices are rolled out as a QoL correction to spell acquisition pacing.
-- AeternusFaith manifested spirits now smoke test correctly as non-player guest pawns: they remain unmanageable, non-hostile, save/load safely, and clean up through the tested lifecycle paths.
-- AeternusFaith ritual dialogs now surface specific invalid-state messages for corpse validity, Bonewright requirements, reachability, reservations, missing ritual targets, missing armor, and already-bound shades.
+- Aeternus Core manifested spirits now smoke test correctly as non-player guest pawns: they remain unmanageable, non-hostile, save/load safely, and clean up through the tested lifecycle paths.
+- Aeternus Core ritual dialogs now surface specific invalid-state messages for corpse validity, Bonewright requirements, reachability, reservations, missing ritual targets, missing armor, and already-bound shades.
 - The universal Bonewright lectern now reads adjacent ritual circles, filters out irrelevant ritual gizmos, and shows one disabled fallback gizmo when no supported circle is adjacent.
 - Choralum's `Animate Reliquary Warden` rite is implemented and smoke tested: it consumes a corpse plus nearby plate/flak armor and creates a tougher armored skeletal guardian through the shared undead factory. Reliquary Wardens now use the limited-labor intelligence tier and inherit a reduced echo of simple source skills.
-- AeternusFaith bound undead now use a one-minion-per-Bonewright rule across the current animation rites. Bound minions follow drafted masters through the lifecycle escort loop, attack hostiles near their drafted master, and can be dismissed through an Ossanith burial rite that fills an ossuary bone box.
+- Aeternus Core bound undead now use a one-minion-per-Bonewright rule across the current animation rites. Bound minions follow drafted masters through the lifecycle escort loop, attack hostiles near their drafted master, and can be dismissed through an Ossanith burial rite that fills an ossuary bone box.
 - Animara's `Animate Echobound Revenant` rite now has a real first-pass pawn kind/race/job path instead of borrowing the Ossanith skeleton result. It creates a skeletal limited-labor revenant through the shared undead factory, blocks complex work such as crafting/art/medicine/research, and copies a reduced practical skill echo from the source pawn.
 - Master death/destruction now has a validated lost-undead behavior for current bound undead: `AF_BoundUndeadMinion` stores the master binding, shows the bound/failing state as a hediff marker, starts a short grace timer when the master dies or is destroyed, then renames the minion to its cathedra lost form, clears the binding, and begins attacking nearby living pawns.
-- AeternusFaith undead now project a standardized `Unnerving aura` onto nearby living non-Bonewright pawns. The debuff lingers for several hours, excludes undead and Bonewrights, and has a stronger tier for Veilbound Shades and the future Voressai Hungering Husk.
+- Aeternus Core undead now project a standardized `Unnerving aura` onto nearby living non-Bonewright pawns. The debuff lingers for several hours, excludes undead and Bonewrights, and has a stronger tier for Veilbound Shades and the future Voressai Hungering Husk.
+- Aeternus Core RC1 validation pass reported June 3, 2026: Bonewright anointment, ritual invalid-state messaging, universal lectern filtering, Echobound Revenant, Reliquary Warden, Veilbound Shade lifecycle, bound-minion rules, master-loss/lost-undead behavior, dismissal/bone-box outcome, and undead aura behavior all passed. The dismissal timing quirk is now fixed and regression tested: the conductor waits for the minion to reach the ossuary, then proceeds properly.
 - Arcane Cache has been confirmed in normal gameplay around day 45, including event arrival and expected completion.
 - Deep Iron Golem has been dev tested and produced a strong boss fight.
 - Automata are working fairly well in current testing.
@@ -69,20 +70,21 @@ Playtest status:
 
 ## Current Focus Band
 
-AeternusFaith RC1 validation slice: make the first public faith/ritual surface reliable, understandable, and packageable without broadening the doctrine into a large new expansion pass.
+Aeternus Core RC1 packaging slice: make the first public faith/Bonewright ritual surface reliable, understandable, and packageable without broadening the doctrine into a large new expansion pass.
 
-Primary target: MF-039 AeternusFaith first-edition release candidate.
+Primary target: MF-039 Aeternus Core first-edition release candidate.
 
-- Bonewright anointment: smoke test circle command, popup selection, Soulwarden bootstrap, membership cap behavior, save/load, and rite gating.
-- Ritual dialogs: continue collecting follow-up details from live smoke tests, especially universal lectern filtering, wrong corpse, missing target, missing armor, non-Bonewright conductor, reachability, reservation, existing bound minion, and dismissal/bone-box messages.
-- Veilbound Shade lifecycle: smoke test Shroudhymn rite-bound shades and debug manifestation with the shared lifecycle profile: guest/non-draftable control, manifest/unmanifest, save/load while manifested, death/downing, map removal, and cleanup.
+- Bonewright anointment: validation passed for circle command, popup selection, Soulwarden bootstrap, membership cap behavior, save/load, and rite gating.
+- Ritual dialogs: validation passed for universal lectern filtering, wrong corpse, missing target, missing armor, non-Bonewright conductor, reachability, reservation, existing bound minion, and dismissal/bone-box messages.
+- Veilbound Shade lifecycle: validation passed for Shroudhymn rite-bound shades and debug manifestation with the shared lifecycle profile: guest/non-draftable control, manifest/unmanifest, save/load while manifested, death/downing, map removal, and cleanup.
 - Cathedra surface: Ossanith Skeleton, Echobound Revenant, Reliquary Warden, and Veilbound Shade have working player-facing rites through the universal Bonewright lectern. Ossanith also has a dismissal path for a Bonewright's current minion. Bound-undead master binding and master-death/lost-undead behavior are implemented and smoke tested.
+- Dismissal presentation: validation passed after the synchronization fix; the conductor waits for the minion to reach the ossuary before the rite timer completes.
 - Ideology and package review: check memes, precepts, roles, apparel, research gates, starting ideology/preset, build availability, metadata, preview/icon assets, dependencies, assembly output, XML load, local deployment, and release notes.
 - Scope guard: defer pseudo-relationship memory, custom ritual-room tiles, decorative building sets, custom wall auto-joining, full Choralum aura/guardian suites, and full Voressai hostile ecosystems unless they become necessary for RC1 coherence.
 
 ## MFVanilla Watch Track
 
-MFVanilla remains the mature first-party content mod after the 0.10.0 release. Keep watching it during normal play, but avoid opening another major pillar until AeternusFaith RC1 pressure eases or a concrete MFVanilla issue appears.
+MFVanilla remains the mature first-party content mod after the 0.10.0 release. Keep watching it during normal play, but avoid opening another major pillar until Aeternus Core RC1 pressure eases or a concrete MFVanilla issue appears.
 
 - Desiccate: animal targets, undead immunity/targeting feedback, mana, cooldown, and debuff duration remain balance watch items.
 - Sites: Ruined Sanctum and Sealed Vault remain observation items; tune only mission frequency, threat, reward tier, timeout, cleanup, and letter text unless a concrete blocker appears.
@@ -94,8 +96,8 @@ MFVanilla remains the mature first-party content mod after the 0.10.0 release. K
 
 | ID | Priority | Complexity | Area | Status | Detail |
 | --- | --- | --- | --- | --- | --- |
-| MF-039 | P1 | M | AeternusFaith | Release target | Prepare the AeternusFaith first-edition release candidate: Bonewright anointment, ritual-dialog validation, spectre lifecycle smoke tests, cathedra surface decisions, ideology/package review, and RC1 release hygiene. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-039-aeternusfaith-first-edition). |
-| MF-019 | P1 | S | AeternusFaith/UI | Complete | Ritual participant dialogs are implemented for the current RC1 rites, including invalid-state reasons and widened action buttons. Remaining checks are ordinary MF-039 RC1 smoke testing. See [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md#mf-019-ritual-dialog-improvements). |
+| MF-039 | P1 | M | Aeternus Core | Release target | Prepare the Aeternus Core first-edition release candidate: Bonewright anointment, ritual-dialog validation, spectre lifecycle smoke tests, cathedra surface decisions, ideology/package review, and RC1 release hygiene. See [ProjectAeternusCoreTodo.md](ProjectAeternusCoreTodo.md#mf-039-aeternus-core-first-edition). |
+| MF-019 | P1 | S | Aeternus Core/UI | Complete | Ritual participant dialogs are implemented for the current RC1 rites, including invalid-state reasons and widened action buttons. Remaining checks are ordinary MF-039 RC1 smoke testing. See [ProjectAeternusCoreTodo.md](ProjectAeternusCoreTodo.md#mf-019-ritual-dialog-improvements). |
 | MF-063 | P1 | M | Framework/Lifecycle | Support | Support the AF RC1 lifecycle surface: spectre manifestation, guest/non-draftable control, cleanup, save/load, debug inspection, and reusable lifecycle readouts. See [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md#mf-063-shared-undead-and-construct-pawn-foundations). |
 | MF-038 | P2 | M | MFVanilla | Watch | MFVanilla 0.10.0 shipped the completion/polish band; keep research/content honesty and late-node design notes visible for the next MFVanilla-focused slice. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-038-mfvanilla-feature-completion). |
 | MF-055 | P2 | M | MFVanilla/Planar | Watch | Post-0.10 planar pocket, material, Cinderdeep, and reward-beat tuning remain watch items rather than the active release target. See [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md#mf-055-planar-magic-foundation-and-validation). |
@@ -135,7 +137,7 @@ School identity and advanced magic after the MFVanilla completion pass:
 - MF-058 Soulcraft lichdom.
 - MF-064 Magical Transcendence endgame and map-scale arcane relics.
 
-AeternusFaith follow-up:
+Aeternus Core follow-up:
 - MF-020, MF-021, MF-023, MF-033, MF-034, MF-035, and MF-059 remain side-track or post-first-edition polish unless they become release blockers.
 
 Consideration backlog:
@@ -144,11 +146,6 @@ Consideration backlog:
 
 ## Recommended Next Work
 
-1. Tune and smoke test the Animara Echobound Revenant: reduced source-skill echoes, allowed limited labor, combat response, save/load, death/downing, dismissal, and whether its limited intellect feels distinct from the Ossanith Skeleton.
-2. Smoke test Shroudhymn rite-bound Veilbound Shades through reduced source-skill echoes, stronger unnerving aura, manifestation, save/load while manifested, death/downing, map removal, cleanup, combat/hostility edge cases, and lifecycle inspect/debug readouts.
-3. Continue Reliquary Warden validation: reduced source-skill echoes, armor consumption, corpse/soul cleanup, save/load, downing/death, limited-labor restrictions, and combat durability against Ossanith Skeleton expectations.
-4. Smoke test the universal Bonewright lectern in continued play: no-circle fallback, one-circle filtering, multi-circle filtering, missing ossuary, missing Choralum armor, and invalid conductor/corpse states.
-5. Run regression checks on completed bound-undead rules: one minion per Bonewright, rejection messaging on additional animation rites, drafted-master follow/defense, dismissal filling an ossuary bone box, and lost-undead conversion after master death/destruction.
-6. Smoke test undead aura behavior: ordinary undead mood effect, stronger shade effect, several-hour duration, refresh behavior, and exemptions for undead and Bonewright pawns.
-7. Review AeternusFaith ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
-8. Decide the next content boundary: either keep RC1 in validation/package mode, or add one small post-foundation undead/presentation improvement only if it clearly improves first-edition coherence.
+1. Review Aeternus Core ideology/package readiness: memes, precepts, roles, apparel, research gates, preset, build availability, `About.xml`, preview/icon assets, dependencies, build/deploy output, XML load, and release notes.
+2. Decide the RC1 content boundary: keep RC1 in validation/package mode unless one small presentation improvement clearly improves first-edition coherence.
+3. Prepare the first-edition release notes from the validated feature surface: soul tracking, Bonewright anointment, four player-facing rites, dismissal/rest handling, lost-undead consequences, and undead aura behavior.

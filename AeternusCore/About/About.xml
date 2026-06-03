@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <name>Aeternus Core</name>
+  <author>Oracle</author>
+  <modVersion>0.5.0</modVersion>
+  <packageId>oracle.aeternuscore</packageId>
+  <supportedVersions>
+    <li>1.6</li>
+  </supportedVersions>
+  <description>Aeternus Core is an early-development content mod about death, soul memory, the Faith of Aeternus, and the Bonewright order.
+
+The current first-edition focus is the Bonewright ritual foundation: anoint Bonewrights, tend ossuaries, raise and dismiss bound undead, call Veilbound Shades, and manage the consequences of abandoned or masterless servants. The religious layer is present through ideology, roles, doctrine, and Aeternus themes, but broader faith content is still growing.
+
+Requires Ideology, Magic Framework, and Harmony.</description>
+  <modDependencies>
+    <li>
+      <packageId>ludeon.rimworld.ideology</packageId>
+      <displayName>Ideology</displayName>
+    </li>
+    <li>
+      <packageId>oracle.magicframework</packageId>
+      <downloadUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=...</downloadUrl>
+      <displayName>Magic Framework</displayName>
+    </li>
+    <li>
+      <packageId>brrainz.harmony</packageId>
+      <downloadUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2009463077</downloadUrl>
+      <displayName>Harmony</displayName>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>brrainz.harmony</li>
+    <li>ludeon.rimworld.ideology</li>
+    <li>oracle.magicframework</li>
+  </loadAfter>
+</ModMetaData>

@@ -50,12 +50,13 @@ if ($Full) {
     $VerifyTextures = $true
 }
 
-# Build order (dependencies first)
+# Build order (dependencies first). Folder is the mod folder; Project is the
+# csproj/DLL stem when it differs from the public folder name.
 $Projects = @(
-    'MagicFramework'
-    'MFVanilla'
-    'MFStoryteller'
-    'AeternusFaith'
+    @{ Name = 'MagicFramework'; Folder = 'MagicFramework'; Project = 'MagicFramework' }
+    @{ Name = 'MFVanilla'; Folder = 'MFVanilla'; Project = 'MFVanilla' }
+    @{ Name = 'MFStoryteller'; Folder = 'MFStoryteller'; Project = 'MFStoryteller' }
+    @{ Name = 'AeternusCore'; Folder = 'AeternusCore'; Project = 'AeternusFaith' }
 )
 
 Write-Host "[BUILD] RimWorld Mods Build Script" -ForegroundColor Cyan
@@ -163,7 +164,7 @@ function Test-ModTextureDependencies {
 
     $textureRoots = @()
     foreach ($proj in $Projects) {
-        $textureRoot = Join-Path (Join-Path $ModsDir $proj) 'Textures'
+        $textureRoot = Join-Path (Join-Path $ModsDir $proj.Folder) 'Textures'
         if (Test-Path $textureRoot) {
             $textureRoots += $textureRoot
         }
@@ -182,7 +183,7 @@ function Test-ModTextureDependencies {
     }
 
     foreach ($proj in $Projects) {
-        $defsPath = Join-Path (Join-Path $ModsDir $proj) 'Defs'
+        $defsPath = Join-Path (Join-Path $ModsDir $proj.Folder) 'Defs'
         if (-not (Test-Path $defsPath)) {
             continue
         }
@@ -263,10 +264,10 @@ function Test-ModTextureDependencies {
 if ($Clean) {
     Write-Host "[CLEAN] Cleaning..." -ForegroundColor Yellow
     foreach ($proj in $Projects) {
-        $assemblyPath = "$ModsDir\$proj\Assemblies"
+        $assemblyPath = Join-Path (Join-Path $ModsDir $proj.Folder) 'Assemblies'
         if (Test-Path $assemblyPath) {
             Remove-Item $assemblyPath -Recurse -Force
-            Write-Host "  Cleaned $proj"
+            Write-Host "  Cleaned $($proj.Name)"
         }
     }
     Write-Host ""
@@ -275,10 +276,10 @@ if ($Clean) {
 # Build projects
 $failed = @()
 foreach ($proj in $Projects) {
-    $projPath = "$ModsDir\$proj\Source\$proj.csproj"
+    $projPath = Join-Path (Join-Path (Join-Path $ModsDir $proj.Folder) 'Source') "$($proj.Project).csproj"
 
     if (-not (Test-Path $projPath)) {
-        Write-Host "[SKIP] $proj (no project file found)" -ForegroundColor Yellow
+        Write-Host "[SKIP] $($proj.Name) (no project file found)" -ForegroundColor Yellow
         continue
     }
 
@@ -288,36 +289,36 @@ foreach ($proj in $Projects) {
         Remove-Item $objPath -Recurse -Force -ErrorAction SilentlyContinue
     }
 
-    Write-Host "[BUILD] Building $proj..." -ForegroundColor Cyan
+    Write-Host "[BUILD] Building $($proj.Name)..." -ForegroundColor Cyan
     dotnet build $projPath -c Release --nologo -v quiet -p:DeployToRimWorldMod=false -p:DeployToModAssemblies=false
 
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "  [OK] $proj built successfully" -ForegroundColor Green
+        Write-Host "  [OK] $($proj.Name) built successfully" -ForegroundColor Green
 
         $projectDir = Split-Path -Parent $projPath
         $builtDll = Get-ChildItem -Path (Join-Path $projectDir 'bin\Release') `
-            -Filter "$proj.dll" `
+            -Filter "$($proj.Project).dll" `
             -Recurse `
             -File |
             Sort-Object LastWriteTime -Descending |
             Select-Object -First 1
 
         if (-not $builtDll) {
-            Write-Host "  [ERROR] Could not find built DLL for $proj under bin\Release" -ForegroundColor Red
-            $failed += $proj
+            Write-Host "  [ERROR] Could not find built DLL for $($proj.Name) under bin\Release" -ForegroundColor Red
+            $failed += $proj.Name
             continue
         }
 
-        $modAssembliesPath = Join-Path (Join-Path $ModsDir $proj) 'Assemblies'
+        $modAssembliesPath = Join-Path (Join-Path $ModsDir $proj.Folder) 'Assemblies'
         New-Item -ItemType Directory -Path $modAssembliesPath -Force | Out-Null
 
-        $targetDll = Join-Path $modAssembliesPath "$proj.dll"
+        $targetDll = Join-Path $modAssembliesPath "$($proj.Project).dll"
         Copy-Item -Path $builtDll.FullName -Destination $targetDll -Force
 
         Write-Host "  [OK] Copied fresh DLL to $targetDll" -ForegroundColor Green
     } else {
-        Write-Host "  [ERROR] $proj build failed" -ForegroundColor Red
-        $failed += $proj
+        Write-Host "  [ERROR] $($proj.Name) build failed" -ForegroundColor Red
+        $failed += $proj.Name
     }
 }
 
@@ -348,12 +349,12 @@ if ($Deploy) {
     }
 
     foreach ($proj in $Projects) {
-        $srcModPath = "$ModsDir\$proj"
-        $dstModPath = "$RimWorldModsPath\$proj"
+        $srcModPath = Join-Path $ModsDir $proj.Folder
+        $dstModPath = Join-Path $RimWorldModsPath $proj.Folder
         $payloadDirs = @('About', 'Assemblies', 'Defs', 'Textures')
 
         if (-not (Test-Path $srcModPath)) {
-            Write-Host "  [SKIP] $proj (mod folder not found)" -ForegroundColor Yellow
+            Write-Host "  [SKIP] $($proj.Name) (mod folder not found)" -ForegroundColor Yellow
             continue
         }
 
@@ -364,7 +365,7 @@ if ($Deploy) {
             $dstPath = Join-Path $dstModPath $payloadDir
 
             if (-not (Test-Path $srcPath)) {
-                Write-Host "  [SKIP] $proj/$payloadDir (not found)" -ForegroundColor Yellow
+                Write-Host "  [SKIP] $($proj.Name)/$payloadDir (not found)" -ForegroundColor Yellow
                 continue
             }
 
@@ -375,7 +376,7 @@ if ($Deploy) {
             Copy-Item $srcPath $dstModPath -Recurse -Force
         }
 
-        Write-Host "  [OK] Deployed $proj" -ForegroundColor Green
+        Write-Host "  [OK] Deployed $($proj.Name)" -ForegroundColor Green
     }
 
     Write-Host ""

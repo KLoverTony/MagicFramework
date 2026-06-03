@@ -1,6 +1,6 @@
 # MagicFramework Roadmap Supplement
 
-This supplement preserves an older implementation sequencing plan for roadmap context. The active short-term dashboard now lives in [ProjectTodo.md](ProjectTodo.md), while detailed task definitions live in [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md), [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md), [ProjectAeternusFaithTodo.md](ProjectAeternusFaithTodo.md), and [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md).
+This supplement preserves an older implementation sequencing plan for roadmap context. The active short-term dashboard now lives in [ProjectTodo.md](ProjectTodo.md), while detailed task definitions live in [ProjectMFVanillaTodo.md](ProjectMFVanillaTodo.md), [ProjectFrameworkBacklog.md](ProjectFrameworkBacklog.md), [ProjectAeternusCoreTodo.md](ProjectAeternusCoreTodo.md), and [ProjectLongTermBacklog.md](ProjectLongTermBacklog.md).
 
 ## Planning Principles
 
@@ -119,7 +119,7 @@ Smoke tests:
 - Persistent visuals clean up on expire, cancel, death, and reload.
 - `MF_WallOfFire` real-fire experiments do not spread beyond intended bounds unless designed to.
 
-## Milestone 6: AeternusFaith Track
+## Milestone 6: Aeternus Core Track
 
 Run this after core MagicFramework stabilizes, unless a content break is desirable.
 

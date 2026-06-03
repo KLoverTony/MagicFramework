@@ -1,0 +1,10 @@
+D:\RimWorld\Mods\AeternusCore\Source\bin\Debug\AeternusFaith.dll
+D:\RimWorld\Mods\AeternusCore\Source\bin\Debug\AeternusFaith.pdb
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.csproj.AssemblyReference.cache
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.GeneratedMSBuildEditorConfig.editorconfig
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.AssemblyInfoInputs.cache
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.AssemblyInfo.cs
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.csproj.CoreCompileInputs.cache
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.sourcelink.json
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.dll
+D:\RimWorld\Mods\AeternusCore\Source\obj\Debug\AeternusFaith.pdb
